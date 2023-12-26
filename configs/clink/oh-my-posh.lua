@@ -1,0 +1,1 @@
+load(io.popen('oh-my-posh init cmd --config https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/omp/theme.json'):read("*a"))()
