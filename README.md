@@ -9,7 +9,9 @@
 
 </div>
 
-## 🗂️ Table of Contents
+### 🗂️ Table of Contents
+
+---
 
 - [Description](#-description)
 - [Installation](#-installation)
@@ -19,37 +21,60 @@
 - [Contact](#-contact)
 - [Acknowledgements](#-acknowledgements)
 
-## 📚 Description
+### 📚 Description
+
+---
 
 This repository contains my personal configuration for the Windows Terminal. It's designed to optimize my workflow and make terminal operations more efficient.
 
-## 📸 Screenshots
+### 📸 Screenshots
 
-![Screenshot](/assets/Product1.png)
+---
+
 ![Screenshot](/assets/Product2.png)
 
-## 🚀 Installation
+### 🚀 Installation
+
+---
 
 1. Clone this repository to your local machine using `https://github.com/luke-beep/shell-config.git`.
 2. Navigate to the cloned repository.
 3. Follow the instructions in the [`installation.md`](/configs/installation.md) file.
 
-## 🛠️ Usage
+### 🛠️ Usage
+
+---
 
 After installation, you can use the Windows Terminal as you normally would. The configuration changes should already be applied.
 
-## 🤝 Contributing
+### 🤝 Contributing
+
+---
 
 Contributions are welcome. Please fork this repository and create a pull request with your changes.
 
-## 📝 License
+### 📝 License
+
+---
 
 This project is licensed under the MIT License. See [`LICENSE`](LICENSE) for more details.
 
-## 📮 Contact
+### 📮 Contact
+
+---
 
 If you have any questions, feel free to reach out to me at [lukehjo@duck.com](mailto:lukehjo@duck.com).
 
-## 🌟 Acknowledgements
+### 🌟 Acknowledgements
+
+---
 
 - [luke-beep](https://github.com/luke-beep) for creating this repository and maintaining it.
+
+---
+
+![Screenshot](/assets/Product1.png)
+
+**<div align="center" id="footer">© 2023 LukeHjo. All rights reserved. <div>**
+<br>
+<div align="right"><a href="#">(Back to top)</a></div>
