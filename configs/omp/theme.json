@@ -1,0 +1,162 @@
+{
+  "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
+  "palette": {
+        "blue":  "#5E81AC",
+		"white": "#ECEFF4",
+		"green": "#A3BE8C",
+		"red": "#BF616A"
+  },
+  "blocks": [
+    {
+      "alignment": "left",
+      "segments": [
+        {
+          "foreground": "p:white",
+          "style": "plain",
+          "template": "\ueb99 ",
+          "type": "os"
+        },
+        {
+          "foreground": "p:blue",
+          "style": "plain",
+          "template": "[{{ .UserName }}@{{ .HostName }}] ",
+          "type": "session"
+        },
+        {
+          "foreground": "p:blue",
+          "properties": {
+            "branch_icon": "\ue725 ",
+            "cherry_pick_icon": "\ue29b ",
+            "commit_icon": "\uf417 ",
+            "fetch_status": false,
+            "fetch_upstream_icon": false,
+            "merge_icon": "\ue727 ",
+            "no_commits_icon": "\uf0c3 ",
+            "rebase_icon": "\ue728 ",
+            "revert_icon": "\uf0e2 ",
+            "tag_icon": "\uf412 "
+          },
+          "template": "{{ .HEAD }} ",
+          "style": "plain",
+          "type": "git"
+        },
+        {
+          "style": "plain",
+          "foreground": "p:white",
+          "template": "\uf105",
+          "type": "text"
+        },
+		{
+          "foreground": "p:white",
+          "properties": {
+            "branch_icon": "",
+            "fetch_upstream_icon": true
+          },
+          "style": "plain",
+          "template": " {{ .UpstreamIcon }}{{ .HEAD }} |",
+          "type": "git"
+        },
+        {
+          "foreground": "p:green",
+          "properties": {
+            "paused_icon": "\uf04c ",
+            "playing_icon": "\ue602 ",
+            "stopped_icon": "\uf04d ",
+            "track_separator": " - "
+          },
+          "style": "plain",
+          "template": " \uf1bc {{ if ne .Status \"stopped\" }}{{ .Artist }} - {{ .Track }}{{ end }} ",
+          "type": "spotify"
+        }
+      ],
+      "type": "prompt"
+    },
+	{
+      "alignment": "right",
+      "segments": [
+        {
+          "foreground": "p:blue",
+          "style": "plain",
+          "type": "text"
+        },
+        {
+          "foreground": "p:blue",
+          "properties": {
+            "style": "dallas",
+            "threshold": 0
+          },
+          "style": "diamond",
+          "template": " {{ .FormattedMs }}s <p:green>\ue601</> ",
+          "type": "executiontime"
+        },
+        {
+          "properties": {
+            "root_icon": "\uf292 "
+          },
+          "style": "diamond",
+          "template": " \uf0e7 ",
+          "type": "root"
+        },
+        {
+          "foreground": "p:blue",
+          "style": "diamond",
+          "template": " <p:white>|</> {{ round .PhysicalPercentUsed .Precision }}% ({{ (div ((sub .PhysicalTotalMemory .PhysicalFreeMemory)|float64) 1000000000.0) }}/{{ (div .PhysicalTotalMemory 1000000000.0) }}GB)",
+          "type": "sysinfo"
+        }
+      ],
+      "type": "prompt"
+    },
+    {
+      "alignment": "left",
+      "newline": true,
+      "segments": [
+        {
+          "style": "plain",
+          "template": "\u256d\u2500",
+          "type": "text"
+        },
+        {
+          "properties": {
+            "time_format": "<p:white>02/01/06</> <p:green>@</> <p:white>15:04</>"
+          },
+          "style": "plain",
+          "template": " <p:red>\u2665</>  {{ .CurrentDate | date .Format }} |",
+          "type": "time"
+        },
+        {
+          "style": "plain",
+          "template": " \uf07b  ",
+          "type": "root"
+        },
+        {
+          "properties": {
+            "folder_icon": " \uf07b ",
+            "folder_separator_icon": "\\",
+            "home_icon": "\ueb06 "
+          },
+          "style": "plain",
+          "template": " {{ .Path }}",
+          "type": "path"
+        }
+      ],
+      "type": "prompt"
+    },
+    {
+      "alignment": "left",
+      "newline": true,
+      "segments": [
+        {
+          "properties": {
+            "always_enabled": true
+          },
+          "style": "plain",
+          "template": "\u2570\u2500 ",
+          "type": "status"
+        }
+      ],
+      "type": "prompt"
+    }
+  ],
+  "final_space": true,
+  "version": 2
+}
