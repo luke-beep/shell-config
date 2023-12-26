@@ -4,12 +4,29 @@
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)
+![GitHub last commit](https://img.shields.io/github/last-commit/luke-beep/shell-config)
+![GitHub stars](https://img.shields.io/github/stars/luke-beep/shell-config)
 
 </div>
+
+## 🗂️ Table of Contents
+
+- [Description](#-description)
+- [Installation](#-installation)
+- [Usage](#️-usage)
+- [Contributing](#-contributing)
+- [License](#-license)
+- [Contact](#-contact)
+- [Acknowledgements](#-acknowledgements)
 
 ## 📚 Description
 
 This repository contains my personal configuration for the Windows Terminal. It's designed to optimize my workflow and make terminal operations more efficient.
+
+## 📸 Screenshots
+
+![Screenshot](/assets/Product1.png)
+![Screenshot](/assets/Product2.png)
 
 ## 🚀 Installation
 
