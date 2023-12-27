@@ -13,16 +13,16 @@
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
-$nord0 =  [System.Drawing.ColorTranslator]::FromHtml("#2E3440") # Polar Night
-$nord1 =  [System.Drawing.ColorTranslator]::FromHtml("#3B4252")
-$nord2 =  [System.Drawing.ColorTranslator]::FromHtml("#434C5E")
-$nord3 =  [System.Drawing.ColorTranslator]::FromHtml("#4C566A")
-$nord4 =  [System.Drawing.ColorTranslator]::FromHtml("#D8DEE9") # Snow Storm
-$nord5 =  [System.Drawing.ColorTranslator]::FromHtml("#E5E9F0")
-$nord6 =  [System.Drawing.ColorTranslator]::FromHtml("#ECEFF4")
-$nord7 =  [System.Drawing.ColorTranslator]::FromHtml("#8FBCBB") # Frost
-$nord8 =  [System.Drawing.ColorTranslator]::FromHtml("#88C0D0")
-$nord9 =  [System.Drawing.ColorTranslator]::FromHtml("#81A1C1")
+$nord0 = [System.Drawing.ColorTranslator]::FromHtml("#2E3440") # Polar Night
+$nord1 = [System.Drawing.ColorTranslator]::FromHtml("#3B4252")
+$nord2 = [System.Drawing.ColorTranslator]::FromHtml("#434C5E")
+$nord3 = [System.Drawing.ColorTranslator]::FromHtml("#4C566A")
+$nord4 = [System.Drawing.ColorTranslator]::FromHtml("#D8DEE9") # Snow Storm
+$nord5 = [System.Drawing.ColorTranslator]::FromHtml("#E5E9F0")
+$nord6 = [System.Drawing.ColorTranslator]::FromHtml("#ECEFF4")
+$nord7 = [System.Drawing.ColorTranslator]::FromHtml("#8FBCBB") # Frost
+$nord8 = [System.Drawing.ColorTranslator]::FromHtml("#88C0D0")
+$nord9 = [System.Drawing.ColorTranslator]::FromHtml("#81A1C1")
 $nord10 = [System.Drawing.ColorTranslator]::FromHtml("#5E81AC")
 $nord11 = [System.Drawing.ColorTranslator]::FromHtml("#BF616A") # Aurora
 $nord12 = [System.Drawing.ColorTranslator]::FromHtml("#D08770")
@@ -30,7 +30,26 @@ $nord13 = [System.Drawing.ColorTranslator]::FromHtml("#EBCB8B")
 $nord14 = [System.Drawing.ColorTranslator]::FromHtml("#A3BE8C")
 $nord15 = [System.Drawing.ColorTranslator]::FromHtml("#B48EAD")
 
+function Auto-Update {
+  $keyPath = 'HKCU:\Software\Azrael\PowerShell'
+  $version = Get-ItemProperty -Path $keyPath -Name 'Version' -ErrorAction SilentlyContinue
+  $currentVersion = $version.Version
+  $latestVersion = Invoke-RestMethod -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/version'
+  if ($currentVersion -ne $latestVersion) {
+    Write-Host "A new version of the profile is available. Would you like to update? (Y/N)"
+    $input = Read-Host
+    if ($input -eq "Y") {
+      Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/Microsoft.PowerShell_profile.ps1' -OutFile $PROFILE
+      New-ItemProperty -Path $keyPath -Name 'Version' -Value $latestVersion -PropertyType 'String' -Force | Out-Null
+      Restart-Shell
+    }
+  }
+}
+
 function Init {
+  # Check for updates
+  Auto-Update
+
   # Set the execution policy
   Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
 
@@ -784,6 +803,268 @@ function Get-ServiceStatus {
   }
 }
 
+<#
+.SYNOPSIS
+   Searches DuckDuckGo
+.DESCRIPTION 
+   This function searches DuckDuckGo
+.PARAMETER Query 
+   The query to search for
+#>
+function Search-DuckDuckGo {
+  param (
+    [string]$Query
+  )
+
+  $encodedQuery = [System.Web.HttpUtility]::UrlEncode($Query)
+  $url = "https://duckduckgo.com/?q=$encodedQuery&t=h_&ia=web"
+
+  Start-Process $url
+}
+
+<#
+.SYNOPSIS
+   Useful links
+.DESCRIPTION 
+   This function displays useful links
+#>
+function Get-Links {
+  $links = @(
+    [PSCustomObject]@{
+      Name = "NVIDIA Control Panel"
+      Url  = "https://apps.microsoft.com/detail/9NF8H0H7WMLT"
+    }
+    [PSCustomObject]@{
+      Name = "NVCleanstall"
+      Url  = "https://www.techpowerup.com/download/techpowerup-nvcleanstall/"
+    }
+    [PSCustomObject]@{
+      Name = "Display Driver Uninstaller"
+      Url  = "https://www.guru3d.com/download/display-driver-uninstaller-download"
+    }
+    [PSCustomObject]@{
+      Name = "NVIDIA Profile Inspector"
+      Url  = "https://github.com/Orbmu2k/nvidiaProfileInspector/releases"
+    }
+    [PSCustomObject]@{
+      Name = "MSI Afterburner"
+      Url  = "https://www.guru3d.com/download/msi-afterburner-beta-download"
+    }
+    [PSCustomObject]@{
+      Name = "MSI Utility V3"
+      Url  = "https://www.mediafire.com/file/ewpy1p0rr132thk/MSI_util_v3.zip/file"
+    }
+    [PSCustomObject]@{
+      Name = "Adwcleaner"
+      Url  = "https://www.malwarebytes.com/adwcleaner"
+    }
+    [PSCustomObject]@{
+      Name = "Autoruns"
+      Url  = "https://learn.microsoft.com/en-us/sysinternals/downloads/autoruns"
+    }
+    [PSCustomObject]@{
+      Name = "BleachBit"
+      Url  = "https://www.bleachbit.org/download"
+    }
+    [PSCustomObject]@{
+      Name = "Bloatbox"
+      Url  = "https://github.com/builtbybel/bloatbox/releases"
+    }
+    [PSCustomObject]@{
+      Name = "BloatyNosy"
+      Url  = "https://github.com/builtbybel/bloatbox/releases"
+    }
+    [PSCustomObject]@{
+      Name = "CapFrameX"
+      Url  = "https://www.capframex.com/download"
+    }
+    [PSCustomObject]@{
+      Name = "CrystalDiskMark"
+      Url  = "https://crystalmark.info/en/software/crystaldiskmark/"
+    }
+    [PSCustomObject]@{
+      Name = "CTT WinUtil"
+      Url  = "https://github.com/ChrisTitusTech/winutil"
+    }
+    [PSCustomObject]@{
+      Name = "Display Driver Uninstaller"
+      Url  = "https://www.guru3d.com/download/display-driver-uninstaller-download"
+    }
+    [PSCustomObject]@{
+      Name = "DLSS Swapper"
+      Url  = "https://github.com/beeradmoore/dlss-swapper/releases"
+    }
+    [PSCustomObject]@{
+      Name = "HWiNFO"
+      Url  = "https://www.hwinfo.com/download/"
+    }
+    [PSCustomObject]@{
+      Name = "JunkCtrl"
+      Url  = "https://github.com/builtbybel/JunkCtrl"
+    }
+    [PSCustomObject]@{
+      Name = "OpenRGB"
+      Url  = "https://openrgb.org/"
+    }
+    [PSCustomObject]@{
+      Name = "Optimizer"
+      Url  = "https://github.com/hellzerg/optimizer/releases"
+    }
+    [PSCustomObject]@{
+      Name = "Park Control"
+      Url  = "https://bitsum.com/parkcontrol/"
+    }
+    [PSCustomObject]@{
+      Name = "Process Lasso"
+      Url  = "https://bitsum.com/"
+    }
+    [PSCustomObject]@{
+      Name = "Quick CPU"
+      Url  = "https://coderbag.com/product/quickcpu"
+    }
+    [PSCustomObject]@{
+      Name = "Rufus"
+      Url  = "https://rufus.ie/downloads/"
+    }
+    [PSCustomObject]@{
+      Name = "VCC Redist All-in-One"
+      Url  = "https://www.techpowerup.com/download/visual-c-redistributable-runtime-package-all-in-one/"
+    }
+    [PSCustomObject]@{
+      Name = "WizTree"
+      Url  = "https://diskanalyzer.com/download"
+    }
+    [PSCustomObject]@{
+      Name = "WPD"
+      Url  = "https://wpd.app/"
+    }
+    [PSCustomObject]@{
+      Name = "Intel Drivers"
+      Url  = "https://www.intel.com/content/www/us/en/download-center/home.html"
+    }
+    [PSCustomObject]@{
+      Name = "AMD Drivers"
+      Url  = "https://www.amd.com/en/support"
+    }
+    [PSCustomObject]@{
+      Name = "NVIDIA Drivers"
+      Url  = "https://www.nvidia.com/Download/index.aspx"   
+    }
+    [PSCustomObject]@{
+      Name = "Intel XTU"
+      Url  = "https://downloadcenter.intel.com/download/29183/Intel-Extreme-Tuning-Utility-Intel-XTU-"   
+    }
+    [PSCustomObject]@{
+      Name = "Sysinternals Suite"
+      Url  = "https://learn.microsoft.com/en-us/sysinternals/downloads/"
+    }
+    [PSCustomObject]@{
+      Name = "Windows 10 Image"
+      Url  = "https://www.microsoft.com/en-us/software-download/windows10ISO"
+    }
+    [PSCustomObject]@{
+      Name = "Windows 11 Image"
+      Url  = "https://www.microsoft.com/en-us/software-download/windows11"
+    }
+    [PSCustomObject]@{
+      Name = "TechPowerUp GPU-Z"
+      Url  = "https://www.techpowerup.com/download/techpowerup-gpu-z/"
+    }
+    [PSCustomObject]@{
+      Name = "TechPowerUp Downloads"
+      Url  = "https://www.techpowerup.com/download/"
+    }
+    [PSCustomObject]@{
+      Name = "HoneCTRL"
+      Url  = "https://github.com/luke-beep/HoneCtrl"
+    }
+    [PSCustomObject]@{
+      Name = "PowerToys"
+      Url  = "https://github.com/microsoft/PowerToys"
+    }
+    [PSCustomObject]@{
+      Name = "Pwsh Profile"
+      Url  = "https://github.com/luke-beep/shell-config/blob/main/configs/pwsh/Microsoft.PowerShell_profile.ps1"
+    }
+    [PSCustomObject]@{
+      Name = "Measure Sleep"
+      Url  = "https://github.com/luke-beep/MeasureSleep/releases/tag/MeasureSleep"
+    }
+    [PSCustomObject]@{
+      Name = "All About Windows"
+      Url  = "https://github.com/luke-beep/all-about-windows"
+    }
+    [PSCustomObject]@{
+      Name = "Zen"
+      Url  = "https://github.com/luke-beep/zen"
+    }
+    ) | Sort-Object -Property Name
+
+  $PanelWidth = 1000
+
+  $form = New-Object System.Windows.Forms.Form
+  $form.Text = "Useful Links"
+  $form.BackColor = $nord0
+  $form.Size = New-Object System.Drawing.Size($PanelWidth, 500)
+  $form.StartPosition = 'CenterScreen'
+  $form.FormBorderStyle = 'FixedDialog'
+  
+  $dataGridView = New-Object System.Windows.Forms.DataGridView
+  $dataGridView.Dock = [System.Windows.Forms.DockStyle]::Fill
+  $dataGridView.BackgroundColor = $nord0
+  $dataGridView.AutoSizeColumnsMode = [System.Windows.Forms.DataGridViewAutoSizeColumnsMode]::Fill
+  $dataGridView.AutoGenerateColumns = $false
+  $dataGridView.ReadOnly = $true
+  $dataGridView.AllowUserToAddRows = $false
+  $dataGridView.ColumnHeadersVisible = $true
+  $dataGridView.RowHeadersVisible = $false
+  $dataGridView.GridColor = $nord4
+
+  $dataGridView.ColumnHeadersDefaultCellStyle.BackColor = $nord0
+  $dataGridView.ColumnHeadersDefaultCellStyle.ForeColor = $nord4
+
+  $dataGridView.RowHeadersDefaultCellStyle.BackColor = $nord0
+  $dataGridView.RowHeadersDefaultCellStyle.ForeColor = $nord4
+
+  $dataGridView.RowsDefaultCellStyle.BackColor = $nord0
+  $dataGridView.RowsDefaultCellStyle.ForeColor = $nord4
+  $dataGridView.AlternatingRowsDefaultCellStyle.BackColor = $nord0
+  $dataGridView.AlternatingRowsDefaultCellStyle.ForeColor = $nord4
+
+  $nameColumn = New-Object System.Windows.Forms.DataGridViewTextBoxColumn
+  $nameColumn.HeaderText = 'Name'
+  $nameColumn.DataPropertyName = 'Name'
+  
+  $urlColumn = New-Object System.Windows.Forms.DataGridViewLinkColumn
+  $urlColumn.HeaderText = 'URL'
+  $urlColumn.DataPropertyName = 'Url'
+  $urlColumn.LinkColor = $nord4
+  $urlColumn.VisitedLinkColor = $nord4
+  $urlColumn.ActiveLinkColor = $nord4
+  $urlColumn.LinkBehavior = [System.Windows.Forms.LinkBehavior]::HoverUnderline
+  
+  $dataGridView.Columns.Add($nameColumn)
+  $dataGridView.Columns.Add($urlColumn)
+  
+  $form.Controls.Add($dataGridView)
+  
+  $dataGridView.Add_CellContentClick({
+      param($sender, $e)
+      if ($e.ColumnIndex -eq 1) {
+        $url = $dataGridView.Rows[$e.RowIndex].Cells[$e.ColumnIndex].Value
+        Start-Process $url
+      }
+    })
+
+  foreach ($link in $links) {
+    $row = $dataGridView.Rows.Add()
+    $dataGridView.Rows[$row].Cells[0].Value = $link.Name
+    $dataGridView.Rows[$row].Cells[1].Value = $link.Url
+  }
+
+  $form.ShowDialog()
+}
+
 # ----------------------------------------
 # Helper functions
 # ----------------------------------------
@@ -875,6 +1156,7 @@ function Show-Help {
 
   $form.ShowDialog()
 }
+
 # ----------------------------------------
 # Aliases
 # ----------------------------------------
@@ -928,6 +1210,8 @@ Set-Alias -Name matrix -Value Start-MatrixRain
 Set-Alias -Name touch -Value Create-File
 Set-Alias -Name joke -Value Get-ProgrammingJoke
 Set-Alias -Name services -Value Get-ServiceStatus
+Set-Alias -Name ddg -Value Search-DuckDuckGo
+Set-Alias -Name links -Value Get-Links
 
 # ----------------------------------------
 # Profile Completion
