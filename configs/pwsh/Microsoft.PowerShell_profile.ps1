@@ -44,35 +44,36 @@ function Auto-Update {
       New-ItemProperty -Path $keyPath -Name 'Version' -Value $latestVersion -PropertyType 'String' -Force | Out-Null
       Restart-Shell
     }
-
-    # Prompt the user to update the profile
-    Write-Host "A new version of the profile is available. Would you like to update? (Y/N)"
-    $input = Read-Host
-    if ($input -eq "Y") {
-
-      # Check if the profile should be updated automatically in the future
-      Write-Host "Would you like to update the profile automatically in the future? (Y/N)"
-      $input = Read-Host
-      if ($input -eq "Y") {
-        New-ItemProperty -Path $keyPath -Name 'AutoUpdate' -Value 1 -PropertyType 'DWord' -Force | Out-Null
-      }
-      else {
-        New-ItemProperty -Path $keyPath -Name 'AutoUpdate' -Value 0 -PropertyType 'DWord' -Force | Out-Null
-      }
-
-      # Update the profile
-      Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/Microsoft.PowerShell_profile.ps1' -OutFile $PROFILE
-      New-ItemProperty -Path $keyPath -Name 'Version' -Value $latestVersion -PropertyType 'String' -Force | Out-Null
-      Restart-Shell
-    }
     else {
-      Write-Host "Would you like to update the profile automatically in the future? (Y/N)"
+      # Prompt the user to update the profile
+      Write-Host "A new version of the profile is available. Would you like to update? (Y/N)"
       $input = Read-Host
       if ($input -eq "Y") {
-        New-ItemProperty -Path $keyPath -Name 'AutoUpdate' -Value 1 -PropertyType 'DWord' -Force | Out-Null
+
+        # Check if the profile should be updated automatically in the future
+        Write-Host "Would you like to update the profile automatically in the future? (Y/N)"
+        $input = Read-Host
+        if ($input -eq "Y") {
+          New-ItemProperty -Path $keyPath -Name 'AutoUpdate' -Value 1 -PropertyType 'DWord' -Force | Out-Null
+        }
+        else {
+          New-ItemProperty -Path $keyPath -Name 'AutoUpdate' -Value 0 -PropertyType 'DWord' -Force | Out-Null
+        }
+
+        # Update the profile
+        Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/Microsoft.PowerShell_profile.ps1' -OutFile $PROFILE
+        New-ItemProperty -Path $keyPath -Name 'Version' -Value $latestVersion -PropertyType 'String' -Force | Out-Null
+        Restart-Shell
       }
       else {
-        New-ItemProperty -Path $keyPath -Name 'AutoUpdate' -Value 0 -PropertyType 'DWord' -Force | Out-Null
+        Write-Host "Would you like to update the profile automatically in the future? (Y/N)"
+        $input = Read-Host
+        if ($input -eq "Y") {
+          New-ItemProperty -Path $keyPath -Name 'AutoUpdate' -Value 1 -PropertyType 'DWord' -Force | Out-Null
+        }
+        else {
+          New-ItemProperty -Path $keyPath -Name 'AutoUpdate' -Value 0 -PropertyType 'DWord' -Force | Out-Null
+        }
       }
     }
   }
@@ -1030,7 +1031,7 @@ function Get-Links {
       Name = "Zen"
       Url  = "https://github.com/luke-beep/zen"
     }
-    ) | Sort-Object -Property Name
+  ) | Sort-Object -Property Name
 
   $PanelWidth = 1000
 
