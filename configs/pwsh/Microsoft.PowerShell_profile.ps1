@@ -4,7 +4,7 @@
 
 # Author: LukeHjo (Azrael)
 # Description: This is my PowerShell profile. It contains features that I use on a daily basis.
-# Version: 1.0.7
+# Version: 1.0.8
 # Date: 2023-12-27
 
 # ----------------------------------------
@@ -1250,7 +1250,7 @@ Set-Alias -Name search -Value Search-Item
 Set-Alias -Name mdd -Value New-DirectoryAndNavigate
 Set-Alias -Name rmd -Value Remove-CurrentDirectory
 Set-Alias -Name backup -Value Backup-Workspace
-Set-Alias -Name update-packages -Value Update-Packages
+Set-Alias -Name upackages -Value Update-Packages
 Set-Alias -Name gsr -Value Generate-System-Report
 Set-Alias -Name optimize -Value Optimize-PowerShell
 Set-Alias -Name activate -Value Activate-Windows
