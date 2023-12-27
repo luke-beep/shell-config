@@ -3,8 +3,8 @@
 # ----------------------------------------
 
 # Author: LukeHjo (Azrael)
-# Description: This is my PowerShell profile. It contains functions that I use on a daily basis.
-# Version: 1.0.4
+# Description: This is my PowerShell profile. It contains features that I use on a daily basis.
+# Version: 1.0.5
 # Date: 2023-12-27
 
 # ----------------------------------------
@@ -1258,6 +1258,7 @@ Set-Alias -Name joke -Value Get-ProgrammingJoke
 Set-Alias -Name services -Value Get-ServiceStatus
 Set-Alias -Name ddg -Value Search-DuckDuckGo
 Set-Alias -Name links -Value Get-Links
+Set-Alias -Name version -Value Profile-Version
 
 # ----------------------------------------
 # Profile Completion
