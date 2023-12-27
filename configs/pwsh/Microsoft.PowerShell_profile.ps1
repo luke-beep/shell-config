@@ -4,7 +4,7 @@
 
 # Author: LukeHjo (Azrael)
 # Description: This is my PowerShell profile. It contains features that I use on a daily basis.
-# Version: 1.0.5
+# Version: 1.0.6
 # Date: 2023-12-27
 
 # ----------------------------------------
@@ -30,7 +30,7 @@ $nord13 = [System.Drawing.ColorTranslator]::FromHtml("#EBCB8B")
 $nord14 = [System.Drawing.ColorTranslator]::FromHtml("#A3BE8C")
 $nord15 = [System.Drawing.ColorTranslator]::FromHtml("#B48EAD")
 
-function Auto-Update {
+function Update-Profile {
   $keyPath = 'HKCU:\Software\Azrael\PowerShell'
   $version = Get-ItemProperty -Path $keyPath -Name 'Version' -ErrorAction SilentlyContinue
   $currentVersion = $version.Version
@@ -81,7 +81,7 @@ function Auto-Update {
 
 function Init {
   # Check for updates
-  Auto-Update
+  Update-Profile
 
   # Set the execution policy
   Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
@@ -1244,7 +1244,7 @@ Set-Alias -Name search -Value Search-Item
 Set-Alias -Name mdd -Value New-DirectoryAndNavigate
 Set-Alias -Name rmd -Value Remove-CurrentDirectory
 Set-Alias -Name backup -Value Backup-Workspace
-Set-Alias -Name update -Value Update-Packages
+Set-Alias -Name update-packages -Value Update-Packages
 Set-Alias -Name gsr -Value Generate-System-Report
 Set-Alias -Name optimize -Value Optimize-PowerShell
 Set-Alias -Name activate -Value Activate-Windows
@@ -1259,6 +1259,7 @@ Set-Alias -Name services -Value Get-ServiceStatus
 Set-Alias -Name ddg -Value Search-DuckDuckGo
 Set-Alias -Name links -Value Get-Links
 Set-Alias -Name version -Value Profile-Version
+Set-Alias -Name update -Value Update-Profile
 
 # ----------------------------------------
 # Profile Completion
