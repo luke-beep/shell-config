@@ -4,7 +4,7 @@
 
 # Author: LukeHjo (Azrael)
 # Description: This is my PowerShell profile. It contains features that I use on a daily basis.
-# Version: 1.0.6
+# Version: 1.0.7
 # Date: 2023-12-27
 
 # ----------------------------------------
@@ -30,6 +30,12 @@ $nord13 = [System.Drawing.ColorTranslator]::FromHtml("#EBCB8B")
 $nord14 = [System.Drawing.ColorTranslator]::FromHtml("#A3BE8C")
 $nord15 = [System.Drawing.ColorTranslator]::FromHtml("#B48EAD")
 
+<#
+.SYNOPSIS
+   Check for updates
+.DESCRIPTION 
+   This function checks for updates
+#>
 function Update-Profile {
   $keyPath = 'HKCU:\Software\Azrael\PowerShell'
   $version = Get-ItemProperty -Path $keyPath -Name 'Version' -ErrorAction SilentlyContinue
