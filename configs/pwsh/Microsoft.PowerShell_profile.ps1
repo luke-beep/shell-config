@@ -3,7 +3,7 @@
 # ----------------------------------------
 
 # Author: LukeHjo (Azrael)
-# Description: This is my PowerShell profile. It contains aliases and functions that I use on a daily basis.
+# Description: This is my PowerShell profile. It contains functions that I use on a daily basis.
 # Version: 1.0.4
 # Date: 2023-12-27
 
