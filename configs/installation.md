@@ -34,3 +34,6 @@
     ```
 
 6. Open the Windows Terminal and enjoy!
+
+> [!NOTE]
+> The PowerShell profile will automatically prompt for updates to the repository when you open a new PowerShell session. If you do not wish to do so simply deny the prompt.
