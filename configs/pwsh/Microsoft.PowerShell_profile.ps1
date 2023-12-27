@@ -1065,6 +1065,19 @@ function Get-Links {
   $form.ShowDialog()
 }
 
+<#
+.SYNOPSIS
+   Gets the current profile version
+.DESCRIPTION 
+   This function gets the current profile version
+#>
+function Profile-Version {
+  $keyPath = 'HKCU:\Software\Azrael\PowerShell'
+  $version = Get-ItemProperty -Path $keyPath -Name 'Version' -ErrorAction SilentlyContinue
+  $currentVersion = $version.Version
+  $currentVersion
+}
+
 # ----------------------------------------
 # Helper functions
 # ----------------------------------------
