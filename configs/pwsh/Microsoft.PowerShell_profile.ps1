@@ -47,9 +47,69 @@ function Update-Profile {
   $currentVersion = $version.Version
   $latestVersion = Invoke-RestMethod -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/version'
   if ($Force) {
-    Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/Microsoft.PowerShell_profile.ps1' -OutFile $PROFILE
-    New-ItemProperty -Path $keyPath -Name 'Version' -Value $latestVersion -PropertyType 'String' -Force | Out-Null
-    exit
+    # Create the form
+    $form = New-Object System.Windows.Forms.Form
+    $form.Text = "Update Available"
+    $form.BackColor = $nord0
+    $form.ForeColor = $nord4
+    $form.Font = New-Object System.Drawing.Font("Arial", 10)
+    $form.StartPosition = 'CenterScreen'
+    $form.Size = New-Object System.Drawing.Size(400, 200)
+    $form.FormBorderStyle = 'FixedDialog'
+    $form.MaximizeBox = $false
+    $form.MinimizeBox = $false
+
+    $icoFileUrl = "https://raw.githubusercontent.com/luke-beep/shell-config/main/assets/Azrael.ico"
+    $icoFileData = Invoke-WebRequest -Uri $icoFileUrl -UseBasicParsing
+
+    if ($icoFileData.StatusCode -eq 200) {
+      $icoFileStream = [System.IO.MemoryStream]::new($icoFileData.Content)
+      $icon = [System.Drawing.Icon]::new($icoFileStream)
+      $form.Icon = $icon
+    }
+    else {
+      Write-Host "Failed to download the ICO file from the URL."
+    }
+
+    $label = New-Object System.Windows.Forms.Label
+    $label.Text = "A new version of the profile is available. Would you like to update?"
+    $label.Location = New-Object System.Drawing.Point(10, 10)
+    $label.Size = New-Object System.Drawing.Size(380, 80)
+    $label.ForeColor = $nord6
+
+    $yesButton = New-Object System.Windows.Forms.Button
+    $yesButton.BackColor = $nord3
+    $yesButton.ForeColor = $nord6
+    $yesButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
+    $yesButton.FlatAppearance.BorderSize = 0
+    $yesButton.Location = New-Object System.Drawing.Point(100, 120)
+    $yesButton.Size = New-Object System.Drawing.Size(75, 23)
+    $yesButton.Text = "Yes"
+    $yesButton.DialogResult = [System.Windows.Forms.DialogResult]::Yes
+
+    $noButton = New-Object System.Windows.Forms.Button
+    $noButton.BackColor = $nord3
+    $noButton.ForeColor = $nord6
+    $noButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
+    $noButton.FlatAppearance.BorderSize = 0
+    $noButton.Location = New-Object System.Drawing.Point(200, 120)
+    $noButton.Size = New-Object System.Drawing.Size(75, 23)
+    $noButton.Text = "No"
+    $noButton.DialogResult = [System.Windows.Forms.DialogResult]::No
+
+    $form.Controls.Add($label)
+    $form.Controls.Add($yesButton)
+    $form.Controls.Add($noButton)
+    $form.AcceptButton = $yesButton
+    $form.CancelButton = $noButton
+
+    $result = $form.ShowDialog()
+
+    if ($result -eq [System.Windows.Forms.DialogResult]::Yes) {
+      Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/Microsoft.PowerShell_profile.ps1' -OutFile $PROFILE
+      New-ItemProperty -Path $keyPath -Name 'Version' -Value $latestVersion -PropertyType 'String' -Force | Out-Null
+      exit
+    }
   }
   elseif ($currentVersion -ne $latestVersion) {
 
