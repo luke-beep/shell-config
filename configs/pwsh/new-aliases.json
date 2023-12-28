@@ -42,6 +42,7 @@
   "find": "Search-Item",
   "backup": "Backup-Workspace",
   "touch": "New-FileOrDirectory",
+  "md": "New-FileOrDirectory",
   "aliases": "Import-Aliases",
   "raliases": "Remove-Aliases",
   "aaliases": "Add-Aliases",
