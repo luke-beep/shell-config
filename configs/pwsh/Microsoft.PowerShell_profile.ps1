@@ -4,7 +4,7 @@
 
 # Author: LukeHjo (Azrael)
 # Description: This is my PowerShell profile. It contains features that I use on a daily basis.
-# Version: 1.1.2
+# Version: 1.1.4
 # Date: 2023-12-28
 
 # ----------------------------------------
@@ -131,7 +131,14 @@ function Update-Profile {
     if ($result -eq [System.Windows.Forms.DialogResult]::Yes) {
       Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/Microsoft.PowerShell_profile.ps1' -OutFile $PROFILE
       New-ItemProperty -Path $keyPath -Name 'Version' -Value $latestVersion -PropertyType 'String' -Force | Out-Null
-      exit
+      . $PROFILE
+      if ($shellType -eq "Pwsh") {
+        pwsh
+      }
+      else {
+        powershell
+      }
+      Stop-Process -Id $PID    
     }
   }
   elseif ($currentVersion -ne $latestVersion) {
@@ -140,7 +147,14 @@ function Update-Profile {
     if ($autoUpdate.AutoUpdate -eq 1 -or $Silent) {
       Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/Microsoft.PowerShell_profile.ps1' -OutFile $PROFILE
       New-ItemProperty -Path $keyPath -Name 'Version' -Value $latestVersion -PropertyType 'String' -Force | Out-Null
-      exit
+      . $PROFILE
+      if ($shellType -eq "Pwsh") {
+        pwsh
+      }
+      else {
+        powershell
+      }
+      Stop-Process -Id $PID
     }
     else {
       # Create the form
@@ -193,7 +207,14 @@ function Update-Profile {
       if ($result -eq [System.Windows.Forms.DialogResult]::Yes) {
         Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/Microsoft.PowerShell_profile.ps1' -OutFile $PROFILE
         New-ItemProperty -Path $keyPath -Name 'Version' -Value $latestVersion -PropertyType 'String' -Force | Out-Null
-        exit
+        . $PROFILE
+        if ($shellType -eq "Pwsh") {
+          pwsh
+        }
+        else {
+          powershell
+        }
+        Stop-Process -Id $PID
       }
       
       $autoUpdate = Get-ItemProperty -Path $keyPath -Name 'AutoUpdate' -ErrorAction SilentlyContinue
@@ -522,7 +543,7 @@ function Show-Profile {
   $richTextBox = New-Object System.Windows.Forms.RichTextBox
   $richTextBox.Location = New-Object System.Drawing.Point(0, 0)
   $richTextBox.Size = New-Object System.Drawing.Size(($PanelWidth + 20), 490)
-$richTextBox.Text = (Get-Content $profile | Out-String)
+  $richTextBox.Text = (Get-Content $profile | Out-String)
   $richTextBox.BackColor = $nord0
   $richTextBox.ForeColor = $nord4
   $richTextBox.Font = New-Object System.Drawing.Font("Consolas", 10)
