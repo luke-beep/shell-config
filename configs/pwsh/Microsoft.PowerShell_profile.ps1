@@ -155,7 +155,7 @@ function Update-Profile {
       else {
         powershell
       }
-      Stop-Process -Id $PID
+      Stop-Process -Id $PID    
     }
     else {
       # Create the form
@@ -260,20 +260,19 @@ function Update-Profile {
         else {
           New-ItemProperty -Path $keyPath -Name 'AutoUpdate' -Value 0 -PropertyType 'DWord' -Force | Out-Null
         }
-
-        # Update
-        if ($result -eq [System.Windows.Forms.DialogResult]::Yes) {
-          Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/Microsoft.PowerShell_profile.ps1' -OutFile $PROFILE
-          New-ItemProperty -Path $keyPath -Name 'Version' -Value $latestVersion -PropertyType 'String' -Force | Out-Null
-          . $PROFILE
-          if ($shellType -eq "Pwsh") {
-            pwsh
-          }
-          else {
-            powershell
-          }
-          Stop-Process -Id $PID
+      }
+      # Update
+      if ($result -eq [System.Windows.Forms.DialogResult]::Yes) {
+        Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/Microsoft.PowerShell_profile.ps1' -OutFile $PROFILE
+        New-ItemProperty -Path $keyPath -Name 'Version' -Value $latestVersion -PropertyType 'String' -Force | Out-Null
+        . $PROFILE
+        if ($shellType -eq "Pwsh") {
+          pwsh
         }
+        else {
+          powershell
+        }
+        Stop-Process -Id $PID
       }
     }
   }
