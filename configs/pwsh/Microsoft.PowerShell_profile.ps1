@@ -4,7 +4,7 @@
 
 # Author: LukeHjo (Azrael)
 # Description: This is my PowerShell profile. It contains features that I use on a daily basis.
-# Version: 1.0.8
+# Version: 1.0.9
 # Date: 2023-12-27
 
 # ----------------------------------------
@@ -642,9 +642,14 @@ function New-DirectoryAndNavigate {
   This function removes the current directory
 #>
 function Remove-CurrentDirectory {
-  $currentDirectory = Get-Location
-  Set-Location -Path ..
-  Remove-Item -Path $currentDirectory -Recurse -Force
+  # Prompt the user to confirm the deletion
+  Write-Host "Are you sure you want to delete the current directory? (Y/N)"
+  $input = Read-Host
+  if ($input -eq "Y") {
+    $currentDirectory = Get-Location
+    Set-Location -Path ..
+    Remove-Item -Path $currentDirectory -Recurse -Force
+  }
 }
 
 <#
@@ -1117,6 +1122,134 @@ function Profile-Version {
   $currentVersion
 }
 
+<#
+.SYNOPSIS
+   Allows you to manage your profile
+.DESCRIPTION 
+   This function allows you to manage your profile
+#>
+function Preview-Profile {
+  $PanelWidth = 1000
+
+  $form = New-Object System.Windows.Forms.Form
+  $form.Text = "Preview Profile"
+  $form.BackColor = $nord0
+  $form.Size = New-Object System.Drawing.Size($PanelWidth, 500)
+  $form.StartPosition = 'CenterScreen'
+  $form.FormBorderStyle = 'FixedDialog'
+
+  $panel = New-Object System.Windows.Forms.Panel
+  $panel.Dock = 'Fill'
+  $panel.AutoScroll = $false
+
+  $richTextBox = New-Object System.Windows.Forms.RichTextBox
+  $richTextBox.Location = New-Object System.Drawing.Point(0, 0)
+  $richTextBox.Size = New-Object System.Drawing.Size(($PanelWidth + 20), 490)
+  $richTextBox.Text = "Profile Version: $(Profile-Version)`n`n" + (Get-Content $profile | Out-String)
+  $richTextBox.BackColor = $nord0
+  $richTextBox.ForeColor = $nord4
+  $richTextBox.Font = New-Object System.Drawing.Font("Consolas", 10)
+  $richTextBox.ReadOnly = $true
+  $richTextBox.BorderStyle = 'None'
+  $richTextBox.ScrollBars = 'Vertical'
+
+  $panel.Controls.Add($richTextBox)
+
+  $form.Controls.Add($panel)
+
+  $form.ShowDialog()
+}
+
+<#
+.SYNOPSIS
+   Download object(s)
+.DESCRIPTION 
+   This function downloads object(s) to the specified path or the current directory
+.PARAMETER Url 
+   The URL of the object
+#>
+function Download-Object {
+  param (
+    [Parameter(Mandatory = $true)][string[]]$Url,
+    [Parameter(Mandatory = $false)][string[]]$ObjectName,
+    [Parameter(Mandatory = $false)][string]$ObjectPath,
+    [Parameter(Mandatory = $false)][switch]$Overwrite,
+    [Parameter(Mandatory = $false)][switch]$Silent
+  )
+
+  $downloadDirectory = if ($ObjectPath) { $ObjectPath } else { Get-Location }
+  $downloadedObjects = @()
+
+  $jobs = @()
+  for ($i = 0; $i -lt $Url.Length; $i++) {
+    try {
+      $actualObjectName = if ($ObjectName.Length -gt $i) { $ObjectName[$i] } else { [System.IO.Path]::GetFileName($Url[$i]) }
+      $destinationPath = Join-Path $downloadDirectory $actualObjectName
+      if ($Overwrite -and (Test-Path $destinationPath)) {
+        if (-not $Silent) {
+          Write-Host "Removing $destinationPath"
+        }
+        Remove-Item $destinationPath -Force
+      }
+
+      $scriptBlock = {
+        param ($url, $destinationPath, $overwrite, $silent)
+        $curlCommand = "curl -o `"$destinationPath`" -L `"$url`" -s"
+        if ($overwrite) {
+          $curlCommand += " -O"
+        }
+        Invoke-Expression $curlCommand 2>&1 | Out-Null
+      }
+
+      $job = Start-Job -ScriptBlock $scriptBlock -ArgumentList $Url[$i], $destinationPath, $Overwrite, $Silent
+      $jobs += $job
+
+      $downloadedObjects += $destinationPath
+    }
+    catch {
+      if (-not $Silent) {
+        Write-Error "An error occurred: $_"
+      }
+    }
+  }
+  $jobs | Wait-Job
+
+  $jobs | ForEach-Object {
+    Receive-Job -Job $_
+    Remove-Job -Job $_
+  }
+
+  if (-not $Silent) {
+    Invoke-Item -Path $downloadDirectory  
+  }
+  return $downloadedObjects
+}
+
+<#
+.SYNOPSIS
+   Allows for pipeline execution
+.DESCRIPTION 
+   This function allows for pipeline execution
+.PARAMETER Objects 
+   The object paths
+.EXAMPLE 
+   Download-Object -Url "http://example.com/file1.zip", "http://example.com/file2.zip" | Execute-Object
+#>
+function Execute-Object {
+  param (
+    [Parameter(ValueFromPipeline = $true)]
+    [string[]]$Objects
+  )
+
+  Process {
+    foreach ($object in $Objects) {
+      if (Test-Path $object) {
+        Start-Process $object
+      }
+    }
+  }
+}
+
 # ----------------------------------------
 # Helper functions
 # ----------------------------------------
@@ -1161,6 +1294,14 @@ function Shell-Help {
 
 }
 
+<#
+.SYNOPSIS
+  Gets the aliases for a command through a reverse lookup
+.DESCRIPTION 
+  This function gets the aliases for a command through a reverse lookup
+.PARAMETER Command
+  The command
+#>
 function Get-ReverseAlias {
   param (
     [Parameter(Mandatory = $true)][string]$Command
@@ -1213,59 +1354,263 @@ function Show-Help {
 # Aliases
 # ----------------------------------------
 
-Remove-Item alias:\del | Out-Null
-Remove-Item alias:\cd | Out-Null
-Remove-Item alias:\md | Out-Null
-Remove-Item alias:\man | Out-Null
+<#
+.SYNOPSIS
+  Loads aliases
+.DESCRIPTION 
+  This function loads aliases
+#>
+function Load-Aliases {
+  $newAliasFilePath = Join-Path (Split-Path -Parent $PROFILE) "new-aliases.json"
+  $oldAliasFilePath = Join-Path (Split-Path -Parent $PROFILE) "old-aliases.json"
 
-Set-Alias -Name del -Value Trash-Item
-Set-Alias -Name empty -Value Empty-RecycleBin
-Set-Alias -Name time -Value Get-Date
-Set-Alias -Name pactive -Value Active-Processes
-Set-Alias -Name pfind -Value Find-Process
-Set-Alias -Name pkill -Value Kill-Process
-Set-Alias -Name pinfo -Value Process-Information
-Set-Alias -Name pcinfo -Value Get-ComputerInfo
-Set-Alias -Name updates -Value Get-Updates
-Set-Alias -Name host -Value Get-Host
-Set-Alias -Name hack -Value Hack-Target
-Set-Alias -Name eip -Value Get-Extended-IpInfo
-Set-Alias -Name ip -Value Get-IP
-Set-Alias -Name scanip -Value Scan-IP
-Set-Alias -Name scanports -Value Scan-Ports
-Set-Alias -Name del -Value Delete-Folder
-Set-Alias -Name ocopy -Value Copy-Folder
-Set-Alias -Name omove -Value Move-Folder
-Set-Alias -Name osize -Value Object-Size
-Set-Alias -Name ocount -Value Object-Count
-Set-Alias -Name cop -Value Copy-Path
-Set-Alias -Name cd -Value Change-Directory
-Set-Alias -Name back -Value Go-Back
-Set-Alias -Name shell -Value Get-ShellInfo
-Set-Alias -Name packages -Value Get-Packages
-Set-Alias -Name refresh -Value Refresh-Shell
-Set-Alias -Name restart -Value Restart-Shell
-Set-Alias -Name help -Value Shell-Help
-Set-Alias -Name search -Value Search-Item
-Set-Alias -Name mdd -Value New-DirectoryAndNavigate
-Set-Alias -Name rmd -Value Remove-CurrentDirectory
-Set-Alias -Name backup -Value Backup-Workspace
-Set-Alias -Name upackages -Value Update-Packages
-Set-Alias -Name gsr -Value Generate-System-Report
-Set-Alias -Name optimize -Value Optimize-PowerShell
-Set-Alias -Name activate -Value Activate-Windows
-Set-Alias -Name hosts -Value Host-Entry-Manager
-Set-Alias -Name dns -Value DNS-Changer
-Set-Alias -Name network -Value Network-Adapter-Manager
-Set-Alias -Name nagle -Value Nagles
-Set-Alias -Name matrix -Value Start-MatrixRain
-Set-Alias -Name touch -Value Create-File
-Set-Alias -Name joke -Value Get-ProgrammingJoke
-Set-Alias -Name services -Value Get-ServiceStatus
-Set-Alias -Name ddg -Value Search-DuckDuckGo
-Set-Alias -Name links -Value Get-Links
-Set-Alias -Name version -Value Profile-Version
-Set-Alias -Name update -Value Update-Profile
+  if (-not (Test-Path $newAliasFilePath)) {
+    $newAliasFileUrl = "https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/new-aliases.json"
+    Invoke-WebRequest -Uri $newAliasFileUrl -OutFile $newAliasFilePath
+  }
+
+  if (-not (Test-Path $oldAliasFilePath)) {
+    $oldAliasFileUrl = "https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/old-aliases.json"
+    Invoke-WebRequest -Uri $oldAliasFileUrl -OutFile $oldAliasFilePath
+  }
+
+  if (Test-Path $oldAliasFilePath) {
+    $oldAliases = Get-Content $oldAliasFilePath | ConvertFrom-Json
+
+    foreach ($alias in $oldAliases) {
+      if (Get-Alias -Name $alias -ErrorAction SilentlyContinue) {
+        Remove-Alias $alias -Force -Scope Global 
+      }
+    }
+  }
+
+  if (Test-Path $newAliasFilePath) {
+    $newAliases = Get-Content $newAliasFilePath | ConvertFrom-Json
+
+    foreach ($alias in $newAliases.PSObject.Properties) {
+      try {
+        Set-Alias -Name $alias.Name -Value $alias.Value -Scope Global -Option AllScope -Force
+      }
+      catch {
+        Write-Error "Error setting alias $($alias.Name): $_"
+      }
+    }  
+  }
+}
+Load-Aliases
+
+function Add-Aliases {
+  $AliasConfigFile = "new-aliases.json"
+  $aliasConfigFilePath = Join-Path (Split-Path -Parent $PROFILE) $AliasConfigFile
+
+  if (-not (Test-Path $aliasConfigFilePath)) {
+    $aliasConfigFileUrl = "https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/$AliasConfigFile"
+    Invoke-WebRequest -Uri $aliasConfigFileUrl -OutFile $aliasConfigFilePath
+  }
+
+  $aliasConfig = Get-Content $aliasConfigFilePath | ConvertFrom-Json
+  Write-Host $aliasConfig
+
+  $form = New-Object System.Windows.Forms.Form
+  $form.Text = "Alias Configuration"
+  $form.Size = New-Object System.Drawing.Size(400, 300)
+  $form.StartPosition = "CenterScreen"
+  $form.BackColor = $nord0
+  $form.ForeColor = $nord4
+
+  $tableLayoutPanel = New-Object System.Windows.Forms.TableLayoutPanel
+  $tableLayoutPanel.RowCount = 1
+  $tableLayoutPanel.ColumnCount = 1
+  $tableLayoutPanel.Dock = [System.Windows.Forms.DockStyle]::Fill
+  $tableLayoutPanel.ColumnStyles.Add((New-Object System.Windows.Forms.ColumnStyle([System.Windows.Forms.SizeType]::Percent, 100)))
+  $tableLayoutPanel.RowStyles.Clear()
+  $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::Percent, 100)))
+  $tableLayoutPanel.BorderStyle = [System.Windows.Forms.BorderStyle]::None
+  $tableLayoutPanel.BackColor = $nord0
+  $tableLayoutPanel.ForeColor = $nord4
+
+  $dataGridView = New-Object System.Windows.Forms.DataGridView
+  $dataGridView.BorderStyle = [System.Windows.Forms.BorderStyle]::None
+  $dataGridView.Location = New-Object System.Drawing.Point(10, 10)
+  $dataGridView.Size = New-Object System.Drawing.Size(360, 200)
+  $dataGridView.Dock = [System.Windows.Forms.DockStyle]::Fill
+  $dataGridView.AutoGenerateColumns = $true
+  $dataGridView.RowHeadersVisible = $false
+  $dataGridView.BackgroundColor = $nord0
+  $dataGridView.ForeColor = $nord6
+  $dataGridView.GridColor = $nord3
+  $dataGridView.DefaultCellStyle.BackColor = $nord0
+  $dataGridView.DefaultCellStyle.ForeColor = $nord6
+  $dataGridView.ColumnHeadersDefaultCellStyle.BackColor = $nord3
+  $dataGridView.ColumnHeadersDefaultCellStyle.ForeColor = $nord6
+  $dataGridView.RowHeadersBorderStyle = [System.Windows.Forms.DataGridViewHeaderBorderStyle]::None
+  $dataGridView.ColumnHeadersBorderStyle = [System.Windows.Forms.DataGridViewHeaderBorderStyle]::None
+  $dataGridView.DefaultCellStyle.SelectionBackColor = $nord3
+  $dataGridView.AutoSizeColumnsMode = [System.Windows.Forms.DataGridViewAutoSizeColumnsMode]::Fill
+
+  $contextMenu = New-Object System.Windows.Forms.ContextMenuStrip
+  $deleteMenuItem = New-Object System.Windows.Forms.ToolStripMenuItem
+  $deleteMenuItem.Text = "Delete"
+  $deleteMenuItem.add_Click({
+      if ($dataGridView.SelectedCells.Count -gt 0) {
+          $selectedRowIndex = $dataGridView.SelectedCells[0].RowIndex
+          $dataGridView.Rows.RemoveAt($selectedRowIndex)
+      }
+  })
+  $contextMenu.Items.Add($deleteMenuItem)
+  
+  $dataGridView.ContextMenuStrip = $contextMenu
+
+  $nameColumn = New-Object System.Windows.Forms.DataGridViewTextBoxColumn
+  $nameColumn.HeaderText = "Alias Name"
+  $nameColumn.DataPropertyName = "Name"
+  $valueColumn = New-Object System.Windows.Forms.DataGridViewTextBoxColumn
+  $valueColumn.HeaderText = "Alias Value"
+  $valueColumn.DataPropertyName = "Value"
+
+  $dataGridView.Columns.Add($nameColumn)
+  $dataGridView.Columns.Add($valueColumn)
+
+  $dataTable = New-Object System.Data.DataTable
+
+  $dataTable.Columns.Add("Name", [string])
+  $dataTable.Columns.Add("Value", [string])
+
+  $aliasConfig.PSObject.Properties | ForEach-Object {
+    $row = $dataTable.NewRow()
+    $row["Name"] = $_.Name
+    $row["Value"] = $_.Value
+    $dataTable.Rows.Add($row)
+  }
+
+  $dataGridView.DataSource = $dataTable
+
+  $tableLayoutPanel.Controls.Add($dataGridView, 0, 0)
+
+  $button = New-Object System.Windows.Forms.Button
+  $button.Location = New-Object System.Drawing.Point(10, 220)
+  $button.Size = New-Object System.Drawing.Size(150, 30)
+  $button.Text = "Save Configuration"
+  $button.Dock = [System.Windows.Forms.DockStyle]::Fill
+  $button.BackColor = $nord3
+  $button.ForeColor = $nord6
+  $button.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
+  $button.FlatAppearance.BorderColor = $nord3
+  $button.FlatAppearance.BorderSize = 1
+  $button.Add_Click({
+      $updatedConfig = New-Object PSObject
+      $dataGridView.DataSource | ForEach-Object {
+        Add-Member -InputObject $updatedConfig -NotePropertyName $_.Name -NotePropertyValue $_.Value
+      }
+
+      $updatedConfig | ConvertTo-Json | Set-Content -Path $aliasConfigFilePath -Force
+
+      [System.Windows.Forms.MessageBox]::Show("Alias configuration saved.", "Success")
+    })
+  $tableLayoutPanel.Controls.Add($button, 0, 1)
+
+  $form.Controls.Add($tableLayoutPanel)
+
+  $form.ShowDialog()
+
+  $form.Dispose()
+}
+
+function Remove-Aliases {
+  $AliasConfigFile = "old-aliases.json"
+  $aliasConfigFilePath = Join-Path (Split-Path -Parent $PROFILE) $AliasConfigFile
+
+  if (-not (Test-Path $aliasConfigFilePath)) {
+    $aliasConfigFileUrl = "https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/$AliasConfigFile"
+    Invoke-WebRequest -Uri $aliasConfigFileUrl -OutFile $aliasConfigFilePath
+  }
+
+  $aliasConfig = Get-Content $aliasConfigFilePath | ConvertFrom-Json
+
+  $dataTable = New-Object System.Data.DataTable
+  $dataTable.Columns.Add("Name", [string])
+
+  foreach ($alias in $aliasConfig) {
+    $row = $dataTable.NewRow()
+    $row["Name"] = $alias
+    $dataTable.Rows.Add($row)
+  }
+
+  $form = New-Object System.Windows.Forms.Form
+  $form.Text = "Alias Configuration"
+  $form.StartPosition = "CenterScreen"
+  $form.BackColor = $nord0
+  $form.ForeColor = $nord4
+
+  $tableLayoutPanel = New-Object System.Windows.Forms.TableLayoutPanel
+  $tableLayoutPanel.RowCount = 1
+  $tableLayoutPanel.ColumnCount = 1
+  $tableLayoutPanel.Dock = [System.Windows.Forms.DockStyle]::Fill
+  $tableLayoutPanel.ColumnStyles.Add((New-Object System.Windows.Forms.ColumnStyle([System.Windows.Forms.SizeType]::Percent, 100)))
+  $tableLayoutPanel.RowStyles.Clear()
+  $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::Percent, 100)))
+  $tableLayoutPanel.BorderStyle = [System.Windows.Forms.BorderStyle]::None
+
+  $dataGridView = New-Object System.Windows.Forms.DataGridView
+  $dataGridView.BorderStyle = [System.Windows.Forms.BorderStyle]::None
+  $dataGridView.Dock = [System.Windows.Forms.DockStyle]::Fill
+  $dataGridView.AutoGenerateColumns = $true
+  $dataGridView.RowHeadersVisible = $false
+  $dataGridView.BackgroundColor = $nord0
+  $dataGridView.ForeColor = $nord6
+  $dataGridView.GridColor = $nord3
+  $dataGridView.DefaultCellStyle.BackColor = $nord0
+  $dataGridView.DefaultCellStyle.ForeColor = $nord6
+  $dataGridView.ColumnHeadersDefaultCellStyle.BackColor = $nord3
+  $dataGridView.ColumnHeadersDefaultCellStyle.ForeColor = $nord6
+  $dataGridView.RowHeadersBorderStyle = [System.Windows.Forms.DataGridViewHeaderBorderStyle]::None
+  $dataGridView.ColumnHeadersBorderStyle = [System.Windows.Forms.DataGridViewHeaderBorderStyle]::None
+  $dataGridView.DefaultCellStyle.SelectionBackColor = $nord3
+  $dataGridView.AutoSizeColumnsMode = [System.Windows.Forms.DataGridViewAutoSizeColumnsMode]::Fill
+
+  $dataGridView.DataSource = $dataTable
+
+  $contextMenu = New-Object System.Windows.Forms.ContextMenuStrip
+  $deleteMenuItem = New-Object System.Windows.Forms.ToolStripMenuItem
+  $deleteMenuItem.Text = "Delete"
+  $deleteMenuItem.add_Click({
+      if ($dataGridView.SelectedCells.Count -gt 0) {
+          $selectedRowIndex = $dataGridView.SelectedCells[0].RowIndex
+          $dataGridView.Rows.RemoveAt($selectedRowIndex)
+      }
+  })
+  $contextMenu.Items.Add($deleteMenuItem)
+  
+  $dataGridView.ContextMenuStrip = $contextMenu
+
+  $tableLayoutPanel.Controls.Add($dataGridView, 0, 0)
+
+  $button = New-Object System.Windows.Forms.Button
+  $button.Dock = [System.Windows.Forms.DockStyle]::Fill
+  $button.Text = "Save Configuration"
+  $button.BackColor = $nord3
+  $button.ForeColor = $nord6
+  $button.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
+  $button.FlatAppearance.BorderColor = $nord3
+  $button.FlatAppearance.BorderSize = 1
+  $button.Add_Click({
+      $updatedConfig = $dataGridView.Rows | Where-Object { -not $_.IsNewRow } | ForEach-Object {
+        $_.Cells["Name"].Value
+      }
+
+      $updatedConfig | ConvertTo-Json | Set-Content -Path $aliasConfigFilePath -Force
+
+      [System.Windows.Forms.MessageBox]::Show("Alias configuration saved.", "Success")
+    })
+
+  $tableLayoutPanel.Controls.Add($button, 0, 1)
+
+  $form.Controls.Add($tableLayoutPanel)
+
+  $form.ShowDialog()
+
+  $form.Dispose()
+}
 
 # ----------------------------------------
 # Profile Completion
