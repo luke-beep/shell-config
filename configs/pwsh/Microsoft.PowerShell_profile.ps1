@@ -4,7 +4,7 @@
 
 # Author: LukeHjo (Azrael)
 # Description: This is my PowerShell profile. It contains features that I use on a daily basis.
-# Version: 1.1.0
+# Version: 1.1.1
 # Date: 2023-12-28
 
 # ----------------------------------------
@@ -35,6 +35,10 @@ $nord15 = [System.Drawing.ColorTranslator]::FromHtml("#B48EAD")
    Check for updates
 .DESCRIPTION 
    This function checks for updates
+.PARAMETER Silent 
+   If this parameter is specified, the profile will be updated silently
+.PARAMETER Force 
+   If this parameter is specified, the profile will be updated automatically by skipping the version check
 #>
 function Update-Profile {
   param (
@@ -112,7 +116,6 @@ function Update-Profile {
     }
   }
   elseif ($currentVersion -ne $latestVersion) {
-
     # Check if the profile should be updated automatically
     $autoUpdate = Get-ItemProperty -Path $keyPath -Name 'AutoUpdate' -ErrorAction SilentlyContinue
     if ($autoUpdate.AutoUpdate -eq 1 -or $Silent) {
@@ -256,7 +259,13 @@ function Update-Profile {
   }
 }
 
-function Init {
+<#
+.SYNOPSIS
+   Initialize the profile and check for updates
+.DESCRIPTION 
+   This function initializes the profile and checks for updates
+#>
+function Initialize-Profile {
   # Check for updates
   Update-Profile
 
@@ -282,7 +291,6 @@ function Init {
   }
 
   oh-my-posh init pwsh --config 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/omp/theme.json' | Invoke-Expression
-  Clear-Host # Clear the screen
 
   $keyPath = 'HKCU:\Software\Azrael\PowerShell'
   $key = Get-ItemProperty -Path $keyPath -Name 'FirstRun' -ErrorAction SilentlyContinue
@@ -346,7 +354,7 @@ function Init {
 
     $form.ShowDialog()
   }
-  Clear-Host
+  
   $keyPath = 'HKCU:\Software\Azrael\PowerShell'
   $key = Get-ItemProperty -Path $keyPath -Name 'Version' -ErrorAction SilentlyContinue
   $version = ($key.Version).Trim()
@@ -358,10 +366,217 @@ function Init {
   Write-Host "Copyright (c) 2023-2024 Azrael"
   Write-Host "https://github.com/luke-beep/shell-config/`n"
 }
-Init # Initialize the profile
+Initialize-Profile
+
+<#
+.SYNOPSIS
+  Configure Profile Settings
+.DESCRIPTION 
+  This function configures profile settings
+#>
+function Set-ProfileSettings {
+  $PanelWidth = 1000
+
+  $form = New-Object System.Windows.Forms.Form
+  $form.Text = "Profile Settings"
+  $form.BackColor = $nord0
+  $form.Size = New-Object System.Drawing.Size($PanelWidth, 500)
+  $form.StartPosition = 'CenterScreen'
+  $form.FormBorderStyle = 'FixedDialog'
+
+  $icoFileUrl = "https://raw.githubusercontent.com/luke-beep/shell-config/main/assets/Azrael.ico"
+  $icoFileData = Invoke-WebRequest -Uri $icoFileUrl -UseBasicParsing
+
+  if ($icoFileData.StatusCode -eq 200) {
+    $icoFileStream = [System.IO.MemoryStream]::new($icoFileData.Content)
+    $icon = [System.Drawing.Icon]::new($icoFileStream)
+    $form.Icon = $icon
+  }
+  else {
+    Write-Host "Failed to download the ICO file from the URL."
+  }
+
+  $keyPath = 'HKCU:\Software\Azrael\PowerShell'
+  $keys = Get-ItemProperty -Path $keyPath -ErrorAction SilentlyContinue
+  
+  $tableLayoutPanel = New-Object System.Windows.Forms.TableLayoutPanel
+  $tableLayoutPanel.RowCount = 1
+  $tableLayoutPanel.ColumnCount = 1
+  $tableLayoutPanel.Dock = [System.Windows.Forms.DockStyle]::Fill
+  $tableLayoutPanel.ColumnStyles.Add((New-Object System.Windows.Forms.ColumnStyle([System.Windows.Forms.SizeType]::Percent, 100)))
+  $tableLayoutPanel.RowStyles.Clear()
+  $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::Percent, 100)))
+  $tableLayoutPanel.BorderStyle = [System.Windows.Forms.BorderStyle]::None
+  $tableLayoutPanel.BackColor = $nord0
+  $tableLayoutPanel.ForeColor = $nord4
+
+  $dataGridView = New-Object System.Windows.Forms.DataGridView
+  $dataGridView.BorderStyle = [System.Windows.Forms.BorderStyle]::None
+  $dataGridView.Location = New-Object System.Drawing.Point(10, 10)
+  $dataGridView.Size = New-Object System.Drawing.Size(360, 200)
+  $dataGridView.Dock = [System.Windows.Forms.DockStyle]::Fill
+  $dataGridView.AutoGenerateColumns = $true
+  $dataGridView.RowHeadersVisible = $false
+  $dataGridView.BackgroundColor = $nord0
+  $dataGridView.ForeColor = $nord6
+  $dataGridView.GridColor = $nord3
+  $dataGridView.DefaultCellStyle.BackColor = $nord0
+  $dataGridView.DefaultCellStyle.ForeColor = $nord6
+  $dataGridView.ColumnHeadersDefaultCellStyle.BackColor = $nord3
+  $dataGridView.ColumnHeadersDefaultCellStyle.ForeColor = $nord6
+  $dataGridView.RowHeadersBorderStyle = [System.Windows.Forms.DataGridViewHeaderBorderStyle]::None
+  $dataGridView.ColumnHeadersBorderStyle = [System.Windows.Forms.DataGridViewHeaderBorderStyle]::None
+  $dataGridView.DefaultCellStyle.SelectionBackColor = $nord3
+  $dataGridView.AutoSizeColumnsMode = [System.Windows.Forms.DataGridViewAutoSizeColumnsMode]::Fill
+
+  $deletedRows = New-Object System.Collections.Generic.List[string]
+
+  $contextMenu = New-Object System.Windows.Forms.ContextMenuStrip
+  $deleteMenuItem = New-Object System.Windows.Forms.ToolStripMenuItem
+  $deleteMenuItem.Text = "Delete"
+  $deleteMenuItem.add_Click({
+      if ($dataGridView.SelectedCells.Count -gt 0) {
+        $selectedRowIndex = $dataGridView.SelectedCells[0].RowIndex
+        $name = $dataGridView.Rows[$selectedRowIndex].Cells[0].Value
+        $deletedRows.Add($name)
+        $dataGridView.Rows.RemoveAt($selectedRowIndex)
+      }
+    })
+  $contextMenu.Items.Add($deleteMenuItem)
+  
+  $dataGridView.ContextMenuStrip = $contextMenu
+
+  $nameColumn = New-Object System.Windows.Forms.DataGridViewTextBoxColumn
+  $nameColumn.HeaderText = "Name"
+  $nameColumn.DataPropertyName = "Name"
+  $valueColumn = New-Object System.Windows.Forms.DataGridViewTextBoxColumn
+  $valueColumn.HeaderText = "Value"
+  $valueColumn.DataPropertyName = "Value"
+
+  $dataGridView.Columns.Add($nameColumn)
+  $dataGridView.Columns.Add($valueColumn)
+
+  $dataTable = New-Object System.Data.DataTable
+
+  $dataTable.Columns.Add("Name", [string])
+  $dataTable.Columns.Add("Value", [string])
+
+  $keys.PSObject.Properties | ForEach-Object {
+    $row = $dataTable.NewRow()
+    $row["Name"] = $_.Name
+    $row["Value"] = $_.Value
+    $dataTable.Rows.Add($row)
+  }
+
+  $dataGridView.DataSource = $dataTable
+
+  $tableLayoutPanel.Controls.Add($dataGridView, 0, 0)
+  
+  $button = New-Object System.Windows.Forms.Button
+  $button.Location = New-Object System.Drawing.Point(10, 220)
+  $button.Size = New-Object System.Drawing.Size(150, 30)
+  $button.Text = "Save Configuration"
+  $button.Dock = [System.Windows.Forms.DockStyle]::Fill
+  $button.BackColor = $nord3
+  $button.ForeColor = $nord6
+  $button.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
+  $button.FlatAppearance.BorderColor = $nord3
+  $button.FlatAppearance.BorderSize = 1
+  $button.Add_Click({
+      $dataGridView.Rows | ForEach-Object {
+        if (-not $_.IsNewRow) {
+          $row = $_.DataBoundItem
+          $name = $row["Name"]
+          $value = $row["Value"]
+          if ([string]::IsNullOrEmpty($value)) {
+            Remove-ItemProperty -Path $keyPath -Name $name
+          }
+          else {
+            Set-ItemProperty -Path $keyPath -Name $name -Value $value
+          }
+        }
+      }
+
+      $deletedRows | ForEach-Object {
+        Remove-ItemProperty -Path $keyPath -Name $_
+        $deletedRows.Remove($_)
+      }
+      [System.Windows.Forms.MessageBox]::Show("Profile settings saved.", "Success")
+    })
+  $tableLayoutPanel.Controls.Add($button, 0, 1)
+
+  $form.Controls.Add($tableLayoutPanel)
+
+  $form.ShowDialog()
+
+  $form.Dispose()
+}
+
+<#
+.SYNOPSIS
+   Gets the current profile version
+.DESCRIPTION 
+   This function gets the current profile version
+#>
+function Get-ProfileVersion {
+  $keyPath = 'HKCU:\Software\Azrael\PowerShell'
+  $version = Get-ItemProperty -Path $keyPath -Name 'Version' -ErrorAction SilentlyContinue
+  $currentVersion = $version.Version
+  $currentVersion
+}
+
+<#
+.SYNOPSIS
+   Allows you to preview your profile
+.DESCRIPTION 
+   This function allows you to preview your profile
+#>
+function Show-Profile {
+  $PanelWidth = 1000
+
+  $form = New-Object System.Windows.Forms.Form
+  $form.Text = "Preview Profile"
+  $form.BackColor = $nord0
+  $form.Size = New-Object System.Drawing.Size($PanelWidth, 500)
+  $form.StartPosition = 'CenterScreen'
+  $form.FormBorderStyle = 'FixedDialog'
+
+  $icoFileUrl = "https://raw.githubusercontent.com/luke-beep/shell-config/main/assets/Azrael.ico"
+  $icoFileData = Invoke-WebRequest -Uri $icoFileUrl -UseBasicParsing
+
+  if ($icoFileData.StatusCode -eq 200) {
+    $icoFileStream = [System.IO.MemoryStream]::new($icoFileData.Content)
+    $icon = [System.Drawing.Icon]::new($icoFileStream)
+    $form.Icon = $icon
+  }
+  else {
+    Write-Host "Failed to download the ICO file from the URL."
+  }
+
+  $panel = New-Object System.Windows.Forms.Panel
+  $panel.Dock = 'Fill'
+  $panel.AutoScroll = $false
+
+  $richTextBox = New-Object System.Windows.Forms.RichTextBox
+  $richTextBox.Location = New-Object System.Drawing.Point(0, 0)
+  $richTextBox.Size = New-Object System.Drawing.Size(($PanelWidth + 20), 490)
+$richTextBox.Text = (Get-Content $profile | Out-String)
+  $richTextBox.BackColor = $nord0
+  $richTextBox.ForeColor = $nord4
+  $richTextBox.Font = New-Object System.Drawing.Font("Consolas", 10)
+  $richTextBox.ReadOnly = $true
+  $richTextBox.BorderStyle = 'None'
+  $richTextBox.ScrollBars = 'Vertical'
+
+  $panel.Controls.Add($richTextBox)
+
+  $form.Controls.Add($panel)
+
+  $form.ShowDialog()
+}
 
 # ----------------------------------------
-# Functions
+# Package Management
 # ----------------------------------------
 
 <#
@@ -369,8 +584,14 @@ Init # Initialize the profile
    Gets all of the available packages
 .DESCRIPTION 
    This function gets all of the available packages
+.PARAMETER Install 
+   If this parameter is specified, the packages will be updated
 #>
 function Get-Packages {
+  param (
+    [Parameter(Mandatory = $false)][string]$Install
+  )
+
   # check if scoop is installed
   $scoop = Get-Command -Name scoop -ErrorAction SilentlyContinue
   if ($scoop) {
@@ -386,58 +607,41 @@ function Get-Packages {
   if ($choco) {
     choco list
   }
+  if ($Install) {
+    # check if scoop is installed
+    $scoop = Get-Command -Name scoop -ErrorAction SilentlyContinue
+    if ($scoop) {
+      # update scoop
+      scoop update *
+    }
+    # check if winget is installed
+    $winget = Get-Command -Name winget -ErrorAction SilentlyContinue
+    if ($winget) {
+      winget upgrade --all
+    }
+    # check if choco is installed
+    $choco = Get-Command -Name choco -ErrorAction SilentlyContinue
+    if ($choco) {
+      choco upgrade all -y
+    }
+  }
 }
+
+# ----------------------------------------
+# Object Management
+# ----------------------------------------
 
 <#
 .SYNOPSIS
-   Gets the current shell information
+   Deletes an object
 .DESCRIPTION
-   This function gets the current shell information
-#>
-function Get-ShellInfo {
-  $version = $host.Version.Major
-  $shellType = if ($version -ge 7) { "Pwsh" } else { "PowerShell" }
-  $bitness = if ([Environment]::Is64BitProcess) { "64-bit" } else { "32-bit" }
-
-  Write-Output "Profile Path: $PROFILE"
-  Write-Output "Host Name: $($host.Name)"
-  Write-Output "Host Version: $($host.Version) -> $($shellType) ($bitness)"
-}
-
-<#
-.SYNOPSIS
-   Refreshes the shell
-.DESCRIPTION
-   This function refreshes the shell
-#>
-function Refresh-Shell {
-  pwsh
-  refreshenv
-  Clear-Host
-}
-
-<#
-.SYNOPSIS
-   Restarts the shell
-.DESCRIPTION
-   This function restarts the shell
-#>
-function Restart-Shell {
-  $host.SetShouldExit() | Out-Null
-  & powershell.exe -NoExit -Command ". '$PROFILE'"
-}
-
-<#
-.SYNOPSIS
-   Deletes a file or folder
-.DESCRIPTION
-   This function deletes a file or folder
+   This function deletes an object
 .PARAMETER Path 
-   The path of the file or folder
+   The path of the object
 #>
-function Trash-Item {
+function Remove-Object {
   param (
-    [Parameter(Mandatory = $false)][string]$Path
+    [Parameter(Mandatory = $true)][string]$Path
   )
 
   if ($Path) {
@@ -448,13 +652,44 @@ function Trash-Item {
 
 <#
 .SYNOPSIS
-   Empties the recycle bin
+   Gets the size of an object
 .DESCRIPTION
-   This function empties the recycle bin
+    This function gets the size of an object
+.PARAMETER Path
+    The path of the object
 #>
-function Empty-RecycleBin {
-  Clear-RecycleBin -Force
+function Get-ObjectSize {
+  param (
+    [Parameter(Mandatory = $true)][string]$Path
+  )
+
+  $size = (Get-ChildItem $Path -Recurse | Measure-Object -Property Length -Sum -ErrorAction SilentlyContinue).Sum
+  Write-Host "Size: $size bytes"
+  Write-Host "Size: $(($size / 1KB)) KB"
+  Write-Host "Size: $(($size / 1MB)) MB"
+  Write-Host "Size: $(($size / 1GB)) GB"
 }
+
+<#
+.SYNOPSIS
+   Counts the number of objects in a folder
+.DESCRIPTION
+   This function counts the number of objects in a folder
+.PARAMETER Path
+   The path of the folder
+#>
+function Get-ObjectCount {
+  param (
+    [Parameter(Mandatory = $true)][string]$Path
+  )
+
+  $count = (Get-ChildItem $Path -Recurse | Measure-Object -Property Length -ErrorAction SilentlyContinue).Count
+  $count
+}
+
+# ----------------------------------------
+# Process Management
+# ----------------------------------------
 
 <#
 .SYNOPSIS
@@ -462,7 +697,7 @@ function Empty-RecycleBin {
 .DESCRIPTION
    This function gets the active processes
 #>
-function Active-Processes {
+function Get-ActiveProcesses {
   Get-Process | Where-Object { $_.mainWindowTitle } | Format-Table `
   @{Label = "NPM(K)"; Expression = { [int]($_.NPM / 1024) } },
   @{Label = "PM(K)"; Expression = { [int]($_.PM / 1024) } },
@@ -516,7 +751,7 @@ function Kill-Process {
 .DESCRIPTION
    This function gets the current computer information
 #>
-function Process-Information {
+function Get-ComputerInformation {
   Get-Process | Format-Table `
   @{Label = "NPM(K)"; Expression = { [int]($_.NPM / 1024) } },
   @{Label = "PM(K)"; Expression = { [int]($_.PM / 1024) } },
@@ -525,6 +760,10 @@ function Process-Information {
   @{Label = "CPU(s)"; Expression = { if ($_.CPU) { $_.CPU.ToString("N") } } },
   Id, ProcessName, StartTime, mainWindowTitle, -AutoSize
 }
+
+# ----------------------------------------
+# System Management
+# ----------------------------------------
 
 <#
 .SYNOPSIS
@@ -541,13 +780,152 @@ function Get-Updates {
 
 <#
 .SYNOPSIS
+   Generates a system report
+.DESCRIPTION
+   This function generates a system report
+#>
+function Get-SystemReport {
+  Invoke-RestMethod "https://raw.githubusercontent.com/luke-beep/GSR/main/GenerateSystemReport.ps1" | Invoke-Expression
+}
+
+<#
+.SYNOPSIS
+   Optimizes PowerShell assemblies
+.DESCRIPTION
+   This function optimizes PowerShell assemblies
+#>
+function Optimize-PowerShell {
+  Invoke-RestMethod "https://raw.githubusercontent.com/luke-beep/ps-optimize-assemblies/main/optimize-assemblies.ps1" | Invoke-Expression
+}
+
+<#
+.SYNOPSIS
+   Activates Windows using MAS
+.DESCRIPTION 
+   This function activates Windows using MAS
+#>
+function Enable-WindowsActivation {
+  Invoke-RestMethod https://massgrave.dev/get | Invoke-Expression
+}
+
+<#
+.SYNOPSIS
+   Download object(s)
+.DESCRIPTION 
+   This function downloads object(s) to the specified path or the current directory
+.PARAMETER Url 
+   The URL of the object
+#>
+function Invoke-DownloadObject {
+  param (
+    [Parameter(Mandatory = $true)][string[]]$Url,
+    [Parameter(Mandatory = $false)][string[]]$ObjectName,
+    [Parameter(Mandatory = $false)][string]$ObjectPath,
+    [Parameter(Mandatory = $false)][switch]$Overwrite,
+    [Parameter(Mandatory = $false)][switch]$Silent
+  )
+
+  $downloadDirectory = if ($ObjectPath) { $ObjectPath } else { Get-Location }
+  $downloadedObjects = @()
+
+  $jobs = @()
+  for ($i = 0; $i -lt $Url.Length; $i++) {
+    try {
+      $actualObjectName = if ($ObjectName.Length -gt $i) { $ObjectName[$i] } else { [System.IO.Path]::GetFileName($Url[$i]) }
+      $destinationPath = Join-Path $downloadDirectory $actualObjectName
+      if ($Overwrite -and (Test-Path $destinationPath)) {
+        if (-not $Silent) {
+          Write-Host "Removing $destinationPath"
+        }
+        Remove-Item $destinationPath -Force
+      }
+
+      $scriptBlock = {
+        param ($url, $destinationPath, $overwrite, $silent)
+        $curlCommand = "curl -o `"$destinationPath`" -L `"$url`" -s"
+        if ($overwrite) {
+          $curlCommand += " -O"
+        }
+        Invoke-Expression $curlCommand 2>&1 | Out-Null
+      }
+
+      $job = Start-Job -ScriptBlock $scriptBlock -ArgumentList $Url[$i], $destinationPath, $Overwrite, $Silent
+      $jobs += $job
+
+      $downloadedObjects += $destinationPath
+    }
+    catch {
+      if (-not $Silent) {
+        Write-Error "An error occurred: $_"
+      }
+    }
+  }
+  $jobs | Wait-Job
+
+  $jobs | ForEach-Object {
+    Receive-Job -Job $_
+    Remove-Job -Job $_
+  }
+
+  if (-not $Silent) {
+    Invoke-Item -Path $downloadDirectory  
+  }
+  return $downloadedObjects
+}
+
+<#
+.SYNOPSIS
+   Allows for pipeline execution
+.DESCRIPTION 
+   This function allows for pipeline execution
+.PARAMETER Objects 
+   The object paths
+.EXAMPLE 
+   Invoke-DownloadObject -Url "http://example.com/file1.zip", "http://example.com/file2.zip" | Invoke-Object
+#>
+function Invoke-Object {
+  param (
+    [Parameter(ValueFromPipeline = $true)]
+    [string[]]$Objects
+  )
+
+  Process {
+    foreach ($object in $Objects) {
+      if (Test-Path $object) {
+        Start-Process $object
+      }
+    }
+  }
+}
+
+<#
+.SYNOPSIS
+   Gets the status of all services
+.DESCRIPTION 
+   This function gets the status of all services
+#>
+function Get-ServiceStatus {
+  Get-Service | ForEach-Object {
+    $status = $_.Status
+    $name = $_.Name
+    $displayName = $_.DisplayName
+    Write-Output ("{0} ({1}): {2}" -f $displayName, $name, $status)
+  }
+}
+
+# ----------------------------------------
+# Entertainment
+# ----------------------------------------
+
+<#
+.SYNOPSIS
    Hacks a target
 .DESCRIPTION
    This function hacks a target
 .PARAMETER Target 
    The target
 #>
-function Hack-Target {
+function Invoke-TargetHack {
   param (
     [Parameter(Mandatory = $true)][string]$Target
   )
@@ -584,385 +962,14 @@ function Hack-Target {
 
 <#
 .SYNOPSIS
-   Gets the current IP address and additional information
-.DESCRIPTION
-   This function gets the current IP address and additional information
-#>
-function Get-Extended-IpInfo {
-  $ip = Invoke-RestMethod -Uri "https://api.ipify.org?format=json"
-  $info = Invoke-RestMethod -Uri "http://ip-api.com/json/$($ip.ip)"
-  Write-Host "IP: $($ip.ip)"
-  Write-Host "Country: $($info.country)"
-  Write-Host "Region: $($info.regionName)"
-  Write-Host "City: $($info.city)"
-  Write-Host "ISP: $($info.isp)"
-}
-
-<#
-.SYNOPSIS
-   Gets the current IP address
-.DESCRIPTION
-   This function gets the current IP address
-#>
-function Get-IP {
-  $ip = Invoke-RestMethod -Uri "https://api.ipify.org?format=json"
-  $ip.ip
-}
-
-<#
-.SYNOPSIS
-   Scans an IP address
-.DESCRIPTION
-   This function scans an IP address
-.PARAMETER IP 
-   The IP address
-#>
-function Scan-IP {
-  param (
-    [Parameter(Mandatory = $true)][string]$IP
-  )
-
-  $info = Invoke-RestMethod -Uri "http://ip-api.com/json/$($IP)"
-  Write-Host "IP: $($IP)"
-  Write-Host "Country: $($info.country)"
-  Write-Host "Region: $($info.regionName)"
-  Write-Host "City: $($info.city)"
-  Write-Host "ISP: $($info.isp)"
-}
-
-<#
-.SYNOPSIS
-   Scans a range of ports
-.DESCRIPTION
-   This function scans a range of ports
-.PARAMETER IP
-   The IP address
-.PARAMETER StartPort 
-   The start port
-.PARAMETER EndPort 
-   The end port
-#>
-function Scan-Ports {
-  param (
-    [Parameter(Mandatory = $true)][string]$IP,
-    [Parameter(Mandatory = $true)][int]$StartPort,
-    [Parameter(Mandatory = $true)][int]$EndPort
-  )
-
-  for ($port = $StartPort; $port -le $EndPort; $port++) {
-    $tcpClient = New-Object System.Net.Sockets.TcpClient
-    $success = $tcpClient.ConnectAsync($IP, $port).Wait(1000)
-    $tcpClient.Close()
-    if ($success) {
-      Write-Host "Port $Port is open."
-    }
-    else {
-      Write-Host "Port $Port is closed."
-    }
-  }
-}
-
-<#
-.SYNOPSIS
-   Deletes a folder
-.DESCRIPTION
-   This function uses robocopy to delete a folder.
-.PARAMETER Destination
-   The destination of the folder
-#>
-function Delete-Folder {
-  param (
-    [Parameter(Mandatory = $true)][string]$Destination
-  )
-  $Temp = [System.IO.Path]::GetTempPath()
-  Remove-Item $Temp\Empty -Force -Recurse -ErrorAction SilentlyContinue | Out-Null
-  New-Item $Temp\Empty -ItemType Directory -Force -ErrorAction SilentlyContinue | Out-Null
-
-  robocopy $Temp\Empty $Destination /mir | Out-Null
-
-  Remove-Item $Destination -Force -Recurse -ErrorAction SilentlyContinue | Out-Null
-  Remove-Item $Temp\Empty -Force -Recurse -ErrorAction SilentlyContinue | Out-Null
-}
-
-<#
-.SYNOPSIS
-   Copies a folder from source to destination
-.DESCRIPTION
-   This function uses robocopy to copy a folder from the source to the destination.
-.PARAMETER Source
-   The source of the folder
-.PARAMETER Destination 
-   The destination of the folder
-#>
-function Copy-Folder {
-  param (
-    [Parameter(Mandatory = $true)][string]$Source,
-    [Parameter(Mandatory = $true)][string]$Destination
-  )
-
-  robocopy $Source $Destination /mir | Out-Null
-}
-
-<#
-.SYNOPSIS
-   Moves a folder from source to destination
-.DESCRIPTION
-   This function uses robocopy to move a folder from the source to the destination. 
-   It then removes the source folder.
-.PARAMETER Source
-   The source folder
-.PARAMETER Destination 
-   The destination folder
-#>
-function Move-Folder {
-  param (
-    [Parameter(Mandatory = $true)][string]$Source,
-    [Parameter(Mandatory = $true)][string]$Destination
-  )
-
-  robocopy $Source $Destination /mir | Out-Null
-  Remove-Item $Source -Force -Recurse -ErrorAction SilentlyContinue | Out-Null
-}
-
-<#
-.SYNOPSIS
-   Gets the size of an object
-.DESCRIPTION
-    This function gets the size of an object
-.PARAMETER Path
-    The path of the object
-#>
-function Object-Size {
-  param (
-    [Parameter(Mandatory = $true)][string]$Path
-  )
-
-  $size = (Get-ChildItem $Path -Recurse | Measure-Object -Property Length -Sum -ErrorAction SilentlyContinue).Sum
-  Write-Host "Size: $size bytes"
-  Write-Host "Size: $(($size / 1KB)) KB"
-  Write-Host "Size: $(($size / 1MB)) MB"
-  Write-Host "Size: $(($size / 1GB)) GB"
-}
-
-
-<#
-.SYNOPSIS
-   Counts the number of files and folders in a folder
-.DESCRIPTION
-   This function counts the number of files and folders in a folder
-.PARAMETER Path
-   The path of the folder
-#>
-function Object-Count {
-  param (
-    [Parameter(Mandatory = $true)][string]$Path
-  )
-
-  $count = (Get-ChildItem $Path -Recurse | Measure-Object -Property Length -ErrorAction SilentlyContinue).Count
-  Write-Host "Count: $count"
-}
-
-<#  
-.SYNOPSIS
-  Copies the current path to the clipboard
-.DESCRIPTION
-  This function copies the current path to the clipboard
-#>
-function Copy-Path {
-  $path = (Get-Location).Path
-  Set-Clipboard $path
-}
-
-<#
-.SYNOPSIS
-  Changes the current directory
-.DESCRIPTION
-  This function changes the current directory
-.PARAMETER Path
-  The path of the directory
-#>
-function Change-Directory {
-  param (
-    [Parameter(Mandatory = $false)][string]$Path
-  )
-  
-  Push-Location $Path
-  Get-ChildItem
-}
-
-<#
-.SYNOPSIS
-  Goes back to the previous directory
-.DESCRIPTION
-  This function goes back to the previous directory
-#>
-function Go-Back {
-  Pop-Location
-  Get-ChildItem
-}
-
-<#
-.SYNOPSIS
-  Searches for a specific file or folder in the current directory
-.DESCRIPTION
-  This function searches for a specific file or folder in the current directory
-.PARAMETER ItemName
-  The name of the item
-#>
-function Search-Item {
-  param (
-    [Parameter(Mandatory = $true)][string]$ItemName
-  )
-  
-  Get-ChildItem -Path . -Recurse | Where-Object { $_.Name -like "*$ItemName*" }
-}
-
-<#
-.SYNOPSIS
-  Creates a new directory and navigates into it
-.DESCRIPTION
-  This function creates a new directory and navigates into it
-  .PARAMETER DirectoryName
-    The name of the directory
-#>
-function New-DirectoryAndNavigate {
-  param (
-    [Parameter(Mandatory = $true)][string]$DirectoryName
-  )
-  
-  New-Item -ItemType Directory -Path $DirectoryName
-  Set-Location -Path $DirectoryName
-}
-
-<#
-.SYNOPSIS
-  Removes the current directory
-.DESCRIPTION
-  This function removes the current directory
-#>
-function Remove-CurrentDirectory {
-  # Prompt the user to confirm the deletion
-  Write-Host "Are you sure you want to delete the current directory? (Y/N)"
-  $input = Read-Host
-  if ($input -eq "Y") {
-    $currentDirectory = Get-Location
-    Set-Location -Path ..
-    Remove-Item -Path $currentDirectory -Recurse -Force
-  }
-}
-
-<#
-.SYNOPSIS
-  Backs up the current workspace to a specified directory
-.DESCRIPTION
-  This function backs up the current workspace to a specified directory
-#>
-function Backup-Workspace {
-  $BackupDirectory = "C:\Snapshots"
-
-  $currentDirectory = Get-Location
-  $backupPath = Join-Path -Path $BackupDirectory -ChildPath (Get-Date -Format "yyyy-MM-dd_HH-mm-ss")
-
-  if (!(Test-Path -Path $backupPath)) {
-    New-Item -ItemType Directory -Path $backupPath | Out-Null
-  }
-
-  Copy-Item -Path "$currentDirectory\*" -Destination $backupPath -Recurse -Force
-}
-
-<#
-.SYNOPSIS
-   Updates all installed packages
+   Gets a programming joke
 .DESCRIPTION 
-   This function updates all installed packages
+   This function gets a programming joke
 #>
-function Update-Packages {
-  # check if scoop is installed
-  $scoop = Get-Command -Name scoop -ErrorAction SilentlyContinue
-  if ($scoop) {
-    # update scoop
-    scoop update *
-  }
-  # check if winget is installed
-  $winget = Get-Command -Name winget -ErrorAction SilentlyContinue
-  if ($winget) {
-    winget upgrade --all
-  }
-  # check if choco is installed
-  $choco = Get-Command -Name choco -ErrorAction SilentlyContinue
-  if ($choco) {
-    choco upgrade all -y
-  }
-}
-
-<#
-.SYNOPSIS
-   Generates a system report
-.DESCRIPTION
-   This function generates a system report
-#>
-function Generate-System-Report {
-  Invoke-RestMethod "https://raw.githubusercontent.com/luke-beep/GSR/main/GenerateSystemReport.ps1" | Invoke-Expression
-}
-
-<#
-.SYNOPSIS
-   Optimizes PowerShell assemblies
-.DESCRIPTION
-   This function optimizes PowerShell assemblies
-#>
-function Optimize-PowerShell {
-  Invoke-RestMethod "https://raw.githubusercontent.com/luke-beep/ps-optimize-assemblies/main/optimize-assemblies.ps1" | Invoke-Expression
-}
-
-<#
-.SYNOPSIS
-   Activates Windows using MAS
-.DESCRIPTION 
-   This function activates Windows using MAS
-#>
-function Activate-Windows {
-  Invoke-RestMethod https://massgrave.dev/get | Invoke-Expression
-}
-
-<#
-.SYNOPSIS
-   Allows you to manage your hosts file
-.DESCRIPTION 
-   This function allows you to manage your hosts file
-#>
-function Host-Entry-Manager {
-  Invoke-RestMethod "https://raw.githubusercontent.com/luke-beep/all-about-windows/main/scripts/HostEntryManager.ps1" | Invoke-Expression
-}
-
-<#
-.SYNOPSIS
-   Allows you to manage your DNS settings
-.DESCRIPTION 
-   This function allows you to manage your DNS settings
-#>
-function DNS-Changer {
-  Invoke-RestMethod "https://raw.githubusercontent.com/luke-beep/all-about-windows/main/scripts/DNSChanger.ps1" | Invoke-Expression
-}
-
-<#
-.SYNOPSIS
-   Allows you to manage your network adapters
-.DESCRIPTION 
-   This function allows you to manage your network adapters
-#>
-function Network-Adapter-Manager {
-  Invoke-RestMethod "https://raw.githubusercontent.com/luke-beep/all-about-windows/main/scripts/NetworkAdapterManager.ps1" | Invoke-Expression
-}
-
-<# 
-.SYNOPSIS
-   Disables Nagles algorithm
-.DESCRIPTION 
-   This function disables Nagles algorithm
-#>
-function Nagles {
-  Invoke-RestMethod "https://raw.githubusercontent.com/luke-beep/all-about-windows/main/scripts/NaglesAlgorithm.ps1" | Invoke-Expression
+function Get-ProgrammingJoke {
+  $response = Invoke-RestMethod -Uri 'https://official-joke-api.appspot.com/jokes/programming/random'
+  $joke = $response[0]
+  Write-Output ("{0} {1}" -f $joke.setup, $joke.punchline)
 }
 
 <#
@@ -991,58 +998,6 @@ function Start-MatrixRain {
   }
   finally {
     Clear-Host
-  }
-}
-
-<#
-.SYNOPSIS
-   Creates a file
-.DESCRIPTION 
-   This function creates a file
-.PARAMETER Path
-   The path of the file
-#>
-function Create-File {
-  param(
-    [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
-    [Alias('FullName')]
-    [string]$Path
-  )
-
-  process {
-    if (Test-Path $Path) {
-          (Get-Item -Path $Path).LastWriteTime = Get-Date
-    }
-    else {
-      New-Item -ItemType File -Path $Path | Out-Null
-    }
-  }
-}
-
-<#
-.SYNOPSIS
-   Gets a programming joke
-.DESCRIPTION 
-   This function gets a programming joke
-#>
-function Get-ProgrammingJoke {
-  $response = Invoke-RestMethod -Uri 'https://official-joke-api.appspot.com/jokes/programming/random'
-  $joke = $response[0]
-  Write-Output ("{0} {1}" -f $joke.setup, $joke.punchline)
-}
-
-<#
-.SYNOPSIS
-   Gets the status of all services
-.DESCRIPTION 
-   This function gets the status of all services
-#>
-function Get-ServiceStatus {
-  Get-Service | ForEach-Object {
-    $status = $_.Status
-    $name = $_.Name
-    $displayName = $_.DisplayName
-    Write-Output ("{0} ({1}): {2}" -f $displayName, $name, $status)
   }
 }
 
@@ -1320,417 +1275,345 @@ function Get-Links {
   $form.ShowDialog()
 }
 
-<#
-.SYNOPSIS
-   Gets the current profile version
-.DESCRIPTION 
-   This function gets the current profile version
-#>
-function Profile-Version {
-  $keyPath = 'HKCU:\Software\Azrael\PowerShell'
-  $version = Get-ItemProperty -Path $keyPath -Name 'Version' -ErrorAction SilentlyContinue
-  $currentVersion = $version.Version
-  $currentVersion
-}
+# ----------------------------------------
+# Network Management
+# ----------------------------------------
 
 <#
 .SYNOPSIS
-   Allows you to manage your profile
-.DESCRIPTION 
-   This function allows you to manage your profile
+   Gets the current IP address and additional information
+.DESCRIPTION
+   This function gets the current IP address and additional information
 #>
-function Preview-Profile {
-  $PanelWidth = 1000
+function Get-IP {
+  [CmdletBinding()]
+  param (
+    [Parameter(Mandatory = $false)][switch]$Extended
+  )
 
-  $form = New-Object System.Windows.Forms.Form
-  $form.Text = "Preview Profile"
-  $form.BackColor = $nord0
-  $form.Size = New-Object System.Drawing.Size($PanelWidth, 500)
-  $form.StartPosition = 'CenterScreen'
-  $form.FormBorderStyle = 'FixedDialog'
-
-  $icoFileUrl = "https://raw.githubusercontent.com/luke-beep/shell-config/main/assets/Azrael.ico"
-  $icoFileData = Invoke-WebRequest -Uri $icoFileUrl -UseBasicParsing
-
-  if ($icoFileData.StatusCode -eq 200) {
-    $icoFileStream = [System.IO.MemoryStream]::new($icoFileData.Content)
-    $icon = [System.Drawing.Icon]::new($icoFileStream)
-    $form.Icon = $icon
+  $ip = Invoke-RestMethod -Uri "https://api.ipify.org?format=json"
+  $info = Invoke-RestMethod -Uri "http://ip-api.com/json/$($ip.ip)"
+  if ($Extended) {
+    Write-Host "IP: $($ip.ip)"
+    Write-Host "Country: $($info.country)"
+    Write-Host "Region: $($info.regionName)"
+    Write-Host "City: $($info.city)"
+    Write-Host "ISP: $($info.isp)"
   }
   else {
-    Write-Host "Failed to download the ICO file from the URL."
+    $ip.ip
   }
-
-  $panel = New-Object System.Windows.Forms.Panel
-  $panel.Dock = 'Fill'
-  $panel.AutoScroll = $false
-
-  $richTextBox = New-Object System.Windows.Forms.RichTextBox
-  $richTextBox.Location = New-Object System.Drawing.Point(0, 0)
-  $richTextBox.Size = New-Object System.Drawing.Size(($PanelWidth + 20), 490)
-  $richTextBox.Text = "Profile Version: $(Profile-Version)`n`n" + (Get-Content $profile | Out-String)
-  $richTextBox.BackColor = $nord0
-  $richTextBox.ForeColor = $nord4
-  $richTextBox.Font = New-Object System.Drawing.Font("Consolas", 10)
-  $richTextBox.ReadOnly = $true
-  $richTextBox.BorderStyle = 'None'
-  $richTextBox.ScrollBars = 'Vertical'
-
-  $panel.Controls.Add($richTextBox)
-
-  $form.Controls.Add($panel)
-
-  $form.ShowDialog()
 }
 
 <#
 .SYNOPSIS
-   Download object(s)
-.DESCRIPTION 
-   This function downloads object(s) to the specified path or the current directory
-.PARAMETER Url 
-   The URL of the object
+   Scans an IP address
+.DESCRIPTION
+   This function scans an IP address
+.PARAMETER IP 
+   The IP address
 #>
-function Download-Object {
+function Test-IP {
   param (
-    [Parameter(Mandatory = $true)][string[]]$Url,
-    [Parameter(Mandatory = $false)][string[]]$ObjectName,
-    [Parameter(Mandatory = $false)][string]$ObjectPath,
-    [Parameter(Mandatory = $false)][switch]$Overwrite,
-    [Parameter(Mandatory = $false)][switch]$Silent
+    [Parameter(Mandatory = $true)][string]$IP,
+    [Parameter(Mandatory = $false)][switch]$Extended
   )
 
-  $downloadDirectory = if ($ObjectPath) { $ObjectPath } else { Get-Location }
-  $downloadedObjects = @()
-
-  $jobs = @()
-  for ($i = 0; $i -lt $Url.Length; $i++) {
-    try {
-      $actualObjectName = if ($ObjectName.Length -gt $i) { $ObjectName[$i] } else { [System.IO.Path]::GetFileName($Url[$i]) }
-      $destinationPath = Join-Path $downloadDirectory $actualObjectName
-      if ($Overwrite -and (Test-Path $destinationPath)) {
-        if (-not $Silent) {
-          Write-Host "Removing $destinationPath"
-        }
-        Remove-Item $destinationPath -Force
-      }
-
-      $scriptBlock = {
-        param ($url, $destinationPath, $overwrite, $silent)
-        $curlCommand = "curl -o `"$destinationPath`" -L `"$url`" -s"
-        if ($overwrite) {
-          $curlCommand += " -O"
-        }
-        Invoke-Expression $curlCommand 2>&1 | Out-Null
-      }
-
-      $job = Start-Job -ScriptBlock $scriptBlock -ArgumentList $Url[$i], $destinationPath, $Overwrite, $Silent
-      $jobs += $job
-
-      $downloadedObjects += $destinationPath
-    }
-    catch {
-      if (-not $Silent) {
-        Write-Error "An error occurred: $_"
-      }
-    }
-  }
-  $jobs | Wait-Job
-
-  $jobs | ForEach-Object {
-    Receive-Job -Job $_
-    Remove-Job -Job $_
-  }
-
-  if (-not $Silent) {
-    Invoke-Item -Path $downloadDirectory  
-  }
-  return $downloadedObjects
+  $info = Invoke-RestMethod -Uri "http://ip-api.com/json/$($IP)"
+  Write-Host "IP: $($IP)"
+  Write-Host "Country: $($info.country)"
+  Write-Host "Region: $($info.regionName)"
+  Write-Host "City: $($info.city)"
+  Write-Host "ISP: $($info.isp)"
 }
 
 <#
 .SYNOPSIS
-   Allows for pipeline execution
-.DESCRIPTION 
-   This function allows for pipeline execution
-.PARAMETER Objects 
-   The object paths
-.EXAMPLE 
-   Download-Object -Url "http://example.com/file1.zip", "http://example.com/file2.zip" | Execute-Object
+   Scans a range of ports
+.DESCRIPTION
+   This function scans a range of ports
+.PARAMETER IP
+   The IP address
+.PARAMETER StartPort 
+   The start port
+.PARAMETER EndPort 
+   The end port
 #>
-function Execute-Object {
+function Test-Ports {
   param (
-    [Parameter(ValueFromPipeline = $true)]
-    [string[]]$Objects
+    [Parameter(Mandatory = $true)][string]$IP,
+    [Parameter(Mandatory = $true)][int]$StartPort,
+    [Parameter(Mandatory = $true)][int]$EndPort
   )
 
-  Process {
-    foreach ($object in $Objects) {
-      if (Test-Path $object) {
-        Start-Process $object
-      }
+  for ($port = $StartPort; $port -le $EndPort; $port++) {
+    $tcpClient = New-Object System.Net.Sockets.TcpClient
+    $success = $tcpClient.ConnectAsync($IP, $port).Wait(1000)
+    $tcpClient.Close()
+    if ($success) {
+      Write-Host "Port $Port is open."
+    }
+    else {
+      Write-Host "Port $Port is closed."
+    }
+  }
+}
+
+<#
+.SYNOPSIS
+   Allows you to manage your hosts file
+.DESCRIPTION 
+   This function allows you to manage your hosts file
+#>
+function Edit-Hosts {
+  Invoke-RestMethod "https://raw.githubusercontent.com/luke-beep/all-about-windows/main/scripts/HostEntryManager.ps1" | Invoke-Expression
+}
+
+<#
+.SYNOPSIS
+   Allows you to manage your DNS settings
+.DESCRIPTION 
+   This function allows you to manage your DNS settings
+#>
+function Set-DNS {
+  Invoke-RestMethod "https://raw.githubusercontent.com/luke-beep/all-about-windows/main/scripts/DNSChanger.ps1" | Invoke-Expression
+}
+
+<#
+.SYNOPSIS
+   Allows you to manage your network adapters
+.DESCRIPTION 
+   This function allows you to manage your network adapters
+#>
+function Set-NetworkAdapter {
+  Invoke-RestMethod "https://raw.githubusercontent.com/luke-beep/all-about-windows/main/scripts/NetworkAdapterManager.ps1" | Invoke-Expression
+}
+
+<# 
+.SYNOPSIS
+   Disables Nagles algorithm
+.DESCRIPTION 
+   This function disables Nagles algorithm
+#>
+function Set-Nagles {
+  Invoke-RestMethod "https://raw.githubusercontent.com/luke-beep/all-about-windows/main/scripts/NaglesAlgorithm.ps1" | Invoke-Expression
+}
+
+# ----------------------------------------
+# File Management
+# ----------------------------------------
+
+<#
+.SYNOPSIS
+   Deletes a folder
+.DESCRIPTION
+   This function uses robocopy to delete a folder.
+.PARAMETER Destination
+   The destination of the folder
+#>
+function Remove-Folder {
+  param (
+    [Parameter(Mandatory = $true)][string]$Destination
+  )
+  $Temp = [System.IO.Path]::GetTempPath()
+  Remove-Item $Temp\Empty -Force -Recurse -ErrorAction SilentlyContinue | Out-Null
+  New-Item $Temp\Empty -ItemType Directory -Force -ErrorAction SilentlyContinue | Out-Null
+
+  robocopy $Temp\Empty $Destination /mir | Out-Null
+
+  Remove-Item $Destination -Force -Recurse -ErrorAction SilentlyContinue | Out-Null
+  Remove-Item $Temp\Empty -Force -Recurse -ErrorAction SilentlyContinue | Out-Null
+}
+
+<#
+.SYNOPSIS
+   Copies a folder from source to destination
+.DESCRIPTION
+   This function uses robocopy to copy a folder from the source to the destination.
+.PARAMETER Source
+   The source of the folder
+.PARAMETER Destination 
+   The destination of the folder
+#>
+function Copy-Folder {
+  param (
+    [Parameter(Mandatory = $true)][string]$Source,
+    [Parameter(Mandatory = $true)][string]$Destination
+  )
+
+  robocopy $Source $Destination /mir | Out-Null
+}
+
+<#
+.SYNOPSIS
+   Moves a folder from source to destination
+.DESCRIPTION
+   This function uses robocopy to move a folder from the source to the destination. 
+   It then removes the source folder.
+.PARAMETER Source
+   The source folder
+.PARAMETER Destination 
+   The destination folder
+#>
+function Move-Folder {
+  param (
+    [Parameter(Mandatory = $true)][string]$Source,
+    [Parameter(Mandatory = $true)][string]$Destination
+  )
+
+  robocopy $Source $Destination /mir | Out-Null
+  Remove-Item $Source -Force -Recurse -ErrorAction SilentlyContinue | Out-Null
+}
+
+<#
+.SYNOPSIS
+   Empties the recycle bin
+.DESCRIPTION
+   This function empties the recycle bin
+#>
+function Clear-RecycleBin {
+  Clear-RecycleBin -Force
+}
+
+<#
+.SYNOPSIS
+  Creates a new directory and navigates into it
+.DESCRIPTION
+  This function creates a new directory and navigates into it
+  .PARAMETER DirectoryName
+    The name of the directory
+#>
+function New-DirectoryAndNavigate {
+  param (
+    [Parameter(Mandatory = $true)][string]$DirectoryName
+  )
+  
+  New-Item -ItemType Directory -Path $DirectoryName
+  Set-Location -Path $DirectoryName
+}
+
+<#
+.SYNOPSIS
+  Removes the current directory
+.DESCRIPTION
+  This function removes the current directory
+#>
+function Remove-CurrentDirectory {
+  # Prompt the user to confirm the deletion
+  Write-Host "Are you sure you want to delete the current directory? (Y/N)"
+  $userInput = Read-Host
+  if ($userInput -eq "Y") {
+    $currentDirectory = Get-Location
+    Set-Location -Path ..
+    Remove-Item -Path $currentDirectory -Recurse -Force
+  }
+}
+
+# ----------------------------------------
+# File System Management
+# ----------------------------------------
+
+<#  
+.SYNOPSIS
+  Copies the current path to the clipboard
+.DESCRIPTION
+  This function copies the current path to the clipboard
+#>
+function Copy-Path {
+  $path = (Get-Location).Path
+  Set-Clipboard $path
+}
+
+<#
+.SYNOPSIS
+  Changes the current directory
+.DESCRIPTION
+  This function changes the current directory
+.PARAMETER Path
+  The path of the directory
+#>
+function Set-NewLocation {
+  param (
+    [Parameter(Mandatory = $false)][string]$Path
+  )
+  
+  Push-Location $Path
+  Get-ChildItem
+}
+
+<#
+.SYNOPSIS
+  Goes back to the previous directory
+.DESCRIPTION
+  This function goes back to the previous directory
+#>
+function Set-PreviousLocation {
+  Pop-Location
+  Get-ChildItem
+}
+
+<#
+.SYNOPSIS
+  Searches for a specific file or folder in the current directory
+.DESCRIPTION
+  This function searches for a specific file or folder in the current directory
+.PARAMETER ItemName
+  The name of the item
+#>
+function Search-Item {
+  param (
+    [Parameter(Mandatory = $true)][string]$ItemName
+  )
+  
+  Get-ChildItem -Path . -Recurse | Where-Object { $_.Name -like "*$ItemName*" }
+}
+
+<#
+.SYNOPSIS
+  Backs up the current workspace to a specified directory
+.DESCRIPTION
+  This function backs up the current workspace to a specified directory
+#>
+function Backup-Workspace {
+  $BackupDirectory = "C:\Snapshots"
+
+  $currentDirectory = Get-Location
+  $backupPath = Join-Path -Path $BackupDirectory -ChildPath (Get-Date -Format "yyyy-MM-dd_HH-mm-ss")
+
+  if (!(Test-Path -Path $backupPath)) {
+    New-Item -ItemType Directory -Path $backupPath | Out-Null
+  }
+
+  Copy-Item -Path "$currentDirectory\*" -Destination $backupPath -Recurse -Force
+}
+
+<#
+.SYNOPSIS
+   Creates a file or a directory
+.DESCRIPTION 
+   This function creates a file or a directory
+.PARAMETER Path
+   The path of the file or directory
+#>
+function New-FileOrDirectory {
+  param(
+    [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
+    [Alias('FullName')]
+    [string]$Path
+  )
+
+  process {
+    if (Test-Path $Path) {
+          (Get-Item -Path $Path).LastWriteTime = Get-Date
+    }
+    else {
+      New-Item -ItemType File -Path $Path | Out-Null
     }
   }
 }
 
 # ----------------------------------------
-# Helper functions
-# ----------------------------------------
-
-<#
-.SYNOPSIS
-  Displays the help menu
-.DESCRIPTION 
-  This function displays the help menu
-.PARAMETER ShowInConsole
-  Displays the help menu in the console
-#>
-function Shell-Help {
-  param (
-    [bool]$ShowInConsole = $false
-  )
-  $excludedNames = 'A:', 'B:', 'C:', 'D:', 'E:', 'F:', 'G:', 'H:', 'I:', 'J:', 'K:', 'L:', 'M:', 'N:', 'O:', 'P:', 'Q:', 'R:', 'S:', 'T:', 'U:', 'V:', 'W:', 'X:', 'Y:', 'Z:'
-  $commands = Get-Command -CommandType Function | Where-Object { $_.Source -eq "" -and $_.Name -notin $excludedNames } | ForEach-Object {
-    $help = Get-Help $_.Name
-    $alias = (Get-ReverseAlias -Command $_.Name -ErrorAction SilentlyContinue | Out-String) -replace "`n", ''
-    $description = $help.Synopsis
-    $parameters = ($help.Parameters.Parameter | ForEach-Object { $_.Name }) -join ', '
-
-    if ($alias -and $description) {
-      [PSCustomObject] @{
-        Name        = "$($_.Name) ($alias)"
-        Description = $description
-        Parameters  = $parameters
-      }
-    }
-  } | Sort-Object -Property Name
-
-  if ($ShowInConsole) {
-    Clear-Host
-    $commandString = "For more information about a command, type 'Get-Help <command-name>'`n" + ($commands | Out-String)
-    $commandString
-  }
-  else {
-    $commandsOutput = $commands | Format-Table -Wrap -AutoSize | Out-String
-    Show-Help -Output $commandsOutput -Introduction "For more information about a command, type 'Get-Help <command-name>'"
-  }
-
-}
-
-<#
-.SYNOPSIS
-  Gets the aliases for a command through a reverse lookup
-.DESCRIPTION 
-  This function gets the aliases for a command through a reverse lookup
-.PARAMETER Command
-  The command
-#>
-function Get-ReverseAlias {
-  param (
-    [Parameter(Mandatory = $true)][string]$Command
-  )
-
-  $aliases = Get-Alias | Where-Object { $_.Definition -eq $Command }
-  if ($aliases) {
-    $aliases.Name
-  }
-}
-
-function Show-Help {
-  param (
-    [Parameter(Mandatory = $true)][string]$Output,
-    [Parameter(Mandatory = $true)][string]$Introduction
-  )
-
-  $PanelWidth = 1000
-
-  $form = New-Object System.Windows.Forms.Form
-  $form.Text = "PowerShell Help"
-  $form.BackColor = $nord0
-  $form.Size = New-Object System.Drawing.Size($PanelWidth, 500)
-  $form.StartPosition = 'CenterScreen'
-  $form.FormBorderStyle = 'FixedDialog'
-
-  $icoFileUrl = "https://raw.githubusercontent.com/luke-beep/shell-config/main/assets/Azrael.ico"
-  $icoFileData = Invoke-WebRequest -Uri $icoFileUrl -UseBasicParsing
-
-  if ($icoFileData.StatusCode -eq 200) {
-    $icoFileStream = [System.IO.MemoryStream]::new($icoFileData.Content)
-    $icon = [System.Drawing.Icon]::new($icoFileStream)
-    $form.Icon = $icon
-  }
-  else {
-    Write-Host "Failed to download the ICO file from the URL."
-  }
-
-  $panel = New-Object System.Windows.Forms.Panel
-  $panel.Dock = 'Fill'
-  $panel.AutoScroll = $false
-
-  $richTextBox = New-Object System.Windows.Forms.RichTextBox
-  $richTextBox.Location = New-Object System.Drawing.Point(0, 0)
-  $richTextBox.Size = New-Object System.Drawing.Size(($PanelWidth + 20), 490)
-  $richTextBox.Text = $Introduction + "`n" + $Output
-  $richTextBox.BackColor = $nord0
-  $richTextBox.ForeColor = $nord4
-  $richTextBox.Font = New-Object System.Drawing.Font("Consolas", 10)
-  $richTextBox.ReadOnly = $true
-  $richTextBox.BorderStyle = 'None'
-  $richTextBox.ScrollBars = 'Vertical'
-
-  $panel.Controls.Add($richTextBox)
-
-  $form.Controls.Add($panel)
-
-  $form.ShowDialog()
-}
-
-<#
-.SYNOPSIS
-  Configure Profile Settings
-.DESCRIPTION 
-  This function configures profile settings
-#>
-function Configure-ProfileSettings {
-  $PanelWidth = 1000
-
-  $form = New-Object System.Windows.Forms.Form
-  $form.Text = "Profile Settings"
-  $form.BackColor = $nord0
-  $form.Size = New-Object System.Drawing.Size($PanelWidth, 500)
-  $form.StartPosition = 'CenterScreen'
-  $form.FormBorderStyle = 'FixedDialog'
-
-  $icoFileUrl = "https://raw.githubusercontent.com/luke-beep/shell-config/main/assets/Azrael.ico"
-  $icoFileData = Invoke-WebRequest -Uri $icoFileUrl -UseBasicParsing
-
-  if ($icoFileData.StatusCode -eq 200) {
-    $icoFileStream = [System.IO.MemoryStream]::new($icoFileData.Content)
-    $icon = [System.Drawing.Icon]::new($icoFileStream)
-    $form.Icon = $icon
-  }
-  else {
-    Write-Host "Failed to download the ICO file from the URL."
-  }
-
-  $keyPath = 'HKCU:\Software\Azrael\PowerShell'
-  $keys = Get-ItemProperty -Path $keyPath -ErrorAction SilentlyContinue
-  
-  $tableLayoutPanel = New-Object System.Windows.Forms.TableLayoutPanel
-  $tableLayoutPanel.RowCount = 1
-  $tableLayoutPanel.ColumnCount = 1
-  $tableLayoutPanel.Dock = [System.Windows.Forms.DockStyle]::Fill
-  $tableLayoutPanel.ColumnStyles.Add((New-Object System.Windows.Forms.ColumnStyle([System.Windows.Forms.SizeType]::Percent, 100)))
-  $tableLayoutPanel.RowStyles.Clear()
-  $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::Percent, 100)))
-  $tableLayoutPanel.BorderStyle = [System.Windows.Forms.BorderStyle]::None
-  $tableLayoutPanel.BackColor = $nord0
-  $tableLayoutPanel.ForeColor = $nord4
-
-  $dataGridView = New-Object System.Windows.Forms.DataGridView
-  $dataGridView.BorderStyle = [System.Windows.Forms.BorderStyle]::None
-  $dataGridView.Location = New-Object System.Drawing.Point(10, 10)
-  $dataGridView.Size = New-Object System.Drawing.Size(360, 200)
-  $dataGridView.Dock = [System.Windows.Forms.DockStyle]::Fill
-  $dataGridView.AutoGenerateColumns = $true
-  $dataGridView.RowHeadersVisible = $false
-  $dataGridView.BackgroundColor = $nord0
-  $dataGridView.ForeColor = $nord6
-  $dataGridView.GridColor = $nord3
-  $dataGridView.DefaultCellStyle.BackColor = $nord0
-  $dataGridView.DefaultCellStyle.ForeColor = $nord6
-  $dataGridView.ColumnHeadersDefaultCellStyle.BackColor = $nord3
-  $dataGridView.ColumnHeadersDefaultCellStyle.ForeColor = $nord6
-  $dataGridView.RowHeadersBorderStyle = [System.Windows.Forms.DataGridViewHeaderBorderStyle]::None
-  $dataGridView.ColumnHeadersBorderStyle = [System.Windows.Forms.DataGridViewHeaderBorderStyle]::None
-  $dataGridView.DefaultCellStyle.SelectionBackColor = $nord3
-  $dataGridView.AutoSizeColumnsMode = [System.Windows.Forms.DataGridViewAutoSizeColumnsMode]::Fill
-
-  $deletedRows = New-Object System.Collections.Generic.List[string]
-
-  $contextMenu = New-Object System.Windows.Forms.ContextMenuStrip
-  $deleteMenuItem = New-Object System.Windows.Forms.ToolStripMenuItem
-  $deleteMenuItem.Text = "Delete"
-  $deleteMenuItem.add_Click({
-      if ($dataGridView.SelectedCells.Count -gt 0) {
-        $selectedRowIndex = $dataGridView.SelectedCells[0].RowIndex
-        $name = $dataGridView.Rows[$selectedRowIndex].Cells[0].Value
-        $deletedRows.Add($name)
-        $dataGridView.Rows.RemoveAt($selectedRowIndex)
-      }
-    })
-  $contextMenu.Items.Add($deleteMenuItem)
-  
-  $dataGridView.ContextMenuStrip = $contextMenu
-
-  $nameColumn = New-Object System.Windows.Forms.DataGridViewTextBoxColumn
-  $nameColumn.HeaderText = "Name"
-  $nameColumn.DataPropertyName = "Name"
-  $valueColumn = New-Object System.Windows.Forms.DataGridViewTextBoxColumn
-  $valueColumn.HeaderText = "Value"
-  $valueColumn.DataPropertyName = "Value"
-
-  $dataGridView.Columns.Add($nameColumn)
-  $dataGridView.Columns.Add($valueColumn)
-
-  $dataTable = New-Object System.Data.DataTable
-
-  $dataTable.Columns.Add("Name", [string])
-  $dataTable.Columns.Add("Value", [string])
-
-  $keys.PSObject.Properties | ForEach-Object {
-    $row = $dataTable.NewRow()
-    $row["Name"] = $_.Name
-    $row["Value"] = $_.Value
-    $dataTable.Rows.Add($row)
-  }
-
-  $dataGridView.DataSource = $dataTable
-
-  $tableLayoutPanel.Controls.Add($dataGridView, 0, 0)
-  
-  $button = New-Object System.Windows.Forms.Button
-  $button.Location = New-Object System.Drawing.Point(10, 220)
-  $button.Size = New-Object System.Drawing.Size(150, 30)
-  $button.Text = "Save Configuration"
-  $button.Dock = [System.Windows.Forms.DockStyle]::Fill
-  $button.BackColor = $nord3
-  $button.ForeColor = $nord6
-  $button.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
-  $button.FlatAppearance.BorderColor = $nord3
-  $button.FlatAppearance.BorderSize = 1
-  $button.Add_Click({
-      $dataGridView.Rows | ForEach-Object {
-        if (-not $_.IsNewRow) {
-          $row = $_.DataBoundItem
-          $name = $row["Name"]
-          $value = $row["Value"]
-          if ([string]::IsNullOrEmpty($value)) {
-            Remove-ItemProperty -Path $keyPath -Name $name
-          }
-          else {
-            Set-ItemProperty -Path $keyPath -Name $name -Value $value
-          }
-        }
-      }
-
-      $deletedRows | ForEach-Object {
-        Remove-ItemProperty -Path $keyPath -Name $_
-        $deletedRows.Remove($_)
-      }
-      [System.Windows.Forms.MessageBox]::Show("Profile settings saved.", "Success")
-    })
-  $tableLayoutPanel.Controls.Add($button, 0, 1)
-
-  $form.Controls.Add($tableLayoutPanel)
-
-  $form.ShowDialog()
-
-  $form.Dispose()
-}
-
-# ----------------------------------------
-# Aliases
+# Alias Management
 # ----------------------------------------
 
 <#
@@ -1738,8 +1621,10 @@ function Configure-ProfileSettings {
   Loads aliases
 .DESCRIPTION 
   This function loads aliases
+.PARAMETER Force 
+  Forces the loading of aliases
 #>
-function Load-Aliases {
+function Import-Aliases {
   param (
     [Parameter(Mandatory = $false)][switch]$Force
   )
@@ -1797,8 +1682,13 @@ function Load-Aliases {
     }
   }
 }
-Load-Aliases
 
+<#
+.SYNOPSIS
+  Adds aliases through a GUI
+.DESCRIPTION 
+  This function allows you to add aliases through a GUI
+#>
 function Add-Aliases {
   $AliasConfigFile = "new-aliases.json"
   $aliasConfigFilePath = Join-Path (Split-Path -Parent $PROFILE) $AliasConfigFile
@@ -1928,6 +1818,12 @@ function Add-Aliases {
   $form.Dispose()
 }
 
+<#
+.SYNOPSIS
+  Removes aliases through a GUI
+.DESCRIPTION  
+  This function allows you to remove aliases through a GUI
+#>
 function Remove-Aliases {
   $AliasConfigFile = "old-aliases.json"
   $aliasConfigFilePath = Join-Path (Split-Path -Parent $PROFILE) $AliasConfigFile
@@ -2037,6 +1933,135 @@ function Remove-Aliases {
   $form.Dispose()
 }
 
+<#
+.SYNOPSIS
+  Gets the aliases for a command through a reverse lookup
+.DESCRIPTION 
+  This function gets the aliases for a command through a reverse lookup
+.PARAMETER Command
+  The command
+#>
+function Get-ReverseAlias {
+  param (
+    [Parameter(Mandatory = $true)][string]$Command
+  )
+
+  $aliases = Get-Alias | Where-Object { $_.Definition -eq $Command }
+  if ($aliases) {
+    $aliases.Name
+  }
+}
+
 # ----------------------------------------
-# Profile Completion
+# Helper functions
 # ----------------------------------------
+
+<#
+.SYNOPSIS
+  Displays the help menu
+.DESCRIPTION 
+  This function displays the help menu
+.PARAMETER ShowInConsole
+  Displays the help menu in the console
+#>
+function Get-ProfileHelp {
+  param (
+    [bool]$ShowInConsole = $false
+  )
+  $excludedNames = 'A:', 'B:', 'C:', 'D:', 'E:', 'F:', 'G:', 'H:', 'I:', 'J:', 'K:', 'L:', 'M:', 'N:', 'O:', 'P:', 'Q:', 'R:', 'S:', 'T:', 'U:', 'V:', 'W:', 'X:', 'Y:', 'Z:'
+  $commands = Get-Command -CommandType Function | Where-Object { $_.Source -eq "" -and $_.Name -notin $excludedNames } | ForEach-Object {
+    $help = Get-Help $_.Name
+    $alias = (Get-ReverseAlias -Command $_.Name -ErrorAction SilentlyContinue | Out-String) -replace "`r`n", ', ' -replace ', $', ''
+    $description = ($help.Synopsis).Trim()
+    $parameters = (($help.Parameters.Parameter | ForEach-Object { $_.Name }) -join ', ').Trim()
+
+    if ($description -and $alias) {
+      [PSCustomObject] @{
+        Name        = "$($_.Name) ($alias)"
+        Description = $description
+        Parameters  = $parameters
+      }
+    }
+  } | Sort-Object -Property Name
+
+  if ($ShowInConsole) {
+    Clear-Host
+    $commandString = "For more information about a command, type 'Get-Help <command-name>'`n" + ($commands | Out-String)
+    $commandString
+  }
+  else {
+    $commandsOutput = $commands | Format-Table -Wrap -AutoSize | Out-String
+    Show-Help -Output $commandsOutput -Introduction "For more information about a command, type 'Get-Help <command-name>'"
+  }
+}
+
+function Show-Help {
+  param (
+    [Parameter(Mandatory = $true)][string]$Output,
+    [Parameter(Mandatory = $true)][string]$Introduction
+  )
+
+  $PanelWidth = 1000
+
+  $form = New-Object System.Windows.Forms.Form
+  $form.Text = "PowerShell Help"
+  $form.BackColor = $nord0
+  $form.Size = New-Object System.Drawing.Size($PanelWidth, 500)
+  $form.StartPosition = 'CenterScreen'
+  $form.FormBorderStyle = 'FixedDialog'
+
+  $icoFileUrl = "https://raw.githubusercontent.com/luke-beep/shell-config/main/assets/Azrael.ico"
+  $icoFileData = Invoke-WebRequest -Uri $icoFileUrl -UseBasicParsing
+
+  if ($icoFileData.StatusCode -eq 200) {
+    $icoFileStream = [System.IO.MemoryStream]::new($icoFileData.Content)
+    $icon = [System.Drawing.Icon]::new($icoFileStream)
+    $form.Icon = $icon
+  }
+  else {
+    Write-Host "Failed to download the ICO file from the URL."
+  }
+
+  $panel = New-Object System.Windows.Forms.Panel
+  $panel.Dock = 'Fill'
+  $panel.AutoScroll = $false
+
+  $richTextBox = New-Object System.Windows.Forms.RichTextBox
+  $richTextBox.Location = New-Object System.Drawing.Point(0, 0)
+  $richTextBox.Size = New-Object System.Drawing.Size(($PanelWidth + 20), 490)
+  $richTextBox.Text = $Introduction + "`n" + $Output
+  $richTextBox.BackColor = $nord0
+  $richTextBox.ForeColor = $nord4
+  $richTextBox.Font = New-Object System.Drawing.Font("Consolas", 10)
+  $richTextBox.ReadOnly = $true
+  $richTextBox.BorderStyle = 'None'
+  $richTextBox.ScrollBars = 'Vertical'
+
+  $panel.Controls.Add($richTextBox)
+
+  $form.Controls.Add($panel)
+
+  $form.ShowDialog()
+}
+
+<#
+.SYNOPSIS
+   Gets the current shell information
+.DESCRIPTION
+   This function gets the current shell information
+#>
+function Get-ShellInfo {
+  $version = $host.Version.Major
+  $shellType = if ($version -ge 7) { "Pwsh" } else { "PowerShell" }
+  $bitness = if ([Environment]::Is64BitProcess) { "64-bit" } else { "32-bit" }
+
+  Write-Output "Profile Path: $PROFILE"
+  Write-Output "Host Name: $($host.Name)"
+  Write-Output "Host Version: $($host.Version) -> $($shellType) ($bitness)"
+}
+
+# ----------------------------------------
+# End of Profile
+# ----------------------------------------
+
+Import-Aliases

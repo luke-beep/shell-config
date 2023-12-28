@@ -2,5 +2,8 @@
     "del",
     "cd",
     "md",
-    "man"
+    "man",
+    "rm",
+    "cp",
+    "mv"
 ]
