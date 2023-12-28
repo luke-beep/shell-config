@@ -49,7 +49,7 @@ $loginMessage = $true
 .SYNOPSIS
    Check for updates
 .DESCRIPTION 
-   This function checks for updates
+   This function checks for updates (Don't touch this function)
 .PARAMETER Silent 
    If this parameter is specified, the profile will be updated silently
 .PARAMETER Force 
@@ -372,7 +372,7 @@ function Initialize-Profile {
     Write-Host "Microsoft Windows [Version $($kernelVersion)]"
     Write-Host "(c) Microsoft Corporation. All rights reserved.`n"
   
-    Write-Host "Azrael's $($shellType) v$($currentVersion)"
+    Write-Host "Azrael's $($shellType) v$($currentVersion.Trim())"
     Write-Host "Copyright (c) 2023-2024 Azrael"
     Write-Host "https://github.com/luke-beep/shell-config/`n"
   }
