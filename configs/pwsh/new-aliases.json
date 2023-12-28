@@ -51,5 +51,6 @@
   "execute": "Execute-Object",
   "aliases": "Load-Aliases",
   "raliases": "Remove-Aliases",
-  "aaliases": "Add-Aliases"
+  "aaliases": "Add-Aliases",
+  "configure": "Configure-ProfileSettings"
 }
