@@ -35,15 +35,15 @@ $iconUrl = "https://raw.githubusercontent.com/luke-beep/shell-config/main/assets
 $iconData = Invoke-WebRequest -Uri $iconUrl -UseBasicParsing
 $iconStream = [System.IO.MemoryStream]::new($iconData.Content)
 $icon = [System.Drawing.Icon]::new($iconStream)
-
 $shellType = if ($host.Version.Major -ge 7) { "Pwsh" } else { "PowerShell" }
 $bitness = if ([Environment]::Is64BitProcess) { "64-bit" } else { "32-bit" }
 $keyPath = if ($shellType -eq "Pwsh") { 'HKCU:\Software\Azrael\Pwsh' } else { 'HKCU:\Software\Azrael\PowerShell' }
 $userName = $env:UserName
 $kernelVersion = (Get-CimInstance -ClassName Win32_OperatingSystem).Version
 $versionKey = Get-ItemProperty -Path $keyPath -Name 'Version' -ErrorAction SilentlyContinue 
-$currentVersion = if ($versionKey) { ($versionKey.Version).Trim() } else { $null }
+$currentVersion = if ($null -eq $versionKey) { $null } else { $versionKey.Version }
 $latestVersion = Invoke-RestMethod -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/version'
+$loginMessage = $true
 
 <#
 .SYNOPSIS
@@ -66,15 +66,19 @@ function Update-Profile {
     New-Item -Path $keyPath -Force | Out-Null
   }
 
-  if ($null -eq $versionKey) {
-    Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/Microsoft.PowerShell_profile.ps1' -OutFile $PROFILE
-    New-ItemProperty -Path $keyPath -Name 'Version' -Value $latestVersion -PropertyType 'String' -Force | Out-Null
-    exit
-  }
-
   $firstRun = Get-ItemProperty -Path $keyPath -Name 'FirstRun' -ErrorAction SilentlyContinue
   if ($null -eq $firstRun) {
+    # Extremely hacky way to get the current version
+    New-ItemProperty -Path $keyPath -Name 'Version' -Value $latestVersion -PropertyType 'String' -Force | Out-Null
     New-ItemProperty -Path $keyPath -Name 'FirstRun' -Value 0 -PropertyType 'DWord' -Force | Out-Null
+    . $PROFILE
+    if ($shellType -eq "Pwsh") {
+      pwsh
+    }
+    else {
+      powershell
+    }
+    Stop-Process -Id $PID
   }
   if ($Force) {
     # Create the form
@@ -285,7 +289,7 @@ function Initialize-Profile {
 
   $themeURL = 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/omp/theme.json'
   $themeKey = Get-ItemProperty -Path $keyPath -Name 'Theme'  -ErrorAction SilentlyContinue
-  $theme
+  $theme = $null
   if ($null -eq $themeKey) {
     New-ItemProperty -Path $keyPath -Name 'Theme' -Value $themeURL -PropertyType 'String' -Force | Out-Null
     $theme = $themeKey.Theme
@@ -294,12 +298,9 @@ function Initialize-Profile {
     $theme = $themeKey.Theme
   }
   
-  oh-my-posh init pwsh --config $themeKey.Theme | Invoke-Expression
+  oh-my-posh init pwsh --config $theme | Invoke-Expression
 
   $key = Get-ItemProperty -Path $keyPath -Name 'FirstRun' -ErrorAction SilentlyContinue
-
-  # Debugging
-  # Remove-ItemProperty -Path $keyPath -Name 'FirstRun' -Force | Out-Null
 
   if ($null -eq $key) {
     if (-not (Test-Path $keyPath)) {
@@ -342,13 +343,16 @@ function Initialize-Profile {
 
     $form.ShowDialog()
   }
-  
-  Write-Host "Microsoft Windows [Version $($kernelVersion)]"
-  Write-Host "(c) Microsoft Corporation. All rights reserved.`n"
+  Clear-Host
 
-  Write-Host "Azrael's $($shellType) v$($currentVersion)"
-  Write-Host "Copyright (c) 2023-2024 Azrael"
-  Write-Host "https://github.com/luke-beep/shell-config/`n"
+  if ($loginMessage) {
+    Write-Host "Microsoft Windows [Version $($kernelVersion)]"
+    Write-Host "(c) Microsoft Corporation. All rights reserved.`n"
+  
+    Write-Host "Azrael's $($shellType) v$($currentVersion)"
+    Write-Host "Copyright (c) 2023-2024 Azrael"
+    Write-Host "https://github.com/luke-beep/shell-config/`n"
+  }
 }
 Initialize-Profile
 
