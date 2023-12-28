@@ -49,7 +49,7 @@ $loginMessage = $true
 .SYNOPSIS
    Check for updates
 .DESCRIPTION 
-   This function checks for updates (Don't touch this function)
+   This function checks for updates
 .PARAMETER Silent 
    If this parameter is specified, the profile will be updated silently
 .PARAMETER Force 
@@ -68,6 +68,58 @@ function Update-Profile {
 
   $firstRun = Get-ItemProperty -Path $keyPath -Name 'FirstRun' -ErrorAction SilentlyContinue
   if ($null -eq $firstRun) {
+    $form = New-Object System.Windows.Forms.Form
+    $form.Text = "Auto Update"
+    $form.BackColor = $nord0
+    $form.ForeColor = $nord4
+    $form.Font = New-Object System.Drawing.Font("Arial", 10)
+    $form.StartPosition = 'CenterScreen'
+    $form.Size = New-Object System.Drawing.Size(400, 200)
+    $form.FormBorderStyle = 'FixedDialog'
+    $form.MaximizeBox = $false
+    $form.MinimizeBox = $false
+    $form.Icon = $icon
+
+    $label = New-Object System.Windows.Forms.Label
+    $label.Text = "Would you like to update the profile automatically in the future?"
+    $label.Location = New-Object System.Drawing.Point(10, 10)
+    $label.Size = New-Object System.Drawing.Size(380, 80)
+    $label.ForeColor = $nord6
+
+    $yesButton = New-Object System.Windows.Forms.Button
+    $yesButton.BackColor = $nord3
+    $yesButton.ForeColor = $nord6
+    $yesButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
+    $yesButton.FlatAppearance.BorderSize = 0
+    $yesButton.Location = New-Object System.Drawing.Point(100, 120)
+    $yesButton.Size = New-Object System.Drawing.Size(75, 23)
+    $yesButton.Text = "Yes"
+    $yesButton.DialogResult = [System.Windows.Forms.DialogResult]::Yes
+
+    $noButton = New-Object System.Windows.Forms.Button
+    $noButton.BackColor = $nord3
+    $noButton.ForeColor = $nord6
+    $noButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
+    $noButton.FlatAppearance.BorderSize = 0
+    $noButton.Location = New-Object System.Drawing.Point(200, 120)
+    $noButton.Size = New-Object System.Drawing.Size(75, 23)
+    $noButton.Text = "No"
+    $noButton.DialogResult = [System.Windows.Forms.DialogResult]::No
+
+    $form.Controls.Add($label)
+    $form.Controls.Add($yesButton)
+    $form.Controls.Add($noButton)
+    $form.AcceptButton = $yesButton
+    $form.CancelButton = $noButton
+
+    $result = $form.ShowDialog()
+
+    if ($result -eq [System.Windows.Forms.DialogResult]::Yes) {
+      New-ItemProperty -Path $keyPath -Name 'AutoUpdate' -Value 1 -PropertyType 'DWord' -Force | Out-Null
+    }
+    else {
+      New-ItemProperty -Path $keyPath -Name 'AutoUpdate' -Value 0 -PropertyType 'DWord' -Force | Out-Null
+    }
     # Extremely hacky way to get the current version
     Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/Microsoft.PowerShell_profile.ps1' -OutFile $PROFILE
     New-ItemProperty -Path $keyPath -Name 'Version' -Value $latestVersion -PropertyType 'String' -Force | Out-Null
@@ -205,62 +257,6 @@ function Update-Profile {
 
       $result = $form.ShowDialog()
 
-      $autoUpdate = Get-ItemProperty -Path $keyPath -Name 'AutoUpdate' -ErrorAction SilentlyContinue
-      if ($null -eq $autoUpdate) {
-        # Create the form
-        $form = New-Object System.Windows.Forms.Form
-        $form.Text = "Auto Update"
-        $form.BackColor = $nord0
-        $form.ForeColor = $nord4
-        $form.Font = New-Object System.Drawing.Font("Arial", 10)
-        $form.StartPosition = 'CenterScreen'
-        $form.Size = New-Object System.Drawing.Size(400, 200)
-        $form.FormBorderStyle = 'FixedDialog'
-        $form.MaximizeBox = $false
-        $form.MinimizeBox = $false
-        $form.Icon = $icon
-
-        $label = New-Object System.Windows.Forms.Label
-        $label.Text = "Would you like to update the profile automatically in the future?"
-        $label.Location = New-Object System.Drawing.Point(10, 10)
-        $label.Size = New-Object System.Drawing.Size(380, 80)
-        $label.ForeColor = $nord6
-
-        $yesButton = New-Object System.Windows.Forms.Button
-        $yesButton.BackColor = $nord3
-        $yesButton.ForeColor = $nord6
-        $yesButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
-        $yesButton.FlatAppearance.BorderSize = 0
-        $yesButton.Location = New-Object System.Drawing.Point(100, 120)
-        $yesButton.Size = New-Object System.Drawing.Size(75, 23)
-        $yesButton.Text = "Yes"
-        $yesButton.DialogResult = [System.Windows.Forms.DialogResult]::Yes
-
-        $noButton = New-Object System.Windows.Forms.Button
-        $noButton.BackColor = $nord3
-        $noButton.ForeColor = $nord6
-        $noButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
-        $noButton.FlatAppearance.BorderSize = 0
-        $noButton.Location = New-Object System.Drawing.Point(200, 120)
-        $noButton.Size = New-Object System.Drawing.Size(75, 23)
-        $noButton.Text = "No"
-        $noButton.DialogResult = [System.Windows.Forms.DialogResult]::No
-
-        $form.Controls.Add($label)
-        $form.Controls.Add($yesButton)
-        $form.Controls.Add($noButton)
-        $form.AcceptButton = $yesButton
-        $form.CancelButton = $noButton
-
-        $result = $form.ShowDialog()
-
-        if ($result -eq [System.Windows.Forms.DialogResult]::Yes) {
-          New-ItemProperty -Path $keyPath -Name 'AutoUpdate' -Value 1 -PropertyType 'DWord' -Force | Out-Null
-        }
-        else {
-          New-ItemProperty -Path $keyPath -Name 'AutoUpdate' -Value 0 -PropertyType 'DWord' -Force | Out-Null
-        }
-      }
       # Update
       if ($result -eq [System.Windows.Forms.DialogResult]::Yes) {
         Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/Microsoft.PowerShell_profile.ps1' -OutFile $PROFILE
