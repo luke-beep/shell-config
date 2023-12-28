@@ -333,7 +333,7 @@ function Initialize-Profile {
 
     # Create the form
     $form = New-Object System.Windows.Forms.Form
-    $form.Text = "Welcome to PowerShell"
+    $form.Text = "Welcome to Azrael's $($shellType) Profile!"
     $form.BackColor = $nord0
     $form.ForeColor = $nord4
     $form.Font = New-Object System.Drawing.Font("Arial", 10)
@@ -389,7 +389,7 @@ function Set-ProfileSettings {
   $PanelWidth = 1000
 
   $form = New-Object System.Windows.Forms.Form
-  $form.Text = "Profile Settings"
+  $form.Text = "$($shellType) Profile Settings"
   $form.BackColor = $nord0
   $form.Size = New-Object System.Drawing.Size($PanelWidth, 500)
   $form.StartPosition = 'CenterScreen'
@@ -531,7 +531,7 @@ function Show-Profile {
   $PanelWidth = 1000
 
   $form = New-Object System.Windows.Forms.Form
-  $form.Text = "Preview Profile"
+  $form.Text = "Preview $($shellType) Profile"
   $form.BackColor = $nord0
   $form.Size = New-Object System.Drawing.Size($PanelWidth, 500)
   $form.StartPosition = 'CenterScreen'
@@ -1586,6 +1586,47 @@ function New-FileOrDirectory {
   }
 }
 
+<#
+.SYNOPSIS
+   Guides you through the process of using this profile
+.DESCRIPTION 
+   This function guides you through the process of using this profile
+#>
+function Get-Usage {
+  $PanelWidth = 1000
+
+  $form = New-Object System.Windows.Forms.Form
+  $form.Text = "$($shellType) Profile Guide"
+  $form.BackColor = $nord0
+  $form.Size = New-Object System.Drawing.Size($PanelWidth, 500)
+  $form.StartPosition = 'CenterScreen'
+  $form.FormBorderStyle = 'FixedDialog'
+  $form.Icon = $icon
+
+  $panel = New-Object System.Windows.Forms.Panel
+  $panel.Dock = 'Fill'
+  $panel.AutoScroll = $false
+
+  $guideText = Invoke-RestMethod "https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/guide.md"
+
+  $richTextBox = New-Object System.Windows.Forms.RichTextBox
+  $richTextBox.Location = New-Object System.Drawing.Point(0, 0)
+  $richTextBox.Size = New-Object System.Drawing.Size(($PanelWidth + 20), 490)
+  $richTextBox.Text = $guideText
+  $richTextBox.BackColor = $nord0
+  $richTextBox.ForeColor = $nord4
+  $richTextBox.Font = New-Object System.Drawing.Font("Consolas", 10)
+  $richTextBox.ReadOnly = $true
+  $richTextBox.BorderStyle = 'None'
+  $richTextBox.ScrollBars = 'Vertical'
+
+  $panel.Controls.Add($richTextBox)
+
+  $form.Controls.Add($panel)
+
+  $form.ShowDialog()
+}
+
 # ----------------------------------------
 # Alias Management
 # ----------------------------------------
@@ -1957,7 +1998,7 @@ function Show-Help {
   $PanelWidth = 1000
 
   $form = New-Object System.Windows.Forms.Form
-  $form.Text = "PowerShell Help"
+  $form.Text = "$($shellType) Profile Help"
   $form.BackColor = $nord0
   $form.Size = New-Object System.Drawing.Size($PanelWidth, 500)
   $form.StartPosition = 'CenterScreen'
