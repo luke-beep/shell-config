@@ -4,7 +4,7 @@
 
 # Author: LukeHjo (Azrael)
 # Description: This is my PowerShell profile. It contains features that I use on a daily basis.
-# Version: 1.0.9
+# Version: 1.1.0
 # Date: 2023-12-27
 
 # ----------------------------------------
@@ -48,7 +48,7 @@ function Update-Profile {
     if ($autoUpdate.AutoUpdate -eq 1) {
       Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/Microsoft.PowerShell_profile.ps1' -OutFile $PROFILE
       New-ItemProperty -Path $keyPath -Name 'Version' -Value $latestVersion -PropertyType 'String' -Force | Out-Null
-      Restart-Shell
+      exit
     }
     else {
       # Create the form
@@ -112,11 +112,11 @@ function Update-Profile {
       if ($result -eq [System.Windows.Forms.DialogResult]::Yes) {
         Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/Microsoft.PowerShell_profile.ps1' -OutFile $PROFILE
         New-ItemProperty -Path $keyPath -Name 'Version' -Value $latestVersion -PropertyType 'String' -Force | Out-Null
-        Restart-Shell
+        exit
       }
       
       $autoUpdate = Get-ItemProperty -Path $keyPath -Name 'AutoUpdate' -ErrorAction SilentlyContinue
-      if ($autoUpdate -eq $null) {
+      if ($null -eq $autoUpdate) {
         # Create the form
         $form = New-Object System.Windows.Forms.Form
         $form.Text = "Auto Update"
