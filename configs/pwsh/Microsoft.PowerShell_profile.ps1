@@ -1606,7 +1606,7 @@ function Get-Tips {
   $panel.Dock = 'Fill'
   $panel.AutoScroll = $false
 
-  $guideText = Invoke-RestMethod "https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/guide.md"
+  $guideText = Invoke-RestMethod "https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/tips.md"
 
   $richTextBox = New-Object System.Windows.Forms.RichTextBox
   $richTextBox.Location = New-Object System.Drawing.Point(0, 0)
