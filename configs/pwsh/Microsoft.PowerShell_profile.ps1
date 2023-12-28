@@ -41,6 +41,7 @@ function Update-Profile {
     [Parameter(Mandatory = $false)][switch]$Silent,
     [Parameter(Mandatory = $false)][switch]$Force
   )
+  
   $keyPath = 'HKCU:\Software\Azrael\PowerShell'
   $version = Get-ItemProperty -Path $keyPath -Name 'Version' -ErrorAction SilentlyContinue
   $currentVersion = $version.Version
