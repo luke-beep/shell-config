@@ -1772,7 +1772,13 @@ function Load-Aliases {
   
       foreach ($alias in $oldAliases) {
         if (Get-Alias -Name $alias -ErrorAction SilentlyContinue) {
-          Remove-Alias $alias -Force -Scope Global 
+          $shellType = if ($pVersion -ge 7) { "Pwsh" } else { "PowerShell" }
+          if ($shellType -eq "Pwsh") {
+            Remove-Alias $alias -Force -Scope Global 
+          }
+          else {
+            Remove-Item alias:$alias -Force
+          }
         }
       }
     }
