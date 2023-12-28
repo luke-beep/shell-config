@@ -4,7 +4,7 @@
 
 # Author: LukeHjo (Azrael)
 # Description: This is my PowerShell profile. It contains features that I use on a daily basis.
-# Version: 1.1.5
+# Version: 1.1.6
 # Date: 2023-12-28
 
 # ----------------------------------------
@@ -1588,15 +1588,15 @@ function New-FileOrDirectory {
 
 <#
 .SYNOPSIS
-   Guides you through the process of using this profile
+   Tips & tricks for using this profile
 .DESCRIPTION 
-   This function guides you through the process of using this profile
+   This function displays tips & tricks for using this profile
 #>
-function Get-Usage {
+function Get-Tips {
   $PanelWidth = 1000
 
   $form = New-Object System.Windows.Forms.Form
-  $form.Text = "$($shellType) Profile Guide"
+  $form.Text = "$($shellType) Profile Tips"
   $form.BackColor = $nord0
   $form.Size = New-Object System.Drawing.Size($PanelWidth, 500)
   $form.StartPosition = 'CenterScreen'

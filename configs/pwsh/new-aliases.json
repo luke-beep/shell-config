@@ -43,7 +43,7 @@
   "backup": "Backup-Workspace",
   "touch": "New-FileOrDirectory",
   "md": "New-FileOrDirectory",
-  "usage": "Get-Usage",
+  "tips": "Get-Tips",
   "aliases": "Import-Aliases",
   "raliases": "Remove-Aliases",
   "aaliases": "Add-Aliases",
