@@ -1670,40 +1670,55 @@ function Configure-ProfileSettings {
   This function loads aliases
 #>
 function Load-Aliases {
+  param (
+    [Parameter(Mandatory = $false)][switch]$Force
+  )
+
   $newAliasFilePath = Join-Path (Split-Path -Parent $PROFILE) "new-aliases.json"
   $oldAliasFilePath = Join-Path (Split-Path -Parent $PROFILE) "old-aliases.json"
 
-  if (-not (Test-Path $newAliasFilePath)) {
+  if ($Force) {
+    Remove-Item $oldAliasFilePath -Force
+    $oldAliasFileUrl = "https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/old-aliases.json"
+    Invoke-WebRequest -Uri $oldAliasFileUrl -OutFile $oldAliasFilePath
+
+    Remove-Item $newAliasFilePath -Force
     $newAliasFileUrl = "https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/new-aliases.json"
     Invoke-WebRequest -Uri $newAliasFileUrl -OutFile $newAliasFilePath
   }
+  else {
+    if (-not (Test-Path $newAliasFilePath)) {
+      $newAliasFileUrl = "https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/new-aliases.json"
+      Invoke-WebRequest -Uri $newAliasFileUrl -OutFile $newAliasFilePath
+    }
+  
+    if (-not (Test-Path $oldAliasFilePath)) {
+      $oldAliasFileUrl = "https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/old-aliases.json"
+      Invoke-WebRequest -Uri $oldAliasFileUrl -OutFile $oldAliasFilePath
+    }  
 
-  if (-not (Test-Path $oldAliasFilePath)) {
-    $oldAliasFileUrl = "https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/old-aliases.json"
-    Invoke-WebRequest -Uri $oldAliasFileUrl -OutFile $oldAliasFilePath
-  }
-
-  if (Test-Path $oldAliasFilePath) {
-    $oldAliases = Get-Content $oldAliasFilePath | ConvertFrom-Json
-
-    foreach ($alias in $oldAliases) {
-      if (Get-Alias -Name $alias -ErrorAction SilentlyContinue) {
-        Remove-Alias $alias -Force -Scope Global 
+    if (Test-Path $oldAliasFilePath) {
+      $oldAliases = Get-Content $oldAliasFilePath | ConvertFrom-Json
+  
+      foreach ($alias in $oldAliases) {
+        if (Get-Alias -Name $alias -ErrorAction SilentlyContinue) {
+          Remove-Alias $alias -Force -Scope Global 
+        }
       }
     }
-  }
-
-  if (Test-Path $newAliasFilePath) {
-    $newAliases = Get-Content $newAliasFilePath | ConvertFrom-Json
-
-    foreach ($alias in $newAliases.PSObject.Properties) {
-      try {
-        Set-Alias -Name $alias.Name -Value $alias.Value -Scope Global -Option AllScope -Force
-      }
-      catch {
-        Write-Error "Error setting alias $($alias.Name): $_"
-      }
-    }  
+  
+    if (Test-Path $newAliasFilePath) {
+      $newAliases = Get-Content $newAliasFilePath | ConvertFrom-Json
+  
+      foreach ($alias in $newAliases.PSObject.Properties) {
+        try {
+          Set-Alias -Name $alias.Name -Value $alias.Value -Scope Global -Option AllScope -Force
+        }
+        catch {
+          Write-Error "Error setting alias $($alias.Name): $_"
+        }
+      }  
+    }
   }
 }
 Load-Aliases
