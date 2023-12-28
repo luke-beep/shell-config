@@ -46,7 +46,12 @@ function Update-Profile {
   $version = Get-ItemProperty -Path $keyPath -Name 'Version' -ErrorAction SilentlyContinue
   $currentVersion = $version.Version
   $latestVersion = Invoke-RestMethod -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/version'
-  if ($currentVersion -ne $latestVersion) {
+  if ($Force) {
+    Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/Microsoft.PowerShell_profile.ps1' -OutFile $PROFILE
+    New-ItemProperty -Path $keyPath -Name 'Version' -Value $latestVersion -PropertyType 'String' -Force | Out-Null
+    exit
+  }
+  elseif ($currentVersion -ne $latestVersion) {
 
     # Check if the profile should be updated automatically
     $autoUpdate = Get-ItemProperty -Path $keyPath -Name 'AutoUpdate' -ErrorAction SilentlyContinue
@@ -188,11 +193,6 @@ function Update-Profile {
         }
       }
     }
-  }
-  elseif ($Force) {
-    Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/Microsoft.PowerShell_profile.ps1' -OutFile $PROFILE
-    New-ItemProperty -Path $keyPath -Name 'Version' -Value $latestVersion -PropertyType 'String' -Force | Out-Null
-    exit
   }
 }
 
