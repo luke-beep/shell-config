@@ -37,6 +37,10 @@ $nord15 = [System.Drawing.ColorTranslator]::FromHtml("#B48EAD")
    This function checks for updates
 #>
 function Update-Profile {
+  param (
+    [Parameter(Mandatory = $false)][switch]$Silent,
+    [Parameter(Mandatory = $false)][switch]$Force
+  )
   $keyPath = 'HKCU:\Software\Azrael\PowerShell'
   $version = Get-ItemProperty -Path $keyPath -Name 'Version' -ErrorAction SilentlyContinue
   $currentVersion = $version.Version
@@ -45,7 +49,7 @@ function Update-Profile {
 
     # Check if the profile should be updated automatically
     $autoUpdate = Get-ItemProperty -Path $keyPath -Name 'AutoUpdate' -ErrorAction SilentlyContinue
-    if ($autoUpdate.AutoUpdate -eq 1) {
+    if ($autoUpdate.AutoUpdate -eq 1 -or $Silent) {
       Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/Microsoft.PowerShell_profile.ps1' -OutFile $PROFILE
       New-ItemProperty -Path $keyPath -Name 'Version' -Value $latestVersion -PropertyType 'String' -Force | Out-Null
       exit
@@ -183,6 +187,11 @@ function Update-Profile {
         }
       }
     }
+  }
+  elseif ($Force) {
+    Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/Microsoft.PowerShell_profile.ps1' -OutFile $PROFILE
+    New-ItemProperty -Path $keyPath -Name 'Version' -Value $latestVersion -PropertyType 'String' -Force | Out-Null
+    exit
   }
 }
 
