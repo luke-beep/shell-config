@@ -51,30 +51,131 @@ function Update-Profile {
       Restart-Shell
     }
     else {
-      # Prompt the user to update the profile
-      Write-Host "A new version of the profile is available. Would you like to update? (Y/N)"
-      $input = Read-Host
-      if ($input -eq "Y") {
+      # Create the form
+      $form = New-Object System.Windows.Forms.Form
+      $form.Text = "Update Available"
+      $form.BackColor = $nord0
+      $form.ForeColor = $nord4
+      $form.Font = New-Object System.Drawing.Font("Arial", 10)
+      $form.StartPosition = 'CenterScreen'
+      $form.Size = New-Object System.Drawing.Size(400, 200)
+      $form.FormBorderStyle = 'FixedDialog'
+      $form.MaximizeBox = $false
+      $form.MinimizeBox = $false
 
-        # Check if the profile should be updated automatically in the future
-        Write-Host "Would you like to update the profile automatically in the future? (Y/N)"
-        $input = Read-Host
-        if ($input -eq "Y") {
-          New-ItemProperty -Path $keyPath -Name 'AutoUpdate' -Value 1 -PropertyType 'DWord' -Force | Out-Null
-        }
-        else {
-          New-ItemProperty -Path $keyPath -Name 'AutoUpdate' -Value 0 -PropertyType 'DWord' -Force | Out-Null
-        }
+      $icoFileUrl = "https://raw.githubusercontent.com/luke-beep/shell-config/main/assets/Azrael.ico"
+      $icoFileData = Invoke-WebRequest -Uri $icoFileUrl -UseBasicParsing
 
-        # Update the profile
+      if ($icoFileData.StatusCode -eq 200) {
+        $icoFileStream = [System.IO.MemoryStream]::new($icoFileData.Content)
+        $icon = [System.Drawing.Icon]::new($icoFileStream)
+        $form.Icon = $icon
+      }
+      else {
+        Write-Host "Failed to download the ICO file from the URL."
+      }
+
+      $label = New-Object System.Windows.Forms.Label
+      $label.Text = "A new version of the profile is available. Would you like to update?"
+      $label.Location = New-Object System.Drawing.Point(10, 10)
+      $label.Size = New-Object System.Drawing.Size(380, 80)
+      $label.ForeColor = $nord6
+
+      $yesButton = New-Object System.Windows.Forms.Button
+      $yesButton.BackColor = $nord3
+      $yesButton.ForeColor = $nord6
+      $yesButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
+      $yesButton.FlatAppearance.BorderSize = 0
+      $yesButton.Location = New-Object System.Drawing.Point(100, 120)
+      $yesButton.Size = New-Object System.Drawing.Size(75, 23)
+      $yesButton.Text = "Yes"
+      $yesButton.DialogResult = [System.Windows.Forms.DialogResult]::Yes
+
+      $noButton = New-Object System.Windows.Forms.Button
+      $noButton.BackColor = $nord3
+      $noButton.ForeColor = $nord6
+      $noButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
+      $noButton.FlatAppearance.BorderSize = 0
+      $noButton.Location = New-Object System.Drawing.Point(200, 120)
+      $noButton.Size = New-Object System.Drawing.Size(75, 23)
+      $noButton.Text = "No"
+      $noButton.DialogResult = [System.Windows.Forms.DialogResult]::No
+
+      $form.Controls.Add($label)
+      $form.Controls.Add($yesButton)
+      $form.Controls.Add($noButton)
+      $form.AcceptButton = $yesButton
+      $form.CancelButton = $noButton
+
+      $result = $form.ShowDialog()
+
+      if ($result -eq [System.Windows.Forms.DialogResult]::Yes) {
         Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/Microsoft.PowerShell_profile.ps1' -OutFile $PROFILE
         New-ItemProperty -Path $keyPath -Name 'Version' -Value $latestVersion -PropertyType 'String' -Force | Out-Null
         Restart-Shell
       }
-      else {
-        Write-Host "Would you like to update the profile automatically in the future? (Y/N)"
-        $input = Read-Host
-        if ($input -eq "Y") {
+      
+      $autoUpdate = Get-ItemProperty -Path $keyPath -Name 'AutoUpdate' -ErrorAction SilentlyContinue
+      if ($autoUpdate -eq $null) {
+        # Create the form
+        $form = New-Object System.Windows.Forms.Form
+        $form.Text = "Auto Update"
+        $form.BackColor = $nord0
+        $form.ForeColor = $nord4
+        $form.Font = New-Object System.Drawing.Font("Arial", 10)
+        $form.StartPosition = 'CenterScreen'
+        $form.Size = New-Object System.Drawing.Size(400, 200)
+        $form.FormBorderStyle = 'FixedDialog'
+        $form.MaximizeBox = $false
+        $form.MinimizeBox = $false
+
+        $icoFileUrl = "https://raw.githubusercontent.com/luke-beep/shell-config/main/assets/Azrael.ico"
+        $icoFileData = Invoke-WebRequest -Uri $icoFileUrl -UseBasicParsing
+        
+        if ($icoFileData.StatusCode -eq 200) {
+          $icoFileStream = [System.IO.MemoryStream]::new($icoFileData.Content)
+          $icon = [System.Drawing.Icon]::new($icoFileStream)
+          $form.Icon = $icon
+        }
+        else {
+          Write-Host "Failed to download the ICO file from the URL."
+        }
+
+        $label = New-Object System.Windows.Forms.Label
+        $label.Text = "Would you like to update the profile automatically in the future?"
+        $label.Location = New-Object System.Drawing.Point(10, 10)
+        $label.Size = New-Object System.Drawing.Size(380, 80)
+        $label.ForeColor = $nord6
+
+        $yesButton = New-Object System.Windows.Forms.Button
+        $yesButton.BackColor = $nord3
+        $yesButton.ForeColor = $nord6
+        $yesButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
+        $yesButton.FlatAppearance.BorderSize = 0
+        $yesButton.Location = New-Object System.Drawing.Point(100, 120)
+        $yesButton.Size = New-Object System.Drawing.Size(75, 23)
+        $yesButton.Text = "Yes"
+        $yesButton.DialogResult = [System.Windows.Forms.DialogResult]::Yes
+
+        $noButton = New-Object System.Windows.Forms.Button
+        $noButton.BackColor = $nord3
+        $noButton.ForeColor = $nord6
+        $noButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
+        $noButton.FlatAppearance.BorderSize = 0
+        $noButton.Location = New-Object System.Drawing.Point(200, 120)
+        $noButton.Size = New-Object System.Drawing.Size(75, 23)
+        $noButton.Text = "No"
+        $noButton.DialogResult = [System.Windows.Forms.DialogResult]::No
+
+        $form.Controls.Add($label)
+        $form.Controls.Add($yesButton)
+        $form.Controls.Add($noButton)
+        $form.AcceptButton = $yesButton
+        $form.CancelButton = $noButton
+
+        $result = $form.ShowDialog()
+
+        if ($result -eq [System.Windows.Forms.DialogResult]::Yes) {
           New-ItemProperty -Path $keyPath -Name 'AutoUpdate' -Value 1 -PropertyType 'DWord' -Force | Out-Null
         }
         else {
@@ -1412,6 +1513,150 @@ function Show-Help {
   $form.Controls.Add($panel)
 
   $form.ShowDialog()
+}
+
+<#
+.SYNOPSIS
+  Configure Profile Settings
+.DESCRIPTION 
+  This function configures profile settings
+#>
+function Configure-ProfileSettings {
+  $PanelWidth = 1000
+
+  $form = New-Object System.Windows.Forms.Form
+  $form.Text = "Profile Settings"
+  $form.BackColor = $nord0
+  $form.Size = New-Object System.Drawing.Size($PanelWidth, 500)
+  $form.StartPosition = 'CenterScreen'
+  $form.FormBorderStyle = 'FixedDialog'
+
+  $icoFileUrl = "https://raw.githubusercontent.com/luke-beep/shell-config/main/assets/Azrael.ico"
+  $icoFileData = Invoke-WebRequest -Uri $icoFileUrl -UseBasicParsing
+
+  if ($icoFileData.StatusCode -eq 200) {
+    $icoFileStream = [System.IO.MemoryStream]::new($icoFileData.Content)
+    $icon = [System.Drawing.Icon]::new($icoFileStream)
+    $form.Icon = $icon
+  }
+  else {
+    Write-Host "Failed to download the ICO file from the URL."
+  }
+
+  $keyPath = 'HKCU:\Software\Azrael\PowerShell'
+  $keys = Get-ItemProperty -Path $keyPath -ErrorAction SilentlyContinue
+  
+  $tableLayoutPanel = New-Object System.Windows.Forms.TableLayoutPanel
+  $tableLayoutPanel.RowCount = 1
+  $tableLayoutPanel.ColumnCount = 1
+  $tableLayoutPanel.Dock = [System.Windows.Forms.DockStyle]::Fill
+  $tableLayoutPanel.ColumnStyles.Add((New-Object System.Windows.Forms.ColumnStyle([System.Windows.Forms.SizeType]::Percent, 100)))
+  $tableLayoutPanel.RowStyles.Clear()
+  $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::Percent, 100)))
+  $tableLayoutPanel.BorderStyle = [System.Windows.Forms.BorderStyle]::None
+  $tableLayoutPanel.BackColor = $nord0
+  $tableLayoutPanel.ForeColor = $nord4
+
+  $dataGridView = New-Object System.Windows.Forms.DataGridView
+  $dataGridView.BorderStyle = [System.Windows.Forms.BorderStyle]::None
+  $dataGridView.Location = New-Object System.Drawing.Point(10, 10)
+  $dataGridView.Size = New-Object System.Drawing.Size(360, 200)
+  $dataGridView.Dock = [System.Windows.Forms.DockStyle]::Fill
+  $dataGridView.AutoGenerateColumns = $true
+  $dataGridView.RowHeadersVisible = $false
+  $dataGridView.BackgroundColor = $nord0
+  $dataGridView.ForeColor = $nord6
+  $dataGridView.GridColor = $nord3
+  $dataGridView.DefaultCellStyle.BackColor = $nord0
+  $dataGridView.DefaultCellStyle.ForeColor = $nord6
+  $dataGridView.ColumnHeadersDefaultCellStyle.BackColor = $nord3
+  $dataGridView.ColumnHeadersDefaultCellStyle.ForeColor = $nord6
+  $dataGridView.RowHeadersBorderStyle = [System.Windows.Forms.DataGridViewHeaderBorderStyle]::None
+  $dataGridView.ColumnHeadersBorderStyle = [System.Windows.Forms.DataGridViewHeaderBorderStyle]::None
+  $dataGridView.DefaultCellStyle.SelectionBackColor = $nord3
+  $dataGridView.AutoSizeColumnsMode = [System.Windows.Forms.DataGridViewAutoSizeColumnsMode]::Fill
+
+  $deletedRows = New-Object System.Collections.Generic.List[string]
+
+  $contextMenu = New-Object System.Windows.Forms.ContextMenuStrip
+  $deleteMenuItem = New-Object System.Windows.Forms.ToolStripMenuItem
+  $deleteMenuItem.Text = "Delete"
+  $deleteMenuItem.add_Click({
+      if ($dataGridView.SelectedCells.Count -gt 0) {
+        $selectedRowIndex = $dataGridView.SelectedCells[0].RowIndex
+        $name = $dataGridView.Rows[$selectedRowIndex].Cells[0].Value
+        $deletedRows.Add($name)
+        $dataGridView.Rows.RemoveAt($selectedRowIndex)
+      }
+    })
+  $contextMenu.Items.Add($deleteMenuItem)
+  
+  $dataGridView.ContextMenuStrip = $contextMenu
+
+  $nameColumn = New-Object System.Windows.Forms.DataGridViewTextBoxColumn
+  $nameColumn.HeaderText = "Name"
+  $nameColumn.DataPropertyName = "Name"
+  $valueColumn = New-Object System.Windows.Forms.DataGridViewTextBoxColumn
+  $valueColumn.HeaderText = "Value"
+  $valueColumn.DataPropertyName = "Value"
+
+  $dataGridView.Columns.Add($nameColumn)
+  $dataGridView.Columns.Add($valueColumn)
+
+  $dataTable = New-Object System.Data.DataTable
+
+  $dataTable.Columns.Add("Name", [string])
+  $dataTable.Columns.Add("Value", [string])
+
+  $keys.PSObject.Properties | ForEach-Object {
+    $row = $dataTable.NewRow()
+    $row["Name"] = $_.Name
+    $row["Value"] = $_.Value
+    $dataTable.Rows.Add($row)
+  }
+
+  $dataGridView.DataSource = $dataTable
+
+  $tableLayoutPanel.Controls.Add($dataGridView, 0, 0)
+  
+  $button = New-Object System.Windows.Forms.Button
+  $button.Location = New-Object System.Drawing.Point(10, 220)
+  $button.Size = New-Object System.Drawing.Size(150, 30)
+  $button.Text = "Save Configuration"
+  $button.Dock = [System.Windows.Forms.DockStyle]::Fill
+  $button.BackColor = $nord3
+  $button.ForeColor = $nord6
+  $button.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
+  $button.FlatAppearance.BorderColor = $nord3
+  $button.FlatAppearance.BorderSize = 1
+  $button.Add_Click({
+      $dataGridView.Rows | ForEach-Object {
+        if (-not $_.IsNewRow) {
+          $row = $_.DataBoundItem
+          $name = $row["Name"]
+          $value = $row["Value"]
+          if ([string]::IsNullOrEmpty($value)) {
+            Remove-ItemProperty -Path $keyPath -Name $name
+          }
+          else {
+            Set-ItemProperty -Path $keyPath -Name $name -Value $value
+          }
+        }
+      }
+
+      $deletedRows | ForEach-Object {
+        Remove-ItemProperty -Path $keyPath -Name $_
+        $deletedRows.Remove($_)
+      }
+      [System.Windows.Forms.MessageBox]::Show("Profile settings saved.", "Success")
+    })
+  $tableLayoutPanel.Controls.Add($button, 0, 1)
+
+  $form.Controls.Add($tableLayoutPanel)
+
+  $form.ShowDialog()
+
+  $form.Dispose()
 }
 
 # ----------------------------------------
