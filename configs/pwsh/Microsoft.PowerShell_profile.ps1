@@ -4,7 +4,7 @@
 
 # Author: LukeHjo (Azrael)
 # Description: This is my PowerShell profile. It contains features that I use on a daily basis.
-# Version: 1.1.1
+# Version: 1.1.2
 # Date: 2023-12-28
 
 # ----------------------------------------
@@ -30,6 +30,21 @@ $nord13 = [System.Drawing.ColorTranslator]::FromHtml("#EBCB8B")
 $nord14 = [System.Drawing.ColorTranslator]::FromHtml("#A3BE8C")
 $nord15 = [System.Drawing.ColorTranslator]::FromHtml("#B48EAD")
 
+# Variables
+$iconUrl = "https://raw.githubusercontent.com/luke-beep/shell-config/main/assets/Azrael.ico"
+$iconData = Invoke-WebRequest -Uri $iconUrl -UseBasicParsing
+$iconStream = [System.IO.MemoryStream]::new($iconData.Content)
+$icon = [System.Drawing.Icon]::new($iconStream)
+
+$shellType = if ($host.Version.Major -ge 7) { "Pwsh" } else { "PowerShell" }
+$bitness = if ([Environment]::Is64BitProcess) { "64-bit" } else { "32-bit" }
+$keyPath = if ($shellType -eq "Pwsh") { 'HKCU:\Software\Azrael\Pwsh' } else { 'HKCU:\Software\Azrael\PowerShell' }
+$userName = $env:UserName
+$kernelVersion = (Get-CimInstance -ClassName Win32_OperatingSystem).Version
+$versionKey = Get-ItemProperty -Path $keyPath -Name 'Version' -ErrorAction SilentlyContinue 
+$currentVersion = if ($versionKey) { ($versionKey.Version).Trim() } else { Update-Profile }
+$latestVersion = Invoke-RestMethod -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/version'
+
 <#
 .SYNOPSIS
    Check for updates
@@ -45,11 +60,22 @@ function Update-Profile {
     [Parameter(Mandatory = $false)][switch]$Silent,
     [Parameter(Mandatory = $false)][switch]$Force
   )
-  
-  $keyPath = 'HKCU:\Software\Azrael\PowerShell'
-  $version = Get-ItemProperty -Path $keyPath -Name 'Version' -ErrorAction SilentlyContinue
-  $currentVersion = $version.Version
-  $latestVersion = Invoke-RestMethod -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/version'
+
+  # Check for registry key
+  if (-not (Test-Path $keyPath)) {
+    New-Item -Path $keyPath -Force | Out-Null
+  }
+
+  if (!$versionKey) {
+    Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/Microsoft.PowerShell_profile.ps1' -OutFile $PROFILE
+    New-ItemProperty -Path $keyPath -Name 'Version' -Value $latestVersion -PropertyType 'String' -Force | Out-Null
+    exit
+  }
+
+  $firstRun = Get-ItemProperty -Path $keyPath -Name 'FirstRun' -ErrorAction SilentlyContinue
+  if ($null -eq $firstRun) {
+    New-ItemProperty -Path $keyPath -Name 'FirstRun' -Value 0 -PropertyType 'DWord' -Force | Out-Null
+  }
   if ($Force) {
     # Create the form
     $form = New-Object System.Windows.Forms.Form
@@ -62,18 +88,7 @@ function Update-Profile {
     $form.FormBorderStyle = 'FixedDialog'
     $form.MaximizeBox = $false
     $form.MinimizeBox = $false
-
-    $icoFileUrl = "https://raw.githubusercontent.com/luke-beep/shell-config/main/assets/Azrael.ico"
-    $icoFileData = Invoke-WebRequest -Uri $icoFileUrl -UseBasicParsing
-
-    if ($icoFileData.StatusCode -eq 200) {
-      $icoFileStream = [System.IO.MemoryStream]::new($icoFileData.Content)
-      $icon = [System.Drawing.Icon]::new($icoFileStream)
-      $form.Icon = $icon
-    }
-    else {
-      Write-Host "Failed to download the ICO file from the URL."
-    }
+    $form.Icon = $icon
 
     $label = New-Object System.Windows.Forms.Label
     $label.Text = "A new version of the profile is available. Would you like to update?"
@@ -135,18 +150,7 @@ function Update-Profile {
       $form.FormBorderStyle = 'FixedDialog'
       $form.MaximizeBox = $false
       $form.MinimizeBox = $false
-
-      $icoFileUrl = "https://raw.githubusercontent.com/luke-beep/shell-config/main/assets/Azrael.ico"
-      $icoFileData = Invoke-WebRequest -Uri $icoFileUrl -UseBasicParsing
-
-      if ($icoFileData.StatusCode -eq 200) {
-        $icoFileStream = [System.IO.MemoryStream]::new($icoFileData.Content)
-        $icon = [System.Drawing.Icon]::new($icoFileStream)
-        $form.Icon = $icon
-      }
-      else {
-        Write-Host "Failed to download the ICO file from the URL."
-      }
+      $form.Icon = $icon
 
       $label = New-Object System.Windows.Forms.Label
       $label.Text = "A new version of the profile is available. Would you like to update?"
@@ -201,18 +205,7 @@ function Update-Profile {
         $form.FormBorderStyle = 'FixedDialog'
         $form.MaximizeBox = $false
         $form.MinimizeBox = $false
-
-        $icoFileUrl = "https://raw.githubusercontent.com/luke-beep/shell-config/main/assets/Azrael.ico"
-        $icoFileData = Invoke-WebRequest -Uri $icoFileUrl -UseBasicParsing
-        
-        if ($icoFileData.StatusCode -eq 200) {
-          $icoFileStream = [System.IO.MemoryStream]::new($icoFileData.Content)
-          $icon = [System.Drawing.Icon]::new($icoFileStream)
-          $form.Icon = $icon
-        }
-        else {
-          Write-Host "Failed to download the ICO file from the URL."
-        }
+        $form.Icon = $icon
 
         $label = New-Object System.Windows.Forms.Label
         $label.Text = "Would you like to update the profile automatically in the future?"
@@ -290,18 +283,23 @@ function Initialize-Profile {
     scoop install https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/oh-my-posh.json
   }
 
-  oh-my-posh init pwsh --config 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/omp/theme.json' | Invoke-Expression
+  $themeURL = 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/omp/theme.json'
+  $themeKey = Get-ItemProperty -Path $keyPath -Name 'Theme'  -ErrorAction SilentlyContinue
+  $theme
+  if ($null -eq $themeKey) {
+    New-ItemProperty -Path $keyPath -Name 'Theme' -Value $themeURL -PropertyType 'String' -Force | Out-Null
+    $theme = $themeKey.Theme
+  }
+  else {
+    $theme = $themeKey.Theme
+  }
+  
+  oh-my-posh init pwsh --config $themeKey.Theme | Invoke-Expression
 
-  $keyPath = 'HKCU:\Software\Azrael\PowerShell'
   $key = Get-ItemProperty -Path $keyPath -Name 'FirstRun' -ErrorAction SilentlyContinue
 
   # Debugging
   # Remove-ItemProperty -Path $keyPath -Name 'FirstRun' -Force | Out-Null
-
-  $userName = $env:UserName
-  $pVersion = $host.Version.Major
-  $shellType = if ($pVersion -ge 7) { "Pwsh" } else { "PowerShell" }
-  $kernelVersion = (Get-CimInstance -ClassName Win32_OperatingSystem).Version
 
   if ($null -eq $key) {
     if (-not (Test-Path $keyPath)) {
@@ -320,18 +318,8 @@ function Initialize-Profile {
     $form.FormBorderStyle = 'FixedDialog'
     $form.MaximizeBox = $false
     $form.MinimizeBox = $false
+    $form.Icon = $icon
 
-    $icoFileUrl = "https://raw.githubusercontent.com/luke-beep/shell-config/main/assets/Azrael.ico"
-    $icoFileData = Invoke-WebRequest -Uri $icoFileUrl -UseBasicParsing
-  
-    if ($icoFileData.StatusCode -eq 200) {
-      $icoFileStream = [System.IO.MemoryStream]::new($icoFileData.Content)
-      $icon = [System.Drawing.Icon]::new($icoFileStream)
-      $form.Icon = $icon
-    }
-    else {
-      Write-Host "Failed to download the ICO file from the URL."
-    }
     $label = New-Object System.Windows.Forms.Label
     $label.Text = "Hello, $userName! Welcome to $($shellType). For more information, please type 'help'."
     $label.Location = New-Object System.Drawing.Point(10, 10)
@@ -355,14 +343,10 @@ function Initialize-Profile {
     $form.ShowDialog()
   }
   
-  $keyPath = 'HKCU:\Software\Azrael\PowerShell'
-  $key = Get-ItemProperty -Path $keyPath -Name 'Version' -ErrorAction SilentlyContinue
-  $version = ($key.Version).Trim()
-
   Write-Host "Microsoft Windows [Version $($kernelVersion)]"
   Write-Host "(c) Microsoft Corporation. All rights reserved.`n"
 
-  Write-Host "Azrael's $($shellType) v$($version)"
+  Write-Host "Azrael's $($shellType) v$($currentVersion)"
   Write-Host "Copyright (c) 2023-2024 Azrael"
   Write-Host "https://github.com/luke-beep/shell-config/`n"
 }
@@ -383,20 +367,8 @@ function Set-ProfileSettings {
   $form.Size = New-Object System.Drawing.Size($PanelWidth, 500)
   $form.StartPosition = 'CenterScreen'
   $form.FormBorderStyle = 'FixedDialog'
+  $form.Icon = $icon
 
-  $icoFileUrl = "https://raw.githubusercontent.com/luke-beep/shell-config/main/assets/Azrael.ico"
-  $icoFileData = Invoke-WebRequest -Uri $icoFileUrl -UseBasicParsing
-
-  if ($icoFileData.StatusCode -eq 200) {
-    $icoFileStream = [System.IO.MemoryStream]::new($icoFileData.Content)
-    $icon = [System.Drawing.Icon]::new($icoFileStream)
-    $form.Icon = $icon
-  }
-  else {
-    Write-Host "Failed to download the ICO file from the URL."
-  }
-
-  $keyPath = 'HKCU:\Software\Azrael\PowerShell'
   $keys = Get-ItemProperty -Path $keyPath -ErrorAction SilentlyContinue
   
   $tableLayoutPanel = New-Object System.Windows.Forms.TableLayoutPanel
@@ -519,9 +491,6 @@ function Set-ProfileSettings {
    This function gets the current profile version
 #>
 function Get-ProfileVersion {
-  $keyPath = 'HKCU:\Software\Azrael\PowerShell'
-  $version = Get-ItemProperty -Path $keyPath -Name 'Version' -ErrorAction SilentlyContinue
-  $currentVersion = $version.Version
   $currentVersion
 }
 
@@ -540,18 +509,7 @@ function Show-Profile {
   $form.Size = New-Object System.Drawing.Size($PanelWidth, 500)
   $form.StartPosition = 'CenterScreen'
   $form.FormBorderStyle = 'FixedDialog'
-
-  $icoFileUrl = "https://raw.githubusercontent.com/luke-beep/shell-config/main/assets/Azrael.ico"
-  $icoFileData = Invoke-WebRequest -Uri $icoFileUrl -UseBasicParsing
-
-  if ($icoFileData.StatusCode -eq 200) {
-    $icoFileStream = [System.IO.MemoryStream]::new($icoFileData.Content)
-    $icon = [System.Drawing.Icon]::new($icoFileStream)
-    $form.Icon = $icon
-  }
-  else {
-    Write-Host "Failed to download the ICO file from the URL."
-  }
+  $form.Icon = $icon
 
   $panel = New-Object System.Windows.Forms.Panel
   $panel.Dock = 'Fill'
@@ -1206,18 +1164,7 @@ function Get-Links {
   $form.Size = New-Object System.Drawing.Size($PanelWidth, 500)
   $form.StartPosition = 'CenterScreen'
   $form.FormBorderStyle = 'FixedDialog'
-
-  $icoFileUrl = "https://raw.githubusercontent.com/luke-beep/shell-config/main/assets/Azrael.ico"
-  $icoFileData = Invoke-WebRequest -Uri $icoFileUrl -UseBasicParsing
-
-  if ($icoFileData.StatusCode -eq 200) {
-    $icoFileStream = [System.IO.MemoryStream]::new($icoFileData.Content)
-    $icon = [System.Drawing.Icon]::new($icoFileStream)
-    $form.Icon = $icon
-  }
-  else {
-    Write-Host "Failed to download the ICO file from the URL."
-  }
+  $form.Icon = $icon
   
   $dataGridView = New-Object System.Windows.Forms.DataGridView
   $dataGridView.Dock = [System.Windows.Forms.DockStyle]::Fill
@@ -1657,7 +1604,6 @@ function Import-Aliases {
   
       foreach ($alias in $oldAliases) {
         if (Get-Alias -Name $alias -ErrorAction SilentlyContinue) {
-          $shellType = if ($pVersion -ge 7) { "Pwsh" } else { "PowerShell" }
           if ($shellType -eq "Pwsh") {
             Remove-Alias $alias -Force -Scope Global 
           }
@@ -1707,18 +1653,8 @@ function Add-Aliases {
   $form.StartPosition = "CenterScreen"
   $form.BackColor = $nord0
   $form.ForeColor = $nord4
-
-  $icoFileUrl = "https://raw.githubusercontent.com/luke-beep/shell-config/main/assets/Azrael.ico"
-  $icoFileData = Invoke-WebRequest -Uri $icoFileUrl -UseBasicParsing
-
-  if ($icoFileData.StatusCode -eq 200) {
-    $icoFileStream = [System.IO.MemoryStream]::new($icoFileData.Content)
-    $icon = [System.Drawing.Icon]::new($icoFileStream)
-    $form.Icon = $icon
-  }
-  else {
-    Write-Host "Failed to download the ICO file from the URL."
-  }
+  $form.FormBorderStyle = "FixedDialog"
+  $form.Icon = $icon
 
   $tableLayoutPanel = New-Object System.Windows.Forms.TableLayoutPanel
   $tableLayoutPanel.RowCount = 1
@@ -1850,18 +1786,8 @@ function Remove-Aliases {
   $form.StartPosition = "CenterScreen"
   $form.BackColor = $nord0
   $form.ForeColor = $nord4
-
-  $icoFileUrl = "https://raw.githubusercontent.com/luke-beep/shell-config/main/assets/Azrael.ico"
-  $icoFileData = Invoke-WebRequest -Uri $icoFileUrl -UseBasicParsing
-
-  if ($icoFileData.StatusCode -eq 200) {
-    $icoFileStream = [System.IO.MemoryStream]::new($icoFileData.Content)
-    $icon = [System.Drawing.Icon]::new($icoFileStream)
-    $form.Icon = $icon
-  }
-  else {
-    Write-Host "Failed to download the ICO file from the URL."
-  }
+  $form.FormBorderStyle = "FixedDialog"
+  $form.Icon = $icon
 
   $tableLayoutPanel = New-Object System.Windows.Forms.TableLayoutPanel
   $tableLayoutPanel.RowCount = 1
@@ -2009,18 +1935,7 @@ function Show-Help {
   $form.Size = New-Object System.Drawing.Size($PanelWidth, 500)
   $form.StartPosition = 'CenterScreen'
   $form.FormBorderStyle = 'FixedDialog'
-
-  $icoFileUrl = "https://raw.githubusercontent.com/luke-beep/shell-config/main/assets/Azrael.ico"
-  $icoFileData = Invoke-WebRequest -Uri $icoFileUrl -UseBasicParsing
-
-  if ($icoFileData.StatusCode -eq 200) {
-    $icoFileStream = [System.IO.MemoryStream]::new($icoFileData.Content)
-    $icon = [System.Drawing.Icon]::new($icoFileStream)
-    $form.Icon = $icon
-  }
-  else {
-    Write-Host "Failed to download the ICO file from the URL."
-  }
+  $form.Icon = $icon
 
   $panel = New-Object System.Windows.Forms.Panel
   $panel.Dock = 'Fill'
@@ -2051,10 +1966,6 @@ function Show-Help {
    This function gets the current shell information
 #>
 function Get-ShellInfo {
-  $version = $host.Version.Major
-  $shellType = if ($version -ge 7) { "Pwsh" } else { "PowerShell" }
-  $bitness = if ([Environment]::Is64BitProcess) { "64-bit" } else { "32-bit" }
-
   Write-Output "Profile Path: $PROFILE"
   Write-Output "Host Name: $($host.Name)"
   Write-Output "Host Version: $($host.Version) -> $($shellType) ($bitness)"
