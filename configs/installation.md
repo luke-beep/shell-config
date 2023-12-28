@@ -1,6 +1,8 @@
-### Installation
+<div align="center">
 
----
+# Installation Guide 📚
+
+</div>
 
 1. **Clone the repository**: Clone this repository to your local machine using the following command:
 
@@ -28,10 +30,12 @@
 
 5. **Copy the PowerShell profile**: Copy the [`Microsoft.PowerShell_profile.ps1`](/configs/powershell/Microsoft.PowerShell_profile.ps1) file to the PowerShell profile directory:
 
-    ```bash
-    cp configs\powershell\Microsoft.PowerShell_profile.ps1 "%UserName%\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1"
-    cp configs\powershell\Microsoft.PowerShell_profile.ps1 "%UserName%\Documents\PowerShell\Microsoft.PowerShell_profile.ps1"
+    ```powershell
+    $sourceFile = "configs\pwsh\Microsoft.PowerShell_profile.ps1"
+    Copy-Item -Path $sourceFile -Destination $PROFILE -Force
     ```
+
+    > Do this for each PowerShell profile you wish to use. E.g. one for PowerShell Core and one for Windows PowerShell.
 
 6. Open the Windows Terminal and enjoy!
 
