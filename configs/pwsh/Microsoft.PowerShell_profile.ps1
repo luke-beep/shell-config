@@ -116,7 +116,14 @@ function Init {
   $keyPath = 'HKCU:\Software\Azrael\PowerShell'
   $key = Get-ItemProperty -Path $keyPath -Name 'FirstRun' -ErrorAction SilentlyContinue
 
+  # Debugging
+  # Remove-ItemProperty -Path $keyPath -Name 'FirstRun' -Force | Out-Null
+
   $userName = $env:UserName
+  $pVersion = $host.Version.Major
+  $shellType = if ($pVersion -ge 7) { "Pwsh" } else { "PowerShell" }
+  $kernelVersion = (Get-CimInstance -ClassName Win32_OperatingSystem).Version
+
   if ($null -eq $key) {
     if (-not (Test-Path $keyPath)) {
       New-Item -Path $keyPath -Force | Out-Null
@@ -135,8 +142,19 @@ function Init {
     $form.MaximizeBox = $false
     $form.MinimizeBox = $false
 
+    $icoFileUrl = "https://raw.githubusercontent.com/luke-beep/shell-config/main/assets/Azrael.ico"
+    $icoFileData = Invoke-WebRequest -Uri $icoFileUrl -UseBasicParsing
+  
+    if ($icoFileData.StatusCode -eq 200) {
+      $icoFileStream = [System.IO.MemoryStream]::new($icoFileData.Content)
+      $icon = [System.Drawing.Icon]::new($icoFileStream)
+      $form.Icon = $icon
+    }
+    else {
+      Write-Host "Failed to download the ICO file from the URL."
+    }
     $label = New-Object System.Windows.Forms.Label
-    $label.Text = "Hello, $userName! Welcome to PowerShell. `n`nFor guidance and to learn about available commands, type 'help'."
+    $label.Text = "Hello, $userName! Welcome to $($shellType). For more information, please type 'help'."
     $label.Location = New-Object System.Drawing.Point(10, 10)
     $label.Size = New-Object System.Drawing.Size(380, 80)
     $label.ForeColor = $nord6
@@ -158,6 +176,16 @@ function Init {
     $form.ShowDialog()
   }
   Clear-Host
+  $keyPath = 'HKCU:\Software\Azrael\PowerShell'
+  $key = Get-ItemProperty -Path $keyPath -Name 'Version' -ErrorAction SilentlyContinue
+  $version = ($key.Version).Trim()
+
+  Write-Host "Microsoft Windows [Version $($kernelVersion)]"
+  Write-Host "(c) Microsoft Corporation. All rights reserved.`n"
+
+  Write-Host "Azrael's $($shellType) v$($version)"
+  Write-Host "Copyright (c) 2023-2024 Azrael"
+  Write-Host "https://github.com/luke-beep/shell-config/`n"
 }
 Init # Initialize the profile
 
@@ -1052,6 +1080,18 @@ function Get-Links {
   $form.Size = New-Object System.Drawing.Size($PanelWidth, 500)
   $form.StartPosition = 'CenterScreen'
   $form.FormBorderStyle = 'FixedDialog'
+
+  $icoFileUrl = "https://raw.githubusercontent.com/luke-beep/shell-config/main/assets/Azrael.ico"
+  $icoFileData = Invoke-WebRequest -Uri $icoFileUrl -UseBasicParsing
+
+  if ($icoFileData.StatusCode -eq 200) {
+    $icoFileStream = [System.IO.MemoryStream]::new($icoFileData.Content)
+    $icon = [System.Drawing.Icon]::new($icoFileStream)
+    $form.Icon = $icon
+  }
+  else {
+    Write-Host "Failed to download the ICO file from the URL."
+  }
   
   $dataGridView = New-Object System.Windows.Forms.DataGridView
   $dataGridView.Dock = [System.Windows.Forms.DockStyle]::Fill
@@ -1137,6 +1177,18 @@ function Preview-Profile {
   $form.Size = New-Object System.Drawing.Size($PanelWidth, 500)
   $form.StartPosition = 'CenterScreen'
   $form.FormBorderStyle = 'FixedDialog'
+
+  $icoFileUrl = "https://raw.githubusercontent.com/luke-beep/shell-config/main/assets/Azrael.ico"
+  $icoFileData = Invoke-WebRequest -Uri $icoFileUrl -UseBasicParsing
+
+  if ($icoFileData.StatusCode -eq 200) {
+    $icoFileStream = [System.IO.MemoryStream]::new($icoFileData.Content)
+    $icon = [System.Drawing.Icon]::new($icoFileStream)
+    $form.Icon = $icon
+  }
+  else {
+    Write-Host "Failed to download the ICO file from the URL."
+  }
 
   $panel = New-Object System.Windows.Forms.Panel
   $panel.Dock = 'Fill'
@@ -1328,6 +1380,18 @@ function Show-Help {
   $form.StartPosition = 'CenterScreen'
   $form.FormBorderStyle = 'FixedDialog'
 
+  $icoFileUrl = "https://raw.githubusercontent.com/luke-beep/shell-config/main/assets/Azrael.ico"
+  $icoFileData = Invoke-WebRequest -Uri $icoFileUrl -UseBasicParsing
+
+  if ($icoFileData.StatusCode -eq 200) {
+    $icoFileStream = [System.IO.MemoryStream]::new($icoFileData.Content)
+    $icon = [System.Drawing.Icon]::new($icoFileStream)
+    $form.Icon = $icon
+  }
+  else {
+    Write-Host "Failed to download the ICO file from the URL."
+  }
+
   $panel = New-Object System.Windows.Forms.Panel
   $panel.Dock = 'Fill'
   $panel.AutoScroll = $false
@@ -1418,6 +1482,18 @@ function Add-Aliases {
   $form.BackColor = $nord0
   $form.ForeColor = $nord4
 
+  $icoFileUrl = "https://raw.githubusercontent.com/luke-beep/shell-config/main/assets/Azrael.ico"
+  $icoFileData = Invoke-WebRequest -Uri $icoFileUrl -UseBasicParsing
+
+  if ($icoFileData.StatusCode -eq 200) {
+    $icoFileStream = [System.IO.MemoryStream]::new($icoFileData.Content)
+    $icon = [System.Drawing.Icon]::new($icoFileStream)
+    $form.Icon = $icon
+  }
+  else {
+    Write-Host "Failed to download the ICO file from the URL."
+  }
+
   $tableLayoutPanel = New-Object System.Windows.Forms.TableLayoutPanel
   $tableLayoutPanel.RowCount = 1
   $tableLayoutPanel.ColumnCount = 1
@@ -1453,10 +1529,10 @@ function Add-Aliases {
   $deleteMenuItem.Text = "Delete"
   $deleteMenuItem.add_Click({
       if ($dataGridView.SelectedCells.Count -gt 0) {
-          $selectedRowIndex = $dataGridView.SelectedCells[0].RowIndex
-          $dataGridView.Rows.RemoveAt($selectedRowIndex)
+        $selectedRowIndex = $dataGridView.SelectedCells[0].RowIndex
+        $dataGridView.Rows.RemoveAt($selectedRowIndex)
       }
-  })
+    })
   $contextMenu.Items.Add($deleteMenuItem)
   
   $dataGridView.ContextMenuStrip = $contextMenu
@@ -1536,11 +1612,24 @@ function Remove-Aliases {
     $dataTable.Rows.Add($row)
   }
 
+
   $form = New-Object System.Windows.Forms.Form
   $form.Text = "Alias Configuration"
   $form.StartPosition = "CenterScreen"
   $form.BackColor = $nord0
   $form.ForeColor = $nord4
+
+  $icoFileUrl = "https://raw.githubusercontent.com/luke-beep/shell-config/main/assets/Azrael.ico"
+  $icoFileData = Invoke-WebRequest -Uri $icoFileUrl -UseBasicParsing
+
+  if ($icoFileData.StatusCode -eq 200) {
+    $icoFileStream = [System.IO.MemoryStream]::new($icoFileData.Content)
+    $icon = [System.Drawing.Icon]::new($icoFileStream)
+    $form.Icon = $icon
+  }
+  else {
+    Write-Host "Failed to download the ICO file from the URL."
+  }
 
   $tableLayoutPanel = New-Object System.Windows.Forms.TableLayoutPanel
   $tableLayoutPanel.RowCount = 1
@@ -1575,10 +1664,10 @@ function Remove-Aliases {
   $deleteMenuItem.Text = "Delete"
   $deleteMenuItem.add_Click({
       if ($dataGridView.SelectedCells.Count -gt 0) {
-          $selectedRowIndex = $dataGridView.SelectedCells[0].RowIndex
-          $dataGridView.Rows.RemoveAt($selectedRowIndex)
+        $selectedRowIndex = $dataGridView.SelectedCells[0].RowIndex
+        $dataGridView.Rows.RemoveAt($selectedRowIndex)
       }
-  })
+    })
   $contextMenu.Items.Add($deleteMenuItem)
   
   $dataGridView.ContextMenuStrip = $contextMenu
