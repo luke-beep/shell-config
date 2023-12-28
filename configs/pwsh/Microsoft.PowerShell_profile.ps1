@@ -42,7 +42,7 @@ $keyPath = if ($shellType -eq "Pwsh") { 'HKCU:\Software\Azrael\Pwsh' } else { 'H
 $userName = $env:UserName
 $kernelVersion = (Get-CimInstance -ClassName Win32_OperatingSystem).Version
 $versionKey = Get-ItemProperty -Path $keyPath -Name 'Version' -ErrorAction SilentlyContinue 
-$currentVersion = if ($versionKey) { ($versionKey.Version).Trim() } else { Update-Profile }
+$currentVersion = if ($versionKey) { ($versionKey.Version).Trim() } else { $null }
 $latestVersion = Invoke-RestMethod -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/version'
 
 <#
@@ -66,7 +66,7 @@ function Update-Profile {
     New-Item -Path $keyPath -Force | Out-Null
   }
 
-  if (!$versionKey) {
+  if ($null -eq $versionKey) {
     Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/Microsoft.PowerShell_profile.ps1' -OutFile $PROFILE
     New-ItemProperty -Path $keyPath -Name 'Version' -Value $latestVersion -PropertyType 'String' -Force | Out-Null
     exit
