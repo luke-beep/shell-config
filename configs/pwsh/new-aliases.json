@@ -34,6 +34,7 @@
   "rm": "Remove-Folder",
   "cp": "Copy-Folder",
   "mv": "Move-Folder",
+  "empty": "Empty-RecycleBin",
   "mdcd": "New-DirectoryAndNavigate",
   "rmd": "Remove-CurrentDirectory",
   "path": "Copy-Path",

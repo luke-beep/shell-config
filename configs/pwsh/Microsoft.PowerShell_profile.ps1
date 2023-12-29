@@ -122,10 +122,8 @@ function Update-Profile {
     else {
       New-ItemProperty -Path $keyPath -Name 'AutoUpdate' -Value 0 -PropertyType 'DWord' -Force | Out-Null
     }
-    # Extremely hacky way to get the current version
     Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/Microsoft.PowerShell_profile.ps1' -OutFile $PROFILE
     New-ItemProperty -Path $keyPath -Name 'Version' -Value $latestVersion -PropertyType 'String' -Force | Out-Null
-    New-ItemProperty -Path $keyPath -Name 'FirstRun' -Value 0 -PropertyType 'DWord' -Force | Out-Null
     . $PROFILE
     if ($shellType -eq "Pwsh") {
       pwsh
@@ -321,31 +319,26 @@ function Initialize-Profile {
     scoop install starship
   }
 
-  $themeURL = 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/omp/theme.json'
-  $themeKey = Get-ItemProperty -Path $keyPath -Name 'Theme'  -ErrorAction SilentlyContinue
-  $theme = $null
-  if ($null -eq $themeKey) {
-    New-ItemProperty -Path $keyPath -Name 'Theme' -Value $themeURL -PropertyType 'String' -Force | Out-Null
-    $theme = $themeKey.Theme
-  }
-  else {
-    $theme = $themeKey.Theme
-  }
-
+  # Key that determines whether or not the starship prompt is enabled (Disabled by default)
   $starShip = Get-ItemProperty -Path $keyPath -Name 'Starship' -ErrorAction SilentlyContinue
   if ($null -eq $starShip) {
     New-ItemProperty -Path $keyPath -Name 'Starship' -Value 0 -PropertyType 'String' -Force | Out-Null
   }
 
+  $ompConfig = "$env:USERPROFILE\.config\omp.json"
+  if (-not (Test-Path $ompConfig)) {
+    New-Item -Path $ompConfig -Force | Out-Null
+    Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/omp/theme.json' -OutFile $ompConfig
+  }
+
   $starshipConfig = "$env:USERPROFILE\.config\starship.toml"
   if (-not (Test-Path $starshipConfig)) {
     New-Item -Path $starshipConfig -Force | Out-Null
-    # download the starship config and write it to the file
     Invoke-WebRequest -Uri 'https://starship.rs/presets/toml/tokyo-night.toml' -OutFile $starshipConfig
   }
   
-  if ($null -eq $starShip.Starship -or $starShip.Starship -eq 0) {
-    oh-my-posh init pwsh --config $theme | Invoke-Expression
+  if ($starShip.Starship -eq 0) {
+    oh-my-posh init pwsh --config $ompConfig | Invoke-Expression
   }
   elseif ($starShip.Starship -eq 1) {
     Invoke-Expression (&starship init powershell)
@@ -373,7 +366,7 @@ function Initialize-Profile {
     $form.Icon = $icon
 
     $label = New-Object System.Windows.Forms.Label
-    $label.Text = "Hello, $userName! Welcome to $($shellType). For more information, please type 'help'."
+    $label.Text = "Hello, $userName! Welcome to $($shellType). For more information, please type 'help' or 'tips'."
     $label.Location = New-Object System.Drawing.Point(10, 10)
     $label.Size = New-Object System.Drawing.Size(380, 80)
     $label.ForeColor = $nord6
@@ -1496,7 +1489,7 @@ function Move-Folder {
 .DESCRIPTION
    This function empties the recycle bin
 #>
-function Clear-RecycleBin {
+function Empty-RecycleBin {
   Clear-RecycleBin -Force
 }
 
@@ -1686,19 +1679,26 @@ function Get-Tips {
    This function allows you to configure your theme
 #>
 function Set-Theme {
+  $ompConfig = "$env:USERPROFILE\.config\omp.json"
   $starshipConfig = "$env:USERPROFILE\.config\starship.toml"
   $starShip = Get-ItemProperty -Path $keyPath -Name 'Starship' -ErrorAction SilentlyContinue
+
+  $PanelWidth = 400
+  $PanelHeight = 200
+
   if ($starShip.Starship -eq 1) {
     Start-Process https://starship.rs/presets/
-    $PanelWidth = 500
 
     $form = New-Object System.Windows.Forms.Form
     $form.Text = "Starship Theme Configuration"
     $form.BackColor = $nord0
-    $form.Size = New-Object System.Drawing.Size($PanelWidth, 500)
+    $form.Size = New-Object System.Drawing.Size($PanelWidth, $PanelHeight)
     $form.StartPosition = 'CenterScreen'
     $form.FormBorderStyle = 'FixedDialog'
     $form.Icon = $icon
+    $form.Topmost = $true
+    $form.MinimizeBox = $false
+    $form.MaximizeBox = $false
 
     $panel = New-Object System.Windows.Forms.Panel
     $panel.Dock = 'Fill'
@@ -1711,11 +1711,11 @@ function Set-Theme {
     $tableLayoutPanel.ColumnStyles.Add((New-Object System.Windows.Forms.ColumnStyle([System.Windows.Forms.SizeType]::Percent, 100)))
     $tableLayoutPanel.RowStyles.Clear()
     $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::Percent, 100)))
-    $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::Percent, 100)))
+    $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::AutoSize)))
 
     $richTextBox = New-Object System.Windows.Forms.RichTextBox
     $richTextBox.Location = New-Object System.Drawing.Point(0, 0)
-    $richTextBox.Size = New-Object System.Drawing.Size(($PanelWidth + 20), 490)
+    $richTextBox.Size = New-Object System.Drawing.Size(($PanelWidth + 20), ($PanelHeight - 10))
     $richTextBox.Text = "Enter the URL of the theme you want to use. E.g. https://starship.rs/presets/toml/tokyo-night.toml"
     $richTextBox.BackColor = $nord0
     $richTextBox.ForeColor = $nord4
@@ -1752,15 +1752,19 @@ function Set-Theme {
   }
   else {
     Start-Process https://ohmyposh.dev/docs/themes
-    $PanelWidth = 500
+    $PanelWidth = 400
+    $PanelHeight = 200
 
     $form = New-Object System.Windows.Forms.Form
     $form.Text = "Oh-my-posh Theme Configuration"
     $form.BackColor = $nord0
-    $form.Size = New-Object System.Drawing.Size($PanelWidth, 500)
+    $form.Size = New-Object System.Drawing.Size($PanelWidth, $PanelHeight)
     $form.StartPosition = 'CenterScreen'
     $form.FormBorderStyle = 'FixedDialog'
     $form.Icon = $icon
+    $form.Topmost = $true
+    $form.MinimizeBox = $false
+    $form.MaximizeBox = $false
 
     $panel = New-Object System.Windows.Forms.Panel
     $panel.Dock = 'Fill'
@@ -1773,17 +1777,19 @@ function Set-Theme {
     $tableLayoutPanel.ColumnStyles.Add((New-Object System.Windows.Forms.ColumnStyle([System.Windows.Forms.SizeType]::Percent, 100)))
     $tableLayoutPanel.RowStyles.Clear()
     $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::Percent, 100)))
-    $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::Percent, 100)))
+    $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::AutoSize)))
 
     $richTextBox = New-Object System.Windows.Forms.RichTextBox
     $richTextBox.Location = New-Object System.Drawing.Point(0, 0)
-    $richTextBox.Size = New-Object System.Drawing.Size(($PanelWidth + 20), 490)
+    $richTextBox.Size = New-Object System.Drawing.Size(($PanelWidth + 20), ($PanelHeight - 10))
     $richTextBox.Text = "Enter the URL of the theme you want to use. E.g. https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/1_shell.omp.json"
     $richTextBox.BackColor = $nord0
     $richTextBox.ForeColor = $nord4
     $richTextBox.Font = New-Object System.Drawing.Font("Consolas", 10)
     $richTextBox.BorderStyle = 'None'
     $richTextBox.ScrollBars = 'Vertical'
+
+    
 
     $tableLayoutPanel.Controls.Add($richTextBox, 0, 0)
 
@@ -1798,7 +1804,8 @@ function Set-Theme {
     $saveButton.FlatAppearance.BorderSize = 0
     $saveButton.Add_Click({
         $url = $richTextBox.Text
-        New-ItemProperty -Path $keyPath -Name 'Theme' -Value $url -PropertyType 'String' -Force | Out-Null
+        $urlContent = Invoke-WebRequest $url
+        $urlContent.Content | Out-File $ompConfig
 
         [System.Windows.Forms.MessageBox]::Show("Oh-my-posh theme successfully changed.", "Success")
       })
