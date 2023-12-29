@@ -124,6 +124,7 @@ function Update-Profile {
     }
     Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/Microsoft.PowerShell_profile.ps1' -OutFile $PROFILE
     New-ItemProperty -Path $keyPath -Name 'Version' -Value $latestVersion -PropertyType 'String' -Force | Out-Null
+    New-ItemProperty -Path $keyPath -Name 'FirstRun' -Value 1 -PropertyType 'DWord' -Force | Out-Null
     . $PROFILE
     if ($shellType -eq "Pwsh") {
       pwsh
@@ -346,7 +347,7 @@ function Initialize-Profile {
 
 
   $key = Get-ItemProperty -Path $keyPath -Name 'FirstRun' -ErrorAction SilentlyContinue
-  if ($null -eq $key) {
+  if ($key -eq 1) {
     if (-not (Test-Path $keyPath)) {
       New-Item -Path $keyPath -Force | Out-Null
     }
