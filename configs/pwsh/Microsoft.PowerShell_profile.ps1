@@ -4,7 +4,7 @@
 
 # Author: LukeHjo (Azrael)
 # Description: This is my PowerShell profile. It contains features that I use on a daily basis.
-# Version: 1.1.6
+# Version: 1.1.7
 # Date: 2023-12-28
 
 # ----------------------------------------
@@ -310,6 +310,16 @@ function Initialize-Profile {
   if (-not $omp) {
     scoop install https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/oh-my-posh.json
   }
+  $nerdfontKey = Get-ItemProperty -Path $keyPath -Name 'NerdFontInstalled' -ErrorAction SilentlyContinue
+  if ($null -eq $nerdfontKey) {
+    New-ItemProperty -Path $keyPath -Name 'NerdFontInstalled' -Value 0 -PropertyType 'DWord' -Force | Out-Null
+    oh-my-posh font install
+  }
+
+  $starship = Get-Command -Name starship -ErrorAction SilentlyContinue
+  if (-not $starship) {
+    scoop install starship
+  }
 
   $themeURL = 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/omp/theme.json'
   $themeKey = Get-ItemProperty -Path $keyPath -Name 'Theme'  -ErrorAction SilentlyContinue
@@ -321,8 +331,26 @@ function Initialize-Profile {
   else {
     $theme = $themeKey.Theme
   }
+
+  $starShip = Get-ItemProperty -Path $keyPath -Name 'Starship' -ErrorAction SilentlyContinue
+  if ($null -eq $starShip) {
+    New-ItemProperty -Path $keyPath -Name 'Starship' -Value 0 -PropertyType 'String' -Force | Out-Null
+  }
+
+  $starshipConfig = "$env:USERPROFILE\.config\starship.toml"
+  if (-not (Test-Path $starshipConfig)) {
+    New-Item -Path $starshipConfig -Force | Out-Null
+    # download the starship config and write it to the file
+    Invoke-WebRequest -Uri 'https://starship.rs/presets/toml/tokyo-night.toml' -OutFile $starshipConfig
+  }
   
-  oh-my-posh init pwsh --config $theme | Invoke-Expression
+  if ($null -eq $starShip.Starship -or $starShip.Starship -eq 0) {
+    oh-my-posh init pwsh --config $theme | Invoke-Expression
+  }
+  elseif ($starShip.Starship -eq 1) {
+    Invoke-Expression (&starship init powershell)
+  }
+
 
   $key = Get-ItemProperty -Path $keyPath -Name 'FirstRun' -ErrorAction SilentlyContinue
   if ($null -eq $key) {
@@ -1214,6 +1242,19 @@ function Get-Links {
   $dataGridView.RowHeadersVisible = $false
   $dataGridView.GridColor = $nord4
 
+  $dataGridView.DefaultCellStyle.BackColor = $nord0
+  $dataGridView.DefaultCellStyle.ForeColor = $nord4
+
+  $panel = New-Object System.Windows.Forms.Panel
+  $panel.Dock = 'Fill'
+  $panel.AutoScroll = $false
+
+  $dataGridView.BorderStyle = [System.Windows.Forms.BorderStyle]::None
+  $dataGridView.ColumnHeadersBorderStyle = [System.Windows.Forms.DataGridViewHeaderBorderStyle]::None
+  $dataGridView.RowHeadersBorderStyle = [System.Windows.Forms.DataGridViewHeaderBorderStyle]::None
+
+  $dataGridView.BackgroundColor = $nord0
+
   $dataGridView.ColumnHeadersDefaultCellStyle.BackColor = $nord0
   $dataGridView.ColumnHeadersDefaultCellStyle.ForeColor = $nord4
 
@@ -1636,6 +1677,142 @@ function Get-Tips {
   $form.Controls.Add($panel)
 
   $form.ShowDialog()
+}
+
+<#
+.SYNOPSIS
+   Allows you to configure your theme
+.DESCRIPTION 
+   This function allows you to configure your theme
+#>
+function Set-Theme {
+  $starshipConfig = "$env:USERPROFILE\.config\starship.toml"
+  $starShip = Get-ItemProperty -Path $keyPath -Name 'Starship' -ErrorAction SilentlyContinue
+  if ($starShip.Starship -eq 1) {
+    Start-Process https://starship.rs/presets/
+    $PanelWidth = 500
+
+    $form = New-Object System.Windows.Forms.Form
+    $form.Text = "Starship Theme Configuration"
+    $form.BackColor = $nord0
+    $form.Size = New-Object System.Drawing.Size($PanelWidth, 500)
+    $form.StartPosition = 'CenterScreen'
+    $form.FormBorderStyle = 'FixedDialog'
+    $form.Icon = $icon
+
+    $panel = New-Object System.Windows.Forms.Panel
+    $panel.Dock = 'Fill'
+    $panel.AutoScroll = $false
+
+    $tableLayoutPanel = New-Object System.Windows.Forms.TableLayoutPanel
+    $tableLayoutPanel.RowCount = 2
+    $tableLayoutPanel.ColumnCount = 1
+    $tableLayoutPanel.Dock = [System.Windows.Forms.DockStyle]::Fill
+    $tableLayoutPanel.ColumnStyles.Add((New-Object System.Windows.Forms.ColumnStyle([System.Windows.Forms.SizeType]::Percent, 100)))
+    $tableLayoutPanel.RowStyles.Clear()
+    $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::Percent, 100)))
+    $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::Percent, 100)))
+
+    $richTextBox = New-Object System.Windows.Forms.RichTextBox
+    $richTextBox.Location = New-Object System.Drawing.Point(0, 0)
+    $richTextBox.Size = New-Object System.Drawing.Size(($PanelWidth + 20), 490)
+    $richTextBox.Text = "Enter the URL of the theme you want to use. E.g. https://starship.rs/presets/toml/tokyo-night.toml"
+    $richTextBox.BackColor = $nord0
+    $richTextBox.ForeColor = $nord4
+    $richTextBox.Font = New-Object System.Drawing.Font("Consolas", 10)
+    $richTextBox.BorderStyle = 'None'
+    $richTextBox.ScrollBars = 'Vertical'
+
+    $tableLayoutPanel.Controls.Add($richTextBox, 0, 0)
+
+    $saveButton = New-Object System.Windows.Forms.Button
+    $saveButton.Location = New-Object System.Drawing.Point(0, 0)
+    $saveButton.Size = New-Object System.Drawing.Size(($PanelWidth + 20), 30)
+    $saveButton.Dock = [System.Windows.Forms.DockStyle]::Fill
+    $saveButton.Text = "Save"
+    $saveButton.BackColor = $nord0
+    $saveButton.ForeColor = $nord4
+    $saveButton.FlatStyle = 'Flat'
+    $saveButton.FlatAppearance.BorderSize = 0
+    $saveButton.Add_Click({
+        $url = $richTextBox.Text
+        $urlContent = Invoke-RestMethod $url
+        $urlContent | Out-File $starshipConfig
+
+        [System.Windows.Forms.MessageBox]::Show("Starship theme successfully changed.", "Success")
+      })
+
+    $tableLayoutPanel.Controls.Add($saveButton, 0, 1)
+
+    $panel.Controls.Add($tableLayoutPanel)
+
+    $form.Controls.Add($panel)
+
+    $form.ShowDialog()
+  }
+  else {
+    Start-Process https://ohmyposh.dev/docs/themes
+    $PanelWidth = 500
+
+    $form = New-Object System.Windows.Forms.Form
+    $form.Text = "Oh-my-posh Theme Configuration"
+    $form.BackColor = $nord0
+    $form.Size = New-Object System.Drawing.Size($PanelWidth, 500)
+    $form.StartPosition = 'CenterScreen'
+    $form.FormBorderStyle = 'FixedDialog'
+    $form.Icon = $icon
+
+    $panel = New-Object System.Windows.Forms.Panel
+    $panel.Dock = 'Fill'
+    $panel.AutoScroll = $false
+
+    $tableLayoutPanel = New-Object System.Windows.Forms.TableLayoutPanel
+    $tableLayoutPanel.RowCount = 2
+    $tableLayoutPanel.ColumnCount = 1
+    $tableLayoutPanel.Dock = [System.Windows.Forms.DockStyle]::Fill
+    $tableLayoutPanel.ColumnStyles.Add((New-Object System.Windows.Forms.ColumnStyle([System.Windows.Forms.SizeType]::Percent, 100)))
+    $tableLayoutPanel.RowStyles.Clear()
+    $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::Percent, 100)))
+    $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::Percent, 100)))
+
+    $richTextBox = New-Object System.Windows.Forms.RichTextBox
+    $richTextBox.Location = New-Object System.Drawing.Point(0, 0)
+    $richTextBox.Size = New-Object System.Drawing.Size(($PanelWidth + 20), 490)
+    $richTextBox.Text = "Enter the URL of the theme you want to use. E.g. https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/1_shell.omp.json"
+    $richTextBox.BackColor = $nord0
+    $richTextBox.ForeColor = $nord4
+    $richTextBox.Font = New-Object System.Drawing.Font("Consolas", 10)
+    $richTextBox.BorderStyle = 'None'
+    $richTextBox.ScrollBars = 'Vertical'
+
+    $tableLayoutPanel.Controls.Add($richTextBox, 0, 0)
+
+    $saveButton = New-Object System.Windows.Forms.Button
+    $saveButton.Location = New-Object System.Drawing.Point(0, 0)
+    $saveButton.Size = New-Object System.Drawing.Size(($PanelWidth + 20), 30)
+    $saveButton.Dock = [System.Windows.Forms.DockStyle]::Fill
+    $saveButton.Text = "Save"
+    $saveButton.BackColor = $nord0
+    $saveButton.ForeColor = $nord4
+    $saveButton.FlatStyle = 'Flat'
+    $saveButton.FlatAppearance.BorderSize = 0
+    $saveButton.Add_Click({
+        $url = $richTextBox.Text
+        New-ItemProperty -Path $keyPath -Name 'Theme' -Value $url -PropertyType 'String' -Force | Out-Null
+
+        [System.Windows.Forms.MessageBox]::Show("Oh-my-posh theme successfully changed.", "Success")
+      })
+    
+    $tableLayoutPanel.Controls.Add($saveButton, 0, 1)
+
+    $panel.Controls.Add($tableLayoutPanel)
+
+    $form.Controls.Add($panel)
+
+    $form.ShowDialog()
+
+    $form.Dispose()
+  }
 }
 
 # ----------------------------------------

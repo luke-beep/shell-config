@@ -44,6 +44,7 @@
   "touch": "New-FileOrDirectory",
   "md": "New-FileOrDirectory",
   "tips": "Get-Tips",
+  "theme": "Set-Theme",
   "aliases": "Import-Aliases",
   "raliases": "Remove-Aliases",
   "aaliases": "Add-Aliases",
