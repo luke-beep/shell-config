@@ -43,7 +43,7 @@ $kernelVersion = (Get-CimInstance -ClassName Win32_OperatingSystem).Version
 $versionKey = Get-ItemProperty -Path $keyPath -Name 'Version' -ErrorAction SilentlyContinue 
 $currentVersion = if ($null -eq $versionKey) { $null } else { $versionKey.Version }
 $latestVersion = Invoke-RestMethod -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/version'
-$loginMessage = $true
+$SystemDrive = $env:SystemDrive
 
 <#
 .SYNOPSIS
@@ -66,7 +66,9 @@ function Update-Profile {
     New-Item -Path $keyPath -Force | Out-Null
   }
 
+  # Check for the first run key
   $firstRun = Get-ItemProperty -Path $keyPath -Name 'FirstRun' -ErrorAction SilentlyContinue
+  # Run the first run script if it's the first run
   if ($null -eq $firstRun) {
     $form = New-Object System.Windows.Forms.Form
     $form.Text = "Auto Update"
@@ -182,6 +184,7 @@ function Update-Profile {
     $result = $form.ShowDialog()
 
     if ($result -eq [System.Windows.Forms.DialogResult]::Yes) {
+      # Resets the entire shell
       Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/Microsoft.PowerShell_profile.ps1' -OutFile $PROFILE
       New-ItemProperty -Path $keyPath -Name 'Version' -Value $latestVersion -PropertyType 'String' -Force | Out-Null
       . $PROFILE
@@ -197,7 +200,9 @@ function Update-Profile {
   elseif ($currentVersion -ne $latestVersion) {
     # Check if the profile should be updated automatically
     $autoUpdate = Get-ItemProperty -Path $keyPath -Name 'AutoUpdate' -ErrorAction SilentlyContinue
+    # Update the profile if it should be updated automatically
     if ($autoUpdate.AutoUpdate -eq 1 -or $Silent) {
+      # Resets the entire shell
       Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/Microsoft.PowerShell_profile.ps1' -OutFile $PROFILE
       New-ItemProperty -Path $keyPath -Name 'Version' -Value $latestVersion -PropertyType 'String' -Force | Out-Null
       . $PROFILE
@@ -259,6 +264,7 @@ function Update-Profile {
 
       # Update
       if ($result -eq [System.Windows.Forms.DialogResult]::Yes) {
+        # Resets the entire shell
         Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/Microsoft.PowerShell_profile.ps1' -OutFile $PROFILE
         New-ItemProperty -Path $keyPath -Name 'Version' -Value $latestVersion -PropertyType 'String' -Force | Out-Null
         . $PROFILE
@@ -319,7 +325,6 @@ function Initialize-Profile {
   oh-my-posh init pwsh --config $theme | Invoke-Expression
 
   $key = Get-ItemProperty -Path $keyPath -Name 'FirstRun' -ErrorAction SilentlyContinue
-
   if ($null -eq $key) {
     if (-not (Test-Path $keyPath)) {
       New-Item -Path $keyPath -Force | Out-Null
@@ -363,6 +368,16 @@ function Initialize-Profile {
   }
   Clear-Host
 
+  # Check for the login message key
+  $loginMessageKey = Get-ItemProperty -Path $keyPath -Name 'LoginMessage' -ErrorAction SilentlyContinue
+  # Create the login message key if it doesn't exist
+  if ($null -eq $loginMessageKey) {
+    New-ItemProperty -Path $keyPath -Name 'LoginMessage' -Value 1 -PropertyType 'DWord' -Force | Out-Null
+  }
+
+  # Check for the login message
+  $loginMessage = $loginMessageKey.LoginMessage
+  # Display the login message if it's enabled
   if ($loginMessage) {
     Write-Host "Microsoft Windows [Version $($kernelVersion)]"
     Write-Host "(c) Microsoft Corporation. All rights reserved.`n"
@@ -1544,10 +1559,11 @@ function Search-Item {
   This function backs up the current workspace to a specified directory
 #>
 function Backup-Workspace {
-  $BackupDirectory = "C:\Snapshots"
+  $BackupDirectory = "$SystemDrive\Snapshots"
 
   $currentDirectory = Get-Location
-  $backupPath = Join-Path -Path $BackupDirectory -ChildPath (Get-Date -Format "yyyy-MM-dd_HH-mm-ss")
+  # backuppath should be date + current directory
+  $backupPath = Join-Path -Path $BackupDirectory -ChildPath (Get-Date -Format "yyyy-MM-dd_HH-mm-ss") + "_" + (Split-Path -Leaf $currentDirectory)
 
   if (!(Test-Path -Path $backupPath)) {
     New-Item -ItemType Directory -Path $backupPath | Out-Null
