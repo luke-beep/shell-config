@@ -69,7 +69,7 @@ function Update-Profile {
   # Check for the first run key
   $firstRun = Get-ItemProperty -Path $keyPath -Name 'FirstRun' -ErrorAction SilentlyContinue
   # Run the first run script if it's the first run
-  if ($null -eq $firstRun) {
+  if ($null -eq $firstRun.FirstRun) {
     $form = New-Object System.Windows.Forms.Form
     $form.Text = "Auto Update"
     $form.BackColor = $nord0
@@ -346,7 +346,7 @@ function Initialize-Profile {
   }
 
   $key = Get-ItemProperty -Path $keyPath -Name 'FirstRun' -ErrorAction SilentlyContinue
-  if ($key -eq 1) {
+  if ($key.FirstRun -eq 1) {
     if (-not (Test-Path $keyPath)) {
       New-Item -Path $keyPath -Force | Out-Null
     }
