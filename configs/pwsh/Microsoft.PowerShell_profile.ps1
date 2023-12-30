@@ -345,7 +345,6 @@ function Initialize-Profile {
     Invoke-Expression (&starship init powershell)
   }
 
-
   $key = Get-ItemProperty -Path $keyPath -Name 'FirstRun' -ErrorAction SilentlyContinue
   if ($key -eq 1) {
     if (-not (Test-Path $keyPath)) {
