@@ -552,17 +552,32 @@ function Manage-Profile {
     })
   $buttonPanel.Controls.Add($button1)
 
+  $updateAliasesButton = New-Object System.Windows.Forms.Button
+  $updateAliasesButton.Text = "Update Aliases"
+  $updateAliasesButton.Width = 100
+  $updateAliasesButton.Height = 30
+  $updateAliasesButton.Location = New-Object System.Drawing.Point(120, 10)
+  $updateAliasesButton.BackColor = $nord1
+  $updateAliasesButton.ForeColor = $nord4
+  $updateAliasesButton.FlatStyle = 'Flat'
+  $updateAliasesButton.FlatAppearance.BorderSize = 0
+  $updateAliasesButton.Add_Click({
+      Import-Aliases -Force
+    })
+
+  $buttonPanel.Controls.Add($updateAliasesButton)
+
   $button2 = New-Object System.Windows.Forms.Button
   $button2.Text = "Change Theme"
   $button2.Width = 100
   $button2.Height = 30
-  $button2.Location = New-Object System.Drawing.Point(120, 10)
+  $button2.Location = New-Object System.Drawing.Point(230, 10)
   $button2.BackColor = $nord1
   $button2.ForeColor = $nord4
   $button2.FlatStyle = 'Flat'
   $button2.FlatAppearance.BorderSize = 0
   $button2.Add_Click({
-    Set-ShellTheme
+      Set-ShellTheme
     })
   $buttonPanel.Controls.Add($button2)
 
@@ -570,7 +585,7 @@ function Manage-Profile {
   $button3.Text = "Settings"
   $button3.Width = 100
   $button3.Height = 30
-  $button3.Location = New-Object System.Drawing.Point(230, 10)
+  $button3.Location = New-Object System.Drawing.Point(340, 10)
   $button3.BackColor = $nord1
   $button3.ForeColor = $nord4
   $button3.FlatStyle = 'Flat'
@@ -584,7 +599,7 @@ function Manage-Profile {
   $button4.Text = "Add Alias"
   $button4.Width = 100
   $button4.Height = 30
-  $button4.Location = New-Object System.Drawing.Point(340, 10)
+  $button4.Location = New-Object System.Drawing.Point(450, 10)
   $button4.BackColor = $nord1
   $button4.ForeColor = $nord4
   $button4.FlatStyle = 'Flat'
@@ -598,7 +613,7 @@ function Manage-Profile {
   $button5.Text = "Remove Alias"
   $button5.Width = 100
   $button5.Height = 30
-  $button5.Location = New-Object System.Drawing.Point(450, 10)
+  $button5.Location = New-Object System.Drawing.Point(560, 10)
   $button5.BackColor = $nord1
   $button5.ForeColor = $nord4
   $button5.FlatStyle = 'Flat'
@@ -612,7 +627,7 @@ function Manage-Profile {
   $button6.Text = "Profile Help"
   $button6.Width = 100
   $button6.Height = 30
-  $button6.Location = New-Object System.Drawing.Point(560, 10)
+  $button6.Location = New-Object System.Drawing.Point(670, 10)
   $button6.BackColor = $nord1
   $button6.ForeColor = $nord4
   $button6.FlatStyle = 'Flat'
@@ -626,7 +641,7 @@ function Manage-Profile {
   $button7.Text = "Profile Tips"
   $button7.Width = 100
   $button7.Height = 30
-  $button7.Location = New-Object System.Drawing.Point(670, 10)
+  $button7.Location = New-Object System.Drawing.Point(780, 10)
   $button7.BackColor = $nord1
   $button7.ForeColor = $nord4
   $button7.FlatStyle = 'Flat'
@@ -2545,8 +2560,14 @@ function Remove-Aliases {
     $dataTable.Rows.Add($row)
   }
 
+  
+
+  $width = 400
+  $height = 300
 
   $form = New-Object System.Windows.Forms.Form
+  $form.Width = $width
+  $form.Height = $height
   $form.Text = "Alias Configuration"
   $form.StartPosition = "CenterScreen"
   $form.BackColor = $nord0
@@ -2555,6 +2576,7 @@ function Remove-Aliases {
   $form.Icon = $icon
 
   $tableLayoutPanel = New-Object System.Windows.Forms.TableLayoutPanel
+  $tableLayoutPanel.Width = $width
   $tableLayoutPanel.RowCount = 1
   $tableLayoutPanel.ColumnCount = 1
   $tableLayoutPanel.Dock = [System.Windows.Forms.DockStyle]::Fill
@@ -2562,6 +2584,7 @@ function Remove-Aliases {
   $tableLayoutPanel.RowStyles.Clear()
   $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::Percent, 100)))
   $tableLayoutPanel.BorderStyle = [System.Windows.Forms.BorderStyle]::None
+  $tableLayoutPanel.AutoScroll = $false
 
   $dataGridView = New-Object System.Windows.Forms.DataGridView
   $dataGridView.BorderStyle = [System.Windows.Forms.BorderStyle]::None
