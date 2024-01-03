@@ -1,10 +1,10 @@
 # ----------------------------------------
-# Profile Information
+# Start of Azrael's PowerShell/Pwsh Profile
 # ----------------------------------------
 
 # Author: LukeHjo (Azrael)
 # Description: This is my PowerShell profile. It contains features that I use on a daily basis.
-# Version: 1.1.8
+# Version: 1.1.9
 # Date: 2023-12-28
 
 Add-Type -AssemblyName System.Windows.Forms
@@ -2787,4 +2787,8 @@ function Get-ShellInfo {
   Write-Output "Host Version: $($host.Version) -> $($shellType) ($bitness)"
 }
 
+
+# ----------------------------------------
+# End of profile
+# ----------------------------------------
 Import-Aliases
