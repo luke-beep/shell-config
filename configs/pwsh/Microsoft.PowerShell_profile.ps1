@@ -7,9 +7,6 @@
 # Version: 1.1.8
 # Date: 2023-12-28
 
-# ----------------------------------------
-# Profile Initialization
-# ----------------------------------------
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
@@ -45,16 +42,6 @@ $currentVersion = if ($null -eq $versionKey) { $null } else { $versionKey.Versio
 $latestVersion = Invoke-RestMethod -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/version'
 $SystemDrive = $env:SystemDrive
 
-<#
-.SYNOPSIS
-   Check for updates
-.DESCRIPTION 
-   This function checks for updates
-.PARAMETER Silent 
-   If this parameter is specified, the profile will be updated silently
-.PARAMETER Force 
-   If this parameter is specified, the profile will be updated automatically by skipping the version check
-#>
 function Update-Profile {
   param (
     [Parameter(Mandatory = $false)][switch]$Silent,
@@ -279,12 +266,6 @@ function Update-Profile {
   }
 }
 
-<#
-.SYNOPSIS
-   Initialize the profile and check for updates
-.DESCRIPTION 
-   This function initializes the profile and checks for updates
-#>
 function Initialize-Profile {
   # Check for updates
   Update-Profile
@@ -410,12 +391,6 @@ function Initialize-Profile {
 }
 Initialize-Profile
 
-<#
-.SYNOPSIS
-  Configure Profile Settings
-.DESCRIPTION 
-  This function configures profile settings
-#>
 function Set-ProfileSettings {
   $PanelWidth = 1000
 
@@ -544,30 +519,122 @@ function Set-ProfileSettings {
 
 <#
 .SYNOPSIS
-   Gets the current profile version
+  Allows you to manage your entire profile
 .DESCRIPTION 
-   This function gets the current profile version
+  This function allows you to manage your profile
 #>
-function Get-ProfileVersion {
-  $currentVersion
-}
-
-<#
-.SYNOPSIS
-   Allows you to preview your profile
-.DESCRIPTION 
-   This function allows you to preview your profile
-#>
-function Show-Profile {
+function Manage-Profile {
   $PanelWidth = 1000
 
   $form = New-Object System.Windows.Forms.Form
-  $form.Text = "Preview $($shellType) Profile"
+  $form.Text = "Manage $($shellType) Profile"
   $form.BackColor = $nord0
   $form.Size = New-Object System.Drawing.Size($PanelWidth, 500)
   $form.StartPosition = 'CenterScreen'
   $form.FormBorderStyle = 'FixedDialog'
   $form.Icon = $icon
+
+  $buttonPanel = New-Object System.Windows.Forms.Panel
+  $buttonPanel.Dock = 'Top'
+  $buttonPanel.Height = 50
+
+  $button1 = New-Object System.Windows.Forms.Button
+  $button1.Text = "Update Profile"
+  $button1.Width = 100
+  $button1.Height = 30
+  $button1.Location = New-Object System.Drawing.Point(10, 10)
+  $button1.BackColor = $nord1
+  $button1.ForeColor = $nord4
+  $button1.FlatStyle = 'Flat'
+  $button1.FlatAppearance.BorderSize = 0
+  $button1.Add_Click({
+      Update-Profile -Force
+    })
+  $buttonPanel.Controls.Add($button1)
+
+  $button2 = New-Object System.Windows.Forms.Button
+  $button2.Text = "Change Theme"
+  $button2.Width = 100
+  $button2.Height = 30
+  $button2.Location = New-Object System.Drawing.Point(120, 10)
+  $button2.BackColor = $nord1
+  $button2.ForeColor = $nord4
+  $button2.FlatStyle = 'Flat'
+  $button2.FlatAppearance.BorderSize = 0
+  $button2.Add_Click({
+    Set-ShellTheme
+    })
+  $buttonPanel.Controls.Add($button2)
+
+  $button3 = New-Object System.Windows.Forms.Button
+  $button3.Text = "Settings"
+  $button3.Width = 100
+  $button3.Height = 30
+  $button3.Location = New-Object System.Drawing.Point(230, 10)
+  $button3.BackColor = $nord1
+  $button3.ForeColor = $nord4
+  $button3.FlatStyle = 'Flat'
+  $button3.FlatAppearance.BorderSize = 0
+  $button3.Add_Click({
+      Set-ProfileSettings
+    })
+  $buttonPanel.Controls.Add($button3)
+
+  $button4 = New-Object System.Windows.Forms.Button
+  $button4.Text = "Add Alias"
+  $button4.Width = 100
+  $button4.Height = 30
+  $button4.Location = New-Object System.Drawing.Point(340, 10)
+  $button4.BackColor = $nord1
+  $button4.ForeColor = $nord4
+  $button4.FlatStyle = 'Flat'
+  $button4.FlatAppearance.BorderSize = 0
+  $button4.Add_Click({
+      Add-Aliases
+    })
+  $buttonPanel.Controls.Add($button4)
+
+  $button5 = New-Object System.Windows.Forms.Button
+  $button5.Text = "Remove Alias"
+  $button5.Width = 100
+  $button5.Height = 30
+  $button5.Location = New-Object System.Drawing.Point(450, 10)
+  $button5.BackColor = $nord1
+  $button5.ForeColor = $nord4
+  $button5.FlatStyle = 'Flat'
+  $button5.FlatAppearance.BorderSize = 0
+  $button5.Add_Click({
+      Remove-Aliases
+    })
+  $buttonPanel.Controls.Add($button5)
+
+  $button6 = New-Object System.Windows.Forms.Button
+  $button6.Text = "Profile Help"
+  $button6.Width = 100
+  $button6.Height = 30
+  $button6.Location = New-Object System.Drawing.Point(560, 10)
+  $button6.BackColor = $nord1
+  $button6.ForeColor = $nord4
+  $button6.FlatStyle = 'Flat'
+  $button6.FlatAppearance.BorderSize = 0
+  $button6.Add_Click({
+      Get-ProfileHelp
+    })
+  $buttonPanel.Controls.Add($button6)
+
+  $button7 = New-Object System.Windows.Forms.Button
+  $button7.Text = "Profile Tips"
+  $button7.Width = 100
+  $button7.Height = 30
+  $button7.Location = New-Object System.Drawing.Point(670, 10)
+  $button7.BackColor = $nord1
+  $button7.ForeColor = $nord4
+  $button7.FlatStyle = 'Flat'
+  $button7.FlatAppearance.BorderSize = 0
+  $button7.Add_Click({
+      Get-ShellTips
+    })
+  $buttonPanel.Controls.Add($button7)
 
   $panel = New-Object System.Windows.Forms.Panel
   $panel.Dock = 'Fill'
@@ -584,6 +651,8 @@ function Show-Profile {
   $richTextBox.BorderStyle = 'None'
   $richTextBox.ScrollBars = 'Vertical'
 
+  $form.Controls.Add($buttonPanel)
+
   $panel.Controls.Add($richTextBox)
 
   $form.Controls.Add($panel)
@@ -591,21 +660,18 @@ function Show-Profile {
   $form.ShowDialog()
 }
 
-# ----------------------------------------
-# Package Management
-# ----------------------------------------
-
 <#
 .SYNOPSIS
-   Gets all of the available packages
+  Gets all of the available packages
 .DESCRIPTION 
-   This function gets all of the available packages
+  This function gets all of the available packages
 .PARAMETER Install 
-   If this parameter is specified, the packages will be updated
+  If this parameter is specified, the packages will be updated
 #>
 function Get-Packages {
   param (
-    [Parameter(Mandatory = $false)][string]$Install
+    [Parameter(Mandatory = $false)]
+    [string]$Install
   )
 
   # check if scoop is installed
@@ -643,93 +709,1015 @@ function Get-Packages {
   }
 }
 
-# ----------------------------------------
-# Object Management
-# ----------------------------------------
+<#
+.SYNOPSIS
+  Lists all directories and files at a given path or in the current directory if no path is provided.
+.DESCRIPTION
+  This function lists all directories and files at a given path. If no path is provided, it lists directories and files in the current directory.
+.PARAMETER Path 
+  The path where to list the directories and files. If not provided, the current directory is used.
+.PARAMETER Recurse 
+  If this parameter is specified, the function will list all directories and files recursively.
+.PARAMETER ShowHidden
+  If this parameter is specified, the function will show hidden directories and files.
+.EXAMPLE
+  List-Directories -Path "C:\Users\" -Recurse
+.EXAMPLE
+  List-Directories -Path "C:\Users\" -ShowHidden
+.EXAMPLE
+  List-Directories -Path "C:\Users\" -Recurse -ShowHidden
+.OUTPUTS
+  A list of directories and files at the given path or in the current directory if no path is provided.
+#>
+function List-Directories {
+  param(
+    [Parameter(Mandatory = $false)]
+    [string]$Path = ".",
+
+    [Parameter(Mandatory = $false)]
+    [Alias("R")]
+    [switch]$Recurse = $false,
+
+    [Parameter(Mandatory = $false)]
+    [Alias("a")]
+    [switch]$ShowHidden = $false
+  )
+  if ($Recurse) {
+    Get-ChildItem -Path $Path -Recurse -Force:$ShowHidden | Format-Table -AutoSize
+  }
+  else {
+    Get-ChildItem -Path $Path -Force:$ShowHidden | Format-Table -AutoSize
+  }
+}
+<#
+.SYNOPSIS
+  Prints the current working directory
+.DESCRIPTION
+    This function prints the current working directory
+.EXAMPLE
+    Print-Working-Directory
+.OUTPUTS
+    The current working directory, e.g. C:\Users\
+#>
+function Print-Working-Directory {
+  $CurrentDirectory = Get-Location
+  $CurrentDirectory.Path
+}
 
 <#
 .SYNOPSIS
-   Deletes an object
+  Navigates to a directory
 .DESCRIPTION
-   This function deletes an object
-.PARAMETER Path 
-   The path of the object
+  This function allows you to navigate to a directory
+.PARAMETER Path
+  The path of the directory
+.EXAMPLE
+  Change-Directory -Path "C:\Users\"
+.EXAMPLE
+  Change-Directory -
+.EXAMPLE
+  Change-Directory ..
+.OUTPUTS
+  A list of directories and files in the current directory
 #>
-function Remove-Object {
+function Change-Directory {
   param (
-    [Parameter(Mandatory = $true)][string]$Path
+    [Parameter(Mandatory = $false)]
+    [string]$Path
   )
-
   if ($Path) {
-    Remove-Item -Path $Path -Force
-    Clear-Host
+    Set-Location -Path $Path
   }
 }
 
 <#
 .SYNOPSIS
-   Gets the size of an object
+  Creates one or more directories
 .DESCRIPTION
-    This function gets the size of an object
+  This function creates one or more directories
 .PARAMETER Path
-    The path of the object
+  The path of the directory
+.PARAMETER Verbose
+  If this parameter is specified, the function will print each directory that is created
+.EXAMPLE
+  Make-Directory -Path "C:\Users\"
+.EXAMPLE
+  Make-Directory -Path "C:\Users\", "C:\Users\Public" -Verbose
+.EXAMPLE
+  Make-Directory -Path "C:\Users\", "C:\Users\Public" -Verbose -Permission "W"
+.OUTPUTS
+  A list of directories that were created if the Verbose parameter is specified, otherwise nothing
 #>
-function Get-ObjectSize {
+function Make-Directory {
   param (
-    [Parameter(Mandatory = $true)][string]$Path
+    [Parameter(Mandatory = $true)]
+    [string[]]$Path,
+
+    [Parameter(Mandatory = $false)]
+    [Alias("v")]
+    [switch]$Verbose,
+    
+    [Parameter(Mandatory = $false)]
+    [Alias("m")]
+    [string]$Permission
+  )
+  $Path | ForEach-Object {
+    New-Item -Path $_ -ItemType Directory -Force
+    if ($Permission) {
+      icacls $_ /grant "$($env:USERNAME):$Permission" /c /q
+    }
+    if ($Verbose) {
+      Write-Host "Created directory $_"
+    }
+  }
+}
+
+<#
+.SYNOPSIS
+  Removes one or more directories
+.DESCRIPTION
+  This function removes one or more directories
+.PARAMETER Path
+  The path of the directory
+.PARAMETER Recurse
+  If this parameter is specified, the function will remove all directories and files recursively
+.EXAMPLE
+  Remove-Directory -Path "C:\Users\"
+.EXAMPLE
+  Remove-Directory -Path "C:\Users\", "C:\Users\Public" -Recurse
+.OUTPUTS
+  A list of directories that were removed
+#>
+function Remove-Directory {
+  param (
+    [Parameter(Mandatory = $false)]
+    [Alias("p")]
+    [switch]$Recurse,
+
+    [Parameter(Mandatory = $true)]
+    [string[]]$Path
+  )
+  $Path | ForEach-Object {
+    if ($Recurse) {
+      Remove-Item -Path $_ -Recurse -Force
+    }
+    else {
+      Remove-Item -Path $_
+    }
+  }
+}
+
+<#
+.SYNOPSIS
+  Deletes one or more files
+.DESCRIPTION
+  This function deletes one or more files
+.PARAMETER Path
+  The path of the file
+.PARAMETER Prompt
+  If this parameter is specified, the function will prompt you before deleting the file
+.PARAMETER Force
+  If this parameter is specified, the function will delete the file without prompting you
+.PARAMETER Recurse
+  If this parameter is specified, the function will delete all files and directories recursively
+.EXAMPLE
+  Remove-File -Path "C:\Users\file.txt"
+.EXAMPLE
+  Remove-File -Path "C:\Users\file.txt", "C:\Users\file2.txt"
+.OUTPUTS
+  A list of files that were deleted
+#>
+function Remove-File {
+  param (  
+    [Parameter(Mandatory = $true)]
+    [string[]]$Path,
+  
+    [Parameter(Mandatory = $false)]
+    [Alias("i")]
+    [switch]$Prompt,
+
+    [Parameter(Mandatory = $false)]
+    [Alias("f")]
+    [switch]$Force,
+
+    [Parameter(Mandatory = $false)]
+    [Alias("r")]
+    [switch]$Recurse
+  )
+  $Path | ForEach-Object {
+    if ($Prompt) {
+      $result = [System.Windows.Forms.MessageBox]::Show("Are you sure you want to delete $_?", "Delete File", [System.Windows.Forms.MessageBoxButtons]::YesNo)
+      if ($result -eq [System.Windows.Forms.DialogResult]::Yes) {
+        Remove-Item -Path $_ -Force:$Force -Recurse:$Recurse
+      }
+    }
+    else {
+      Remove-Item -Path $_ -Force:$Force -Recurse:$Recurse
+    }
+  }
+}
+
+<#
+.SYNOPSIS
+  Copies one or more files or folders to a destination
+.DESCRIPTION
+  This function copies one or more files or folders to a destination
+.PARAMETER Recurse
+  If this parameter is specified, the function will copy all files and directories recursively
+.PARAMETER Source
+  The source of the file or folder
+.PARAMETER Destination
+  The destination of the file or folder
+.EXAMPLE
+  Copy-Item -Source "C:\Users\file.txt" -Destination "C:\Users\Documents\"
+.EXAMPLE
+  Copy-Item -Source "C:\Users\file.txt", "C:\Users\file2.txt" -Destination "C:\Users\Documents\"
+.EXAMPLE
+  Copy-Item -Source "C:\Users\folder" -Destination "C:\Users\Documents\" -Recurse
+.OUTPUTS
+  Nothing.
+#>
+function Copy-Folder-File {
+  param(  
+    [Parameter(Mandatory = $true)]
+    [string[]]$Source,
+
+    [Parameter(Mandatory = $true)]
+    [string]$Destination,
+
+    [Parameter(Mandatory = $false)]
+    [Alias("R")]
+    [Switch]$Recurse
   )
 
-  $size = (Get-ChildItem $Path -Recurse | Measure-Object -Property Length -Sum -ErrorAction SilentlyContinue).Sum
-  Write-Host "Size: $size bytes"
-  Write-Host "Size: $(($size / 1KB)) KB"
-  Write-Host "Size: $(($size / 1MB)) MB"
-  Write-Host "Size: $(($size / 1GB)) GB"
+  foreach ($item in $Source) {
+    Copy-Item $item $Destination -Recurse:$Recurse
+  }
 }
 
 <#
 .SYNOPSIS
-   Counts the number of objects in a folder
+  Moves one or more files or folders to a destination
 .DESCRIPTION
-   This function counts the number of objects in a folder
-.PARAMETER Path
-   The path of the folder
+  This function moves one or more files or folders to a destination
+.PARAMETER Source
+  The source of the file or folder
+.PARAMETER Destination
+  The destination of the file or folder
+.EXAMPLE
+  Move-Item -Source "C:\Users\file.txt" -Destination "C:\Users\Documents\"
+.EXAMPLE
+  Move-Item -Source "C:\Users\file.txt", "C:\Users\file2.txt" -Destination "C:\Users\Documents\"
+.EXAMPLE
+  Move-Item -Source "C:\Users\folder" -Destination "C:\Users\Documents\"
+.OUTPUTS
+  Nothing.
 #>
-function Get-ObjectCount {
-  param (
-    [Parameter(Mandatory = $true)][string]$Path
+function Move-Folder-File {
+  param(
+    [Parameter(Mandatory = $true)]
+    [string[]]$Source,
+
+    [Parameter(Mandatory = $true)]
+    [string]$Destination
   )
 
-  $count = (Get-ChildItem $Path -Recurse | Measure-Object -Property Length -ErrorAction SilentlyContinue).Count
-  $count
+  foreach ($item in $Source) {
+    Move-Item $item $Destination
+  }
 }
-
-# ----------------------------------------
-# Process Management
-# ----------------------------------------
 
 <#
 .SYNOPSIS
-   Gets the active processes
+  Creates one or more files
 .DESCRIPTION
-   This function gets the active processes
+  This function creates one or more files
+.PARAMETER Path
+  The path of the file(s)
+.EXAMPLE
+  Create-File -Path "C:\Users\file.txt"
+.EXAMPLE
+  Create-File -Path "C:\Users\file.txt", "C:\Users\file2.txt"
+.OUTPUTS
+  Nothing.
 #>
-function Get-ActiveProcesses {
-  Get-Process | Where-Object { $_.mainWindowTitle } | Format-Table `
-  @{Label = "NPM(K)"; Expression = { [int]($_.NPM / 1024) } },
-  @{Label = "PM(K)"; Expression = { [int]($_.PM / 1024) } },
-  @{Label = "WS(K)"; Expression = { [int]($_.WS / 1024) } },
-  @{Label = "VM(M)"; Expression = { [int]($_.VM / 1MB) } },
-  @{Label = "CPU(s)"; Expression = { if ($_.CPU) { $_.CPU.ToString("N") } } },
-  Id, ProcessName, StartTime, mainWindowTitle
+function Create-File {
+  param(
+    [Parameter(Mandatory = $true)]
+    [string[]]$Path
+  )
+
+  foreach ($item in $Path) {
+    if (!(Test-Path $item)) {
+      New-Item -ItemType File -Path $item -Force
+    }
+    else {
+          (Get-Item -Path $item).LastWriteTime = Get-Date
+    }
+  }
 }
 
 <#
 .SYNOPSIS
-   Finds a process
+  Lets you check a file's type
 .DESCRIPTION
-   This function finds a process
+  This function lets you check a file's type
+.PARAMETER Path
+  The path of the file
+.EXAMPLE
+  File-Type -Path "C:\Users\file.txt"
+.EXAMPLE
+  File-Type -Path "C:\Users\file.txt", "C:\Users\file2.txt"
+.OUTPUTS
+  The file's type. E.g. "C:\Users\file.txt" -> ".txt"
+#>
+function File-Type {
+  param(
+    [Parameter(Mandatory = $true)]
+    [string[]]$Path
+  )
+
+  foreach ($item in $Path) {
+    if (Test-Path $item) {
+      $file = Get-Item -Path $item
+      $file.Extension
+    }
+  }
+}
+
+<#
+.SYNOPSIS
+  Lets you read a file
+.DESCRIPTION
+  This function lets you read a file, and if the file doesn't exist, it creates it
+.PARAMETER Path
+  The path of the file
+.EXAMPLE
+  Read-File -Path "C:\Users\file.txt"
+.EXAMPLE
+  Read-File -Path "C:\Users\file.txt", "C:\Users\file2.txt"
+.OUTPUTS
+  The file's contents
+#>
+function Read-File {
+  param(
+    [Parameter(Mandatory = $true)]
+    [string[]]$Path
+  )
+
+  foreach ($item in $Path) {
+    if (Test-Path $item) {
+      $file = Get-Item -Path $item
+      Get-Content $file
+    }
+    else {
+      New-Item -ItemType File -Path $item -Force
+    }
+  }
+}
+
+<#
+.SYNOPSIS
+  Lets you read a file in reverse
+.DESCRIPTION
+  This function lets you read a file in reverse
+.PARAMETER Path
+  The path of the file
+.EXAMPLE
+  Read-File-Reverse -Path "C:\Users\file.txt"
+.EXAMPLE
+  Read-File-Reverse -Path "C:\Users\file.txt", "C:\Users\file2.txt"
+.OUTPUTS
+  The file's contents in reverse
+#>
+function Read-File-Reverse {
+  param(
+    [Parameter(Mandatory = $true)]
+    [string[]]$Path
+  )
+
+  foreach ($item in $Path) {
+    $content = Get-Content $item -ReadCount 0
+    [array]::Reverse($content)
+    $content
+  }
+}
+
+<#
+.SYNOPSIS
+  Grab the first few lines of a file
+.DESCRIPTION
+  This function grabs the first few lines of a file
+.PARAMETER Path
+  The path of the file
+.PARAMETER Lines
+  The number of lines to grab
+.EXAMPLE
+  Head-File -Path "C:\Users\file.txt"
+.EXAMPLE
+  Head-File -Path "C:\Users\file.txt", "C:\Users\file2.txt"
+.EXAMPLE
+  Head-File -Path "C:\Users\file.txt" -Lines 5
+.OUTPUTS
+  The first few lines of the file (default is 10)
+#>
+function Head-File {
+  param(      
+    [Parameter(Mandatory = $true)]
+    [string[]]$Path,
+
+    [Parameter(Mandatory = $false)]
+    [Alias("n")]
+    [int]$Lines = 10
+  )
+
+  foreach ($item in $Path) {
+    Get-Content $item -TotalCount $Lines
+  }
+}
+
+<#
+.SYNOPSIS
+  Grab the last few lines of a file
+.DESCRIPTION
+  This function grabs the last few lines of a file
+.PARAMETER Path
+  The path of the file
+.PARAMETER Lines
+  The number of lines to grab
+.EXAMPLE
+  Tail-File -Path "C:\Users\file.txt"
+.EXAMPLE
+  Tail-File -Path "C:\Users\file.txt", "C:\Users\file2.txt"
+.EXAMPLE
+  Tail-File -Path "C:\Users\file.txt" -Lines 5
+.OUTPUTS
+  The last few lines of the file (default is 10)
+#>
+function Tail-File {
+  param(    
+    [Parameter(Mandatory = $true)]
+    [string[]]$Path,
+
+    [Parameter(Mandatory = $false)]
+    [Alias("n")]
+    [int]$Lines = 10
+  )
+
+  foreach ($item in $Path) {
+    $content = Get-Content $item
+    $content[ - $Lines..-1]
+  }
+}
+
+<#
+.SYNOPSIS
+  Lets you compare two files
+.DESCRIPTION
+  This function lets you compare two files
+.PARAMETER Path
+  The path of the file
+.EXAMPLE
+  Compare-File -Path "C:\Users\file.txt", "C:\Users\file2.txt"
+.OUTPUTS
+  The differences between the two files
+#>
+function Differential-File {
+  param(
+    [Parameter(Mandatory = $true)]
+    [string[]]$Path
+  )
+
+  foreach ($item in $Path) {
+    Compare-Object -ReferenceObject (Get-Content $item) -DifferenceObject (Get-Content $item)
+  }
+}
+
+<#
+.SYNOPSIS
+  Lets you write the input to shell and files
+.DESCRIPTION
+  This function lets you write the input to shell and files
+.PARAMETER InputObject
+  The input to write to shell and files
+.PARAMETER FilePath
+  The path of the file(s)
+.EXAMPLE
+  "Hello, World!" | Write-OutputAndFile -FilePath "C:\Users\file.txt"
+.EXAMPLE
+  "Hello, World!" | Write-OutputAndFile -FilePath "C:\Users\file.txt", "C:\Users\file2.txt"
+.OUTPUTS
+  The input written to shell and files
+#>
+function Write-OutputAndFile {
+  param(
+    [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+    [string]$InputObject,
+
+    [Parameter(Mandatory = $true)]
+    [string[]]$FilePath
+  )
+
+  process {
+    foreach ($file in $FilePath) {
+      $InputObject | Tee-Object -FilePath $file -Append
+    }
+  }
+}
+
+<#
+.SYNOPSIS
+  This command lets you find a file in a directory. 
+.DESCRIPTION
+  This command lets you find a file in a directory.
+.PARAMETER Pattern
+  The pattern to search for
+.EXAMPLE
+  Locate-File -Pattern "file"
+.EXAMPLE
+  Locate-File -Pattern "file*anotherfile"
+.EXAMPLE
+  Locate-File -Pattern "file" | Select-Object FullName
+.OUTPUTS
+  The file(s) that match the pattern
+#>
+function Locate-File {
+  param(
+    [Parameter(Mandatory = $true)]
+    [string]$Pattern
+  )
+
+  $currentLocation = Get-Location
+  Get-ChildItem -Path $currentLocation -Filter "*$Pattern*" -File -Recurse -ErrorAction SilentlyContinue | Select-Object FullName
+}
+
+<#
+.SYNOPSIS
+  Searches for files or directories with a specific name in a given path.
+
+.DESCRIPTION
+  The Find-Item function uses the Get-ChildItem cmdlet to search for items (files or directories) with a specific name in a given path and its subdirectories. 
+  If the path is not provided, it defaults to the current location. 
+  The type of the items to search for can be specified with the ItemType parameter ("f" for files, "d" for directories). 
+  If the ItemType parameter is not provided, it defaults to "f" (files).
+
+.PARAMETER Path
+  The path in which to search for the item. If not provided, the current location is used.
+
+.PARAMETER ItemName
+  The name of the item to search for.
+
+.PARAMETER ItemType
+  The type of the item to search for ("f" for files, "d" for directories). If not provided, it defaults to "f" (files).
+
+.EXAMPLE
+  Find-Item -ItemName "file1.txt"
+  This command will return the full paths of all files named "file1.txt" in the current directory and its subdirectories.
+
+.EXAMPLE
+  Find-Item -Path "C:\" -ItemName "directoryname" -ItemType "d"
+  This command will return the full paths of all directories named "directoryname" in the `C:\` directory and its subdirectories.
+
+.OUTPUTS
+  The full paths of the items that match the specified name and type.
+#>
+function Find-Item {
+  param(
+    [Parameter(Mandatory = $false)]
+    [string]$Path = (Get-Location),
+
+    [Parameter(Mandatory = $true)]
+    [Alias("name")]
+    [string]$ItemName,
+
+    [Parameter(Mandatory = $false)]
+    [ValidateSet("f", "d")]
+    [Alias("type")]
+    [string]$ItemType = "f"
+  )
+
+  if ($ItemType -eq "f") {
+    Get-ChildItem -Path $Path -Filter $ItemName -File -Recurse -ErrorAction SilentlyContinue | Select-Object FullName
+  }
+  else {
+    Get-ChildItem -Path $Path -Filter $ItemName -Directory -Recurse -ErrorAction SilentlyContinue | Select-Object FullName
+  }
+}
+
+<#
+.SYNOPSIS
+  Retrieves detailed information about the disk usage of the drives on your system.
+.DESCRIPTION
+  The Get-DiskUsage function provides detailed information about the disk usage of the drives on your system. It can be customized with several optional parameters to specify a particular drive and the unit of measurement for the disk usage information.
+.PARAMETER Drive
+  Specify a particular drive to get information about. If not provided, the function will return information about all fixed drives.
+.PARAMETER Megabytes
+  If this switch is provided, the disk usage information will be displayed in megabytes.
+.PARAMETER Kilobytes
+  If this switch is provided, the disk usage information will be displayed in kilobytes.
+.PARAMETER FilesystemType
+  This switch filters the output by file system type.
+.EXAMPLE
+  Get-DiskUsage -Drive "C" This command will return the disk usage information for the C: drive, in gigabytes.
+.EXAMPLE
+  Get-DiskUsage -Megabytes This command will return the disk usage information for all fixed drives, in megabytes.
+.OUTPUTS
+  A custom object for each drive.
+#>
+function Get-DiskUsage {
+  param(
+    [Parameter(Mandatory = $false)]
+    [string]$Drive,
+
+    [Parameter(Mandatory = $false)]
+    [Alias("m")]
+    [switch]$Megabytes,
+
+    [Parameter(Mandatory = $false)]
+    [Alias("k")]
+    [switch]$Kilobytes,
+
+    [Parameter(Mandatory = $false)]
+    [Alias("T")]
+    [switch]$FilesystemType
+  )
+
+  $sizeType = "GB"
+  if ($Megabytes) {
+    $sizeType = "MB"
+  }
+  elseif ($Kilobytes) {
+    $sizeType = "KB"
+  }
+
+  if ($Drive) {
+    $vol = Get-Volume -DriveLetter $Drive
+    $vol | Format-Table -AutoSize
+  }
+  else {
+    Get-Volume | Where-Object { $_.DriveType -eq 'Fixed' } | ForEach-Object {
+      $used = ($_.Size - $_.SizeRemaining) / ("1$($sizeType)")
+      $total = $_.Size / ("1$($sizeType)")
+      $free = $_.SizeRemaining / ("1$($sizeType)")
+      if ($FilesystemType) {
+        $fileSystem = $_.FileSystem
+        [PSCustomObject]@{
+          Name                 = $_.FileSystemLabel
+          'Drive Letter'       = $_.DriveLetter
+          'Used'               = [Math]::Round($used, 2)
+          'Free'               = [Math]::Round($free, 2)
+          'Total'              = [Math]::Round($total, 2)
+          'File System'        = $fileSystem
+          'Health Status'      = $_.HealthStatus
+          'Operational Status' = $_.OperationalStatus
+          'Unit'               = $sizeType
+        }
+      }
+      else {
+        [PSCustomObject]@{
+          Name                 = $_.FileSystemLabel
+          'Drive Letter'       = $_.DriveLetter
+          'Used'               = [Math]::Round($used, 2)
+          'Free'               = [Math]::Round($free, 2)
+          'Total'              = [Math]::Round($total, 2)
+          'Health Status'      = $_.HealthStatus
+          'Operational Status' = $_.OperationalStatus
+          'Unit'               = $sizeType
+        }      
+      }
+    }
+  }
+}
+
+<#
+.SYNOPSIS
+  Retrieves the size of a directory and its subdirectories.
+.DESCRIPTION
+  The Get-DirectorySize function calculates the total size of all files in a specified directory and its subdirectories. The size is returned in gigabytes by default, but can be returned in megabytes or kilobytes if the -Megabytes or -Kilobytes switch is provided, respectively. If the -LastModified switch is provided, the function will also return the last modification date of the most recently modified file in the directory.
+.PARAMETER Path
+  The path to the directory for which to calculate the size.
+.PARAMETER Megabytes
+  If this switch is provided, the size will be returned in megabytes.
+.PARAMETER Kilobytes
+  If this switch is provided, the size will be returned in kilobytes.
+.PARAMETER LastModified
+  If this switch is provided, the function will return the last modification date of the most recently modified file in the directory.
+.EXAMPLE
+  Get-DirectorySize -Path "C:\Users\username\Documents" This command will return the total size of all files in the "C:\Users\username\Documents" directory and its subdirectories, in gigabytes.
+.EXAMPLE
+  Get-DirectorySize -Path "C:\Users\username\Documents" -Megabytes -LastModified This command will return the total size of all files in the "C:\Users\username\Documents" directory and its subdirectories, in megabytes, as well as the last modification date of the most recently modified file in the directory.
+.OUTPUTS
+  A custom object with the following properties: Path, Size, Unit, Last Modified (if the -LastModified switch is provided).
+#>
+function Get-DirectorySize {
+  param(
+    [Parameter(Mandatory = $true)]
+    [string]$Path,
+
+    [Parameter(Mandatory = $false)]
+    [Alias("m")]
+    [switch]$Megabytes,
+
+    [Parameter(Mandatory = $false)]
+    [Alias("k")]
+    [switch]$Kilobytes,
+
+    [Parameter(Mandatory = $false)]
+    [Alias("h")]
+    [switch]$LastModified
+  )
+
+  $items = Get-ChildItem $Path -Recurse -File
+  $size = ($items | Measure-Object -Property Length -Sum).Sum
+
+  if ($Megabytes) {
+    $size = $size / 1MB
+    $unit = "MB"
+  }
+  elseif ($Kilobytes) {
+    $size = $size / 1KB
+    $unit = "KB"
+  }
+  else {
+    $size = $size / 1GB
+    $unit = "GB"
+  }
+
+  $output = [PSCustomObject]@{
+    Path = $Path
+    Size = [Math]::Round($size, 2)
+    Unit = $unit
+  }
+
+  if ($LastModified) {
+    $lastModified = $items | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+    $output | Add-Member -Type NoteProperty -Name "Last Modified" -Value $lastModified.LastWriteTime
+  }
+
+  return $output
+}
+
+<#
+.SYNOPSIS
+  Prints information about the current system.
+.DESCRIPTION
+  The Get-SystemInfo function prints information about the current system. It can be customized with the -KernelName and -NodeHostName switches to return only the kernel version and the hostname, respectively.
+.PARAMETER KernelName
+  If this switch is provided, the function will return the kernel version.
+.PARAMETER NodeHostName
+  If this switch is provided, the function will return the hostname.
+.EXAMPLE
+  Get-SystemInfo -KernelName
+.EXAMPLE
+  Get-SystemInfo -NodeHostName
+.OUTPUTS
+  A custom object with the following properties: KernelName, NodeHostName.
+#>
+function Get-SystemInfo {
+  param(
+    [Parameter(Mandatory = $false)]
+    [Alias("s")]
+    [switch]$KernelName,
+
+    [Parameter(Mandatory = $false)]
+    [Alias("n")]
+    [switch]$NodeHostName
+  )
+
+  if ($KernelName) {
+    $output = [PSCustomObject]@{
+      'Kernel version' = (Get-CimInstance -ClassName Win32_OperatingSystem).Version
+    }
+  }
+  elseif ($NodeHostName) {
+    $output = [PSCustomObject]@{
+      'Hostname' = [System.Net.Dns]::GetHostName()
+    }
+  }
+  else {
+    $output = [PSCustomObject]@{
+      OS               = (Get-WmiObject -Class Win32_OperatingSystem).Caption
+      'Hostname'       = [System.Net.Dns]::GetHostName()
+      Version          = [System.Environment]::OSVersion.Version
+      'Kernel version' = (Get-CimInstance -ClassName Win32_OperatingSystem).Version
+      Time             = Get-Date -Format "HH:mm:ss"
+    }
+  }
+
+  return $output
+}
+
+<#
+.SYNOPSIS
+  Prints information about the current user.
+.DESCRIPTION 
+  Prints information about the current user.
+.PARAMETER Alias
+  If this switch is provided, the function will return the hostname as an alias.
+.PARAMETER FQDN
+  If this switch is provided, the function will return the fully qualified domain name (FQDN).
+.PARAMETER IPAddress
+  If this switch is provided, the function will return the IP address of the host.
+.EXAMPLE
+  Get-HostNameInfo -Alias
+.EXAMPLE
+  Get-HostNameInfo -FQD
+.OUTPUTS
+  A custom object with the following properties: Alias, FQDN, IPAddress.
+#>
+function Get-HostNameInfo {
+  param(
+    [Parameter(Mandatory = $false)]
+    [Alias("a")]
+    [switch]$Alias,
+
+    [Parameter(Mandatory = $false)]
+    [Alias("f")]
+    [switch]$FQDN,
+
+    [Parameter(Mandatory = $false)]
+    [Alias("i")]
+    [switch]$IPAddress
+  )
+
+  if ($Alias) {
+    $output = [PSCustomObject]@{
+      Alias = [System.Net.Dns]::GetHostName()
+    }
+  }
+  elseif ($FQDN) {
+    $output = [PSCustomObject]@{
+      FQDN = "$username@$([System.Net.Dns]::GetHostName())"
+    }
+  }
+  elseif ($IPAddress) {
+    $output = [PSCustomObject]@{
+      IPAddress = ([System.Net.Dns]::GetHostAddresses([System.Net.Dns]::GetHostName()) | Where-Object { $_.AddressFamily -eq 'InterNetwork' })[0].IPAddressToString
+    }
+  }
+  else {
+    $output = [PSCustomObject]@{
+      'Hostname' = [System.Net.Dns]::GetHostName()
+    }
+  }
+
+  return $output
+}
+
+<#
+.SYNOPSIS
+  Times the execution of a script block.
+.DESCRIPTION
+  The Measure-ExecutionTime function times the execution of a script block. It can be customized with the -Verbose switch to print the execution time.
+.PARAMETER ScriptBlock
+  The script block containing the commands to be measured.
+.EXAMPLE
+  Capture-Commands { cd 'C:\'; New-Item -ItemType file -Name "bashscript.sh"; }
+.OUTPUTS
+  A custom object with the following property: ExecutionTime.
+#>
+function Measure-ExecutionTime {
+  param(
+    [Parameter(Mandatory = $true)]
+    [scriptblock]$ScriptBlock
+  )
+
+  $result = Measure-Command -Expression $ScriptBlock
+
+  $output = [PSCustomObject]@{
+    'Execution Time (ms)' = $result.TotalMilliseconds
+  }
+
+  return $output
+}
+
+<#
+.SYNOPSIS
+  Prints the active session jobs.
+.DESCRIPTION
+  The Get-Jobs function prints the active session jobs. 
+.PARAMETER List
+  If this switch is provided, the function will print all the properties of the jobs.
+.PARAMETER Status
+  If this switch is provided, the function will only print those whose statuses have changed since the last notification.
+.PARAMETER ProcessId
+  If this switch is provided, the function will print the process IDs of the jobs.
+.EXAMPLE
+  Get-Jobs -List
+.EXAMPLE
+  Get-Jobs -Status
+.EXAMPLE
+  Get-Jobs -ProcessId
+.OUTPUTS
+  A list of jobs.
+#>
+function Get-Jobs {
+  param(
+    [Parameter(Mandatory = $false)]
+    [Alias("l")]
+    [switch]$List,
+
+    [Parameter(Mandatory = $false)]
+    [Alias("n")]
+    [switch]$Status,
+
+    [Parameter(Mandatory = $false)]
+    [Alias("p")]
+    [switch]$ProcessId
+  )
+
+  if ($ProcessId) {
+    Get-Job | ForEach-Object { $_.Id }
+  }
+  elseif ($List) {
+    Get-Job | Format-List -Property *
+  }
+  elseif ($Status) {
+    Get-Job | Where-Object { $_.HasMoreData -eq $true }
+  }
+  else {
+    Get-Job
+  }
+}
+
+<#
+.SYNOPSIS
+  Kills a process
+.DESCRIPTION
+  This function kills a process    
+.PARAMETER ProcessId
+  The ID of the process, can be retrieved with Get-Process
+#>
+function Kill-Process {
+  param (
+    [Parameter(Mandatory = $true)]
+    [string]$ProcessId
+  )
+
+  Stop-Process -Id $ProcessId
+}
+
+<#
+.SYNOPSIS
+  Allows you to gather DNS information about a domain
+.DESCRIPTION
+  This function allows you to gather DNS information about a domain
+.PARAMETER Domain
+  The domain to gather information about
+.PARAMETER Type
+  The type of DNS record to gather information about
+#>
+function Find-DNSRecord {
+  param (
+    [Parameter(Mandatory = $true)]
+    [string]$Domain,
+
+    [Parameter(Mandatory = $true)]
+    [string]$Type
+  )
+
+  Resolve-DnsName -Name $Domain -Type $Type
+}
+
+<#
+.SYNOPSIS
+  Allows you to manipulate the shell history
+.DESCRIPTION
+  This function allows you to manipulate the shell history
+.PARAMETER Clear
+  Clears the shell history
+.PARAMETER Save
+  Saves the shell history to a file
+#>
+function Shell-History {
+  param (
+    [Parameter(Mandatory = $false)]
+    [Alias("c")]
+    [switch]$Clear,
+
+    [Parameter(Mandatory = $false)]
+    [Alias("s")]
+    [string]$Save
+  )
+
+  if ($Clear) {
+    Clear-History
+  }
+
+  if ($Save) {
+    Get-History | Out-File $Save
+  }
+
+  Get-History
+}
+
+<#
+.SYNOPSIS
+  Finds a process
+.DESCRIPTION
+  This function finds a process
 .PARAMETER Name 
-   The name of the process
+  The name of the process
 #>
 function Find-Process {
   param (
@@ -747,45 +1735,9 @@ function Find-Process {
 
 <#
 .SYNOPSIS
-   Kills a process
+  Retrieves the currently installed updates
 .DESCRIPTION
-   This function kills a process    
-.PARAMETER Name
-   The name of the process
-#>
-function Kill-Process {
-  param (
-    [Parameter(Mandatory = $true)][string]$Name
-  )
-
-  Get-Process | Where-Object { $_.Name -like "*$Name*" } | Stop-Process -Force
-}
-
-<#
-.SYNOPSIS
-   Gets the current computer information
-.DESCRIPTION
-   This function gets the current computer information
-#>
-function Get-ComputerInformation {
-  Get-Process | Format-Table `
-  @{Label = "NPM(K)"; Expression = { [int]($_.NPM / 1024) } },
-  @{Label = "PM(K)"; Expression = { [int]($_.PM / 1024) } },
-  @{Label = "WS(K)"; Expression = { [int]($_.WS / 1024) } },
-  @{Label = "VM(M)"; Expression = { [int]($_.VM / 1MB) } },
-  @{Label = "CPU(s)"; Expression = { if ($_.CPU) { $_.CPU.ToString("N") } } },
-  Id, ProcessName, StartTime, mainWindowTitle, -AutoSize
-}
-
-# ----------------------------------------
-# System Management
-# ----------------------------------------
-
-<#
-.SYNOPSIS
-   Retrieves the currently installed updates
-.DESCRIPTION
-   This function retrieves the currently installed updates
+  This function retrieves the currently installed updates
 #>
 function Get-Updates {
   $updates = Get-WmiObject -Class Win32_QuickFixEngineering
@@ -796,9 +1748,9 @@ function Get-Updates {
 
 <#
 .SYNOPSIS
-   Generates a system report
+  Generates a system report
 .DESCRIPTION
-   This function generates a system report
+  This function generates a system report
 #>
 function Get-SystemReport {
   Invoke-RestMethod "https://raw.githubusercontent.com/luke-beep/GSR/main/GenerateSystemReport.ps1" | Invoke-Expression
@@ -806,9 +1758,9 @@ function Get-SystemReport {
 
 <#
 .SYNOPSIS
-   Optimizes PowerShell assemblies
+  Optimizes PowerShell assemblies
 .DESCRIPTION
-   This function optimizes PowerShell assemblies
+  This function optimizes PowerShell assemblies
 #>
 function Optimize-PowerShell {
   Invoke-RestMethod "https://raw.githubusercontent.com/luke-beep/ps-optimize-assemblies/main/optimize-assemblies.ps1" | Invoke-Expression
@@ -816,21 +1768,21 @@ function Optimize-PowerShell {
 
 <#
 .SYNOPSIS
-   Activates Windows using MAS
+  Activates Windows using MAS
 .DESCRIPTION 
-   This function activates Windows using MAS
+  This function activates Windows using MAS
 #>
-function Enable-WindowsActivation {
+function Activate-Windows {
   Invoke-RestMethod https://massgrave.dev/get | Invoke-Expression
 }
 
 <#
 .SYNOPSIS
-   Download object(s)
+  Download object(s)
 .DESCRIPTION 
-   This function downloads object(s) to the specified path or the current directory
+  This function downloads object(s) to the specified path or the current directory
 .PARAMETER Url 
-   The URL of the object
+  The URL of the object
 #>
 function Invoke-DownloadObject {
   param (
@@ -891,13 +1843,13 @@ function Invoke-DownloadObject {
 
 <#
 .SYNOPSIS
-   Allows for pipeline execution
+  Allows for pipeline execution
 .DESCRIPTION 
-   This function allows for pipeline execution
+  This function allows for pipeline execution
 .PARAMETER Objects 
-   The object paths
+  The object paths
 .EXAMPLE 
-   Invoke-DownloadObject -Url "http://example.com/file1.zip", "http://example.com/file2.zip" | Invoke-Object
+  Invoke-DownloadObject -Url "http://example.com/file1.zip", "http://example.com/file2.zip" | Invoke-Object
 #>
 function Invoke-Object {
   param (
@@ -916,11 +1868,11 @@ function Invoke-Object {
 
 <#
 .SYNOPSIS
-   Gets the status of all services
+  Gets the status of all services
 .DESCRIPTION 
-   This function gets the status of all services
+  This function gets the status of all services
 #>
-function Get-ServiceStatus {
+function Get-Services {
   Get-Service | ForEach-Object {
     $status = $_.Status
     $name = $_.Name
@@ -929,17 +1881,13 @@ function Get-ServiceStatus {
   }
 }
 
-# ----------------------------------------
-# Entertainment
-# ----------------------------------------
-
 <#
 .SYNOPSIS
-   Hacks a target
+  Hacks a target
 .DESCRIPTION
-   This function hacks a target
+  This function hacks a target
 .PARAMETER Target 
-   The target
+  The target
 #>
 function Invoke-TargetHack {
   param (
@@ -978,9 +1926,9 @@ function Invoke-TargetHack {
 
 <#
 .SYNOPSIS
-   Gets a programming joke
+  Gets a programming joke
 .DESCRIPTION 
-   This function gets a programming joke
+  This function gets a programming joke
 #>
 function Get-ProgrammingJoke {
   $response = Invoke-RestMethod -Uri 'https://official-joke-api.appspot.com/jokes/programming/random'
@@ -990,9 +1938,9 @@ function Get-ProgrammingJoke {
 
 <#
 .SYNOPSIS
-   Allows you to emulate the Matrix rain effect
+  Allows you to emulate the Matrix rain effect
 .DESCRIPTION 
-   This function allows you to emulate the Matrix rain effect
+  This function allows you to emulate the Matrix rain effect
 #>
 function Start-MatrixRain {
   $width = $host.UI.RawUI.BufferSize.Width
@@ -1019,11 +1967,11 @@ function Start-MatrixRain {
 
 <#
 .SYNOPSIS
-   Searches DuckDuckGo
+  Searches DuckDuckGo
 .DESCRIPTION 
-   This function searches DuckDuckGo
+  This function searches DuckDuckGo
 .PARAMETER Query 
-   The query to search for
+  The query to search for
 #>
 function Search-DuckDuckGo {
   param (
@@ -1038,298 +1986,13 @@ function Search-DuckDuckGo {
 
 <#
 .SYNOPSIS
-   Useful links
-.DESCRIPTION 
-   This function displays useful links
-#>
-function Get-Links {
-  $links = @(
-    [PSCustomObject]@{
-      Name = "NVIDIA Control Panel"
-      Url  = "https://apps.microsoft.com/detail/9NF8H0H7WMLT"
-    }
-    [PSCustomObject]@{
-      Name = "NVCleanstall"
-      Url  = "https://www.techpowerup.com/download/techpowerup-nvcleanstall/"
-    }
-    [PSCustomObject]@{
-      Name = "Display Driver Uninstaller"
-      Url  = "https://www.guru3d.com/download/display-driver-uninstaller-download"
-    }
-    [PSCustomObject]@{
-      Name = "NVIDIA Profile Inspector"
-      Url  = "https://github.com/Orbmu2k/nvidiaProfileInspector/releases"
-    }
-    [PSCustomObject]@{
-      Name = "MSI Afterburner"
-      Url  = "https://www.guru3d.com/download/msi-afterburner-beta-download"
-    }
-    [PSCustomObject]@{
-      Name = "MSI Utility V3"
-      Url  = "https://www.mediafire.com/file/ewpy1p0rr132thk/MSI_util_v3.zip/file"
-    }
-    [PSCustomObject]@{
-      Name = "Adwcleaner"
-      Url  = "https://www.malwarebytes.com/adwcleaner"
-    }
-    [PSCustomObject]@{
-      Name = "Autoruns"
-      Url  = "https://learn.microsoft.com/en-us/sysinternals/downloads/autoruns"
-    }
-    [PSCustomObject]@{
-      Name = "BleachBit"
-      Url  = "https://www.bleachbit.org/download"
-    }
-    [PSCustomObject]@{
-      Name = "Bloatbox"
-      Url  = "https://github.com/builtbybel/bloatbox/releases"
-    }
-    [PSCustomObject]@{
-      Name = "BloatyNosy"
-      Url  = "https://github.com/builtbybel/bloatbox/releases"
-    }
-    [PSCustomObject]@{
-      Name = "CapFrameX"
-      Url  = "https://www.capframex.com/download"
-    }
-    [PSCustomObject]@{
-      Name = "CrystalDiskMark"
-      Url  = "https://crystalmark.info/en/software/crystaldiskmark/"
-    }
-    [PSCustomObject]@{
-      Name = "CTT WinUtil"
-      Url  = "https://github.com/ChrisTitusTech/winutil"
-    }
-    [PSCustomObject]@{
-      Name = "Display Driver Uninstaller"
-      Url  = "https://www.guru3d.com/download/display-driver-uninstaller-download"
-    }
-    [PSCustomObject]@{
-      Name = "DLSS Swapper"
-      Url  = "https://github.com/beeradmoore/dlss-swapper/releases"
-    }
-    [PSCustomObject]@{
-      Name = "HWiNFO"
-      Url  = "https://www.hwinfo.com/download/"
-    }
-    [PSCustomObject]@{
-      Name = "JunkCtrl"
-      Url  = "https://github.com/builtbybel/JunkCtrl"
-    }
-    [PSCustomObject]@{
-      Name = "OpenRGB"
-      Url  = "https://openrgb.org/"
-    }
-    [PSCustomObject]@{
-      Name = "Optimizer"
-      Url  = "https://github.com/hellzerg/optimizer/releases"
-    }
-    [PSCustomObject]@{
-      Name = "Park Control"
-      Url  = "https://bitsum.com/parkcontrol/"
-    }
-    [PSCustomObject]@{
-      Name = "Process Lasso"
-      Url  = "https://bitsum.com/"
-    }
-    [PSCustomObject]@{
-      Name = "Quick CPU"
-      Url  = "https://coderbag.com/product/quickcpu"
-    }
-    [PSCustomObject]@{
-      Name = "Rufus"
-      Url  = "https://rufus.ie/downloads/"
-    }
-    [PSCustomObject]@{
-      Name = "VCC Redist All-in-One"
-      Url  = "https://www.techpowerup.com/download/visual-c-redistributable-runtime-package-all-in-one/"
-    }
-    [PSCustomObject]@{
-      Name = "WizTree"
-      Url  = "https://diskanalyzer.com/download"
-    }
-    [PSCustomObject]@{
-      Name = "WPD"
-      Url  = "https://wpd.app/"
-    }
-    [PSCustomObject]@{
-      Name = "Intel Drivers"
-      Url  = "https://www.intel.com/content/www/us/en/download-center/home.html"
-    }
-    [PSCustomObject]@{
-      Name = "AMD Drivers"
-      Url  = "https://www.amd.com/en/support"
-    }
-    [PSCustomObject]@{
-      Name = "NVIDIA Drivers"
-      Url  = "https://www.nvidia.com/Download/index.aspx"   
-    }
-    [PSCustomObject]@{
-      Name = "Intel XTU"
-      Url  = "https://downloadcenter.intel.com/download/29183/Intel-Extreme-Tuning-Utility-Intel-XTU-"   
-    }
-    [PSCustomObject]@{
-      Name = "Sysinternals Suite"
-      Url  = "https://learn.microsoft.com/en-us/sysinternals/downloads/"
-    }
-    [PSCustomObject]@{
-      Name = "Windows 10 Image"
-      Url  = "https://www.microsoft.com/en-us/software-download/windows10ISO"
-    }
-    [PSCustomObject]@{
-      Name = "Windows 11 Image"
-      Url  = "https://www.microsoft.com/en-us/software-download/windows11"
-    }
-    [PSCustomObject]@{
-      Name = "TechPowerUp GPU-Z"
-      Url  = "https://www.techpowerup.com/download/techpowerup-gpu-z/"
-    }
-    [PSCustomObject]@{
-      Name = "TechPowerUp Downloads"
-      Url  = "https://www.techpowerup.com/download/"
-    }
-    [PSCustomObject]@{
-      Name = "HoneCTRL"
-      Url  = "https://github.com/luke-beep/HoneCtrl"
-    }
-    [PSCustomObject]@{
-      Name = "PowerToys"
-      Url  = "https://github.com/microsoft/PowerToys"
-    }
-    [PSCustomObject]@{
-      Name = "Pwsh Profile"
-      Url  = "https://github.com/luke-beep/shell-config/blob/main/configs/pwsh/Microsoft.PowerShell_profile.ps1"
-    }
-    [PSCustomObject]@{
-      Name = "Measure Sleep"
-      Url  = "https://github.com/luke-beep/MeasureSleep/releases/tag/MeasureSleep"
-    }
-    [PSCustomObject]@{
-      Name = "All About Windows"
-      Url  = "https://github.com/luke-beep/all-about-windows"
-    }
-    [PSCustomObject]@{
-      Name = "Zen"
-      Url  = "https://github.com/luke-beep/zen"
-    }
-  ) | Sort-Object -Property Name
-
-  $PanelWidth = 1000
-
-  $form = New-Object System.Windows.Forms.Form
-  $form.Text = "Useful Links"
-  $form.BackColor = $nord0
-  $form.Size = New-Object System.Drawing.Size($PanelWidth, 500)
-  $form.StartPosition = 'CenterScreen'
-  $form.FormBorderStyle = 'FixedDialog'
-  $form.Icon = $icon
-  
-  $dataGridView = New-Object System.Windows.Forms.DataGridView
-  $dataGridView.Dock = [System.Windows.Forms.DockStyle]::Fill
-  $dataGridView.BackgroundColor = $nord0
-  $dataGridView.AutoSizeColumnsMode = [System.Windows.Forms.DataGridViewAutoSizeColumnsMode]::Fill
-  $dataGridView.AutoGenerateColumns = $false
-  $dataGridView.ReadOnly = $true
-  $dataGridView.AllowUserToAddRows = $false
-  $dataGridView.ColumnHeadersVisible = $true
-  $dataGridView.RowHeadersVisible = $false
-  $dataGridView.GridColor = $nord4
-
-  $dataGridView.DefaultCellStyle.BackColor = $nord0
-  $dataGridView.DefaultCellStyle.ForeColor = $nord4
-
-  $panel = New-Object System.Windows.Forms.Panel
-  $panel.Dock = 'Fill'
-  $panel.AutoScroll = $false
-
-  $dataGridView.BorderStyle = [System.Windows.Forms.BorderStyle]::None
-  $dataGridView.ColumnHeadersBorderStyle = [System.Windows.Forms.DataGridViewHeaderBorderStyle]::None
-  $dataGridView.RowHeadersBorderStyle = [System.Windows.Forms.DataGridViewHeaderBorderStyle]::None
-
-  $dataGridView.BackgroundColor = $nord0
-
-  $dataGridView.ColumnHeadersDefaultCellStyle.BackColor = $nord0
-  $dataGridView.ColumnHeadersDefaultCellStyle.ForeColor = $nord4
-
-  $dataGridView.RowHeadersDefaultCellStyle.BackColor = $nord0
-  $dataGridView.RowHeadersDefaultCellStyle.ForeColor = $nord4
-
-  $dataGridView.RowsDefaultCellStyle.BackColor = $nord0
-  $dataGridView.RowsDefaultCellStyle.ForeColor = $nord4
-  $dataGridView.AlternatingRowsDefaultCellStyle.BackColor = $nord0
-  $dataGridView.AlternatingRowsDefaultCellStyle.ForeColor = $nord4
-
-  $nameColumn = New-Object System.Windows.Forms.DataGridViewTextBoxColumn
-  $nameColumn.HeaderText = 'Name'
-  $nameColumn.DataPropertyName = 'Name'
-  
-  $urlColumn = New-Object System.Windows.Forms.DataGridViewLinkColumn
-  $urlColumn.HeaderText = 'URL'
-  $urlColumn.DataPropertyName = 'Url'
-  $urlColumn.LinkColor = $nord4
-  $urlColumn.VisitedLinkColor = $nord4
-  $urlColumn.ActiveLinkColor = $nord4
-  $urlColumn.LinkBehavior = [System.Windows.Forms.LinkBehavior]::HoverUnderline
-  
-  $dataGridView.Columns.Add($nameColumn)
-  $dataGridView.Columns.Add($urlColumn)
-  
-  $form.Controls.Add($dataGridView)
-  
-  $dataGridView.Add_CellContentClick({
-      param($sender, $e)
-      if ($e.ColumnIndex -eq 1) {
-        $url = $dataGridView.Rows[$e.RowIndex].Cells[$e.ColumnIndex].Value
-        Start-Process $url
-      }
-    })
-
-  foreach ($link in $links) {
-    $row = $dataGridView.Rows.Add()
-    $dataGridView.Rows[$row].Cells[0].Value = $link.Name
-    $dataGridView.Rows[$row].Cells[1].Value = $link.Url
-  }
-
-  $form.ShowDialog()
-}
-
-# ----------------------------------------
-# Network Management
-# ----------------------------------------
-
-<#
-.SYNOPSIS
-   Gets the current IP address and additional information
+  Scans an IP address
 .DESCRIPTION
-   This function gets the current IP address and additional information
-#>
-function Get-IP {
-  [CmdletBinding()]
-  param (
-    [Parameter(Mandatory = $false)][switch]$Extended
-  )
-
-  $ip = Invoke-RestMethod -Uri "https://api.ipify.org?format=json"
-  $info = Invoke-RestMethod -Uri "http://ip-api.com/json/$($ip.ip)"
-  if ($Extended) {
-    Write-Host "IP: $($ip.ip)"
-    Write-Host "Country: $($info.country)"
-    Write-Host "Region: $($info.regionName)"
-    Write-Host "City: $($info.city)"
-    Write-Host "ISP: $($info.isp)"
-  }
-  else {
-    $ip.ip
-  }
-}
-
-<#
-.SYNOPSIS
-   Scans an IP address
-.DESCRIPTION
-   This function scans an IP address
+  This function scans an IP address
 .PARAMETER IP 
-   The IP address
+  The IP address
+.PARAMETER Extended
+  Whether to show extended information
 #>
 function Test-IP {
   param (
@@ -1347,15 +2010,15 @@ function Test-IP {
 
 <#
 .SYNOPSIS
-   Scans a range of ports
+  Scans a range of ports
 .DESCRIPTION
-   This function scans a range of ports
+  This function scans a range of ports
 .PARAMETER IP
-   The IP address
+  The IP address
 .PARAMETER StartPort 
-   The start port
+  The start port
 .PARAMETER EndPort 
-   The end port
+  The end port
 #>
 function Test-Ports {
   param (
@@ -1379,9 +2042,9 @@ function Test-Ports {
 
 <#
 .SYNOPSIS
-   Allows you to manage your hosts file
+  Allows you to manage your hosts file
 .DESCRIPTION 
-   This function allows you to manage your hosts file
+  This function allows you to manage your hosts file
 #>
 function Edit-Hosts {
   Invoke-RestMethod "https://raw.githubusercontent.com/luke-beep/all-about-windows/main/scripts/HostEntryManager.ps1" | Invoke-Expression
@@ -1389,9 +2052,9 @@ function Edit-Hosts {
 
 <#
 .SYNOPSIS
-   Allows you to manage your DNS settings
+  Allows you to manage your DNS settings
 .DESCRIPTION 
-   This function allows you to manage your DNS settings
+  This function allows you to manage your DNS settings
 #>
 function Set-DNS {
   Invoke-RestMethod "https://raw.githubusercontent.com/luke-beep/all-about-windows/main/scripts/DNSChanger.ps1" | Invoke-Expression
@@ -1399,9 +2062,9 @@ function Set-DNS {
 
 <#
 .SYNOPSIS
-   Allows you to manage your network adapters
+  Allows you to manage your network adapters
 .DESCRIPTION 
-   This function allows you to manage your network adapters
+  This function allows you to manage your network adapters
 #>
 function Set-NetworkAdapter {
   Invoke-RestMethod "https://raw.githubusercontent.com/luke-beep/all-about-windows/main/scripts/NetworkAdapterManager.ps1" | Invoke-Expression
@@ -1409,127 +2072,23 @@ function Set-NetworkAdapter {
 
 <# 
 .SYNOPSIS
-   Disables Nagles algorithm
+  Disables Nagles algorithm
 .DESCRIPTION 
-   This function disables Nagles algorithm
+  This function disables Nagles algorithm
 #>
 function Set-Nagles {
   Invoke-RestMethod "https://raw.githubusercontent.com/luke-beep/all-about-windows/main/scripts/NaglesAlgorithm.ps1" | Invoke-Expression
 }
 
-# ----------------------------------------
-# File Management
-# ----------------------------------------
-
 <#
 .SYNOPSIS
-   Deletes a folder
+  Empties the recycle bin
 .DESCRIPTION
-   This function uses robocopy to delete a folder.
-.PARAMETER Destination
-   The destination of the folder
-#>
-function Remove-Folder {
-  param (
-    [Parameter(Mandatory = $true)][string]$Destination
-  )
-  $Temp = [System.IO.Path]::GetTempPath()
-  Remove-Item $Temp\Empty -Force -Recurse -ErrorAction SilentlyContinue | Out-Null
-  New-Item $Temp\Empty -ItemType Directory -Force -ErrorAction SilentlyContinue | Out-Null
-
-  robocopy $Temp\Empty $Destination /mir | Out-Null
-
-  Remove-Item $Destination -Force -Recurse -ErrorAction SilentlyContinue | Out-Null
-  Remove-Item $Temp\Empty -Force -Recurse -ErrorAction SilentlyContinue | Out-Null
-}
-
-<#
-.SYNOPSIS
-   Copies a folder from source to destination
-.DESCRIPTION
-   This function uses robocopy to copy a folder from the source to the destination.
-.PARAMETER Source
-   The source of the folder
-.PARAMETER Destination 
-   The destination of the folder
-#>
-function Copy-Folder {
-  param (
-    [Parameter(Mandatory = $true)][string]$Source,
-    [Parameter(Mandatory = $true)][string]$Destination
-  )
-
-  robocopy $Source $Destination /mir | Out-Null
-}
-
-<#
-.SYNOPSIS
-   Moves a folder from source to destination
-.DESCRIPTION
-   This function uses robocopy to move a folder from the source to the destination. 
-   It then removes the source folder.
-.PARAMETER Source
-   The source folder
-.PARAMETER Destination 
-   The destination folder
-#>
-function Move-Folder {
-  param (
-    [Parameter(Mandatory = $true)][string]$Source,
-    [Parameter(Mandatory = $true)][string]$Destination
-  )
-
-  robocopy $Source $Destination /mir | Out-Null
-  Remove-Item $Source -Force -Recurse -ErrorAction SilentlyContinue | Out-Null
-}
-
-<#
-.SYNOPSIS
-   Empties the recycle bin
-.DESCRIPTION
-   This function empties the recycle bin
+  This function empties the recycle bin
 #>
 function Empty-RecycleBin {
   Clear-RecycleBin -Force
 }
-
-<#
-.SYNOPSIS
-  Creates a new directory and navigates into it
-.DESCRIPTION
-  This function creates a new directory and navigates into it
-  .PARAMETER DirectoryName
-    The name of the directory
-#>
-function New-DirectoryAndNavigate {
-  param (
-    [Parameter(Mandatory = $true)][string]$DirectoryName
-  )
-  
-  New-Item -ItemType Directory -Path $DirectoryName
-  Set-Location -Path $DirectoryName
-}
-
-<#
-.SYNOPSIS
-  Removes the current directory
-.DESCRIPTION
-  This function removes the current directory
-#>
-function Remove-CurrentDirectory {
-  # Prompt the user to confirm the deletion
-  Write-Host "Are you sure you want to delete the current directory? (Y/N)"
-  $userInput = Read-Host
-  if ($userInput -eq "Y") {
-    $currentDirectory = Get-Location
-    Set-Location -Path ..
-    Remove-Item -Path $currentDirectory -Recurse -Force
-  }
-}
-
-# ----------------------------------------
-# File System Management
-# ----------------------------------------
 
 <#  
 .SYNOPSIS
@@ -1544,60 +2103,15 @@ function Copy-Path {
 
 <#
 .SYNOPSIS
-  Changes the current directory
-.DESCRIPTION
-  This function changes the current directory
-.PARAMETER Path
-  The path of the directory
-#>
-function Set-NewLocation {
-  param (
-    [Parameter(Mandatory = $false)][string]$Path
-  )
-  
-  Push-Location $Path
-  Get-ChildItem
-}
-
-<#
-.SYNOPSIS
-  Goes back to the previous directory
-.DESCRIPTION
-  This function goes back to the previous directory
-#>
-function Set-PreviousLocation {
-  Pop-Location
-  Get-ChildItem
-}
-
-<#
-.SYNOPSIS
-  Searches for a specific file or folder in the current directory
-.DESCRIPTION
-  This function searches for a specific file or folder in the current directory
-.PARAMETER ItemName
-  The name of the item
-#>
-function Search-Item {
-  param (
-    [Parameter(Mandatory = $true)][string]$ItemName
-  )
-  
-  Get-ChildItem -Path . -Recurse | Where-Object { $_.Name -like "*$ItemName*" }
-}
-
-<#
-.SYNOPSIS
   Backs up the current workspace to a specified directory
 .DESCRIPTION
   This function backs up the current workspace to a specified directory
 #>
-function Backup-Workspace {
+function Take-Snapshot {
   $BackupDirectory = "$SystemDrive\Snapshots"
 
   $currentDirectory = Get-Location
-  # backuppath should be date + current directory
-  $backupPath = Join-Path -Path $BackupDirectory -ChildPath (Get-Date -Format "yyyy-MM-dd_HH-mm-ss") + "_" + (Split-Path -Leaf $currentDirectory)
+  $backupPath = Join-Path -Path $BackupDirectory -ChildPath (Get-Date -Format "yyyy-MM-dd_HH-mm-ss") + "_" + (Split-Path -Leaf $currentDirectory.Provider)
 
   if (!(Test-Path -Path $backupPath)) {
     New-Item -ItemType Directory -Path $backupPath | Out-Null
@@ -1608,36 +2122,11 @@ function Backup-Workspace {
 
 <#
 .SYNOPSIS
-   Creates a file or a directory
+  Tips & tricks for using this profile
 .DESCRIPTION 
-   This function creates a file or a directory
-.PARAMETER Path
-   The path of the file or directory
+  This function displays tips & tricks for using this profile
 #>
-function New-FileOrDirectory {
-  param(
-    [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
-    [Alias('FullName')]
-    [string]$Path
-  )
-
-  process {
-    if (Test-Path $Path) {
-          (Get-Item -Path $Path).LastWriteTime = Get-Date
-    }
-    else {
-      New-Item -ItemType File -Path $Path | Out-Null
-    }
-  }
-}
-
-<#
-.SYNOPSIS
-   Tips & tricks for using this profile
-.DESCRIPTION 
-   This function displays tips & tricks for using this profile
-#>
-function Get-Tips {
+function Get-ShellTips {
   $PanelWidth = 1000
 
   $form = New-Object System.Windows.Forms.Form
@@ -1674,11 +2163,11 @@ function Get-Tips {
 
 <#
 .SYNOPSIS
-   Allows you to configure your theme
+  Allows you to configure your theme
 .DESCRIPTION 
-   This function allows you to configure your theme
+  This function allows you to configure your theme
 #>
-function Set-Theme {
+function Set-ShellTheme {
   $ompConfig = "$env:USERPROFILE\.config\omp.json"
   $starshipConfig = "$env:USERPROFILE\.config\starship.toml"
   $starShip = Get-ItemProperty -Path $keyPath -Name 'Starship' -ErrorAction SilentlyContinue
@@ -1822,9 +2311,22 @@ function Set-Theme {
   }
 }
 
-# ----------------------------------------
-# Alias Management
-# ----------------------------------------
+<#
+.SYNOPSIS
+  Allows you to get the manual for a command
+.DESCRIPTION
+  This function allows you to get the manual for a command
+.PARAMETER Name
+  The name of the command
+#>
+function Find-Manual {
+  param(
+    [Parameter(Mandatory = $true)]
+    [string]$Name
+  )
+
+  Get-Help -Name $Name -Full
+}
 
 <#
 .SYNOPSIS
@@ -2122,14 +2624,6 @@ function Remove-Aliases {
   $form.Dispose()
 }
 
-<#
-.SYNOPSIS
-  Gets the aliases for a command through a reverse lookup
-.DESCRIPTION 
-  This function gets the aliases for a command through a reverse lookup
-.PARAMETER Command
-  The command
-#>
 function Get-ReverseAlias {
   param (
     [Parameter(Mandatory = $true)][string]$Command
@@ -2141,10 +2635,6 @@ function Get-ReverseAlias {
   }
 }
 
-# ----------------------------------------
-# Helper functions
-# ----------------------------------------
-
 <#
 .SYNOPSIS
   Displays the help menu
@@ -2155,11 +2645,13 @@ function Get-ReverseAlias {
 #>
 function Get-ProfileHelp {
   param (
-    [bool]$ShowInConsole = $false
+    [Parameter(Mandatory = $false)]
+    [Alias('c')]
+    [switch]$ShowInConsole = $false
   )
   $excludedNames = 'A:', 'B:', 'C:', 'D:', 'E:', 'F:', 'G:', 'H:', 'I:', 'J:', 'K:', 'L:', 'M:', 'N:', 'O:', 'P:', 'Q:', 'R:', 'S:', 'T:', 'U:', 'V:', 'W:', 'X:', 'Y:', 'Z:'
   $commands = Get-Command -CommandType Function | Where-Object { $_.Source -eq "" -and $_.Name -notin $excludedNames } | ForEach-Object {
-    $help = Get-Help $_.Name
+    $help = Get-Help $_.Name -ErrorAction SilentlyContinue
     $alias = (Get-ReverseAlias -Command $_.Name -ErrorAction SilentlyContinue | Out-String) -replace "`r`n", ', ' -replace ', $', ''
     $description = ($help.Synopsis).Trim()
     $parameters = (($help.Parameters.Parameter | ForEach-Object { $_.Name }) -join ', ').Trim()
@@ -2179,6 +2671,7 @@ function Get-ProfileHelp {
     $commandString
   }
   else {
+    Clear-Host
     $commandsOutput = $commands | Format-Table -Wrap -AutoSize | Out-String
     Show-Help -Output $commandsOutput -Introduction "For more information about a command, type 'Get-Help <command-name>'"
   }
@@ -2224,18 +2717,51 @@ function Show-Help {
 
 <#
 .SYNOPSIS
-   Gets the current shell information
+  Simple calendar
 .DESCRIPTION
-   This function gets the current shell information
+  This function displays a simple calendar
+.PARAMETER Month
+  The month
+.PARAMETER Year
+  The year
+.EXAMPLE
+  Calendar 12 2020
+#>
+function Calendar {
+  param(
+    [Parameter(Position = 0)]
+    [int]$Month = (Get-Date).Month,
+    [Parameter(Position = 1)]
+    [int]$Year = (Get-Date).Year
+  )
+
+  $daysInMonth = [DateTime]::DaysInMonth($Year, $Month)
+  $date = New-Object DateTime $Year, $Month, 1
+
+  Write-Host ("    {0} {1}" -f $date.ToString('MMMM'), $Year)
+  Write-Host "Su Mo Tu We Th Fr Sa"
+
+  1..$date.DayOfWeek.value__ | ForEach-Object { Write-Host "   " -NoNewline }
+  1..$daysInMonth | ForEach-Object {
+    $day = $_
+    $date = New-Object DateTime $Year, $Month, $day
+    if ($day -lt 10) { Write-Host " $day" -NoNewline } else { Write-Host "$day" -NoNewline }
+    if ($date.DayOfWeek.value__ -eq 6) { Write-Host "" }
+    else { Write-Host " " -NoNewline }
+  }
+  Write-Host ""
+}
+
+<#
+.SYNOPSIS
+  Gets the current shell information
+.DESCRIPTION
+  This function gets the current shell information
 #>
 function Get-ShellInfo {
   Write-Output "Profile Path: $PROFILE"
   Write-Output "Host Name: $($host.Name)"
   Write-Output "Host Version: $($host.Version) -> $($shellType) ($bitness)"
 }
-
-# ----------------------------------------
-# End of Profile
-# ----------------------------------------
 
 Import-Aliases
