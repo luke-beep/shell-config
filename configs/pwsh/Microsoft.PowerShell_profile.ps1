@@ -4,7 +4,7 @@
 
 # Author: LukeHjo (Azrael)
 # Description: This is my PowerShell profile. It contains features that I use on a daily basis.
-# Version: 1.2.1
+# Version: 1.2.2
 # Date: 2023-12-28
 
 Add-Type -AssemblyName System.Windows.Forms
@@ -658,11 +658,6 @@ function Preview-Variables {
       $form.Dispose()
     }
   }
-}
-
-function Add-Path($Path) {
-  $Path = [Environment]::GetEnvironmentVariable("PATH", "Machine") + [IO.Path]::PathSeparator + $Path
-  [Environment]::SetEnvironmentVariable( "Path", $Path, "Machine" )
 }
 
 function Initialize-Profile {

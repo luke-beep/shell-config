@@ -1,5 +1,9 @@
 [
     "restart",
+    "echi",
+    "echw",
+    "eche",
+    "echc",
     "profile",
     "apt-get",
     "ls",
@@ -59,5 +63,8 @@
     "help",
     "cal",
     "shell",
-    "grep"
+    "grep",
+    "analyze",
+    "checkhealth",
+    "palette"
 ]
