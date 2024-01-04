@@ -351,6 +351,114 @@ function Update-Profile {
   }
 }
 
+function Import-Functions {
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM ( ) # No parameters
+
+  BEGIN {
+    $newFunctionsFilePath = Join-Path (Split-Path -Parent $PROFILE) "custom-functions.ps1"
+    $newFunctionsFileUrl = "https://github.com/luke-beep/shell-config/raw/main/configs/pwsh/custom-functions.ps1"
+  }  
+
+  PROCESS {
+    if (-not (Test-Path $newFunctionsFilePath)) {
+      Invoke-WebRequest -Uri $newFunctionsFileUrl -OutFile $newFunctionsFilePath
+    }
+    . $newFunctionsFilePath
+  }
+}
+
+function Manage-Functions {
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM ( ) # No parameters
+
+  BEGIN {
+    $newFunctionsFilePath = Join-Path (Split-Path -Parent $PROFILE) "custom-functions.ps1"
+    $newFunctionsFileUrl = "https://github.com/luke-beep/shell-config/raw/main/configs/pwsh/custom-functions.ps1"
+    if (-not (Test-Path $newFunctionsFilePath)) {
+      Invoke-WebRequest -Uri $newFunctionsFileUrl -OutFile $newFunctionsFilePath
+    }
+    
+    $PanelWidth = 900
+
+    $form = New-Object System.Windows.Forms.Form
+    $form.Text = "Manage Custom Functions"
+    $form.BackColor = $Nord0
+    $form.Size = New-Object System.Drawing.Size($PanelWidth, 500)
+    $form.StartPosition = 'CenterScreen'
+    $form.FormBorderStyle = 'FixedDialog'
+    $form.Icon = $ShellIcon
+
+    $tableLayoutPanel = New-Object System.Windows.Forms.TableLayoutPanel
+    $tableLayoutPanel.RowCount = 1
+    $tableLayoutPanel.ColumnCount = 1
+    $tableLayoutPanel.Dock = [System.Windows.Forms.DockStyle]::Fill
+    $tableLayoutPanel.ColumnStyles.Add((New-Object System.Windows.Forms.ColumnStyle([System.Windows.Forms.SizeType]::Percent, 100)))
+    $tableLayoutPanel.RowStyles.Clear()
+    $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::Percent, 100)))
+    $tableLayoutPanel.BorderStyle = [System.Windows.Forms.BorderStyle]::None
+    $tableLayoutPanel.BackColor = $Nord0
+    $tableLayoutPanel.ForeColor = $Nord4
+
+    $richTextBox = New-Object System.Windows.Forms.RichTextBox
+    $richTextBox.Location = New-Object System.Drawing.Point(0, 0)
+    $richTextBox.Size = New-Object System.Drawing.Size(($PanelWidth + 20), 300)
+    $richTextBox.Text = (Get-Content $newFunctionsFilePath | Out-String)
+    $richTextBox.BackColor = $Nord0
+    $richTextBox.ForeColor = $Nord4
+    $richTextBox.Font = New-Object System.Drawing.Font("Consolas", 10)
+    $richTextBox.ReadOnly = $false
+    $richTextBox.BorderStyle = 'None'
+    $richTextBox.ScrollBars = 'Vertical'
+
+    $button = New-Object System.Windows.Forms.Button
+    $button.Location = New-Object System.Drawing.Point(10, 220)
+    $button.Size = New-Object System.Drawing.Size(150, 30)
+    $button.Text = "Save Functions"
+    $button.Dock = [System.Windows.Forms.DockStyle]::Fill
+    $button.BackColor = $Nord3
+    $button.ForeColor = $Nord6
+    $button.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
+    $button.FlatAppearance.BorderColor = $Nord3
+    $button.FlatAppearance.BorderSize = 1
+    $button.Add_Click({
+        $richTextBox.SaveFile($newFunctionsFilePath, 'PlainText')
+        . $newFunctionsFilePath
+        [System.Windows.Forms.MessageBox]::Show("Functions saved.", "Success")
+      })
+
+    $tableLayoutPanel.Controls.Add($richTextBox, 0, 0)
+    $tableLayoutPanel.Controls.Add($button, 0, 1)
+
+    $form.Controls.Add($tableLayoutPanel)
+
+  }
+
+  PROCESS {
+    $form.ShowDialog()
+  }
+
+  END {
+    $form.Dispose()
+  }
+}
+
+function Import-Variables {
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM ( ) # No parameters
+
+  BEGIN {
+    $newVariablesFilePath = Join-Path (Split-Path -Parent $PROFILE) "custom-variables.ps1"
+    $newVariablesFileUrl = "https://github.com/luke-beep/shell-config/raw/main/configs/pwsh/custom-variables.ps1"
+  }
+
+  PROCESS {
+    if (-not (Test-Path $newVariablesFilePath)) {
+      Invoke-WebRequest -Uri $newVariablesFileUrl -OutFile $newVariablesFilePath
+    }
+    . $newVariablesFilePath
+  }
+}
 function Initialize-Profile {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
   PARAM ( ) # No parameters
@@ -478,6 +586,8 @@ function Initialize-Profile {
 
   END {
     $form.Dispose()
+
+    Import-Functions # Import custom functions
 
     Clear-Host
 
@@ -795,6 +905,20 @@ function Manage-Profile {
         Analyze-Profile -GUI
       })
     $buttonPanel2.Controls.Add($button8)
+
+    $button9 = New-Object System.Windows.Forms.Button
+    $button9.Text = "Functions"
+    $button9.Width = 100
+    $button9.Height = 30
+    $button9.Location = New-Object System.Drawing.Point(120, 0)
+    $button9.BackColor = $Nord1
+    $button9.ForeColor = $Nord4
+    $button9.FlatStyle = 'Flat'
+    $button9.FlatAppearance.BorderSize = 0
+    $button9.Add_Click({
+        Manage-Functions
+      })
+    $buttonPanel2.Controls.Add($button9)
 
     $panel = New-Object System.Windows.Forms.Panel
     $panel.Dock = 'Fill'
@@ -2901,24 +3025,6 @@ function Find-Manual {
     }
   }
 }
-
-function Import-Functions {
-  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
-  PARAM ( ) # No parameters
-
-  BEGIN {
-    $newFunctionsFilePath = Join-Path (Split-Path -Parent $PROFILE) "custom-functions.ps1"
-  }  
-
-  PROCESS {
-    if (-not (Test-Path $newFunctionsFilePath)) {
-      New-Item -Path $newFunctionsFilePath -ItemType File
-    }
-    . $newFunctionsFilePath
-    Write-Host "Sourced $newFunctionsFilePath"
-  }
-}
-Import-Functions
 
 <#
 .SYNOPSIS

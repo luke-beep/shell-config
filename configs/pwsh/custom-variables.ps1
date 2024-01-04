@@ -1,0 +1,1 @@
+$ExampleVariable = "Example Value"
