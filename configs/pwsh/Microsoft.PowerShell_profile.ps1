@@ -783,10 +783,10 @@ function Initialize-Profile {
       Invoke-WebRequest -Uri 'https://starship.rs/presets/toml/tokyo-night.toml' -OutFile $starshipConfig
     }
   
-    if ($starShip.Starship -eq 0) {
+    if ($starShipKey.Starship -eq 0) {
       oh-my-posh init pwsh --config $ompConfig | Invoke-Expression
     }
-    elseif ($starShip.Starship -eq 1) {
+    elseif ($starShipKey.Starship -eq 1) {
       Invoke-Expression (&starship init powershell)
     }
 
