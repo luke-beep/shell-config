@@ -10,37 +10,37 @@
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
-$nord0 = [System.Drawing.ColorTranslator]::FromHtml("#2E3440") # Polar Night
-$nord1 = [System.Drawing.ColorTranslator]::FromHtml("#3B4252")
-$nord2 = [System.Drawing.ColorTranslator]::FromHtml("#434C5E")
-$nord3 = [System.Drawing.ColorTranslator]::FromHtml("#4C566A")
-$nord4 = [System.Drawing.ColorTranslator]::FromHtml("#D8DEE9") # Snow Storm
-$nord5 = [System.Drawing.ColorTranslator]::FromHtml("#E5E9F0")
-$nord6 = [System.Drawing.ColorTranslator]::FromHtml("#ECEFF4")
-$nord7 = [System.Drawing.ColorTranslator]::FromHtml("#8FBCBB") # Frost
-$nord8 = [System.Drawing.ColorTranslator]::FromHtml("#88C0D0")
-$nord9 = [System.Drawing.ColorTranslator]::FromHtml("#81A1C1")
-$nord10 = [System.Drawing.ColorTranslator]::FromHtml("#5E81AC")
-$nord11 = [System.Drawing.ColorTranslator]::FromHtml("#BF616A") # Aurora
-$nord12 = [System.Drawing.ColorTranslator]::FromHtml("#D08770")
-$nord13 = [System.Drawing.ColorTranslator]::FromHtml("#EBCB8B")
-$nord14 = [System.Drawing.ColorTranslator]::FromHtml("#A3BE8C")
-$nord15 = [System.Drawing.ColorTranslator]::FromHtml("#B48EAD")
+# Nord Theme
+$Nord0 = [System.Drawing.ColorTranslator]::FromHtml("#2E3440") # Polar Night
+$Nord1 = [System.Drawing.ColorTranslator]::FromHtml("#3B4252")
+$Nord2 = [System.Drawing.ColorTranslator]::FromHtml("#434C5E")
+$Nord3 = [System.Drawing.ColorTranslator]::FromHtml("#4C566A")
+$Nord4 = [System.Drawing.ColorTranslator]::FromHtml("#D8DEE9") # Snow Storm
+$Nord5 = [System.Drawing.ColorTranslator]::FromHtml("#E5E9F0")
+$Nord6 = [System.Drawing.ColorTranslator]::FromHtml("#ECEFF4")
+$Nord7 = [System.Drawing.ColorTranslator]::FromHtml("#8FBCBB") # Frost
+$Nord8 = [System.Drawing.ColorTranslator]::FromHtml("#88C0D0")
+$Nord9 = [System.Drawing.ColorTranslator]::FromHtml("#81A1C1")
+$Nord10 = [System.Drawing.ColorTranslator]::FromHtml("#5E81AC")
+$Nord11 = [System.Drawing.ColorTranslator]::FromHtml("#BF616A") # Aurora
+$Nord12 = [System.Drawing.ColorTranslator]::FromHtml("#D08770")
+$Nord13 = [System.Drawing.ColorTranslator]::FromHtml("#EBCB8B")
+$Nord14 = [System.Drawing.ColorTranslator]::FromHtml("#A3BE8C")
+$Nord15 = [System.Drawing.ColorTranslator]::FromHtml("#B48EAD")
 
-# Variables
-$iconUrl = "https://raw.githubusercontent.com/luke-beep/shell-config/main/assets/Azrael.ico"
-$iconData = Invoke-WebRequest -Uri $iconUrl -UseBasicParsing
-$iconStream = [System.IO.MemoryStream]::new($iconData.Content)
-$icon = [System.Drawing.Icon]::new($iconStream)
-$shellType = if ($host.Version.Major -ge 7) { "Pwsh" } else { "PowerShell" }
-$bitness = if ([Environment]::Is64BitProcess) { "64-bit" } else { "32-bit" }
-$keyPath = if ($shellType -eq "Pwsh") { 'HKCU:\Software\Azrael\Pwsh' } else { 'HKCU:\Software\Azrael\PowerShell' }
-$userName = $env:UserName
-$kernelVersion = (Get-CimInstance -ClassName Win32_OperatingSystem).Version
-$versionKey = Get-ItemProperty -Path $keyPath -Name 'Version' -ErrorAction SilentlyContinue 
-$currentVersion = if ($null -eq $versionKey) { $null } else { $versionKey.Version }
-$latestVersion = Invoke-RestMethod -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/version'
-$wiki = 'https://github.com/luke-beep/shell-config/wiki/Commands'
+# Global Variables (Usable in the shell environment)
+$ShellIconURL = "https://raw.githubusercontent.com/luke-beep/shell-config/main/assets/Azrael.ico"
+$ShellIconData = Invoke-WebRequest -Uri $ShellIconURL -UseBasicParsing
+$ShellIconStream = [System.IO.MemoryStream]::new($ShellIconData.Content)
+$ShellIcon = [System.Drawing.Icon]::new($ShellIconStream)
+$ShellType = if ($host.Version.Major -ge 7) { "Pwsh" } else { "PowerShell" }
+$Bitness = if ([Environment]::Is64BitProcess) { "64-bit" } else { "32-bit" }
+$KeyPath = if ($ShellType -eq "Pwsh") { 'HKCU:\Software\Azrael\Pwsh' } else { 'HKCU:\Software\Azrael\PowerShell' }
+$UserName = $env:UserName
+$KernelVersion = (Get-CimInstance -ClassName Win32_OperatingSystem).Version
+$VersionKey = Get-ItemProperty -Path $KeyPath -Name 'Version' -ErrorAction SilentlyContinue 
+$CurrentVersion = if ($null -eq $VersionKey) { $null } else { $VersionKey.Version }
+$LatestVersion = Invoke-RestMethod -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/version'
 $SystemDrive = $env:SystemDrive
 
 <#
@@ -57,7 +57,7 @@ function Restart-Shell {
   
   PROCESS {
     . $PROFILE
-    if ($shellType -eq "Pwsh") {
+    if ($ShellType -eq "Pwsh") {
       pwsh
     }
     else {
@@ -158,41 +158,85 @@ function Update-Profile {
 
   BEGIN {
     # Check for registry key
-    if (-not (Test-Path $keyPath)) {
-      New-Item -Path $keyPath -Force 
+    if (-not (Test-Path $KeyPath)) {
+      New-Item -Path $KeyPath -Force 
     }
 
     # Check for the first run key
-    $firstRun = Get-ItemProperty -Path $keyPath -Name 'FirstRun' -ErrorAction SilentlyContinue
+    $firstRun = Get-ItemProperty -Path $KeyPath -Name 'FirstRun' -ErrorAction SilentlyContinue
 
     # Check if the profile should be updated automatically
-    $autoUpdate = Get-ItemProperty -Path $keyPath -Name 'AutoUpdate' -ErrorAction SilentlyContinue
+    $autoUpdate = Get-ItemProperty -Path $KeyPath -Name 'AutoUpdate' -ErrorAction SilentlyContinue
+
+    # Create the form
+    $updateForm = New-Object System.Windows.Forms.Form
+    $updateForm.Text = "Update Available"
+    $updateForm.BackColor = $Nord0
+    $updateForm.ForeColor = $Nord4
+    $updateForm.Font = New-Object System.Drawing.Font("Arial", 10)
+    $updateForm.StartPosition = 'CenterScreen'
+    $updateForm.Size = New-Object System.Drawing.Size(400, 200)
+    $updateForm.FormBorderStyle = 'FixedDialog'
+    $updateForm.MaximizeBox = $false
+    $updateForm.MinimizeBox = $false
+    $updateForm.Icon = $ShellIcon
+    
+    $label = New-Object System.Windows.Forms.Label
+    $label.Text = "A new version of the profile is available. Would you like to update?"
+    $label.Location = New-Object System.Drawing.Point(10, 10)
+    $label.Size = New-Object System.Drawing.Size(380, 80)
+    $label.ForeColor = $Nord6
+    
+    $yesButton = New-Object System.Windows.Forms.Button
+    $yesButton.BackColor = $Nord3
+    $yesButton.ForeColor = $Nord6
+    $yesButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
+    $yesButton.FlatAppearance.BorderSize = 0
+    $yesButton.Location = New-Object System.Drawing.Point(100, 120)
+    $yesButton.Size = New-Object System.Drawing.Size(75, 23)
+    $yesButton.Text = "Yes"
+    $yesButton.DialogResult = [System.Windows.Forms.DialogResult]::Yes
+    
+    $noButton = New-Object System.Windows.Forms.Button
+    $noButton.BackColor = $Nord3
+    $noButton.ForeColor = $Nord6
+    $noButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
+    $noButton.FlatAppearance.BorderSize = 0
+    $noButton.Location = New-Object System.Drawing.Point(200, 120)
+    $noButton.Size = New-Object System.Drawing.Size(75, 23)
+    $noButton.Text = "No"
+    $noButton.DialogResult = [System.Windows.Forms.DialogResult]::No
+    
+    $updateForm.Controls.Add($label)
+    $updateForm.Controls.Add($yesButton)
+    $updateForm.Controls.Add($noButton)
+    $updateForm.AcceptButton = $yesButton
+    $updateForm.CancelButton = $noButton
   }
 
   PROCESS {
-    # Run the first run script if it's the first run
     if ($null -eq $firstRun.FirstRun) {
       $form = New-Object System.Windows.Forms.Form
       $form.Text = "Auto Update"
-      $form.BackColor = $nord0
-      $form.ForeColor = $nord4
+      $form.BackColor = $Nord0
+      $form.ForeColor = $Nord4
       $form.Font = New-Object System.Drawing.Font("Arial", 10)
       $form.StartPosition = 'CenterScreen'
       $form.Size = New-Object System.Drawing.Size(400, 200)
       $form.FormBorderStyle = 'FixedDialog'
       $form.MaximizeBox = $false
       $form.MinimizeBox = $false
-      $form.Icon = $icon
+      $form.Icon = $ShellIcon
 
       $label = New-Object System.Windows.Forms.Label
       $label.Text = "Would you like to update the profile automatically in the future?"
       $label.Location = New-Object System.Drawing.Point(10, 10)
       $label.Size = New-Object System.Drawing.Size(380, 80)
-      $label.ForeColor = $nord6
+      $label.ForeColor = $Nord6
 
       $yesButton = New-Object System.Windows.Forms.Button
-      $yesButton.BackColor = $nord3
-      $yesButton.ForeColor = $nord6
+      $yesButton.BackColor = $Nord3
+      $yesButton.ForeColor = $Nord6
       $yesButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
       $yesButton.FlatAppearance.BorderSize = 0
       $yesButton.Location = New-Object System.Drawing.Point(100, 120)
@@ -201,8 +245,8 @@ function Update-Profile {
       $yesButton.DialogResult = [System.Windows.Forms.DialogResult]::Yes
 
       $noButton = New-Object System.Windows.Forms.Button
-      $noButton.BackColor = $nord3
-      $noButton.ForeColor = $nord6
+      $noButton.BackColor = $Nord3
+      $noButton.ForeColor = $Nord6
       $noButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
       $noButton.FlatAppearance.BorderSize = 0
       $noButton.Location = New-Object System.Drawing.Point(200, 120)
@@ -219,138 +263,43 @@ function Update-Profile {
       $result = $form.ShowDialog()
 
       if ($result -eq [System.Windows.Forms.DialogResult]::Yes) {
-        New-ItemProperty -Path $keyPath -Name 'AutoUpdate' -Value 1 -PropertyType 'DWord' -Force 
+        New-ItemProperty -Path $KeyPath -Name 'AutoUpdate' -Value 1 -PropertyType 'DWord' -Force 
       }
       else {
-        New-ItemProperty -Path $keyPath -Name 'AutoUpdate' -Value 0 -PropertyType 'DWord' -Force 
+        New-ItemProperty -Path $KeyPath -Name 'AutoUpdate' -Value 0 -PropertyType 'DWord' -Force 
       }
-
-      $form.Dispose()
 
       Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/Microsoft.PowerShell_profile.ps1' -OutFile $PROFILE
-      New-ItemProperty -Path $keyPath -Name 'Version' -Value $latestVersion -PropertyType 'String' -Force 
-      New-ItemProperty -Path $keyPath -Name 'FirstRun' -Value 1 -PropertyType 'DWord' -Force 
-    }
-    if ($Force) {
-      # Create the form
-      $form = New-Object System.Windows.Forms.Form
-      $form.Text = "Update Available"
-      $form.BackColor = $nord0
-      $form.ForeColor = $nord4
-      $form.Font = New-Object System.Drawing.Font("Arial", 10)
-      $form.StartPosition = 'CenterScreen'
-      $form.Size = New-Object System.Drawing.Size(400, 200)
-      $form.FormBorderStyle = 'FixedDialog'
-      $form.MaximizeBox = $false
-      $form.MinimizeBox = $false
-      $form.Icon = $icon
+      New-ItemProperty -Path $KeyPath -Name 'Version' -Value $LatestVersion -PropertyType 'String' -Force 
+      New-ItemProperty -Path $KeyPath -Name 'FirstRun' -Value 1 -PropertyType 'DWord' -Force 
 
-      $label = New-Object System.Windows.Forms.Label
-      $label.Text = "A new version of the profile is available. Would you like to update?"
-      $label.Location = New-Object System.Drawing.Point(10, 10)
-      $label.Size = New-Object System.Drawing.Size(380, 80)
-      $label.ForeColor = $nord6
-
-      $yesButton = New-Object System.Windows.Forms.Button
-      $yesButton.BackColor = $nord3
-      $yesButton.ForeColor = $nord6
-      $yesButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
-      $yesButton.FlatAppearance.BorderSize = 0
-      $yesButton.Location = New-Object System.Drawing.Point(100, 120)
-      $yesButton.Size = New-Object System.Drawing.Size(75, 23)
-      $yesButton.Text = "Yes"
-      $yesButton.DialogResult = [System.Windows.Forms.DialogResult]::Yes
-
-      $noButton = New-Object System.Windows.Forms.Button
-      $noButton.BackColor = $nord3
-      $noButton.ForeColor = $nord6
-      $noButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
-      $noButton.FlatAppearance.BorderSize = 0
-      $noButton.Location = New-Object System.Drawing.Point(200, 120)
-      $noButton.Size = New-Object System.Drawing.Size(75, 23)
-      $noButton.Text = "No"
-      $noButton.DialogResult = [System.Windows.Forms.DialogResult]::No
-
-      $form.Controls.Add($label)
-      $form.Controls.Add($yesButton)
-      $form.Controls.Add($noButton)
-      $form.AcceptButton = $yesButton
-      $form.CancelButton = $noButton
-
-      $result = $form.ShowDialog()
-
-      if ($result -eq [System.Windows.Forms.DialogResult]::Yes) {
-        # Resets the entire shell
-        Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/Microsoft.PowerShell_profile.ps1' -OutFile $PROFILE
-        New-ItemProperty -Path $keyPath -Name 'Version' -Value $latestVersion -PropertyType 'String' -Force 
-        Restart-Shell 
-      }
       $form.Dispose()
     }
-    elseif ($currentVersion -ne $latestVersion) {
-      # Update the profile if it should be updated automatically
-      if ($autoUpdate.AutoUpdate -eq 1 -or $Silent) {
-        # Resets the entire shell
+    if ($Force) {
+      $result = $updateForm.ShowDialog()
+      if ($result -eq [System.Windows.Forms.DialogResult]::Yes) {
         Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/Microsoft.PowerShell_profile.ps1' -OutFile $PROFILE
-        New-ItemProperty -Path $keyPath -Name 'Version' -Value $latestVersion -PropertyType 'String' -Force 
+        New-ItemProperty -Path $KeyPath -Name 'Version' -Value $LatestVersion -PropertyType 'String' -Force 
+        Restart-Shell 
+      }
+
+      $updateForm.Dispose()
+    }
+    elseif ($CurrentVersion -ne $LatestVersion) {
+      if ($autoUpdate.AutoUpdate -eq 1 -or $Silent) {
+        Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/Microsoft.PowerShell_profile.ps1' -OutFile $PROFILE
+        New-ItemProperty -Path $KeyPath -Name 'Version' -Value $LatestVersion -PropertyType 'String' -Force 
         Restart-Shell
       }
       else {
-        # Create the form
-        $form = New-Object System.Windows.Forms.Form
-        $form.Text = "Update Available"
-        $form.BackColor = $nord0
-        $form.ForeColor = $nord4
-        $form.Font = New-Object System.Drawing.Font("Arial", 10)
-        $form.StartPosition = 'CenterScreen'
-        $form.Size = New-Object System.Drawing.Size(400, 200)
-        $form.FormBorderStyle = 'FixedDialog'
-        $form.MaximizeBox = $false
-        $form.MinimizeBox = $false
-        $form.Icon = $icon
-
-        $label = New-Object System.Windows.Forms.Label
-        $label.Text = "A new version of the profile is available. Would you like to update?"
-        $label.Location = New-Object System.Drawing.Point(10, 10)
-        $label.Size = New-Object System.Drawing.Size(380, 80)
-        $label.ForeColor = $nord6
-
-        $yesButton = New-Object System.Windows.Forms.Button
-        $yesButton.BackColor = $nord3
-        $yesButton.ForeColor = $nord6
-        $yesButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
-        $yesButton.FlatAppearance.BorderSize = 0
-        $yesButton.Location = New-Object System.Drawing.Point(100, 120)
-        $yesButton.Size = New-Object System.Drawing.Size(75, 23)
-        $yesButton.Text = "Yes"
-        $yesButton.DialogResult = [System.Windows.Forms.DialogResult]::Yes
-
-        $noButton = New-Object System.Windows.Forms.Button
-        $noButton.BackColor = $nord3
-        $noButton.ForeColor = $nord6
-        $noButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
-        $noButton.FlatAppearance.BorderSize = 0
-        $noButton.Location = New-Object System.Drawing.Point(200, 120)
-        $noButton.Size = New-Object System.Drawing.Size(75, 23)
-        $noButton.Text = "No"
-        $noButton.DialogResult = [System.Windows.Forms.DialogResult]::No
-
-        $form.Controls.Add($label)
-        $form.Controls.Add($yesButton)
-        $form.Controls.Add($noButton)
-        $form.AcceptButton = $yesButton
-        $form.CancelButton = $noButton
-
-        $result = $form.ShowDialog()
-
-        # Update
+            
+        $result = $updateForm.ShowDialog()
         if ($result -eq [System.Windows.Forms.DialogResult]::Yes) {
-          # Resets the entire shell
           Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/Microsoft.PowerShell_profile.ps1' -OutFile $PROFILE
-          New-ItemProperty -Path $keyPath -Name 'Version' -Value $latestVersion -PropertyType 'String' -Force 
-          Restart-Shell
+          New-ItemProperty -Path $KeyPath -Name 'Version' -Value $LatestVersion -PropertyType 'String' -Force 
+          Restart-Shell 
         }
-        $form.Dispose()
+        $updateForm.Dispose()
       }
     }
   }
@@ -377,13 +326,13 @@ function Initialize-Profile {
     $omp = Get-Command -Name oh-my-posh -ErrorAction SilentlyContinue
 
     # Check for the Nerd Fonts registry key
-    $nerdfontKey = Get-ItemProperty -Path $keyPath -Name 'NerdFontInstalled' -ErrorAction SilentlyContinue
+    $nerdfontKey = Get-ItemProperty -Path $KeyPath -Name 'NerdFontInstalled' -ErrorAction SilentlyContinue
 
     # Check for starship and install it if it's not installed
     $starship = Get-Command -Name starship -ErrorAction SilentlyContinue
 
     # Key that determines whether or not the starship prompt is enabled (Disabled by default)
-    $starShip = Get-ItemProperty -Path $keyPath -Name 'Starship' -ErrorAction SilentlyContinue
+    $starShip = Get-ItemProperty -Path $KeyPath -Name 'Starship' -ErrorAction SilentlyContinue
 
     # Path to the oh-my-posh config file
     $ompConfig = "$env:USERPROFILE\.config\omp.json"
@@ -392,30 +341,30 @@ function Initialize-Profile {
     $starshipConfig = "$env:USERPROFILE\.config\starship.toml"
 
     # Check for the FirstRun key
-    $key = Get-ItemProperty -Path $keyPath -Name 'FirstRun' -ErrorAction SilentlyContinue
+    $key = Get-ItemProperty -Path $KeyPath -Name 'FirstRun' -ErrorAction SilentlyContinue
 
     # Create the form
     $form = New-Object System.Windows.Forms.Form
-    $form.Text = "Welcome to Azrael's $($shellType) Profile!"
-    $form.BackColor = $nord0
-    $form.ForeColor = $nord4
+    $form.Text = "Welcome to Azrael's $($ShellType) Profile!"
+    $form.BackColor = $Nord0
+    $form.ForeColor = $Nord4
     $form.Font = New-Object System.Drawing.Font("Arial", 10)
     $form.StartPosition = 'CenterScreen'
     $form.Size = New-Object System.Drawing.Size(400, 200)
     $form.FormBorderStyle = 'FixedDialog'
     $form.MaximizeBox = $false
     $form.MinimizeBox = $false
-    $form.Icon = $icon
+    $form.Icon = $ShellIcon
     
     $label = New-Object System.Windows.Forms.Label
-    $label.Text = "Hello, $userName! Welcome to $($shellType). For more information, please type 'help' or 'tips'."
+    $label.Text = "Hello, $UserName! Welcome to $($ShellType). For more information, please type 'help' or 'tips'."
     $label.Location = New-Object System.Drawing.Point(10, 10)
     $label.Size = New-Object System.Drawing.Size(380, 80)
-    $label.ForeColor = $nord6
+    $label.ForeColor = $Nord6
     
     $okButton = New-Object System.Windows.Forms.Button
-    $okButton.BackColor = $nord3
-    $okButton.ForeColor = $nord6
+    $okButton.BackColor = $Nord3
+    $okButton.ForeColor = $Nord6
     $okButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
     $okButton.FlatAppearance.BorderSize = 0
     $okButton.Location = New-Object System.Drawing.Point(160, 120)
@@ -442,7 +391,7 @@ function Initialize-Profile {
     }
 
     if ($null -eq $nerdfontKey) {
-      New-ItemProperty -Path $keyPath -Name 'NerdFontInstalled' -Value 0 -PropertyType 'DWord' -Force 
+      New-ItemProperty -Path $KeyPath -Name 'NerdFontInstalled' -Value 0 -PropertyType 'DWord' -Force 
       oh-my-posh font install
     }
 
@@ -451,7 +400,7 @@ function Initialize-Profile {
     }
 
     if ($null -eq $starShip) {
-      New-ItemProperty -Path $keyPath -Name 'Starship' -Value 0 -PropertyType 'String' -Force 
+      New-ItemProperty -Path $KeyPath -Name 'Starship' -Value 0 -PropertyType 'String' -Force 
     }
 
     if (-not (Test-Path $ompConfig)) {
@@ -472,10 +421,10 @@ function Initialize-Profile {
     }
 
     if ($key.FirstRun -eq 1) {
-      if (-not (Test-Path $keyPath)) {
-        New-Item -Path $keyPath -Force 
+      if (-not (Test-Path $KeyPath)) {
+        New-Item -Path $KeyPath -Force 
       }
-      New-ItemProperty -Path $keyPath -Name 'FirstRun' -Value 0 -PropertyType 'DWord' -Force 
+      New-ItemProperty -Path $KeyPath -Name 'FirstRun' -Value 0 -PropertyType 'DWord' -Force 
 
       $form.ShowDialog()
     }
@@ -486,19 +435,19 @@ function Initialize-Profile {
 
     Clear-Host
 
-    $loginMessageKey = Get-ItemProperty -Path $keyPath -Name 'LoginMessage' -ErrorAction SilentlyContinue
+    $loginMessageKey = Get-ItemProperty -Path $KeyPath -Name 'LoginMessage' -ErrorAction SilentlyContinue
     if ($null -eq $loginMessageKey) {
-      New-ItemProperty -Path $keyPath -Name 'LoginMessage' -Value 1 -PropertyType 'DWord' -Force 
+      New-ItemProperty -Path $KeyPath -Name 'LoginMessage' -Value 1 -PropertyType 'DWord' -Force 
     }
   
     # Check for the login message
     $loginMessage = $loginMessageKey.LoginMessage
     # Display the login message if it's enabled
     if ($loginMessage) {
-      Write-Output "Microsoft Windows [Version $($kernelVersion)]"
+      Write-Output "Microsoft Windows [Version $($KernelVersion)]"
       Write-Output "(c) Microsoft Corporation. All rights reserved.`n"
     
-      Write-Output "Azrael's $($shellType) v$($currentVersion.Trim())"
+      Write-Output "Azrael's $($ShellType) v$($CurrentVersion.Trim())"
       Write-Output "Copyright (c) 2023-2024 Azrael"
       Write-Output "https://github.com/luke-beep/shell-config/`n"
     }
@@ -514,14 +463,14 @@ function Set-ProfileSettings {
     $PanelWidth = 1000
 
     $form = New-Object System.Windows.Forms.Form
-    $form.Text = "$($shellType) Profile Settings"
-    $form.BackColor = $nord0
+    $form.Text = "$($ShellType) Profile Settings"
+    $form.BackColor = $Nord0
     $form.Size = New-Object System.Drawing.Size($PanelWidth, 500)
     $form.StartPosition = 'CenterScreen'
     $form.FormBorderStyle = 'FixedDialog'
-    $form.Icon = $icon
+    $form.Icon = $ShellIcon
 
-    $keys = Get-ItemProperty -Path $keyPath -ErrorAction SilentlyContinue
+    $keys = Get-ItemProperty -Path $KeyPath -ErrorAction SilentlyContinue
   
     $tableLayoutPanel = New-Object System.Windows.Forms.TableLayoutPanel
     $tableLayoutPanel.RowCount = 1
@@ -531,8 +480,8 @@ function Set-ProfileSettings {
     $tableLayoutPanel.RowStyles.Clear()
     $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::Percent, 100)))
     $tableLayoutPanel.BorderStyle = [System.Windows.Forms.BorderStyle]::None
-    $tableLayoutPanel.BackColor = $nord0
-    $tableLayoutPanel.ForeColor = $nord4
+    $tableLayoutPanel.BackColor = $Nord0
+    $tableLayoutPanel.ForeColor = $Nord4
 
     $dataGridView = New-Object System.Windows.Forms.DataGridView
     $dataGridView.BorderStyle = [System.Windows.Forms.BorderStyle]::None
@@ -541,16 +490,16 @@ function Set-ProfileSettings {
     $dataGridView.Dock = [System.Windows.Forms.DockStyle]::Fill
     $dataGridView.AutoGenerateColumns = $true
     $dataGridView.RowHeadersVisible = $false
-    $dataGridView.BackgroundColor = $nord0
-    $dataGridView.ForeColor = $nord6
-    $dataGridView.GridColor = $nord3
-    $dataGridView.DefaultCellStyle.BackColor = $nord0
-    $dataGridView.DefaultCellStyle.ForeColor = $nord6
-    $dataGridView.ColumnHeadersDefaultCellStyle.BackColor = $nord3
-    $dataGridView.ColumnHeadersDefaultCellStyle.ForeColor = $nord6
+    $dataGridView.BackgroundColor = $Nord0
+    $dataGridView.ForeColor = $Nord6
+    $dataGridView.GridColor = $Nord3
+    $dataGridView.DefaultCellStyle.BackColor = $Nord0
+    $dataGridView.DefaultCellStyle.ForeColor = $Nord6
+    $dataGridView.ColumnHeadersDefaultCellStyle.BackColor = $Nord3
+    $dataGridView.ColumnHeadersDefaultCellStyle.ForeColor = $Nord6
     $dataGridView.RowHeadersBorderStyle = [System.Windows.Forms.DataGridViewHeaderBorderStyle]::None
     $dataGridView.ColumnHeadersBorderStyle = [System.Windows.Forms.DataGridViewHeaderBorderStyle]::None
-    $dataGridView.DefaultCellStyle.SelectionBackColor = $nord3
+    $dataGridView.DefaultCellStyle.SelectionBackColor = $Nord3
     $dataGridView.AutoSizeColumnsMode = [System.Windows.Forms.DataGridViewAutoSizeColumnsMode]::Fill
 
     $deletedRows = New-Object System.Collections.Generic.List[string]
@@ -601,10 +550,10 @@ function Set-ProfileSettings {
     $button.Size = New-Object System.Drawing.Size(150, 30)
     $button.Text = "Save Configuration"
     $button.Dock = [System.Windows.Forms.DockStyle]::Fill
-    $button.BackColor = $nord3
-    $button.ForeColor = $nord6
+    $button.BackColor = $Nord3
+    $button.ForeColor = $Nord6
     $button.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
-    $button.FlatAppearance.BorderColor = $nord3
+    $button.FlatAppearance.BorderColor = $Nord3
     $button.FlatAppearance.BorderSize = 1
     $button.Add_Click({
         $dataGridView.Rows | ForEach-Object {
@@ -613,16 +562,16 @@ function Set-ProfileSettings {
             $name = $row["Name"]
             $value = $row["Value"]
             if ([string]::IsNullOrEmpty($value)) {
-              Remove-ItemProperty -Path $keyPath -Name $name
+              Remove-ItemProperty -Path $KeyPath -Name $name
             }
             else {
-              Set-ItemProperty -Path $keyPath -Name $name -Value $value
+              Set-ItemProperty -Path $KeyPath -Name $name -Value $value
             }
           }
         }
 
         $deletedRows | ForEach-Object {
-          Remove-ItemProperty -Path $keyPath -Name $_
+          Remove-ItemProperty -Path $KeyPath -Name $_
           $deletedRows.Remove($_)
         }
         [System.Windows.Forms.MessageBox]::Show("Profile settings saved.", "Success")
@@ -657,12 +606,12 @@ function Manage-Profile {
     $PanelWidth = 905
 
     $form = New-Object System.Windows.Forms.Form
-    $form.Text = "Manage $($shellType) Profile"
-    $form.BackColor = $nord0
+    $form.Text = "Manage $($ShellType) Profile"
+    $form.BackColor = $Nord0
     $form.Size = New-Object System.Drawing.Size($PanelWidth, 500)
     $form.StartPosition = 'CenterScreen'
     $form.FormBorderStyle = 'FixedDialog'
-    $form.Icon = $icon
+    $form.Icon = $ShellIcon
 
     $buttonPanel2 = New-Object System.Windows.Forms.Panel # 7 buttons
     $buttonPanel2.Dock = 'Top'
@@ -679,8 +628,8 @@ function Manage-Profile {
     $button1.Width = 100
     $button1.Height = 30
     $button1.Location = New-Object System.Drawing.Point(10, 10)
-    $button1.BackColor = $nord1
-    $button1.ForeColor = $nord4
+    $button1.BackColor = $Nord1
+    $button1.ForeColor = $Nord4
     $button1.FlatStyle = 'Flat'
     $button1.FlatAppearance.BorderSize = 0
     $button1.Add_Click({
@@ -693,8 +642,8 @@ function Manage-Profile {
     $updateAliasesButton.Width = 100
     $updateAliasesButton.Height = 30
     $updateAliasesButton.Location = New-Object System.Drawing.Point(120, 10)
-    $updateAliasesButton.BackColor = $nord1
-    $updateAliasesButton.ForeColor = $nord4
+    $updateAliasesButton.BackColor = $Nord1
+    $updateAliasesButton.ForeColor = $Nord4
     $updateAliasesButton.FlatStyle = 'Flat'
     $updateAliasesButton.FlatAppearance.BorderSize = 0
     $updateAliasesButton.Add_Click({
@@ -708,8 +657,8 @@ function Manage-Profile {
     $button2.Width = 100
     $button2.Height = 30
     $button2.Location = New-Object System.Drawing.Point(230, 10)
-    $button2.BackColor = $nord1
-    $button2.ForeColor = $nord4
+    $button2.BackColor = $Nord1
+    $button2.ForeColor = $Nord4
     $button2.FlatStyle = 'Flat'
     $button2.FlatAppearance.BorderSize = 0
     $button2.Add_Click({
@@ -722,8 +671,8 @@ function Manage-Profile {
     $button3.Width = 100
     $button3.Height = 30
     $button3.Location = New-Object System.Drawing.Point(340, 10)
-    $button3.BackColor = $nord1
-    $button3.ForeColor = $nord4
+    $button3.BackColor = $Nord1
+    $button3.ForeColor = $Nord4
     $button3.FlatStyle = 'Flat'
     $button3.FlatAppearance.BorderSize = 0
     $button3.Add_Click({
@@ -736,8 +685,8 @@ function Manage-Profile {
     $button4.Width = 100
     $button4.Height = 30
     $button4.Location = New-Object System.Drawing.Point(450, 10)
-    $button4.BackColor = $nord1
-    $button4.ForeColor = $nord4
+    $button4.BackColor = $Nord1
+    $button4.ForeColor = $Nord4
     $button4.FlatStyle = 'Flat'
     $button4.FlatAppearance.BorderSize = 0
     $button4.Add_Click({
@@ -750,8 +699,8 @@ function Manage-Profile {
     $button5.Width = 100
     $button5.Height = 30
     $button5.Location = New-Object System.Drawing.Point(560, 10)
-    $button5.BackColor = $nord1
-    $button5.ForeColor = $nord4
+    $button5.BackColor = $Nord1
+    $button5.ForeColor = $Nord4
     $button5.FlatStyle = 'Flat'
     $button5.FlatAppearance.BorderSize = 0
     $button5.Add_Click({
@@ -764,8 +713,8 @@ function Manage-Profile {
     $button6.Width = 100
     $button6.Height = 30
     $button6.Location = New-Object System.Drawing.Point(670, 10)
-    $button6.BackColor = $nord1
-    $button6.ForeColor = $nord4
+    $button6.BackColor = $Nord1
+    $button6.ForeColor = $Nord4
     $button6.FlatStyle = 'Flat'
     $button6.FlatAppearance.BorderSize = 0
     $button6.Add_Click({
@@ -778,8 +727,8 @@ function Manage-Profile {
     $button7.Width = 100
     $button7.Height = 30
     $button7.Location = New-Object System.Drawing.Point(780, 10)
-    $button7.BackColor = $nord1
-    $button7.ForeColor = $nord4
+    $button7.BackColor = $Nord1
+    $button7.ForeColor = $Nord4
     $button7.FlatStyle = 'Flat'
     $button7.FlatAppearance.BorderSize = 0
     $button7.Add_Click({
@@ -792,8 +741,8 @@ function Manage-Profile {
     $button8.Width = 100
     $button8.Height = 30
     $button8.Location = New-Object System.Drawing.Point(10, 0)
-    $button8.BackColor = $nord1
-    $button8.ForeColor = $nord4
+    $button8.BackColor = $Nord1
+    $button8.ForeColor = $Nord4
     $button8.FlatStyle = 'Flat'
     $button8.FlatAppearance.BorderSize = 0
     $button8.Add_Click({
@@ -809,8 +758,8 @@ function Manage-Profile {
     $richTextBox.Location = New-Object System.Drawing.Point(0, 100)
     $richTextBox.Size = New-Object System.Drawing.Size(($PanelWidth + 20), 490)
     $richTextBox.Text = (Get-Content $profile | Out-String)
-    $richTextBox.BackColor = $nord0
-    $richTextBox.ForeColor = $nord4
+    $richTextBox.BackColor = $Nord0
+    $richTextBox.ForeColor = $Nord4
     $richTextBox.Font = New-Object System.Drawing.Font("Consolas", 10)
     $richTextBox.ReadOnly = $true
     $richTextBox.BorderStyle = 'None'
@@ -2124,7 +2073,7 @@ function Optimize-PowerShell {
   PARAM ( ) # No parameters
 
   PROCESS {
-    if (shellType -eq "PowerShell") {
+    if (ShellType -eq "PowerShell") {
       Invoke-RestMethod "https://raw.githubusercontent.com/luke-beep/ps-optimize-assemblies/main/optimize-assemblies.ps1" | Invoke-Expression
     }
     else {
@@ -2631,12 +2580,12 @@ function Get-ShellTips {
     $PanelWidth = 1000
 
     $form = New-Object System.Windows.Forms.Form
-    $form.Text = "$($shellType) Profile Tips"
-    $form.BackColor = $nord0
+    $form.Text = "$($ShellType) Profile Tips"
+    $form.BackColor = $Nord0
     $form.Size = New-Object System.Drawing.Size($PanelWidth, 500)
     $form.StartPosition = 'CenterScreen'
     $form.FormBorderStyle = 'FixedDialog'
-    $form.Icon = $icon
+    $form.Icon = $ShellIcon
   
     $panel = New-Object System.Windows.Forms.Panel
     $panel.Dock = 'Fill'
@@ -2648,8 +2597,8 @@ function Get-ShellTips {
     $richTextBox.Location = New-Object System.Drawing.Point(0, 0)
     $richTextBox.Size = New-Object System.Drawing.Size(($PanelWidth + 20), 490)
     $richTextBox.Text = $guideText
-    $richTextBox.BackColor = $nord0
-    $richTextBox.ForeColor = $nord4
+    $richTextBox.BackColor = $Nord0
+    $richTextBox.ForeColor = $Nord4
     $richTextBox.Font = New-Object System.Drawing.Font("Consolas", 10)
     $richTextBox.ReadOnly = $true
     $richTextBox.BorderStyle = 'None'
@@ -2684,7 +2633,7 @@ function Set-ShellTheme {
   BEGIN {
     $ompConfig = "$env:USERPROFILE\.config\omp.json"
     $starshipConfig = "$env:USERPROFILE\.config\starship.toml"
-    $starShip = Get-ItemProperty -Path $keyPath -Name 'Starship' -ErrorAction SilentlyContinue
+    $starShip = Get-ItemProperty -Path $KeyPath -Name 'Starship' -ErrorAction SilentlyContinue
   
     $PanelWidth = 400
     $PanelHeight = 200
@@ -2696,11 +2645,11 @@ function Set-ShellTheme {
   
       $form = New-Object System.Windows.Forms.Form
       $form.Text = "Starship Theme Configuration"
-      $form.BackColor = $nord0
+      $form.BackColor = $Nord0
       $form.Size = New-Object System.Drawing.Size($PanelWidth, $PanelHeight)
       $form.StartPosition = 'CenterScreen'
       $form.FormBorderStyle = 'FixedDialog'
-      $form.Icon = $icon
+      $form.Icon = $ShellIcon
       $form.Topmost = $true
       $form.MinimizeBox = $false
       $form.MaximizeBox = $false
@@ -2722,8 +2671,8 @@ function Set-ShellTheme {
       $richTextBox.Location = New-Object System.Drawing.Point(0, 0)
       $richTextBox.Size = New-Object System.Drawing.Size(($PanelWidth + 20), ($PanelHeight - 10))
       $richTextBox.Text = "Enter the URL of the theme you want to use. E.g. https://starship.rs/presets/toml/tokyo-night.toml"
-      $richTextBox.BackColor = $nord0
-      $richTextBox.ForeColor = $nord4
+      $richTextBox.BackColor = $Nord0
+      $richTextBox.ForeColor = $Nord4
       $richTextBox.Font = New-Object System.Drawing.Font("Consolas", 10)
       $richTextBox.BorderStyle = 'None'
       $richTextBox.ScrollBars = 'Vertical'
@@ -2735,8 +2684,8 @@ function Set-ShellTheme {
       $saveButton.Size = New-Object System.Drawing.Size(($PanelWidth + 20), 30)
       $saveButton.Dock = [System.Windows.Forms.DockStyle]::Fill
       $saveButton.Text = "Save"
-      $saveButton.BackColor = $nord0
-      $saveButton.ForeColor = $nord4
+      $saveButton.BackColor = $Nord0
+      $saveButton.ForeColor = $Nord4
       $saveButton.FlatStyle = 'Flat'
       $saveButton.FlatAppearance.BorderSize = 0
       $saveButton.Add_Click({
@@ -2762,11 +2711,11 @@ function Set-ShellTheme {
   
       $form = New-Object System.Windows.Forms.Form
       $form.Text = "Oh-my-posh Theme Configuration"
-      $form.BackColor = $nord0
+      $form.BackColor = $Nord0
       $form.Size = New-Object System.Drawing.Size($PanelWidth, $PanelHeight)
       $form.StartPosition = 'CenterScreen'
       $form.FormBorderStyle = 'FixedDialog'
-      $form.Icon = $icon
+      $form.Icon = $ShellIcon
       $form.Topmost = $true
       $form.MinimizeBox = $false
       $form.MaximizeBox = $false
@@ -2788,8 +2737,8 @@ function Set-ShellTheme {
       $richTextBox.Location = New-Object System.Drawing.Point(0, 0)
       $richTextBox.Size = New-Object System.Drawing.Size(($PanelWidth + 20), ($PanelHeight - 10))
       $richTextBox.Text = "Enter the URL of the theme you want to use. E.g. https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/1_shell.omp.json"
-      $richTextBox.BackColor = $nord0
-      $richTextBox.ForeColor = $nord4
+      $richTextBox.BackColor = $Nord0
+      $richTextBox.ForeColor = $Nord4
       $richTextBox.Font = New-Object System.Drawing.Font("Consolas", 10)
       $richTextBox.BorderStyle = 'None'
       $richTextBox.ScrollBars = 'Vertical'
@@ -2801,8 +2750,8 @@ function Set-ShellTheme {
       $saveButton.Size = New-Object System.Drawing.Size(($PanelWidth + 20), 30)
       $saveButton.Dock = [System.Windows.Forms.DockStyle]::Fill
       $saveButton.Text = "Save"
-      $saveButton.BackColor = $nord0
-      $saveButton.ForeColor = $nord4
+      $saveButton.BackColor = $Nord0
+      $saveButton.ForeColor = $Nord4
       $saveButton.FlatStyle = 'Flat'
       $saveButton.FlatAppearance.BorderSize = 0
       $saveButton.Add_Click({
@@ -2858,11 +2807,11 @@ function Find-Manual {
   
       $form = New-Object System.Windows.Forms.Form
       $form.Text = "Manual for $Name"
-      $form.BackColor = $nord0
+      $form.BackColor = $Nord0
       $form.Size = New-Object System.Drawing.Size($PanelWidth, 500)
       $form.StartPosition = 'CenterScreen'
       $form.FormBorderStyle = 'FixedDialog'
-      $form.Icon = $icon
+      $form.Icon = $ShellIcon
     
       $panel = New-Object System.Windows.Forms.Panel
       $panel.Dock = 'Fill'
@@ -2872,8 +2821,8 @@ function Find-Manual {
       $richTextBox.Location = New-Object System.Drawing.Point(0, 0)
       $richTextBox.Size = New-Object System.Drawing.Size(($PanelWidth + 20), 490)
       $richTextBox.Text = $ManualText
-      $richTextBox.BackColor = $nord0
-      $richTextBox.ForeColor = $nord4
+      $richTextBox.BackColor = $Nord0
+      $richTextBox.ForeColor = $Nord4
       $richTextBox.Font = New-Object System.Drawing.Font("Consolas", 10)
       $richTextBox.ReadOnly = $true
       $richTextBox.BorderStyle = 'None'
@@ -2950,7 +2899,7 @@ function Import-Aliases {
   
         foreach ($alias in $oldAliases) {
           if (Get-Alias -Name $alias -ErrorAction SilentlyContinue) {
-            if ($shellType -eq "Pwsh") {
+            if ($ShellType -eq "Pwsh") {
               Remove-Alias $alias -Force -Scope Global 
             }
             else {
@@ -3004,10 +2953,10 @@ function Add-Aliases {
     $form.Text = "Alias Configuration"
     $form.Size = New-Object System.Drawing.Size(400, 300)
     $form.StartPosition = "CenterScreen"
-    $form.BackColor = $nord0
-    $form.ForeColor = $nord4
+    $form.BackColor = $Nord0
+    $form.ForeColor = $Nord4
     $form.FormBorderStyle = "FixedDialog"
-    $form.Icon = $icon
+    $form.Icon = $ShellIcon
 
     $tableLayoutPanel = New-Object System.Windows.Forms.TableLayoutPanel
     $tableLayoutPanel.RowCount = 1
@@ -3017,8 +2966,8 @@ function Add-Aliases {
     $tableLayoutPanel.RowStyles.Clear()
     $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::Percent, 100)))
     $tableLayoutPanel.BorderStyle = [System.Windows.Forms.BorderStyle]::None
-    $tableLayoutPanel.BackColor = $nord0
-    $tableLayoutPanel.ForeColor = $nord4
+    $tableLayoutPanel.BackColor = $Nord0
+    $tableLayoutPanel.ForeColor = $Nord4
 
     $dataGridView = New-Object System.Windows.Forms.DataGridView
     $dataGridView.BorderStyle = [System.Windows.Forms.BorderStyle]::None
@@ -3027,16 +2976,16 @@ function Add-Aliases {
     $dataGridView.Dock = [System.Windows.Forms.DockStyle]::Fill
     $dataGridView.AutoGenerateColumns = $true
     $dataGridView.RowHeadersVisible = $false
-    $dataGridView.BackgroundColor = $nord0
-    $dataGridView.ForeColor = $nord6
-    $dataGridView.GridColor = $nord3
-    $dataGridView.DefaultCellStyle.BackColor = $nord0
-    $dataGridView.DefaultCellStyle.ForeColor = $nord6
-    $dataGridView.ColumnHeadersDefaultCellStyle.BackColor = $nord3
-    $dataGridView.ColumnHeadersDefaultCellStyle.ForeColor = $nord6
+    $dataGridView.BackgroundColor = $Nord0
+    $dataGridView.ForeColor = $Nord6
+    $dataGridView.GridColor = $Nord3
+    $dataGridView.DefaultCellStyle.BackColor = $Nord0
+    $dataGridView.DefaultCellStyle.ForeColor = $Nord6
+    $dataGridView.ColumnHeadersDefaultCellStyle.BackColor = $Nord3
+    $dataGridView.ColumnHeadersDefaultCellStyle.ForeColor = $Nord6
     $dataGridView.RowHeadersBorderStyle = [System.Windows.Forms.DataGridViewHeaderBorderStyle]::None
     $dataGridView.ColumnHeadersBorderStyle = [System.Windows.Forms.DataGridViewHeaderBorderStyle]::None
-    $dataGridView.DefaultCellStyle.SelectionBackColor = $nord3
+    $dataGridView.DefaultCellStyle.SelectionBackColor = $Nord3
     $dataGridView.AutoSizeColumnsMode = [System.Windows.Forms.DataGridViewAutoSizeColumnsMode]::Fill
 
     $contextMenu = New-Object System.Windows.Forms.ContextMenuStrip
@@ -3083,10 +3032,10 @@ function Add-Aliases {
     $button.Size = New-Object System.Drawing.Size(150, 30)
     $button.Text = "Save Configuration"
     $button.Dock = [System.Windows.Forms.DockStyle]::Fill
-    $button.BackColor = $nord3
-    $button.ForeColor = $nord6
+    $button.BackColor = $Nord3
+    $button.ForeColor = $Nord6
     $button.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
-    $button.FlatAppearance.BorderColor = $nord3
+    $button.FlatAppearance.BorderColor = $Nord3
     $button.FlatAppearance.BorderSize = 1
     $button.Add_Click({
         $updatedConfig = New-Object PSObject
@@ -3152,10 +3101,10 @@ function Remove-Aliases {
     $form.Height = $height
     $form.Text = "Alias Configuration"
     $form.StartPosition = "CenterScreen"
-    $form.BackColor = $nord0
-    $form.ForeColor = $nord4
+    $form.BackColor = $Nord0
+    $form.ForeColor = $Nord4
     $form.FormBorderStyle = "FixedDialog"
-    $form.Icon = $icon
+    $form.Icon = $ShellIcon
   
     $tableLayoutPanel = New-Object System.Windows.Forms.TableLayoutPanel
     $tableLayoutPanel.Width = $width
@@ -3173,16 +3122,16 @@ function Remove-Aliases {
     $dataGridView.Dock = [System.Windows.Forms.DockStyle]::Fill
     $dataGridView.AutoGenerateColumns = $true
     $dataGridView.RowHeadersVisible = $false
-    $dataGridView.BackgroundColor = $nord0
-    $dataGridView.ForeColor = $nord6
-    $dataGridView.GridColor = $nord3
-    $dataGridView.DefaultCellStyle.BackColor = $nord0
-    $dataGridView.DefaultCellStyle.ForeColor = $nord6
-    $dataGridView.ColumnHeadersDefaultCellStyle.BackColor = $nord3
-    $dataGridView.ColumnHeadersDefaultCellStyle.ForeColor = $nord6
+    $dataGridView.BackgroundColor = $Nord0
+    $dataGridView.ForeColor = $Nord6
+    $dataGridView.GridColor = $Nord3
+    $dataGridView.DefaultCellStyle.BackColor = $Nord0
+    $dataGridView.DefaultCellStyle.ForeColor = $Nord6
+    $dataGridView.ColumnHeadersDefaultCellStyle.BackColor = $Nord3
+    $dataGridView.ColumnHeadersDefaultCellStyle.ForeColor = $Nord6
     $dataGridView.RowHeadersBorderStyle = [System.Windows.Forms.DataGridViewHeaderBorderStyle]::None
     $dataGridView.ColumnHeadersBorderStyle = [System.Windows.Forms.DataGridViewHeaderBorderStyle]::None
-    $dataGridView.DefaultCellStyle.SelectionBackColor = $nord3
+    $dataGridView.DefaultCellStyle.SelectionBackColor = $Nord3
     $dataGridView.AutoSizeColumnsMode = [System.Windows.Forms.DataGridViewAutoSizeColumnsMode]::Fill
   
     $dataGridView.DataSource = $dataTable
@@ -3205,10 +3154,10 @@ function Remove-Aliases {
     $button = New-Object System.Windows.Forms.Button
     $button.Dock = [System.Windows.Forms.DockStyle]::Fill
     $button.Text = "Save Configuration"
-    $button.BackColor = $nord3
-    $button.ForeColor = $nord6
+    $button.BackColor = $Nord3
+    $button.ForeColor = $Nord6
     $button.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
-    $button.FlatAppearance.BorderColor = $nord3
+    $button.FlatAppearance.BorderColor = $Nord3
     $button.FlatAppearance.BorderSize = 1
     $button.Add_Click({
         $updatedConfig = $dataGridView.Rows | Where-Object { -not $_.IsNewRow } | ForEach-Object {
@@ -3310,12 +3259,12 @@ function Show-Help {
     $PanelWidth = 1000
 
     $form = New-Object System.Windows.Forms.Form
-    $form.Text = "$($shellType) Profile Help"
-    $form.BackColor = $nord0
+    $form.Text = "$($ShellType) Profile Help"
+    $form.BackColor = $Nord0
     $form.Size = New-Object System.Drawing.Size($PanelWidth, 500)
     $form.StartPosition = 'CenterScreen'
     $form.FormBorderStyle = 'FixedDialog'
-    $form.Icon = $icon
+    $form.Icon = $ShellIcon
   
     $panel = New-Object System.Windows.Forms.Panel
     $panel.Dock = 'Fill'
@@ -3325,8 +3274,8 @@ function Show-Help {
     $richTextBox.Location = New-Object System.Drawing.Point(0, 0)
     $richTextBox.Size = New-Object System.Drawing.Size(($PanelWidth + 20), 490)
     $richTextBox.Text = $Introduction + "`n" + $Output
-    $richTextBox.BackColor = $nord0
-    $richTextBox.ForeColor = $nord4
+    $richTextBox.BackColor = $Nord0
+    $richTextBox.ForeColor = $Nord4
     $richTextBox.Font = New-Object System.Drawing.Font("Consolas", 10)
     $richTextBox.ReadOnly = $true
     $richTextBox.BorderStyle = 'None'
@@ -3413,7 +3362,7 @@ function Get-ShellInfo {
   PROCESS {
     Write-TimestampedInformation "Profile Path: $PROFILE"
     Write-TimestampedInformation "Host Name: $($name)"
-    Write-TimestampedInformation "Host Version: $($version) -> $($shellType) ($bitness)"
+    Write-TimestampedInformation "Host Version: $($version) -> $($ShellType) ($Bitness)"
   }
 }
 
@@ -3503,11 +3452,11 @@ function Analyze-Profile {
 
     $form = New-Object System.Windows.Forms.Form
     $form.Text = "Profile Analysis"
-    $form.BackColor = $nord0
+    $form.BackColor = $Nord0
     $form.Size = New-Object System.Drawing.Size($PanelWidth, 500)
     $form.StartPosition = 'CenterScreen'
     $form.FormBorderStyle = 'FixedDialog'
-    $form.Icon = $icon
+    $form.Icon = $ShellIcon
   
     $panel = New-Object System.Windows.Forms.Panel
     $panel.Dock = 'Fill'
@@ -3516,8 +3465,8 @@ function Analyze-Profile {
     $richTextBox = New-Object System.Windows.Forms.RichTextBox
     $richTextBox.Location = New-Object System.Drawing.Point(0, 0)
     $richTextBox.Size = New-Object System.Drawing.Size(($PanelWidth + 20), 490)
-    $richTextBox.BackColor = $nord0
-    $richTextBox.ForeColor = $nord4
+    $richTextBox.BackColor = $Nord0
+    $richTextBox.ForeColor = $Nord4
     $richTextBox.Font = New-Object System.Drawing.Font("Consolas", 10)
     $richTextBox.ReadOnly = $true
     $richTextBox.BorderStyle = 'None'
@@ -3544,6 +3493,88 @@ function Analyze-Profile {
     if ($GUI) {
       $form.Dispose() 
     }
+  }
+}
+
+<#
+.SYNOPSIS
+  Displays the color palette in the console
+.DESCRIPTION
+  This function displays the color palette in the console
+.EXAMPLE
+  Color-Palette
+.OUTPUTS
+  The color palette, displayed in the console
+.LINK
+  https://github.com/luke-beep/shell-config/wiki/Commands
+#>
+function Color-Palette {
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM ( ) # No parameters
+
+  BEGIN {
+    $colors = [System.Enum]::GetValues([System.ConsoleColor])
+    $colors = $colors | Sort-Object
+  }
+
+  PROCESS {
+    for ($i = 0; $i -lt $colors.Length; $i += 8) {
+      for ($j = 0; $j -lt 1; $j++) {
+        for ($k = 0; $k -lt 8; $k++) {
+          if ($i + $k -lt $colors.Length) {
+            $color = $colors[$i + $k]
+            Write-Color -Color $color -SpaceCount 3 -LineCount 1 -NewLine $false
+          }
+        }
+        Write-Output " "
+      }
+    }
+  }
+}
+
+<#
+.SYNOPSIS
+  Writes a colored text
+.DESCRIPTION
+  This function writes a colored text
+.PARAMETER Color
+  The color of the text
+.PARAMETER SpaceCount
+  The number of spaces to write
+.PARAMETER LineCount
+  The number of lines to write
+.PARAMETER NewLine
+  Whether to write a new line
+.EXAMPLE
+  Write-Color -Color Red -SpaceCount 10 -LineCount 1 -NewLine $true
+.OUTPUTS
+  A colored blank text
+.LINK
+  https://github.com/luke-beep/shell-config/wiki/Commands
+#>
+function Write-Color {
+  param(
+    [Parameter(Mandatory = $true)]
+    [System.ConsoleColor]$Color,
+
+    [Parameter(Mandatory = $true)]
+    [int]$SpaceCount,
+
+    [Parameter(Mandatory = $false)]
+    [int]$LineCount = 1,
+
+    [Parameter(Mandatory = $false)]
+    [bool]$NewLine = $true
+  )
+
+  $spaces = " " * $SpaceCount
+
+  for ($i = 0; $i -lt $LineCount; $i++) {
+    Write-Host $spaces -ForegroundColor $Color -BackgroundColor $Color -NoNewline # Write-Host is needed to change the background color
+  }
+
+  if ($NewLine) {
+    Write-Output ""
   }
 }
 
