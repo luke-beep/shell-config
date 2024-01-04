@@ -4,8 +4,8 @@
 
 # Author: LukeHjo (Azrael)
 # Description: This is my PowerShell profile. It contains features that I use on a daily basis.
-# Version: 1.2.2
-# Date: 2023-12-28
+# Version: 1.2.3
+# Date: 2024-01-04
 
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
@@ -1172,6 +1172,20 @@ function Manage-Profile {
         Preview-Variables
       })
     $buttonPanel2.Controls.Add($button12)
+
+    $button13 = New-Object System.Windows.Forms.Button
+    $button13.Text = "Profile Directory"
+    $button13.Width = 100
+    $button13.Height = 30
+    $button13.Location = New-Object System.Drawing.Point(560, 0)
+    $button13.BackColor = $Nord1
+    $button13.ForeColor = $Nord4
+    $button13.FlatStyle = 'Flat'
+    $button13.FlatAppearance.BorderSize = 0
+    $button13.Add_Click({
+        Start-Process -FilePath (Split-Path -Parent $PROFILE)
+      })
+    $buttonPanel2.Controls.Add($button13)
 
     $panel = New-Object System.Windows.Forms.Panel
     $panel.Dock = 'Fill'
