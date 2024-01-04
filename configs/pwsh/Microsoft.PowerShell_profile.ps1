@@ -324,12 +324,11 @@ function Update-Profile {
     if ($Force) {
       $result = $updateForm.ShowDialog()
       if ($result -eq [System.Windows.Forms.DialogResult]::Yes) {
+        $updateForm.Dispose()
         Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/Microsoft.PowerShell_profile.ps1' -OutFile $PROFILE
         New-ItemProperty -Path $KeyPath -Name 'Version' -Value $LatestVersion -PropertyType 'String' -Force 
         Restart-Shell 
       }
-
-      $updateForm.Dispose()
     }
     elseif ($CurrentVersion -ne $LatestVersion) {
       if ($autoUpdate.AutoUpdate -eq 1 -or $Silent) {
@@ -341,11 +340,11 @@ function Update-Profile {
             
         $result = $updateForm.ShowDialog()
         if ($result -eq [System.Windows.Forms.DialogResult]::Yes) {
+          $updateForm.Dispose()
           Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/Microsoft.PowerShell_profile.ps1' -OutFile $PROFILE
           New-ItemProperty -Path $KeyPath -Name 'Version' -Value $LatestVersion -PropertyType 'String' -Force 
           Restart-Shell 
         }
-        $updateForm.Dispose()
       }
     }
   }
@@ -1000,6 +999,7 @@ function Manage-Profile {
     $button1.FlatStyle = 'Flat'
     $button1.FlatAppearance.BorderSize = 0
     $button1.Add_Click({
+        $form.Dispose()
         Update-Profile -Force
       })
     $buttonPanel.Controls.Add($button1)
