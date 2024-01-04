@@ -2162,7 +2162,7 @@ function Get-SystemInfo {
     }
     else {
       $output = [PSCustomObject]@{
-        OS               = (Get-WmiObject -Class Win32_OperatingSystem).Caption
+        OS               = (Get-CimInstance -ClassName CIM_OperatingSystem).Caption
         'Hostname'       = [System.Net.Dns]::GetHostName()
         Version          = [System.Environment]::OSVersion.Version
         'Kernel version' = (Get-CimInstance -ClassName Win32_OperatingSystem).Version
@@ -2454,13 +2454,13 @@ function Get-Updates {
   PARAM ( ) # No parameters
 
   BEGIN {
-    $updates = Get-WmiObject -Class Win32_QuickFixEngineering
+    $updates = Get-CimInstance -ClassName Win32_QuickFixEngineering
   }
 
   PROCESS {
     $updates | Format-Table `
     @{Label = "InstalledOn"; Expression = { if ($_.InstalledOn) { $_.InstalledOn.ToString("yyyy-MM-dd") } } },
-    Description, HotFixID, InstalledBy, InstalledOn, ServicePackInEffect, Status
+    Description, HotFixID, InstalledBy
   }
 }
 
