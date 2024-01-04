@@ -2561,7 +2561,7 @@ function Invoke-DownloadObject {
         $destinationPath = Join-Path $downloadDirectory $actualObjectName
         if ($Overwrite -and (Test-Path $destinationPath)) {
           if (-not $Silent) {
-            Write-TimestampedInformation "Removing $destinationPath"
+            Write-Output "Removing $destinationPath"
           }
           Remove-Item $destinationPath -Force
         }
@@ -2647,7 +2647,7 @@ function Get-Services {
       $status = $_.Status
       $name = $_.Name
       $displayName = $_.DisplayName
-      Write-TimestampedInformation ("{0} ({1}): {2}" -f $displayName, $name, $status)
+      Write-Output ("{0} ({1}): {2}" -f $displayName, $name, $status)
     }
   }
 }
@@ -2689,15 +2689,15 @@ function Invoke-TargetHack {
     } -ArgumentList $Target
 
     while ($job.State -eq "Running") {
-      Write-TimestampedInformation -NoNewline $progressBar
+      Write-Output -NoNewline $progressBar
       Start-Sleep -Milliseconds 100
     }
   }
 
   END {
-    Write-TimestampedInformation "Hacking complete!"
-    Write-TimestampedInformation "Target: $Target"
-    Write-TimestampedInformation "Status: $($job.State)"
+    Write-Output "Hacking complete!"
+    Write-Output "Target: $Target"
+    Write-Output "Status: $($job.State)"
   }
 }
 
@@ -2719,7 +2719,7 @@ function Get-ProgrammingJoke {
   }
 
   PROCESS {
-    Write-TimestampedInformation ("{0} {1}" -f $joke.setup, $joke.punchline) 
+    Write-Output ("{0} {1}" -f $joke.setup, $joke.punchline) 
   }
 }
 
@@ -2750,7 +2750,7 @@ function Start-MatrixRain {
           $stream = $streams[$i]
           $stream.Position = ($stream.Position + $stream.Speed) % $height
           $host.UI.RawUI.CursorPosition = New-Object -TypeName System.Management.Automation.Host.Coordinates -ArgumentList $i, $stream.Position
-          Write-TimestampedInformation (Get-Random -InputObject ('!'..'/' + ':'..'@' + '['..'`' + '{'..'~' + 0..9)) -NoNewline -ForegroundColor Green
+          Write-Output (Get-Random -InputObject ('!'..'/' + ':'..'@' + '['..'`' + '{'..'~' + 0..9)) -NoNewline -ForegroundColor Green
         }
         Start-Sleep -Milliseconds 200
       } 
@@ -2815,11 +2815,11 @@ function Test-IP {
   }
 
   PROCESS {
-    Write-TimestampedInformation "IP: $($IP)"
-    Write-TimestampedInformation "Country: $($info.country)"
-    Write-TimestampedInformation "Region: $($info.regionName)"
-    Write-TimestampedInformation "City: $($info.city)"
-    Write-TimestampedInformation "ISP: $($info.isp)"
+    Write-Output "IP: $($IP)"
+    Write-Output "Country: $($info.country)"
+    Write-Output "Region: $($info.regionName)"
+    Write-Output "City: $($info.city)"
+    Write-Output "ISP: $($info.isp)"
   }
 }
 
@@ -2851,10 +2851,10 @@ function Test-Ports {
       $success = $tcpClient.ConnectAsync($IP, $port).Wait(1000)
       $tcpClient.Close()
       if ($success) {
-        Write-TimestampedInformation "Port $Port is open."
+        Write-Output "Port $Port is open."
       }
       else {
-        Write-TimestampedInformation "Port $Port is closed."
+        Write-Output "Port $Port is closed."
       }
     }
   }
@@ -3753,21 +3753,21 @@ function Calendar {
   }
 
   PROCESS {
-    Write-TimestampedInformation ("    {0} {1}" -f $date.ToString('MMMM'), $Year)
-    Write-TimestampedInformation "Su Mo Tu We Th Fr Sa"
+    Write-Output ("    {0} {1}" -f $date.ToString('MMMM'), $Year)
+    Write-Output "Su Mo Tu We Th Fr Sa"
   
-    1..$date.DayOfWeek.value__ | ForEach-Object { Write-TimestampedInformation "   " -NoNewline }
+    1..$date.DayOfWeek.value__ | ForEach-Object { Write-Output "   " -NoNewline }
     1..$daysInMonth | ForEach-Object {
       $day = $_
       $date = New-Object DateTime $Year, $Month, $day
-      if ($day -lt 10) { Write-TimestampedInformation " $day" -NoNewline } else { Write-TimestampedInformation "$day" -NoNewline }
-      if ($date.DayOfWeek.value__ -eq 6) { Write-TimestampedInformation "" }
-      else { Write-TimestampedInformation " " -NoNewline }
+      if ($day -lt 10) { Write-Output " $day" -NoNewline } else { Write-Output "$day" -NoNewline }
+      if ($date.DayOfWeek.value__ -eq 6) { Write-Output "" }
+      else { Write-Output " " -NoNewline }
     }
   }
 
   END {
-    Write-TimestampedInformation ""
+    Write-Output ""
   }
 }
 
@@ -3789,9 +3789,9 @@ function Get-ShellInfo {
   }
 
   PROCESS {
-    Write-TimestampedInformation "Profile Path: $PROFILE"
-    Write-TimestampedInformation "Host Name: $($name)"
-    Write-TimestampedInformation "Host Version: $($version) -> $($ShellType) ($Bitness)"
+    Write-Output "Profile Path: $PROFILE"
+    Write-Output "Host Name: $($name)"
+    Write-Output "Host Version: $($version) -> $($ShellType) ($Bitness)"
   }
 }
 
