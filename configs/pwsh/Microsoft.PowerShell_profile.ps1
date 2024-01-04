@@ -792,7 +792,7 @@ function Initialize-Profile {
 
     if ($null -eq $sysinternalsKey) {
       New-ItemProperty -Path $KeyPath -Name 'SysinternalsInstalled' -Value 0 -PropertyType 'DWord' -Force
-      choco install sysinternals
+      choco install sysinternals -y
     }
 
     if ($key.FirstRun -eq 1) {
