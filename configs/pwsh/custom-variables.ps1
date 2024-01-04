@@ -1,1 +1,1 @@
-$ExampleVariable = "Example Value"
+Set-Variable -Name "ExampleVariable" -Value "ExampleValue" -Scope Global
