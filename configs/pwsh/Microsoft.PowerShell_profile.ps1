@@ -791,7 +791,7 @@ function Initialize-Profile {
     }
 
     if ($null -eq $sysinternalsKey) {
-      New-ItemProperty -Path $KeyPath -Name 'SysinternalsInstalled' -Value 0 -PropertyType 'DWord' -Force
+      New-ItemProperty -Path $KeyPath -Name 'SysinternalsInstalled' -Value 1 -PropertyType 'DWord' -Force
       choco install sysinternals -y
     }
 
@@ -842,8 +842,8 @@ function Set-ProfileSettings {
     $form.FormBorderStyle = 'FixedDialog'
     $form.Icon = $ShellIcon
 
-    $keys = Get-ItemProperty -Path $KeyPath -ErrorAction SilentlyContinue
-  
+    $keys = Get-ItemProperty -Path $KeyPath -ErrorAction SilentlyContinue | Select-Object -ExcludeProperty PSPath, PSParentPath, PSChildName, PSDrive, PSProvider
+      
     $tableLayoutPanel = New-Object System.Windows.Forms.TableLayoutPanel
     $tableLayoutPanel.RowCount = 1
     $tableLayoutPanel.ColumnCount = 1
