@@ -1,4 +1,5 @@
 [
+    "restart",
     "profile",
     "apt-get",
     "ls",
@@ -57,5 +58,6 @@
     "unalias",
     "help",
     "cal",
-    "shell"
+    "shell",
+    "grep"
 ]

@@ -4,7 +4,7 @@
 
 # Author: LukeHjo (Azrael)
 # Description: This is my PowerShell profile. It contains features that I use on a daily basis.
-# Version: 1.1.9
+# Version: 1.2.0
 # Date: 2023-12-28
 
 Add-Type -AssemblyName System.Windows.Forms
@@ -42,165 +42,100 @@ $currentVersion = if ($null -eq $versionKey) { $null } else { $versionKey.Versio
 $latestVersion = Invoke-RestMethod -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/version'
 $SystemDrive = $env:SystemDrive
 
+function Restart-Shell {
+  . $PROFILE
+  if ($shellType -eq "Pwsh") {
+    pwsh
+  }
+  else {
+    powershell
+  }
+  Stop-Process -Id $PID
+}
+
 function Update-Profile {
-  param (
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
     [Parameter(Mandatory = $false)][switch]$Silent,
     [Parameter(Mandatory = $false)][switch]$Force
   )
 
-  # Check for registry key
-  if (-not (Test-Path $keyPath)) {
-    New-Item -Path $keyPath -Force | Out-Null
-  }
-
-  # Check for the first run key
-  $firstRun = Get-ItemProperty -Path $keyPath -Name 'FirstRun' -ErrorAction SilentlyContinue
-  # Run the first run script if it's the first run
-  if ($null -eq $firstRun.FirstRun) {
-    $form = New-Object System.Windows.Forms.Form
-    $form.Text = "Auto Update"
-    $form.BackColor = $nord0
-    $form.ForeColor = $nord4
-    $form.Font = New-Object System.Drawing.Font("Arial", 10)
-    $form.StartPosition = 'CenterScreen'
-    $form.Size = New-Object System.Drawing.Size(400, 200)
-    $form.FormBorderStyle = 'FixedDialog'
-    $form.MaximizeBox = $false
-    $form.MinimizeBox = $false
-    $form.Icon = $icon
-
-    $label = New-Object System.Windows.Forms.Label
-    $label.Text = "Would you like to update the profile automatically in the future?"
-    $label.Location = New-Object System.Drawing.Point(10, 10)
-    $label.Size = New-Object System.Drawing.Size(380, 80)
-    $label.ForeColor = $nord6
-
-    $yesButton = New-Object System.Windows.Forms.Button
-    $yesButton.BackColor = $nord3
-    $yesButton.ForeColor = $nord6
-    $yesButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
-    $yesButton.FlatAppearance.BorderSize = 0
-    $yesButton.Location = New-Object System.Drawing.Point(100, 120)
-    $yesButton.Size = New-Object System.Drawing.Size(75, 23)
-    $yesButton.Text = "Yes"
-    $yesButton.DialogResult = [System.Windows.Forms.DialogResult]::Yes
-
-    $noButton = New-Object System.Windows.Forms.Button
-    $noButton.BackColor = $nord3
-    $noButton.ForeColor = $nord6
-    $noButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
-    $noButton.FlatAppearance.BorderSize = 0
-    $noButton.Location = New-Object System.Drawing.Point(200, 120)
-    $noButton.Size = New-Object System.Drawing.Size(75, 23)
-    $noButton.Text = "No"
-    $noButton.DialogResult = [System.Windows.Forms.DialogResult]::No
-
-    $form.Controls.Add($label)
-    $form.Controls.Add($yesButton)
-    $form.Controls.Add($noButton)
-    $form.AcceptButton = $yesButton
-    $form.CancelButton = $noButton
-
-    $result = $form.ShowDialog()
-
-    if ($result -eq [System.Windows.Forms.DialogResult]::Yes) {
-      New-ItemProperty -Path $keyPath -Name 'AutoUpdate' -Value 1 -PropertyType 'DWord' -Force | Out-Null
+  BEGIN {
+    # Check for registry key
+    if (-not (Test-Path $keyPath)) {
+      New-Item -Path $keyPath -Force | Out-Null
     }
-    else {
-      New-ItemProperty -Path $keyPath -Name 'AutoUpdate' -Value 0 -PropertyType 'DWord' -Force | Out-Null
-    }
-    Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/Microsoft.PowerShell_profile.ps1' -OutFile $PROFILE
-    New-ItemProperty -Path $keyPath -Name 'Version' -Value $latestVersion -PropertyType 'String' -Force | Out-Null
-    New-ItemProperty -Path $keyPath -Name 'FirstRun' -Value 1 -PropertyType 'DWord' -Force | Out-Null
-    . $PROFILE
-    if ($shellType -eq "Pwsh") {
-      pwsh
-    }
-    else {
-      powershell
-    }
-    Stop-Process -Id $PID
-  }
-  if ($Force) {
-    # Create the form
-    $form = New-Object System.Windows.Forms.Form
-    $form.Text = "Update Available"
-    $form.BackColor = $nord0
-    $form.ForeColor = $nord4
-    $form.Font = New-Object System.Drawing.Font("Arial", 10)
-    $form.StartPosition = 'CenterScreen'
-    $form.Size = New-Object System.Drawing.Size(400, 200)
-    $form.FormBorderStyle = 'FixedDialog'
-    $form.MaximizeBox = $false
-    $form.MinimizeBox = $false
-    $form.Icon = $icon
 
-    $label = New-Object System.Windows.Forms.Label
-    $label.Text = "A new version of the profile is available. Would you like to update?"
-    $label.Location = New-Object System.Drawing.Point(10, 10)
-    $label.Size = New-Object System.Drawing.Size(380, 80)
-    $label.ForeColor = $nord6
+    # Check for the first run key
+    $firstRun = Get-ItemProperty -Path $keyPath -Name 'FirstRun' -ErrorAction SilentlyContinue
 
-    $yesButton = New-Object System.Windows.Forms.Button
-    $yesButton.BackColor = $nord3
-    $yesButton.ForeColor = $nord6
-    $yesButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
-    $yesButton.FlatAppearance.BorderSize = 0
-    $yesButton.Location = New-Object System.Drawing.Point(100, 120)
-    $yesButton.Size = New-Object System.Drawing.Size(75, 23)
-    $yesButton.Text = "Yes"
-    $yesButton.DialogResult = [System.Windows.Forms.DialogResult]::Yes
-
-    $noButton = New-Object System.Windows.Forms.Button
-    $noButton.BackColor = $nord3
-    $noButton.ForeColor = $nord6
-    $noButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
-    $noButton.FlatAppearance.BorderSize = 0
-    $noButton.Location = New-Object System.Drawing.Point(200, 120)
-    $noButton.Size = New-Object System.Drawing.Size(75, 23)
-    $noButton.Text = "No"
-    $noButton.DialogResult = [System.Windows.Forms.DialogResult]::No
-
-    $form.Controls.Add($label)
-    $form.Controls.Add($yesButton)
-    $form.Controls.Add($noButton)
-    $form.AcceptButton = $yesButton
-    $form.CancelButton = $noButton
-
-    $result = $form.ShowDialog()
-
-    if ($result -eq [System.Windows.Forms.DialogResult]::Yes) {
-      # Resets the entire shell
-      Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/Microsoft.PowerShell_profile.ps1' -OutFile $PROFILE
-      New-ItemProperty -Path $keyPath -Name 'Version' -Value $latestVersion -PropertyType 'String' -Force | Out-Null
-      . $PROFILE
-      if ($shellType -eq "Pwsh") {
-        pwsh
-      }
-      else {
-        powershell
-      }
-      Stop-Process -Id $PID    
-    }
-  }
-  elseif ($currentVersion -ne $latestVersion) {
     # Check if the profile should be updated automatically
     $autoUpdate = Get-ItemProperty -Path $keyPath -Name 'AutoUpdate' -ErrorAction SilentlyContinue
-    # Update the profile if it should be updated automatically
-    if ($autoUpdate.AutoUpdate -eq 1 -or $Silent) {
-      # Resets the entire shell
-      Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/Microsoft.PowerShell_profile.ps1' -OutFile $PROFILE
-      New-ItemProperty -Path $keyPath -Name 'Version' -Value $latestVersion -PropertyType 'String' -Force | Out-Null
-      . $PROFILE
-      if ($shellType -eq "Pwsh") {
-        pwsh
+  }
+
+  PROCESS {
+    # Run the first run script if it's the first run
+    if ($null -eq $firstRun.FirstRun) {
+      $form = New-Object System.Windows.Forms.Form
+      $form.Text = "Auto Update"
+      $form.BackColor = $nord0
+      $form.ForeColor = $nord4
+      $form.Font = New-Object System.Drawing.Font("Arial", 10)
+      $form.StartPosition = 'CenterScreen'
+      $form.Size = New-Object System.Drawing.Size(400, 200)
+      $form.FormBorderStyle = 'FixedDialog'
+      $form.MaximizeBox = $false
+      $form.MinimizeBox = $false
+      $form.Icon = $icon
+
+      $label = New-Object System.Windows.Forms.Label
+      $label.Text = "Would you like to update the profile automatically in the future?"
+      $label.Location = New-Object System.Drawing.Point(10, 10)
+      $label.Size = New-Object System.Drawing.Size(380, 80)
+      $label.ForeColor = $nord6
+
+      $yesButton = New-Object System.Windows.Forms.Button
+      $yesButton.BackColor = $nord3
+      $yesButton.ForeColor = $nord6
+      $yesButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
+      $yesButton.FlatAppearance.BorderSize = 0
+      $yesButton.Location = New-Object System.Drawing.Point(100, 120)
+      $yesButton.Size = New-Object System.Drawing.Size(75, 23)
+      $yesButton.Text = "Yes"
+      $yesButton.DialogResult = [System.Windows.Forms.DialogResult]::Yes
+
+      $noButton = New-Object System.Windows.Forms.Button
+      $noButton.BackColor = $nord3
+      $noButton.ForeColor = $nord6
+      $noButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
+      $noButton.FlatAppearance.BorderSize = 0
+      $noButton.Location = New-Object System.Drawing.Point(200, 120)
+      $noButton.Size = New-Object System.Drawing.Size(75, 23)
+      $noButton.Text = "No"
+      $noButton.DialogResult = [System.Windows.Forms.DialogResult]::No
+
+      $form.Controls.Add($label)
+      $form.Controls.Add($yesButton)
+      $form.Controls.Add($noButton)
+      $form.AcceptButton = $yesButton
+      $form.CancelButton = $noButton
+
+      $result = $form.ShowDialog()
+
+      if ($result -eq [System.Windows.Forms.DialogResult]::Yes) {
+        New-ItemProperty -Path $keyPath -Name 'AutoUpdate' -Value 1 -PropertyType 'DWord' -Force | Out-Null
       }
       else {
-        powershell
+        New-ItemProperty -Path $keyPath -Name 'AutoUpdate' -Value 0 -PropertyType 'DWord' -Force | Out-Null
       }
-      Stop-Process -Id $PID    
+
+      $form.Dispose()
+
+      Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/Microsoft.PowerShell_profile.ps1' -OutFile $PROFILE
+      New-ItemProperty -Path $keyPath -Name 'Version' -Value $latestVersion -PropertyType 'String' -Force | Out-Null
+      New-ItemProperty -Path $keyPath -Name 'FirstRun' -Value 1 -PropertyType 'DWord' -Force | Out-Null
     }
-    else {
+    if ($Force) {
       # Create the form
       $form = New-Object System.Windows.Forms.Form
       $form.Text = "Update Available"
@@ -248,90 +183,120 @@ function Update-Profile {
 
       $result = $form.ShowDialog()
 
-      # Update
       if ($result -eq [System.Windows.Forms.DialogResult]::Yes) {
         # Resets the entire shell
         Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/Microsoft.PowerShell_profile.ps1' -OutFile $PROFILE
         New-ItemProperty -Path $keyPath -Name 'Version' -Value $latestVersion -PropertyType 'String' -Force | Out-Null
-        . $PROFILE
-        if ($shellType -eq "Pwsh") {
-          pwsh
+        Restart-Shell 
+      }
+      $form.Dispose()
+    }
+    elseif ($currentVersion -ne $latestVersion) {
+      # Update the profile if it should be updated automatically
+      if ($autoUpdate.AutoUpdate -eq 1 -or $Silent) {
+        # Resets the entire shell
+        Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/Microsoft.PowerShell_profile.ps1' -OutFile $PROFILE
+        New-ItemProperty -Path $keyPath -Name 'Version' -Value $latestVersion -PropertyType 'String' -Force | Out-Null
+        Restart-Shell
+      }
+      else {
+        # Create the form
+        $form = New-Object System.Windows.Forms.Form
+        $form.Text = "Update Available"
+        $form.BackColor = $nord0
+        $form.ForeColor = $nord4
+        $form.Font = New-Object System.Drawing.Font("Arial", 10)
+        $form.StartPosition = 'CenterScreen'
+        $form.Size = New-Object System.Drawing.Size(400, 200)
+        $form.FormBorderStyle = 'FixedDialog'
+        $form.MaximizeBox = $false
+        $form.MinimizeBox = $false
+        $form.Icon = $icon
+
+        $label = New-Object System.Windows.Forms.Label
+        $label.Text = "A new version of the profile is available. Would you like to update?"
+        $label.Location = New-Object System.Drawing.Point(10, 10)
+        $label.Size = New-Object System.Drawing.Size(380, 80)
+        $label.ForeColor = $nord6
+
+        $yesButton = New-Object System.Windows.Forms.Button
+        $yesButton.BackColor = $nord3
+        $yesButton.ForeColor = $nord6
+        $yesButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
+        $yesButton.FlatAppearance.BorderSize = 0
+        $yesButton.Location = New-Object System.Drawing.Point(100, 120)
+        $yesButton.Size = New-Object System.Drawing.Size(75, 23)
+        $yesButton.Text = "Yes"
+        $yesButton.DialogResult = [System.Windows.Forms.DialogResult]::Yes
+
+        $noButton = New-Object System.Windows.Forms.Button
+        $noButton.BackColor = $nord3
+        $noButton.ForeColor = $nord6
+        $noButton.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
+        $noButton.FlatAppearance.BorderSize = 0
+        $noButton.Location = New-Object System.Drawing.Point(200, 120)
+        $noButton.Size = New-Object System.Drawing.Size(75, 23)
+        $noButton.Text = "No"
+        $noButton.DialogResult = [System.Windows.Forms.DialogResult]::No
+
+        $form.Controls.Add($label)
+        $form.Controls.Add($yesButton)
+        $form.Controls.Add($noButton)
+        $form.AcceptButton = $yesButton
+        $form.CancelButton = $noButton
+
+        $result = $form.ShowDialog()
+
+        # Update
+        if ($result -eq [System.Windows.Forms.DialogResult]::Yes) {
+          # Resets the entire shell
+          Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/Microsoft.PowerShell_profile.ps1' -OutFile $PROFILE
+          New-ItemProperty -Path $keyPath -Name 'Version' -Value $latestVersion -PropertyType 'String' -Force | Out-Null
+          Restart-Shell
         }
-        else {
-          powershell
-        }
-        Stop-Process -Id $PID
+        $form.Dispose()
       }
     }
   }
 }
 
 function Initialize-Profile {
-  # Check for updates
-  Update-Profile
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM ( ) # No parameters
 
-  # Set the execution policy
-  Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
+  BEGIN {
+    # Set the execution policy
+    Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
+        
+    # Check for updates
+    Update-Profile
 
-  # Check for Scoop and install it if it's not installed
-  $scoop = Get-Command -Name scoop -ErrorAction SilentlyContinue
-  if (-not $scoop) {
-    Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')
-  }
+    # Check for Scoop and install it if it's not installed
+    $scoop = Get-Command -Name scoop -ErrorAction SilentlyContinue
 
-  # Check for Chocolatey and install it if it's not installed
-  $choco = Get-Command -Name choco -ErrorAction SilentlyContinue
-  if (-not $choco) {
-    Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1')
-  }
+    # Check for Chocolatey and install it if it's not installed
+    $choco = Get-Command -Name choco -ErrorAction SilentlyContinue
 
-  # Check for oh-my-posh and install it if it's not installed
-  $omp = Get-Command -Name oh-my-posh -ErrorAction SilentlyContinue
-  if (-not $omp) {
-    scoop install https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/oh-my-posh.json
-  }
-  $nerdfontKey = Get-ItemProperty -Path $keyPath -Name 'NerdFontInstalled' -ErrorAction SilentlyContinue
-  if ($null -eq $nerdfontKey) {
-    New-ItemProperty -Path $keyPath -Name 'NerdFontInstalled' -Value 0 -PropertyType 'DWord' -Force | Out-Null
-    oh-my-posh font install
-  }
+    # Check for oh-my-posh and install it if it's not installed
+    $omp = Get-Command -Name oh-my-posh -ErrorAction SilentlyContinue
 
-  $starship = Get-Command -Name starship -ErrorAction SilentlyContinue
-  if (-not $starship) {
-    scoop install starship
-  }
+    # Check for the Nerd Fonts registry key
+    $nerdfontKey = Get-ItemProperty -Path $keyPath -Name 'NerdFontInstalled' -ErrorAction SilentlyContinue
 
-  # Key that determines whether or not the starship prompt is enabled (Disabled by default)
-  $starShip = Get-ItemProperty -Path $keyPath -Name 'Starship' -ErrorAction SilentlyContinue
-  if ($null -eq $starShip) {
-    New-ItemProperty -Path $keyPath -Name 'Starship' -Value 0 -PropertyType 'String' -Force | Out-Null
-  }
+    # Check for starship and install it if it's not installed
+    $starship = Get-Command -Name starship -ErrorAction SilentlyContinue
 
-  $ompConfig = "$env:USERPROFILE\.config\omp.json"
-  if (-not (Test-Path $ompConfig)) {
-    New-Item -Path $ompConfig -Force | Out-Null
-    Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/omp/theme.json' -OutFile $ompConfig
-  }
+    # Key that determines whether or not the starship prompt is enabled (Disabled by default)
+    $starShip = Get-ItemProperty -Path $keyPath -Name 'Starship' -ErrorAction SilentlyContinue
 
-  $starshipConfig = "$env:USERPROFILE\.config\starship.toml"
-  if (-not (Test-Path $starshipConfig)) {
-    New-Item -Path $starshipConfig -Force | Out-Null
-    Invoke-WebRequest -Uri 'https://starship.rs/presets/toml/tokyo-night.toml' -OutFile $starshipConfig
-  }
-  
-  if ($starShip.Starship -eq 0) {
-    oh-my-posh init pwsh --config $ompConfig | Invoke-Expression
-  }
-  elseif ($starShip.Starship -eq 1) {
-    Invoke-Expression (&starship init powershell)
-  }
+    # Path to the oh-my-posh config file
+    $ompConfig = "$env:USERPROFILE\.config\omp.json"
 
-  $key = Get-ItemProperty -Path $keyPath -Name 'FirstRun' -ErrorAction SilentlyContinue
-  if ($key.FirstRun -eq 1) {
-    if (-not (Test-Path $keyPath)) {
-      New-Item -Path $keyPath -Force | Out-Null
-    }
-    New-ItemProperty -Path $keyPath -Name 'FirstRun' -Value 0 -PropertyType 'DWord' -Force | Out-Null
+    # Path to the starship config file
+    $starshipConfig = "$env:USERPROFILE\.config\starship.toml"
+
+    # Check for the FirstRun key
+    $key = Get-ItemProperty -Path $keyPath -Name 'FirstRun' -ErrorAction SilentlyContinue
 
     # Create the form
     $form = New-Object System.Windows.Forms.Form
@@ -345,13 +310,13 @@ function Initialize-Profile {
     $form.MaximizeBox = $false
     $form.MinimizeBox = $false
     $form.Icon = $icon
-
+    
     $label = New-Object System.Windows.Forms.Label
     $label.Text = "Hello, $userName! Welcome to $($shellType). For more information, please type 'help' or 'tips'."
     $label.Location = New-Object System.Drawing.Point(10, 10)
     $label.Size = New-Object System.Drawing.Size(380, 80)
     $label.ForeColor = $nord6
-
+    
     $okButton = New-Object System.Windows.Forms.Button
     $okButton.BackColor = $nord3
     $okButton.ForeColor = $nord6
@@ -361,160 +326,223 @@ function Initialize-Profile {
     $okButton.Size = New-Object System.Drawing.Size(75, 23)
     $okButton.Text = "OK"
     $okButton.DialogResult = [System.Windows.Forms.DialogResult]::OK
-
+    
     $form.Controls.Add($label)
     $form.Controls.Add($okButton)
     $form.AcceptButton = $okButton
-
-    $form.ShowDialog()
-  }
-  Clear-Host
-
-  # Check for the login message key
-  $loginMessageKey = Get-ItemProperty -Path $keyPath -Name 'LoginMessage' -ErrorAction SilentlyContinue
-  # Create the login message key if it doesn't exist
-  if ($null -eq $loginMessageKey) {
-    New-ItemProperty -Path $keyPath -Name 'LoginMessage' -Value 1 -PropertyType 'DWord' -Force | Out-Null
   }
 
-  # Check for the login message
-  $loginMessage = $loginMessageKey.LoginMessage
-  # Display the login message if it's enabled
-  if ($loginMessage) {
-    Write-Host "Microsoft Windows [Version $($kernelVersion)]"
-    Write-Host "(c) Microsoft Corporation. All rights reserved.`n"
+  PROCESS {
+    if (-not $scoop) {
+      Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')
+    }
+
+    if (-not $choco) {
+      Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1')
+    }
+
+    if (-not $omp) {
+      scoop install https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/oh-my-posh.json
+    }
+
+    if ($null -eq $nerdfontKey) {
+      New-ItemProperty -Path $keyPath -Name 'NerdFontInstalled' -Value 0 -PropertyType 'DWord' -Force | Out-Null
+      oh-my-posh font install
+    }
+
+    if (-not $starship) {
+      scoop install starship
+    }
+
+    if ($null -eq $starShip) {
+      New-ItemProperty -Path $keyPath -Name 'Starship' -Value 0 -PropertyType 'String' -Force | Out-Null
+    }
+
+    if (-not (Test-Path $ompConfig)) {
+      New-Item -Path $ompConfig -Force | Out-Null
+      Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/omp/theme.json' -OutFile $ompConfig
+    }
+
+    if (-not (Test-Path $starshipConfig)) {
+      New-Item -Path $starshipConfig -Force | Out-Null
+      Invoke-WebRequest -Uri 'https://starship.rs/presets/toml/tokyo-night.toml' -OutFile $starshipConfig
+    }
   
-    Write-Host "Azrael's $($shellType) v$($currentVersion.Trim())"
-    Write-Host "Copyright (c) 2023-2024 Azrael"
-    Write-Host "https://github.com/luke-beep/shell-config/`n"
+    if ($starShip.Starship -eq 0) {
+      oh-my-posh init pwsh --config $ompConfig | Invoke-Expression
+    }
+    elseif ($starShip.Starship -eq 1) {
+      Invoke-Expression (&starship init powershell)
+    }
+
+    if ($key.FirstRun -eq 1) {
+      if (-not (Test-Path $keyPath)) {
+        New-Item -Path $keyPath -Force | Out-Null
+      }
+      New-ItemProperty -Path $keyPath -Name 'FirstRun' -Value 0 -PropertyType 'DWord' -Force | Out-Null
+
+      $form.ShowDialog()
+    }
+  }
+
+  END {
+    $form.Dispose()
+
+    Clear-Host
+
+    $loginMessageKey = Get-ItemProperty -Path $keyPath -Name 'LoginMessage' -ErrorAction SilentlyContinue
+    if ($null -eq $loginMessageKey) {
+      New-ItemProperty -Path $keyPath -Name 'LoginMessage' -Value 1 -PropertyType 'DWord' -Force | Out-Null
+    }
+  
+    # Check for the login message
+    $loginMessage = $loginMessageKey.LoginMessage
+    # Display the login message if it's enabled
+    if ($loginMessage) {
+      Write-Host "Microsoft Windows [Version $($kernelVersion)]"
+      Write-Host "(c) Microsoft Corporation. All rights reserved.`n"
+    
+      Write-Host "Azrael's $($shellType) v$($currentVersion.Trim())"
+      Write-Host "Copyright (c) 2023-2024 Azrael"
+      Write-Host "https://github.com/luke-beep/shell-config/`n"
+    }
   }
 }
 Initialize-Profile
 
 function Set-ProfileSettings {
-  $PanelWidth = 1000
-
-  $form = New-Object System.Windows.Forms.Form
-  $form.Text = "$($shellType) Profile Settings"
-  $form.BackColor = $nord0
-  $form.Size = New-Object System.Drawing.Size($PanelWidth, 500)
-  $form.StartPosition = 'CenterScreen'
-  $form.FormBorderStyle = 'FixedDialog'
-  $form.Icon = $icon
-
-  $keys = Get-ItemProperty -Path $keyPath -ErrorAction SilentlyContinue
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM ( ) # No parameters
   
-  $tableLayoutPanel = New-Object System.Windows.Forms.TableLayoutPanel
-  $tableLayoutPanel.RowCount = 1
-  $tableLayoutPanel.ColumnCount = 1
-  $tableLayoutPanel.Dock = [System.Windows.Forms.DockStyle]::Fill
-  $tableLayoutPanel.ColumnStyles.Add((New-Object System.Windows.Forms.ColumnStyle([System.Windows.Forms.SizeType]::Percent, 100)))
-  $tableLayoutPanel.RowStyles.Clear()
-  $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::Percent, 100)))
-  $tableLayoutPanel.BorderStyle = [System.Windows.Forms.BorderStyle]::None
-  $tableLayoutPanel.BackColor = $nord0
-  $tableLayoutPanel.ForeColor = $nord4
+  BEGIN {
+    $PanelWidth = 1000
 
-  $dataGridView = New-Object System.Windows.Forms.DataGridView
-  $dataGridView.BorderStyle = [System.Windows.Forms.BorderStyle]::None
-  $dataGridView.Location = New-Object System.Drawing.Point(10, 10)
-  $dataGridView.Size = New-Object System.Drawing.Size(360, 200)
-  $dataGridView.Dock = [System.Windows.Forms.DockStyle]::Fill
-  $dataGridView.AutoGenerateColumns = $true
-  $dataGridView.RowHeadersVisible = $false
-  $dataGridView.BackgroundColor = $nord0
-  $dataGridView.ForeColor = $nord6
-  $dataGridView.GridColor = $nord3
-  $dataGridView.DefaultCellStyle.BackColor = $nord0
-  $dataGridView.DefaultCellStyle.ForeColor = $nord6
-  $dataGridView.ColumnHeadersDefaultCellStyle.BackColor = $nord3
-  $dataGridView.ColumnHeadersDefaultCellStyle.ForeColor = $nord6
-  $dataGridView.RowHeadersBorderStyle = [System.Windows.Forms.DataGridViewHeaderBorderStyle]::None
-  $dataGridView.ColumnHeadersBorderStyle = [System.Windows.Forms.DataGridViewHeaderBorderStyle]::None
-  $dataGridView.DefaultCellStyle.SelectionBackColor = $nord3
-  $dataGridView.AutoSizeColumnsMode = [System.Windows.Forms.DataGridViewAutoSizeColumnsMode]::Fill
+    $form = New-Object System.Windows.Forms.Form
+    $form.Text = "$($shellType) Profile Settings"
+    $form.BackColor = $nord0
+    $form.Size = New-Object System.Drawing.Size($PanelWidth, 500)
+    $form.StartPosition = 'CenterScreen'
+    $form.FormBorderStyle = 'FixedDialog'
+    $form.Icon = $icon
 
-  $deletedRows = New-Object System.Collections.Generic.List[string]
-
-  $contextMenu = New-Object System.Windows.Forms.ContextMenuStrip
-  $deleteMenuItem = New-Object System.Windows.Forms.ToolStripMenuItem
-  $deleteMenuItem.Text = "Delete"
-  $deleteMenuItem.add_Click({
-      if ($dataGridView.SelectedCells.Count -gt 0) {
-        $selectedRowIndex = $dataGridView.SelectedCells[0].RowIndex
-        $name = $dataGridView.Rows[$selectedRowIndex].Cells[0].Value
-        $deletedRows.Add($name)
-        $dataGridView.Rows.RemoveAt($selectedRowIndex)
-      }
-    })
-  $contextMenu.Items.Add($deleteMenuItem)
+    $keys = Get-ItemProperty -Path $keyPath -ErrorAction SilentlyContinue
   
-  $dataGridView.ContextMenuStrip = $contextMenu
+    $tableLayoutPanel = New-Object System.Windows.Forms.TableLayoutPanel
+    $tableLayoutPanel.RowCount = 1
+    $tableLayoutPanel.ColumnCount = 1
+    $tableLayoutPanel.Dock = [System.Windows.Forms.DockStyle]::Fill
+    $tableLayoutPanel.ColumnStyles.Add((New-Object System.Windows.Forms.ColumnStyle([System.Windows.Forms.SizeType]::Percent, 100)))
+    $tableLayoutPanel.RowStyles.Clear()
+    $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::Percent, 100)))
+    $tableLayoutPanel.BorderStyle = [System.Windows.Forms.BorderStyle]::None
+    $tableLayoutPanel.BackColor = $nord0
+    $tableLayoutPanel.ForeColor = $nord4
 
-  $nameColumn = New-Object System.Windows.Forms.DataGridViewTextBoxColumn
-  $nameColumn.HeaderText = "Name"
-  $nameColumn.DataPropertyName = "Name"
-  $valueColumn = New-Object System.Windows.Forms.DataGridViewTextBoxColumn
-  $valueColumn.HeaderText = "Value"
-  $valueColumn.DataPropertyName = "Value"
+    $dataGridView = New-Object System.Windows.Forms.DataGridView
+    $dataGridView.BorderStyle = [System.Windows.Forms.BorderStyle]::None
+    $dataGridView.Location = New-Object System.Drawing.Point(10, 10)
+    $dataGridView.Size = New-Object System.Drawing.Size(360, 200)
+    $dataGridView.Dock = [System.Windows.Forms.DockStyle]::Fill
+    $dataGridView.AutoGenerateColumns = $true
+    $dataGridView.RowHeadersVisible = $false
+    $dataGridView.BackgroundColor = $nord0
+    $dataGridView.ForeColor = $nord6
+    $dataGridView.GridColor = $nord3
+    $dataGridView.DefaultCellStyle.BackColor = $nord0
+    $dataGridView.DefaultCellStyle.ForeColor = $nord6
+    $dataGridView.ColumnHeadersDefaultCellStyle.BackColor = $nord3
+    $dataGridView.ColumnHeadersDefaultCellStyle.ForeColor = $nord6
+    $dataGridView.RowHeadersBorderStyle = [System.Windows.Forms.DataGridViewHeaderBorderStyle]::None
+    $dataGridView.ColumnHeadersBorderStyle = [System.Windows.Forms.DataGridViewHeaderBorderStyle]::None
+    $dataGridView.DefaultCellStyle.SelectionBackColor = $nord3
+    $dataGridView.AutoSizeColumnsMode = [System.Windows.Forms.DataGridViewAutoSizeColumnsMode]::Fill
 
-  $dataGridView.Columns.Add($nameColumn)
-  $dataGridView.Columns.Add($valueColumn)
+    $deletedRows = New-Object System.Collections.Generic.List[string]
 
-  $dataTable = New-Object System.Data.DataTable
-
-  $dataTable.Columns.Add("Name", [string])
-  $dataTable.Columns.Add("Value", [string])
-
-  $keys.PSObject.Properties | ForEach-Object {
-    $row = $dataTable.NewRow()
-    $row["Name"] = $_.Name
-    $row["Value"] = $_.Value
-    $dataTable.Rows.Add($row)
-  }
-
-  $dataGridView.DataSource = $dataTable
-
-  $tableLayoutPanel.Controls.Add($dataGridView, 0, 0)
+    $contextMenu = New-Object System.Windows.Forms.ContextMenuStrip
+    $deleteMenuItem = New-Object System.Windows.Forms.ToolStripMenuItem
+    $deleteMenuItem.Text = "Delete"
+    $deleteMenuItem.add_Click({
+        if ($dataGridView.SelectedCells.Count -gt 0) {
+          $selectedRowIndex = $dataGridView.SelectedCells[0].RowIndex
+          $name = $dataGridView.Rows[$selectedRowIndex].Cells[0].Value
+          $deletedRows.Add($name)
+          $dataGridView.Rows.RemoveAt($selectedRowIndex)
+        }
+      })
+    $contextMenu.Items.Add($deleteMenuItem)
   
-  $button = New-Object System.Windows.Forms.Button
-  $button.Location = New-Object System.Drawing.Point(10, 220)
-  $button.Size = New-Object System.Drawing.Size(150, 30)
-  $button.Text = "Save Configuration"
-  $button.Dock = [System.Windows.Forms.DockStyle]::Fill
-  $button.BackColor = $nord3
-  $button.ForeColor = $nord6
-  $button.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
-  $button.FlatAppearance.BorderColor = $nord3
-  $button.FlatAppearance.BorderSize = 1
-  $button.Add_Click({
-      $dataGridView.Rows | ForEach-Object {
-        if (-not $_.IsNewRow) {
-          $row = $_.DataBoundItem
-          $name = $row["Name"]
-          $value = $row["Value"]
-          if ([string]::IsNullOrEmpty($value)) {
-            Remove-ItemProperty -Path $keyPath -Name $name
-          }
-          else {
-            Set-ItemProperty -Path $keyPath -Name $name -Value $value
+    $dataGridView.ContextMenuStrip = $contextMenu
+
+    $nameColumn = New-Object System.Windows.Forms.DataGridViewTextBoxColumn
+    $nameColumn.HeaderText = "Name"
+    $nameColumn.DataPropertyName = "Name"
+    $valueColumn = New-Object System.Windows.Forms.DataGridViewTextBoxColumn
+    $valueColumn.HeaderText = "Value"
+    $valueColumn.DataPropertyName = "Value"
+
+    $dataGridView.Columns.Add($nameColumn)
+    $dataGridView.Columns.Add($valueColumn)
+
+    $dataTable = New-Object System.Data.DataTable
+
+    $dataTable.Columns.Add("Name", [string])
+    $dataTable.Columns.Add("Value", [string])
+
+    $keys.PSObject.Properties | ForEach-Object {
+      $row = $dataTable.NewRow()
+      $row["Name"] = $_.Name
+      $row["Value"] = $_.Value
+      $dataTable.Rows.Add($row)
+    }
+
+    $dataGridView.DataSource = $dataTable
+
+    $tableLayoutPanel.Controls.Add($dataGridView, 0, 0)
+  
+    $button = New-Object System.Windows.Forms.Button
+    $button.Location = New-Object System.Drawing.Point(10, 220)
+    $button.Size = New-Object System.Drawing.Size(150, 30)
+    $button.Text = "Save Configuration"
+    $button.Dock = [System.Windows.Forms.DockStyle]::Fill
+    $button.BackColor = $nord3
+    $button.ForeColor = $nord6
+    $button.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
+    $button.FlatAppearance.BorderColor = $nord3
+    $button.FlatAppearance.BorderSize = 1
+    $button.Add_Click({
+        $dataGridView.Rows | ForEach-Object {
+          if (-not $_.IsNewRow) {
+            $row = $_.DataBoundItem
+            $name = $row["Name"]
+            $value = $row["Value"]
+            if ([string]::IsNullOrEmpty($value)) {
+              Remove-ItemProperty -Path $keyPath -Name $name
+            }
+            else {
+              Set-ItemProperty -Path $keyPath -Name $name -Value $value
+            }
           }
         }
-      }
 
-      $deletedRows | ForEach-Object {
-        Remove-ItemProperty -Path $keyPath -Name $_
-        $deletedRows.Remove($_)
-      }
-      [System.Windows.Forms.MessageBox]::Show("Profile settings saved.", "Success")
-    })
-  $tableLayoutPanel.Controls.Add($button, 0, 1)
+        $deletedRows | ForEach-Object {
+          Remove-ItemProperty -Path $keyPath -Name $_
+          $deletedRows.Remove($_)
+        }
+        [System.Windows.Forms.MessageBox]::Show("Profile settings saved.", "Success")
+      })
+    $tableLayoutPanel.Controls.Add($button, 0, 1)
 
-  $form.Controls.Add($tableLayoutPanel)
-
-  $form.ShowDialog()
-
-  $form.Dispose()
+    $form.Controls.Add($tableLayoutPanel)
+  }
+  
+  PROCESS {
+    $form.ShowDialog()
+  }
+  
+  END {
+    $form.Dispose()
+  }
 }
 
 <#
@@ -524,155 +552,167 @@ function Set-ProfileSettings {
   This function allows you to manage your profile
 #>
 function Manage-Profile {
-  $PanelWidth = 1000
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM ( ) # No parameters
+  
+  BEGIN {
+    $PanelWidth = 1000
 
-  $form = New-Object System.Windows.Forms.Form
-  $form.Text = "Manage $($shellType) Profile"
-  $form.BackColor = $nord0
-  $form.Size = New-Object System.Drawing.Size($PanelWidth, 500)
-  $form.StartPosition = 'CenterScreen'
-  $form.FormBorderStyle = 'FixedDialog'
-  $form.Icon = $icon
+    $form = New-Object System.Windows.Forms.Form
+    $form.Text = "Manage $($shellType) Profile"
+    $form.BackColor = $nord0
+    $form.Size = New-Object System.Drawing.Size($PanelWidth, 500)
+    $form.StartPosition = 'CenterScreen'
+    $form.FormBorderStyle = 'FixedDialog'
+    $form.Icon = $icon
 
-  $buttonPanel = New-Object System.Windows.Forms.Panel
-  $buttonPanel.Dock = 'Top'
-  $buttonPanel.Height = 50
+    $buttonPanel = New-Object System.Windows.Forms.Panel
+    $buttonPanel.Dock = 'Top'
+    $buttonPanel.Height = 50
 
-  $button1 = New-Object System.Windows.Forms.Button
-  $button1.Text = "Update Profile"
-  $button1.Width = 100
-  $button1.Height = 30
-  $button1.Location = New-Object System.Drawing.Point(10, 10)
-  $button1.BackColor = $nord1
-  $button1.ForeColor = $nord4
-  $button1.FlatStyle = 'Flat'
-  $button1.FlatAppearance.BorderSize = 0
-  $button1.Add_Click({
-      Update-Profile -Force
-    })
-  $buttonPanel.Controls.Add($button1)
+    $button1 = New-Object System.Windows.Forms.Button
+    $button1.Text = "Update Profile"
+    $button1.Width = 100
+    $button1.Height = 30
+    $button1.Location = New-Object System.Drawing.Point(10, 10)
+    $button1.BackColor = $nord1
+    $button1.ForeColor = $nord4
+    $button1.FlatStyle = 'Flat'
+    $button1.FlatAppearance.BorderSize = 0
+    $button1.Add_Click({
+        Update-Profile -Force
+      })
+    $buttonPanel.Controls.Add($button1)
 
-  $updateAliasesButton = New-Object System.Windows.Forms.Button
-  $updateAliasesButton.Text = "Update Aliases"
-  $updateAliasesButton.Width = 100
-  $updateAliasesButton.Height = 30
-  $updateAliasesButton.Location = New-Object System.Drawing.Point(120, 10)
-  $updateAliasesButton.BackColor = $nord1
-  $updateAliasesButton.ForeColor = $nord4
-  $updateAliasesButton.FlatStyle = 'Flat'
-  $updateAliasesButton.FlatAppearance.BorderSize = 0
-  $updateAliasesButton.Add_Click({
-      Import-Aliases -Force
-    })
+    $updateAliasesButton = New-Object System.Windows.Forms.Button
+    $updateAliasesButton.Text = "Update Aliases"
+    $updateAliasesButton.Width = 100
+    $updateAliasesButton.Height = 30
+    $updateAliasesButton.Location = New-Object System.Drawing.Point(120, 10)
+    $updateAliasesButton.BackColor = $nord1
+    $updateAliasesButton.ForeColor = $nord4
+    $updateAliasesButton.FlatStyle = 'Flat'
+    $updateAliasesButton.FlatAppearance.BorderSize = 0
+    $updateAliasesButton.Add_Click({
+        Import-Aliases -Force
+      })
 
-  $buttonPanel.Controls.Add($updateAliasesButton)
+    $buttonPanel.Controls.Add($updateAliasesButton)
 
-  $button2 = New-Object System.Windows.Forms.Button
-  $button2.Text = "Change Theme"
-  $button2.Width = 100
-  $button2.Height = 30
-  $button2.Location = New-Object System.Drawing.Point(230, 10)
-  $button2.BackColor = $nord1
-  $button2.ForeColor = $nord4
-  $button2.FlatStyle = 'Flat'
-  $button2.FlatAppearance.BorderSize = 0
-  $button2.Add_Click({
-      Set-ShellTheme
-    })
-  $buttonPanel.Controls.Add($button2)
+    $button2 = New-Object System.Windows.Forms.Button
+    $button2.Text = "Change Theme"
+    $button2.Width = 100
+    $button2.Height = 30
+    $button2.Location = New-Object System.Drawing.Point(230, 10)
+    $button2.BackColor = $nord1
+    $button2.ForeColor = $nord4
+    $button2.FlatStyle = 'Flat'
+    $button2.FlatAppearance.BorderSize = 0
+    $button2.Add_Click({
+        Set-ShellTheme
+      })
+    $buttonPanel.Controls.Add($button2)
 
-  $button3 = New-Object System.Windows.Forms.Button
-  $button3.Text = "Settings"
-  $button3.Width = 100
-  $button3.Height = 30
-  $button3.Location = New-Object System.Drawing.Point(340, 10)
-  $button3.BackColor = $nord1
-  $button3.ForeColor = $nord4
-  $button3.FlatStyle = 'Flat'
-  $button3.FlatAppearance.BorderSize = 0
-  $button3.Add_Click({
-      Set-ProfileSettings
-    })
-  $buttonPanel.Controls.Add($button3)
+    $button3 = New-Object System.Windows.Forms.Button
+    $button3.Text = "Settings"
+    $button3.Width = 100
+    $button3.Height = 30
+    $button3.Location = New-Object System.Drawing.Point(340, 10)
+    $button3.BackColor = $nord1
+    $button3.ForeColor = $nord4
+    $button3.FlatStyle = 'Flat'
+    $button3.FlatAppearance.BorderSize = 0
+    $button3.Add_Click({
+        Set-ProfileSettings
+      })
+    $buttonPanel.Controls.Add($button3)
 
-  $button4 = New-Object System.Windows.Forms.Button
-  $button4.Text = "Add Alias"
-  $button4.Width = 100
-  $button4.Height = 30
-  $button4.Location = New-Object System.Drawing.Point(450, 10)
-  $button4.BackColor = $nord1
-  $button4.ForeColor = $nord4
-  $button4.FlatStyle = 'Flat'
-  $button4.FlatAppearance.BorderSize = 0
-  $button4.Add_Click({
-      Add-Aliases
-    })
-  $buttonPanel.Controls.Add($button4)
+    $button4 = New-Object System.Windows.Forms.Button
+    $button4.Text = "Add Alias"
+    $button4.Width = 100
+    $button4.Height = 30
+    $button4.Location = New-Object System.Drawing.Point(450, 10)
+    $button4.BackColor = $nord1
+    $button4.ForeColor = $nord4
+    $button4.FlatStyle = 'Flat'
+    $button4.FlatAppearance.BorderSize = 0
+    $button4.Add_Click({
+        Add-Aliases
+      })
+    $buttonPanel.Controls.Add($button4)
 
-  $button5 = New-Object System.Windows.Forms.Button
-  $button5.Text = "Remove Alias"
-  $button5.Width = 100
-  $button5.Height = 30
-  $button5.Location = New-Object System.Drawing.Point(560, 10)
-  $button5.BackColor = $nord1
-  $button5.ForeColor = $nord4
-  $button5.FlatStyle = 'Flat'
-  $button5.FlatAppearance.BorderSize = 0
-  $button5.Add_Click({
-      Remove-Aliases
-    })
-  $buttonPanel.Controls.Add($button5)
+    $button5 = New-Object System.Windows.Forms.Button
+    $button5.Text = "Remove Alias"
+    $button5.Width = 100
+    $button5.Height = 30
+    $button5.Location = New-Object System.Drawing.Point(560, 10)
+    $button5.BackColor = $nord1
+    $button5.ForeColor = $nord4
+    $button5.FlatStyle = 'Flat'
+    $button5.FlatAppearance.BorderSize = 0
+    $button5.Add_Click({
+        Remove-Aliases
+      })
+    $buttonPanel.Controls.Add($button5)
 
-  $button6 = New-Object System.Windows.Forms.Button
-  $button6.Text = "Profile Help"
-  $button6.Width = 100
-  $button6.Height = 30
-  $button6.Location = New-Object System.Drawing.Point(670, 10)
-  $button6.BackColor = $nord1
-  $button6.ForeColor = $nord4
-  $button6.FlatStyle = 'Flat'
-  $button6.FlatAppearance.BorderSize = 0
-  $button6.Add_Click({
-      Get-ProfileHelp
-    })
-  $buttonPanel.Controls.Add($button6)
+    $button6 = New-Object System.Windows.Forms.Button
+    $button6.Text = "Profile Help"
+    $button6.Width = 100
+    $button6.Height = 30
+    $button6.Location = New-Object System.Drawing.Point(670, 10)
+    $button6.BackColor = $nord1
+    $button6.ForeColor = $nord4
+    $button6.FlatStyle = 'Flat'
+    $button6.FlatAppearance.BorderSize = 0
+    $button6.Add_Click({
+        Get-ProfileHelp
+      })
+    $buttonPanel.Controls.Add($button6)
 
-  $button7 = New-Object System.Windows.Forms.Button
-  $button7.Text = "Profile Tips"
-  $button7.Width = 100
-  $button7.Height = 30
-  $button7.Location = New-Object System.Drawing.Point(780, 10)
-  $button7.BackColor = $nord1
-  $button7.ForeColor = $nord4
-  $button7.FlatStyle = 'Flat'
-  $button7.FlatAppearance.BorderSize = 0
-  $button7.Add_Click({
-      Get-ShellTips
-    })
-  $buttonPanel.Controls.Add($button7)
+    $button7 = New-Object System.Windows.Forms.Button
+    $button7.Text = "Profile Tips"
+    $button7.Width = 100
+    $button7.Height = 30
+    $button7.Location = New-Object System.Drawing.Point(780, 10)
+    $button7.BackColor = $nord1
+    $button7.ForeColor = $nord4
+    $button7.FlatStyle = 'Flat'
+    $button7.FlatAppearance.BorderSize = 0
+    $button7.Add_Click({
+        Get-ShellTips
+      })
+    $buttonPanel.Controls.Add($button7)
 
-  $panel = New-Object System.Windows.Forms.Panel
-  $panel.Dock = 'Fill'
-  $panel.AutoScroll = $false
+    $panel = New-Object System.Windows.Forms.Panel
+    $panel.Dock = 'Fill'
+    $panel.AutoScroll = $false
 
-  $richTextBox = New-Object System.Windows.Forms.RichTextBox
-  $richTextBox.Location = New-Object System.Drawing.Point(0, 0)
-  $richTextBox.Size = New-Object System.Drawing.Size(($PanelWidth + 20), 490)
-  $richTextBox.Text = (Get-Content $profile | Out-String)
-  $richTextBox.BackColor = $nord0
-  $richTextBox.ForeColor = $nord4
-  $richTextBox.Font = New-Object System.Drawing.Font("Consolas", 10)
-  $richTextBox.ReadOnly = $true
-  $richTextBox.BorderStyle = 'None'
-  $richTextBox.ScrollBars = 'Vertical'
+    $richTextBox = New-Object System.Windows.Forms.RichTextBox
+    $richTextBox.Location = New-Object System.Drawing.Point(0, 0)
+    $richTextBox.Size = New-Object System.Drawing.Size(($PanelWidth + 20), 490)
+    $richTextBox.Text = (Get-Content $profile | Out-String)
+    $richTextBox.BackColor = $nord0
+    $richTextBox.ForeColor = $nord4
+    $richTextBox.Font = New-Object System.Drawing.Font("Consolas", 10)
+    $richTextBox.ReadOnly = $true
+    $richTextBox.BorderStyle = 'None'
+    $richTextBox.ScrollBars = 'Vertical'
 
-  $form.Controls.Add($buttonPanel)
+    $form.Controls.Add($buttonPanel)
 
-  $panel.Controls.Add($richTextBox)
+    $panel.Controls.Add($richTextBox)
 
-  $form.Controls.Add($panel)
+    $form.Controls.Add($panel)
 
-  $form.ShowDialog()
+  }
+
+  PROCESS {
+    $form.ShowDialog()
+  }
+
+  END {
+    $form.Dispose()
+  }
 }
 
 <#
@@ -684,42 +724,47 @@ function Manage-Profile {
   If this parameter is specified, the packages will be updated
 #>
 function Get-Packages {
-  param (
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
     [Parameter(Mandatory = $false)]
     [string]$Install
   )
 
-  # check if scoop is installed
-  $scoop = Get-Command -Name scoop -ErrorAction SilentlyContinue
-  if ($scoop) {
-    scoop list
-  }
-  # check if winget is installed
-  $winget = Get-Command -Name winget -ErrorAction SilentlyContinue
-  if ($winget) {
-    winget list
-  }
-  # check if choco is installed
-  $choco = Get-Command -Name choco -ErrorAction SilentlyContinue
-  if ($choco) {
-    choco list
-  }
-  if ($Install) {
-    # check if scoop is installed
+  BEGIN {
     $scoop = Get-Command -Name scoop -ErrorAction SilentlyContinue
-    if ($scoop) {
-      # update scoop
-      scoop update *
-    }
-    # check if winget is installed
     $winget = Get-Command -Name winget -ErrorAction SilentlyContinue
-    if ($winget) {
-      winget upgrade --all
-    }
-    # check if choco is installed
     $choco = Get-Command -Name choco -ErrorAction SilentlyContinue
+  }
+
+  PROCESS {
+    # Check if scoop is installed
+    if ($scoop) {
+      scoop list
+    }
+    # Check if winget is installed
+    if ($winget) {
+      winget list
+    }
+    # Check if choco is installed
     if ($choco) {
-      choco upgrade all -y
+      choco list
+    }
+    if ($Install) {
+      # Check if scoop is installed
+      if ($scoop) {
+        # Update scoop
+        scoop update *
+      }
+      # Check if winget is installed
+      if ($winget) {
+        # Update winget
+        winget upgrade --all
+      }
+      # Check if choco is installed
+      if ($choco) {
+        # Update choco
+        choco upgrade all -y
+      }
     }
   }
 }
@@ -745,7 +790,8 @@ function Get-Packages {
   A list of directories and files at the given path or in the current directory if no path is provided.
 #>
 function List-Directories {
-  param(
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
     [Parameter(Mandatory = $false)]
     [string]$Path = ".",
 
@@ -757,11 +803,14 @@ function List-Directories {
     [Alias("a")]
     [switch]$ShowHidden = $false
   )
-  if ($Recurse) {
-    Get-ChildItem -Path $Path -Recurse -Force:$ShowHidden | Format-Table -AutoSize
-  }
-  else {
-    Get-ChildItem -Path $Path -Force:$ShowHidden | Format-Table -AutoSize
+
+  PROCESS {
+    if ($Recurse) {
+      Get-ChildItem -Path $Path -Recurse -Force:$ShowHidden | Format-Table -AutoSize
+    }
+    else {
+      Get-ChildItem -Path $Path -Force:$ShowHidden | Format-Table -AutoSize
+    }
   }
 }
 <#
@@ -775,8 +824,16 @@ function List-Directories {
     The current working directory, e.g. C:\Users\
 #>
 function Print-Working-Directory {
-  $CurrentDirectory = Get-Location
-  $CurrentDirectory.Path
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM ( ) # No parameters
+
+  BEGIN {
+    $CurrentDirectory = Get-Location
+  }
+
+  PROCESS {
+    $CurrentDirectory.Path
+  }
 }
 
 <#
@@ -796,12 +853,17 @@ function Print-Working-Directory {
   A list of directories and files in the current directory
 #>
 function Change-Directory {
-  param (
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
     [Parameter(Mandatory = $false)]
     [string]$Path
   )
-  if ($Path) {
-    Set-Location -Path $Path
+
+  PROCESS {
+    if ($Path) {
+      Push-Location -Path $Path
+      List-Directories
+    }
   }
 }
 
@@ -824,25 +886,22 @@ function Change-Directory {
   A list of directories that were created if the Verbose parameter is specified, otherwise nothing
 #>
 function Make-Directory {
-  param (
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
     [Parameter(Mandatory = $true)]
     [string[]]$Path,
-
-    [Parameter(Mandatory = $false)]
-    [Alias("v")]
-    [switch]$Verbose,
     
     [Parameter(Mandatory = $false)]
     [Alias("m")]
     [string]$Permission
   )
-  $Path | ForEach-Object {
-    New-Item -Path $_ -ItemType Directory -Force
-    if ($Permission) {
-      icacls $_ /grant "$($env:USERNAME):$Permission" /c /q
-    }
-    if ($Verbose) {
-      Write-Host "Created directory $_"
+
+  PROCESS {
+    $Path | ForEach-Object {
+      New-Item -Path $_ -ItemType Directory -Force
+      if ($Permission) {
+        icacls $_ /grant "$($env:USERNAME):$Permission" /c /q
+      }
     }
   }
 }
@@ -864,7 +923,8 @@ function Make-Directory {
   A list of directories that were removed
 #>
 function Remove-Directory {
-  param (
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
     [Parameter(Mandatory = $false)]
     [Alias("p")]
     [switch]$Recurse,
@@ -872,12 +932,15 @@ function Remove-Directory {
     [Parameter(Mandatory = $true)]
     [string[]]$Path
   )
-  $Path | ForEach-Object {
-    if ($Recurse) {
-      Remove-Item -Path $_ -Recurse -Force
-    }
-    else {
-      Remove-Item -Path $_
+
+  PROCESS {
+    $Path | ForEach-Object {
+      if ($Recurse) {
+        Remove-Item -Path $_ -Recurse -Force
+      }
+      else {
+        Remove-Item -Path $_
+      }
     }
   }
 }
@@ -903,7 +966,8 @@ function Remove-Directory {
   A list of files that were deleted
 #>
 function Remove-File {
-  param (  
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (  
     [Parameter(Mandatory = $true)]
     [string[]]$Path,
   
@@ -919,15 +983,18 @@ function Remove-File {
     [Alias("r")]
     [switch]$Recurse
   )
-  $Path | ForEach-Object {
-    if ($Prompt) {
-      $result = [System.Windows.Forms.MessageBox]::Show("Are you sure you want to delete $_?", "Delete File", [System.Windows.Forms.MessageBoxButtons]::YesNo)
-      if ($result -eq [System.Windows.Forms.DialogResult]::Yes) {
+
+  PROCESS {
+    $Path | ForEach-Object {
+      if ($Prompt) {
+        $result = [System.Windows.Forms.MessageBox]::Show("Are you sure you want to delete $_?", "Delete File", [System.Windows.Forms.MessageBoxButtons]::YesNo)
+        if ($result -eq [System.Windows.Forms.DialogResult]::Yes) {
+          Remove-Item -Path $_ -Force:$Force -Recurse:$Recurse
+        }
+      }
+      else {
         Remove-Item -Path $_ -Force:$Force -Recurse:$Recurse
       }
-    }
-    else {
-      Remove-Item -Path $_ -Force:$Force -Recurse:$Recurse
     }
   }
 }
@@ -953,7 +1020,8 @@ function Remove-File {
   Nothing.
 #>
 function Copy-Folder-File {
-  param(  
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (  
     [Parameter(Mandatory = $true)]
     [string[]]$Source,
 
@@ -965,8 +1033,10 @@ function Copy-Folder-File {
     [Switch]$Recurse
   )
 
-  foreach ($item in $Source) {
-    Copy-Item $item $Destination -Recurse:$Recurse
+  PROCESS {
+    foreach ($item in $Source) {
+      Copy-Item $item $Destination -Recurse:$Recurse
+    }
   }
 }
 
@@ -989,7 +1059,8 @@ function Copy-Folder-File {
   Nothing.
 #>
 function Move-Folder-File {
-  param(
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
     [Parameter(Mandatory = $true)]
     [string[]]$Source,
 
@@ -997,8 +1068,10 @@ function Move-Folder-File {
     [string]$Destination
   )
 
-  foreach ($item in $Source) {
-    Move-Item $item $Destination
+  PROCESS {
+    foreach ($item in $Source) {
+      Move-Item $item $Destination
+    }
   }
 }
 
@@ -1017,17 +1090,20 @@ function Move-Folder-File {
   Nothing.
 #>
 function Create-File {
-  param(
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
     [Parameter(Mandatory = $true)]
     [string[]]$Path
   )
 
-  foreach ($item in $Path) {
-    if (!(Test-Path $item)) {
-      New-Item -ItemType File -Path $item -Force
-    }
-    else {
+  PROCESS {
+    foreach ($item in $Path) {
+      if (!(Test-Path $item)) {
+        New-Item -ItemType File -Path $item -Force
+      }
+      else {
           (Get-Item -Path $item).LastWriteTime = Get-Date
+      }
     }
   }
 }
@@ -1047,15 +1123,18 @@ function Create-File {
   The file's type. E.g. "C:\Users\file.txt" -> ".txt"
 #>
 function File-Type {
-  param(
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
     [Parameter(Mandatory = $true)]
     [string[]]$Path
   )
 
-  foreach ($item in $Path) {
-    if (Test-Path $item) {
-      $file = Get-Item -Path $item
-      $file.Extension
+  PROCESS {
+    foreach ($item in $Path) {
+      if (Test-Path $item) {
+        $file = Get-Item -Path $item
+        $file.Extension
+      }
     }
   }
 }
@@ -1075,18 +1154,21 @@ function File-Type {
   The file's contents
 #>
 function Read-File {
-  param(
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
     [Parameter(Mandatory = $true)]
     [string[]]$Path
   )
 
-  foreach ($item in $Path) {
-    if (Test-Path $item) {
-      $file = Get-Item -Path $item
-      Get-Content $file
-    }
-    else {
-      New-Item -ItemType File -Path $item -Force
+  PROCESS {
+    foreach ($item in $Path) {
+      if (Test-Path $item) {
+        $file = Get-Item -Path $item
+        Get-Content $file
+      }
+      else {
+        New-Item -ItemType File -Path $item -Force
+      }
     }
   }
 }
@@ -1106,15 +1188,18 @@ function Read-File {
   The file's contents in reverse
 #>
 function Read-File-Reverse {
-  param(
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
     [Parameter(Mandatory = $true)]
     [string[]]$Path
   )
 
-  foreach ($item in $Path) {
-    $content = Get-Content $item -ReadCount 0
-    [array]::Reverse($content)
-    $content
+  PROCESS {
+    foreach ($item in $Path) {
+      $content = Get-Content $item -ReadCount 0
+      [array]::Reverse($content)
+      $content
+    }
   }
 }
 
@@ -1137,7 +1222,8 @@ function Read-File-Reverse {
   The first few lines of the file (default is 10)
 #>
 function Head-File {
-  param(      
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (      
     [Parameter(Mandatory = $true)]
     [string[]]$Path,
 
@@ -1146,8 +1232,10 @@ function Head-File {
     [int]$Lines = 10
   )
 
-  foreach ($item in $Path) {
-    Get-Content $item -TotalCount $Lines
+  PROCESS {
+    foreach ($item in $Path) {
+      Get-Content $item -TotalCount $Lines
+    }
   }
 }
 
@@ -1170,7 +1258,8 @@ function Head-File {
   The last few lines of the file (default is 10)
 #>
 function Tail-File {
-  param(    
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (    
     [Parameter(Mandatory = $true)]
     [string[]]$Path,
 
@@ -1179,9 +1268,11 @@ function Tail-File {
     [int]$Lines = 10
   )
 
-  foreach ($item in $Path) {
-    $content = Get-Content $item
-    $content[ - $Lines..-1]
+  PROCESS {
+    foreach ($item in $Path) {
+      $content = Get-Content $item
+      $content[ - $Lines..-1]
+    }
   }
 }
 
@@ -1198,13 +1289,16 @@ function Tail-File {
   The differences between the two files
 #>
 function Differential-File {
-  param(
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
     [Parameter(Mandatory = $true)]
     [string[]]$Path
   )
 
-  foreach ($item in $Path) {
-    Compare-Object -ReferenceObject (Get-Content $item) -DifferenceObject (Get-Content $item)
+  PROCESS {
+    foreach ($item in $Path) {
+      Compare-Object -ReferenceObject (Get-Content $item) -DifferenceObject (Get-Content $item)
+    }
   }
 }
 
@@ -1225,7 +1319,8 @@ function Differential-File {
   The input written to shell and files
 #>
 function Write-OutputAndFile {
-  param(
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
     [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
     [string]$InputObject,
 
@@ -1233,7 +1328,7 @@ function Write-OutputAndFile {
     [string[]]$FilePath
   )
 
-  process {
+  PROCESS {
     foreach ($file in $FilePath) {
       $InputObject | Tee-Object -FilePath $file -Append
     }
@@ -1257,13 +1352,19 @@ function Write-OutputAndFile {
   The file(s) that match the pattern
 #>
 function Locate-File {
-  param(
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
     [Parameter(Mandatory = $true)]
     [string]$Pattern
   )
 
-  $currentLocation = Get-Location
-  Get-ChildItem -Path $currentLocation -Filter "*$Pattern*" -File -Recurse -ErrorAction SilentlyContinue | Select-Object FullName
+  BEGIN {
+    $currentLocation = Get-Location
+  }
+
+  PROCESS {
+    Get-ChildItem -Path $currentLocation -Filter "*$Pattern*" -File -Recurse -ErrorAction SilentlyContinue | Select-Object FullName
+  }
 }
 
 <#
@@ -1297,7 +1398,8 @@ function Locate-File {
   The full paths of the items that match the specified name and type.
 #>
 function Find-Item {
-  param(
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
     [Parameter(Mandatory = $false)]
     [string]$Path = (Get-Location),
 
@@ -1311,11 +1413,13 @@ function Find-Item {
     [string]$ItemType = "f"
   )
 
-  if ($ItemType -eq "f") {
-    Get-ChildItem -Path $Path -Filter $ItemName -File -Recurse -ErrorAction SilentlyContinue | Select-Object FullName
-  }
-  else {
-    Get-ChildItem -Path $Path -Filter $ItemName -Directory -Recurse -ErrorAction SilentlyContinue | Select-Object FullName
+  PROCESS {
+    if ($ItemType -eq "f") {
+      Get-ChildItem -Path $Path -Filter $ItemName -File -Recurse -ErrorAction SilentlyContinue | Select-Object FullName
+    }
+    else {
+      Get-ChildItem -Path $Path -Filter $ItemName -Directory -Recurse -ErrorAction SilentlyContinue | Select-Object FullName
+    }
   }
 }
 
@@ -1340,7 +1444,8 @@ function Find-Item {
   A custom object for each drive.
 #>
 function Get-DiskUsage {
-  param(
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
     [Parameter(Mandatory = $false)]
     [string]$Drive,
 
@@ -1357,48 +1462,52 @@ function Get-DiskUsage {
     [switch]$FilesystemType
   )
 
-  $sizeType = "GB"
-  if ($Megabytes) {
-    $sizeType = "MB"
-  }
-  elseif ($Kilobytes) {
-    $sizeType = "KB"
+  BEGIN {
+    $sizeType = "GB"
+    if ($Megabytes) {
+      $sizeType = "MB"
+    }
+    elseif ($Kilobytes) {
+      $sizeType = "KB"
+    }
   }
 
-  if ($Drive) {
-    $vol = Get-Volume -DriveLetter $Drive
-    $vol | Format-Table -AutoSize
-  }
-  else {
-    Get-Volume | Where-Object { $_.DriveType -eq 'Fixed' } | ForEach-Object {
-      $used = ($_.Size - $_.SizeRemaining) / ("1$($sizeType)")
-      $total = $_.Size / ("1$($sizeType)")
-      $free = $_.SizeRemaining / ("1$($sizeType)")
-      if ($FilesystemType) {
-        $fileSystem = $_.FileSystem
-        [PSCustomObject]@{
-          Name                 = $_.FileSystemLabel
-          'Drive Letter'       = $_.DriveLetter
-          'Used'               = [Math]::Round($used, 2)
-          'Free'               = [Math]::Round($free, 2)
-          'Total'              = [Math]::Round($total, 2)
-          'File System'        = $fileSystem
-          'Health Status'      = $_.HealthStatus
-          'Operational Status' = $_.OperationalStatus
-          'Unit'               = $sizeType
+  PROCESS {
+    if ($Drive) {
+      $vol = Get-Volume -DriveLetter $Drive
+      $vol | Format-Table -AutoSize
+    }
+    else {
+      Get-Volume | Where-Object { $_.DriveType -eq 'Fixed' } | ForEach-Object {
+        $used = ($_.Size - $_.SizeRemaining) / ("1$($sizeType)")
+        $total = $_.Size / ("1$($sizeType)")
+        $free = $_.SizeRemaining / ("1$($sizeType)")
+        if ($FilesystemType) {
+          $fileSystem = $_.FileSystem
+          [PSCustomObject]@{
+            Name                 = $_.FileSystemLabel
+            'Drive Letter'       = $_.DriveLetter
+            'Used'               = [Math]::Round($used, 2)
+            'Free'               = [Math]::Round($free, 2)
+            'Total'              = [Math]::Round($total, 2)
+            'File System'        = $fileSystem
+            'Health Status'      = $_.HealthStatus
+            'Operational Status' = $_.OperationalStatus
+            'Unit'               = $sizeType
+          }
         }
-      }
-      else {
-        [PSCustomObject]@{
-          Name                 = $_.FileSystemLabel
-          'Drive Letter'       = $_.DriveLetter
-          'Used'               = [Math]::Round($used, 2)
-          'Free'               = [Math]::Round($free, 2)
-          'Total'              = [Math]::Round($total, 2)
-          'Health Status'      = $_.HealthStatus
-          'Operational Status' = $_.OperationalStatus
-          'Unit'               = $sizeType
-        }      
+        else {
+          [PSCustomObject]@{
+            Name                 = $_.FileSystemLabel
+            'Drive Letter'       = $_.DriveLetter
+            'Used'               = [Math]::Round($used, 2)
+            'Free'               = [Math]::Round($free, 2)
+            'Total'              = [Math]::Round($total, 2)
+            'Health Status'      = $_.HealthStatus
+            'Operational Status' = $_.OperationalStatus
+            'Unit'               = $sizeType
+          }      
+        }
       }
     }
   }
@@ -1425,7 +1534,8 @@ function Get-DiskUsage {
   A custom object with the following properties: Path, Size, Unit, Last Modified (if the -LastModified switch is provided).
 #>
 function Get-DirectorySize {
-  param(
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
     [Parameter(Mandatory = $true)]
     [string]$Path,
 
@@ -1442,34 +1552,40 @@ function Get-DirectorySize {
     [switch]$LastModified
   )
 
-  $items = Get-ChildItem $Path -Recurse -File
-  $size = ($items | Measure-Object -Property Length -Sum).Sum
-
-  if ($Megabytes) {
-    $size = $size / 1MB
-    $unit = "MB"
-  }
-  elseif ($Kilobytes) {
-    $size = $size / 1KB
-    $unit = "KB"
-  }
-  else {
-    $size = $size / 1GB
-    $unit = "GB"
+  BEGIN {
+    $items = Get-ChildItem $Path -Recurse -File
+    $size = ($items | Measure-Object -Property Length -Sum).Sum
   }
 
-  $output = [PSCustomObject]@{
-    Path = $Path
-    Size = [Math]::Round($size, 2)
-    Unit = $unit
+  PROCESS {
+    if ($Megabytes) {
+      $size = $size / 1MB
+      $unit = "MB"
+    }
+    elseif ($Kilobytes) {
+      $size = $size / 1KB
+      $unit = "KB"
+    }
+    else {
+      $size = $size / 1GB
+      $unit = "GB"
+    }
+  
+    $output = [PSCustomObject]@{
+      Path = $Path
+      Size = [Math]::Round($size, 2)
+      Unit = $unit
+    }
+  
+    if ($LastModified) {
+      $lastModified = $items | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+      $output | Add-Member -Type NoteProperty -Name "Last Modified" -Value $lastModified.LastWriteTime
+    }
   }
 
-  if ($LastModified) {
-    $lastModified = $items | Sort-Object LastWriteTime -Descending | Select-Object -First 1
-    $output | Add-Member -Type NoteProperty -Name "Last Modified" -Value $lastModified.LastWriteTime
+  END {
+    return $output
   }
-
-  return $output
 }
 
 <#
@@ -1489,7 +1605,8 @@ function Get-DirectorySize {
   A custom object with the following properties: KernelName, NodeHostName.
 #>
 function Get-SystemInfo {
-  param(
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
     [Parameter(Mandatory = $false)]
     [Alias("s")]
     [switch]$KernelName,
@@ -1499,27 +1616,31 @@ function Get-SystemInfo {
     [switch]$NodeHostName
   )
 
-  if ($KernelName) {
-    $output = [PSCustomObject]@{
-      'Kernel version' = (Get-CimInstance -ClassName Win32_OperatingSystem).Version
+  PROCESS {
+    if ($KernelName) {
+      $output = [PSCustomObject]@{
+        'Kernel version' = (Get-CimInstance -ClassName Win32_OperatingSystem).Version
+      }
     }
-  }
-  elseif ($NodeHostName) {
-    $output = [PSCustomObject]@{
-      'Hostname' = [System.Net.Dns]::GetHostName()
+    elseif ($NodeHostName) {
+      $output = [PSCustomObject]@{
+        'Hostname' = [System.Net.Dns]::GetHostName()
+      }
     }
-  }
-  else {
-    $output = [PSCustomObject]@{
-      OS               = (Get-WmiObject -Class Win32_OperatingSystem).Caption
-      'Hostname'       = [System.Net.Dns]::GetHostName()
-      Version          = [System.Environment]::OSVersion.Version
-      'Kernel version' = (Get-CimInstance -ClassName Win32_OperatingSystem).Version
-      Time             = Get-Date -Format "HH:mm:ss"
+    else {
+      $output = [PSCustomObject]@{
+        OS               = (Get-WmiObject -Class Win32_OperatingSystem).Caption
+        'Hostname'       = [System.Net.Dns]::GetHostName()
+        Version          = [System.Environment]::OSVersion.Version
+        'Kernel version' = (Get-CimInstance -ClassName Win32_OperatingSystem).Version
+        Time             = Get-Date -Format "HH:mm:ss"
+      }
     }
   }
 
-  return $output
+  END {
+    return $output
+  }
 }
 
 <#
@@ -1541,7 +1662,8 @@ function Get-SystemInfo {
   A custom object with the following properties: Alias, FQDN, IPAddress.
 #>
 function Get-HostNameInfo {
-  param(
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
     [Parameter(Mandatory = $false)]
     [Alias("a")]
     [switch]$Alias,
@@ -1555,28 +1677,32 @@ function Get-HostNameInfo {
     [switch]$IPAddress
   )
 
-  if ($Alias) {
-    $output = [PSCustomObject]@{
-      Alias = [System.Net.Dns]::GetHostName()
+  PROCESS {
+    if ($Alias) {
+      $output = [PSCustomObject]@{
+        Alias = [System.Net.Dns]::GetHostName()
+      }
     }
-  }
-  elseif ($FQDN) {
-    $output = [PSCustomObject]@{
-      FQDN = "$username@$([System.Net.Dns]::GetHostName())"
+    elseif ($FQDN) {
+      $output = [PSCustomObject]@{
+        FQDN = "$username@$([System.Net.Dns]::GetHostName())"
+      }
     }
-  }
-  elseif ($IPAddress) {
-    $output = [PSCustomObject]@{
-      IPAddress = ([System.Net.Dns]::GetHostAddresses([System.Net.Dns]::GetHostName()) | Where-Object { $_.AddressFamily -eq 'InterNetwork' })[0].IPAddressToString
+    elseif ($IPAddress) {
+      $output = [PSCustomObject]@{
+        IPAddress = ([System.Net.Dns]::GetHostAddresses([System.Net.Dns]::GetHostName()) | Where-Object { $_.AddressFamily -eq 'InterNetwork' })[0].IPAddressToString
+      }
     }
-  }
-  else {
-    $output = [PSCustomObject]@{
-      'Hostname' = [System.Net.Dns]::GetHostName()
+    else {
+      $output = [PSCustomObject]@{
+        'Hostname' = [System.Net.Dns]::GetHostName()
+      }
     }
   }
 
-  return $output
+  END {
+    return $output
+  }
 }
 
 <#
@@ -1592,18 +1718,25 @@ function Get-HostNameInfo {
   A custom object with the following property: ExecutionTime.
 #>
 function Measure-ExecutionTime {
-  param(
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
     [Parameter(Mandatory = $true)]
     [scriptblock]$ScriptBlock
   )
 
-  $result = Measure-Command -Expression $ScriptBlock
-
-  $output = [PSCustomObject]@{
-    'Execution Time (ms)' = $result.TotalMilliseconds
+  BEGIN {
+    $result = Measure-Command -Expression $ScriptBlock
   }
 
-  return $output
+  PROCESS {
+    $output = [PSCustomObject]@{
+      'Execution Time (ms)' = $result.TotalMilliseconds
+    }
+  }
+
+  END {
+    return $output
+  }
 }
 
 <#
@@ -1627,7 +1760,8 @@ function Measure-ExecutionTime {
   A list of jobs.
 #>
 function Get-Jobs {
-  param(
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
     [Parameter(Mandatory = $false)]
     [Alias("l")]
     [switch]$List,
@@ -1641,17 +1775,19 @@ function Get-Jobs {
     [switch]$ProcessId
   )
 
-  if ($ProcessId) {
-    Get-Job | ForEach-Object { $_.Id }
-  }
-  elseif ($List) {
-    Get-Job | Format-List -Property *
-  }
-  elseif ($Status) {
-    Get-Job | Where-Object { $_.HasMoreData -eq $true }
-  }
-  else {
-    Get-Job
+  PROCESS {
+    if ($ProcessId) {
+      Get-Job | ForEach-Object { $_.Id }
+    }
+    elseif ($List) {
+      Get-Job | Format-List -Property *
+    }
+    elseif ($Status) {
+      Get-Job | Where-Object { $_.HasMoreData -eq $true }
+    }
+    else {
+      Get-Job
+    }
   }
 }
 
@@ -1664,12 +1800,14 @@ function Get-Jobs {
   The ID of the process, can be retrieved with Get-Process
 #>
 function Kill-Process {
-  param (
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
     [Parameter(Mandatory = $true)]
     [string]$ProcessId
   )
-
-  Stop-Process -Id $ProcessId
+  PROCESS {
+    Stop-Process -Id $ProcessId
+  }
 }
 
 <#
@@ -1683,15 +1821,17 @@ function Kill-Process {
   The type of DNS record to gather information about
 #>
 function Find-DNSRecord {
-  param (
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
     [Parameter(Mandatory = $true)]
     [string]$Domain,
 
     [Parameter(Mandatory = $true)]
     [string]$Type
   )
-
-  Resolve-DnsName -Name $Domain -Type $Type
+  PROCESS {
+    Resolve-DnsName -Name $Domain -Type $Type
+  }
 }
 
 <#
@@ -1705,7 +1845,8 @@ function Find-DNSRecord {
   Saves the shell history to a file
 #>
 function Shell-History {
-  param (
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
     [Parameter(Mandatory = $false)]
     [Alias("c")]
     [switch]$Clear,
@@ -1715,15 +1856,17 @@ function Shell-History {
     [string]$Save
   )
 
-  if ($Clear) {
-    Clear-History
-  }
+  PROCESS {
+    if ($Clear) {
+      Clear-History
+    }
 
-  if ($Save) {
-    Get-History | Out-File $Save
-  }
+    if ($Save) {
+      Get-History | Out-File $Save
+    }
 
-  Get-History
+    Get-History
+  }
 }
 
 <#
@@ -1735,17 +1878,20 @@ function Shell-History {
   The name of the process
 #>
 function Find-Process {
-  param (
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
     [Parameter(Mandatory = $true)][string]$Name
   )
 
-  Get-Process | Where-Object { $_.Name -like "*$Name*" } | Format-Table `
-  @{Label = "NPM(K)"; Expression = { [int]($_.NPM / 1024) } },
-  @{Label = "PM(K)"; Expression = { [int]($_.PM / 1024) } },
-  @{Label = "WS(K)"; Expression = { [int]($_.WS / 1024) } },
-  @{Label = "VM(M)"; Expression = { [int]($_.VM / 1MB) } },
-  @{Label = "CPU(s)"; Expression = { if ($_.CPU) { $_.CPU.ToString("N") } } },
-  Id, ProcessName, StartTime, mainWindowTitle
+  PROCESS {
+    Get-Process | Where-Object { $_.Name -like "*$Name*" } | Format-Table `
+    @{Label = "NPM(K)"; Expression = { [int]($_.NPM / 1024) } },
+    @{Label = "PM(K)"; Expression = { [int]($_.PM / 1024) } },
+    @{Label = "WS(K)"; Expression = { [int]($_.WS / 1024) } },
+    @{Label = "VM(M)"; Expression = { [int]($_.VM / 1MB) } },
+    @{Label = "CPU(s)"; Expression = { if ($_.CPU) { $_.CPU.ToString("N") } } },
+    Id, ProcessName, StartTime, mainWindowTitle
+  }
 }
 
 <#
@@ -1755,10 +1901,18 @@ function Find-Process {
   This function retrieves the currently installed updates
 #>
 function Get-Updates {
-  $updates = Get-WmiObject -Class Win32_QuickFixEngineering
-  $updates | Format-Table `
-  @{Label = "InstalledOn"; Expression = { if ($_.InstalledOn) { $_.InstalledOn.ToString("yyyy-MM-dd") } } },
-  Description, HotFixID, InstalledBy, InstalledOn, ServicePackInEffect, Status, -AutoSize
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM ( ) # No parameters
+
+  BEGIN {
+    $updates = Get-WmiObject -Class Win32_QuickFixEngineering
+  }
+
+  PROCESS {
+    $updates | Format-Table `
+    @{Label = "InstalledOn"; Expression = { if ($_.InstalledOn) { $_.InstalledOn.ToString("yyyy-MM-dd") } } },
+    Description, HotFixID, InstalledBy, InstalledOn, ServicePackInEffect, Status
+  }
 }
 
 <#
@@ -1768,7 +1922,12 @@ function Get-Updates {
   This function generates a system report
 #>
 function Get-SystemReport {
-  Invoke-RestMethod "https://raw.githubusercontent.com/luke-beep/GSR/main/GenerateSystemReport.ps1" | Invoke-Expression
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM ( ) # No parameters
+
+  PROCESS {
+    Invoke-RestMethod "https://raw.githubusercontent.com/luke-beep/GSR/main/GenerateSystemReport.ps1" | Invoke-Expression
+  }
 }
 
 <#
@@ -1778,7 +1937,12 @@ function Get-SystemReport {
   This function optimizes PowerShell assemblies
 #>
 function Optimize-PowerShell {
-  Invoke-RestMethod "https://raw.githubusercontent.com/luke-beep/ps-optimize-assemblies/main/optimize-assemblies.ps1" | Invoke-Expression
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM ( ) # No parameters
+
+  PROCESS {
+    Invoke-RestMethod "https://raw.githubusercontent.com/luke-beep/ps-optimize-assemblies/main/optimize-assemblies.ps1" | Invoke-Expression
+  }
 }
 
 <#
@@ -1788,7 +1952,12 @@ function Optimize-PowerShell {
   This function activates Windows using MAS
 #>
 function Activate-Windows {
-  Invoke-RestMethod https://massgrave.dev/get | Invoke-Expression
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM ( ) # No parameters
+
+  PROCESS {
+    Invoke-RestMethod https://massgrave.dev/get | Invoke-Expression
+  }
 }
 
 <#
@@ -1800,60 +1969,67 @@ function Activate-Windows {
   The URL of the object
 #>
 function Invoke-DownloadObject {
-  param (
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
     [Parameter(Mandatory = $true)][string[]]$Url,
     [Parameter(Mandatory = $false)][string[]]$ObjectName,
     [Parameter(Mandatory = $false)][string]$ObjectPath,
     [Parameter(Mandatory = $false)][switch]$Overwrite,
     [Parameter(Mandatory = $false)][switch]$Silent
   )
+  
+  BEGIN {
+    $downloadDirectory = if ($ObjectPath) { $ObjectPath } else { Get-Location }
+    $downloadedObjects = @()
+    $jobs = @()
+  }
 
-  $downloadDirectory = if ($ObjectPath) { $ObjectPath } else { Get-Location }
-  $downloadedObjects = @()
+  PROCESS { 
+    for ($i = 0; $i -lt $Url.Length; $i++) {
+      try {
+        $actualObjectName = if ($ObjectName.Length -gt $i) { $ObjectName[$i] } else { [System.IO.Path]::GetFileName($Url[$i]) }
+        $destinationPath = Join-Path $downloadDirectory $actualObjectName
+        if ($Overwrite -and (Test-Path $destinationPath)) {
+          if (-not $Silent) {
+            Write-Host "Removing $destinationPath"
+          }
+          Remove-Item $destinationPath -Force
+        }
 
-  $jobs = @()
-  for ($i = 0; $i -lt $Url.Length; $i++) {
-    try {
-      $actualObjectName = if ($ObjectName.Length -gt $i) { $ObjectName[$i] } else { [System.IO.Path]::GetFileName($Url[$i]) }
-      $destinationPath = Join-Path $downloadDirectory $actualObjectName
-      if ($Overwrite -and (Test-Path $destinationPath)) {
+        $scriptBlock = {
+          PARAM ($url, $destinationPath, $overwrite, $silent)
+          $curlCommand = "curl -o `"$destinationPath`" -L `"$url`" -s"
+          if ($overwrite) {
+            $curlCommand += " -O"
+          }
+          Invoke-Expression $curlCommand 2>&1 | Out-Null
+        }
+
+        $job = Start-Job -ScriptBlock $scriptBlock -ArgumentList $Url[$i], $destinationPath, $Overwrite, $Silent
+        $jobs += $job
+
+        $downloadedObjects += $destinationPath
+      }
+      catch {
         if (-not $Silent) {
-          Write-Host "Removing $destinationPath"
+          Write-Error "An error occurred: $_"
         }
-        Remove-Item $destinationPath -Force
-      }
-
-      $scriptBlock = {
-        param ($url, $destinationPath, $overwrite, $silent)
-        $curlCommand = "curl -o `"$destinationPath`" -L `"$url`" -s"
-        if ($overwrite) {
-          $curlCommand += " -O"
-        }
-        Invoke-Expression $curlCommand 2>&1 | Out-Null
-      }
-
-      $job = Start-Job -ScriptBlock $scriptBlock -ArgumentList $Url[$i], $destinationPath, $Overwrite, $Silent
-      $jobs += $job
-
-      $downloadedObjects += $destinationPath
-    }
-    catch {
-      if (-not $Silent) {
-        Write-Error "An error occurred: $_"
       }
     }
-  }
-  $jobs | Wait-Job
+    $jobs | Wait-Job
 
-  $jobs | ForEach-Object {
-    Receive-Job -Job $_
-    Remove-Job -Job $_
+    $jobs | ForEach-Object {
+      Receive-Job -Job $_
+      Remove-Job -Job $_
+    }
   }
 
-  if (-not $Silent) {
-    Invoke-Item -Path $downloadDirectory  
+  END {
+    if (-not $Silent) {
+      Invoke-Item -Path $downloadDirectory  
+    }
+    return $downloadedObjects
   }
-  return $downloadedObjects
 }
 
 <#
@@ -1867,12 +2043,13 @@ function Invoke-DownloadObject {
   Invoke-DownloadObject -Url "http://example.com/file1.zip", "http://example.com/file2.zip" | Invoke-Object
 #>
 function Invoke-Object {
-  param (
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
     [Parameter(ValueFromPipeline = $true)]
     [string[]]$Objects
   )
 
-  Process {
+  PROCESS {
     foreach ($object in $Objects) {
       if (Test-Path $object) {
         Start-Process $object
@@ -1888,11 +2065,16 @@ function Invoke-Object {
   This function gets the status of all services
 #>
 function Get-Services {
-  Get-Service | ForEach-Object {
-    $status = $_.Status
-    $name = $_.Name
-    $displayName = $_.DisplayName
-    Write-Output ("{0} ({1}): {2}" -f $displayName, $name, $status)
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM ( ) # No parameters
+
+  PROCESS {
+    Get-Service | ForEach-Object {
+      $status = $_.Status
+      $name = $_.Name
+      $displayName = $_.DisplayName
+      Write-Output ("{0} ({1}): {2}" -f $displayName, $name, $status)
+    }
   }
 }
 
@@ -1905,38 +2087,42 @@ function Get-Services {
   The target
 #>
 function Invoke-TargetHack {
-  param (
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
     [Parameter(Mandatory = $true)][string]$Target
   )
 
-  $progress = 0
-  $progressMax = 100
-  $progressStep = 10
-  $progressBar = [char]0x2588
-
-  $job = Start-Job -ScriptBlock {
+  BEGIN {
     $progress = 0
     $progressMax = 100
     $progressStep = 10
-
-    while ($progress -lt $progressMax) {
-      $progress += $progressStep
-      Write-Progress -Activity "Hacking $Target" -Status "Progress: $progress%" -PercentComplete $progress
-      Start-Sleep -Seconds 1
-    }
-  } -ArgumentList $Target
-
-  while ($job.State -eq "Running") {
-    Write-Host -NoNewline $progressBar
-    Start-Sleep -Milliseconds 100
+    $progressBar = [char]0x2588
   }
 
-  Write-Host
-  Write-Host "Hacking complete!"
-  Write-Host
-  Write-Host "Target: $Target"
-  Write-Host "Status: $($job.State)"
-  Write-Host
+  PROCESS {
+    $job = Start-Job -ScriptBlock {
+      $progress = 0
+      $progressMax = 100
+      $progressStep = 10
+
+      while ($progress -lt $progressMax) {
+        $progress += $progressStep
+        Write-Progress -Activity "Hacking $Target" -Status "Progress: $progress%" -PercentComplete $progress
+        Start-Sleep -Seconds 1
+      }
+    } -ArgumentList $Target
+
+    while ($job.State -eq "Running") {
+      Write-Host -NoNewline $progressBar
+      Start-Sleep -Milliseconds 100
+    }
+  }
+
+  END {
+    Write-Host "Hacking complete!"
+    Write-Host "Target: $Target"
+    Write-Host "Status: $($job.State)"
+  }
 }
 
 <#
@@ -1946,9 +2132,17 @@ function Invoke-TargetHack {
   This function gets a programming joke
 #>
 function Get-ProgrammingJoke {
-  $response = Invoke-RestMethod -Uri 'https://official-joke-api.appspot.com/jokes/programming/random'
-  $joke = $response[0]
-  Write-Output ("{0} {1}" -f $joke.setup, $joke.punchline)
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM ( ) # No parameters
+
+  BEGIN {
+    $response = Invoke-RestMethod -Uri 'https://official-joke-api.appspot.com/jokes/programming/random'
+    $joke = $response[0]
+  }
+
+  PROCESS {
+    Write-Output ("{0} {1}" -f $joke.setup, $joke.punchline) 
+  }
 }
 
 <#
@@ -1958,24 +2152,35 @@ function Get-ProgrammingJoke {
   This function allows you to emulate the Matrix rain effect
 #>
 function Start-MatrixRain {
-  $width = $host.UI.RawUI.BufferSize.Width
-  $height = $host.UI.RawUI.BufferSize.Height
-  $streams = 1..($width * 200) | ForEach-Object { @{ Position = Get-Random -Minimum 0 -Maximum $height; Speed = Get-Random -Minimum 1 -Maximum 2 } }
-  
-  $host.UI.RawUI.CursorSize = 0
-  try {
-    while ($true) {
-      Clear-Host
-      for ($i = 0; $i -lt $width; $i++) {
-        $stream = $streams[$i]
-        $stream.Position = ($stream.Position + $stream.Speed) % $height
-        $host.UI.RawUI.CursorPosition = New-Object -TypeName System.Management.Automation.Host.Coordinates -ArgumentList $i, $stream.Position
-        Write-Host (Get-Random -InputObject ('!'..'/' + ':'..'@' + '['..'`' + '{'..'~' + 0..9)) -NoNewline -ForegroundColor Green
-      }
-      Start-Sleep -Milliseconds 200
-    } 
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM ( ) # No parameters
+
+  BEGIN {
+    $width = $host.UI.RawUI.BufferSize.Width
+    $height = $host.UI.RawUI.BufferSize.Height
+    $streams = 1..($width * 200) | ForEach-Object { @{ Position = Get-Random -Minimum 0 -Maximum $height; Speed = Get-Random -Minimum 1 -Maximum 2 } }
+    $host.UI.RawUI.CursorSize = 0
   }
-  finally {
+
+  PROCESS {
+    try {
+      while ($true) {
+        Clear-Host
+        for ($i = 0; $i -lt $width; $i++) {
+          $stream = $streams[$i]
+          $stream.Position = ($stream.Position + $stream.Speed) % $height
+          $host.UI.RawUI.CursorPosition = New-Object -TypeName System.Management.Automation.Host.Coordinates -ArgumentList $i, $stream.Position
+          Write-Host (Get-Random -InputObject ('!'..'/' + ':'..'@' + '['..'`' + '{'..'~' + 0..9)) -NoNewline -ForegroundColor Green
+        }
+        Start-Sleep -Milliseconds 200
+      } 
+    }
+    finally {
+      Clear-Host
+    }
+  }
+
+  END {
     Clear-Host
   }
 }
@@ -1989,14 +2194,19 @@ function Start-MatrixRain {
   The query to search for
 #>
 function Search-DuckDuckGo {
-  param (
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
     [string]$Query
   )
 
-  $encodedQuery = [System.Web.HttpUtility]::UrlEncode($Query)
-  $url = "https://duckduckgo.com/?q=$encodedQuery&t=h_&ia=web"
+  BEGIN {
+    $encodedQuery = [System.Web.HttpUtility]::UrlEncode($Query)
+    $url = "https://duckduckgo.com/?q=$encodedQuery&t=h_&ia=web"
+  }
 
-  Start-Process $url
+  PROCESS {
+    Start-Process $url
+  }
 }
 
 <#
@@ -2010,17 +2220,23 @@ function Search-DuckDuckGo {
   Whether to show extended information
 #>
 function Test-IP {
-  param (
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
     [Parameter(Mandatory = $true)][string]$IP,
     [Parameter(Mandatory = $false)][switch]$Extended
   )
 
-  $info = Invoke-RestMethod -Uri "http://ip-api.com/json/$($IP)"
-  Write-Host "IP: $($IP)"
-  Write-Host "Country: $($info.country)"
-  Write-Host "Region: $($info.regionName)"
-  Write-Host "City: $($info.city)"
-  Write-Host "ISP: $($info.isp)"
+  BEGIN {
+    $info = Invoke-RestMethod -Uri "http://ip-api.com/json/$($IP)"
+  }
+
+  PROCESS {
+    Write-Host "IP: $($IP)"
+    Write-Host "Country: $($info.country)"
+    Write-Host "Region: $($info.regionName)"
+    Write-Host "City: $($info.city)"
+    Write-Host "ISP: $($info.isp)"
+  }
 }
 
 <#
@@ -2036,21 +2252,24 @@ function Test-IP {
   The end port
 #>
 function Test-Ports {
-  param (
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
     [Parameter(Mandatory = $true)][string]$IP,
     [Parameter(Mandatory = $true)][int]$StartPort,
     [Parameter(Mandatory = $true)][int]$EndPort
   )
 
-  for ($port = $StartPort; $port -le $EndPort; $port++) {
-    $tcpClient = New-Object System.Net.Sockets.TcpClient
-    $success = $tcpClient.ConnectAsync($IP, $port).Wait(1000)
-    $tcpClient.Close()
-    if ($success) {
-      Write-Host "Port $Port is open."
-    }
-    else {
-      Write-Host "Port $Port is closed."
+  PROCESS {
+    for ($port = $StartPort; $port -le $EndPort; $port++) {
+      $tcpClient = New-Object System.Net.Sockets.TcpClient
+      $success = $tcpClient.ConnectAsync($IP, $port).Wait(1000)
+      $tcpClient.Close()
+      if ($success) {
+        Write-Host "Port $Port is open."
+      }
+      else {
+        Write-Host "Port $Port is closed."
+      }
     }
   }
 }
@@ -2062,7 +2281,12 @@ function Test-Ports {
   This function allows you to manage your hosts file
 #>
 function Edit-Hosts {
-  Invoke-RestMethod "https://raw.githubusercontent.com/luke-beep/all-about-windows/main/scripts/HostEntryManager.ps1" | Invoke-Expression
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM ( ) # No parameters
+
+  PROCESS {
+    Invoke-RestMethod "https://raw.githubusercontent.com/luke-beep/all-about-windows/main/scripts/HostEntryManager.ps1" | Invoke-Expression
+  }
 }
 
 <#
@@ -2072,7 +2296,12 @@ function Edit-Hosts {
   This function allows you to manage your DNS settings
 #>
 function Set-DNS {
-  Invoke-RestMethod "https://raw.githubusercontent.com/luke-beep/all-about-windows/main/scripts/DNSChanger.ps1" | Invoke-Expression
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM ( ) # No parameters
+
+  PROCESS {
+    Invoke-RestMethod "https://raw.githubusercontent.com/luke-beep/all-about-windows/main/scripts/DNSChanger.ps1" | Invoke-Expression
+  }
 }
 
 <#
@@ -2082,7 +2311,12 @@ function Set-DNS {
   This function allows you to manage your network adapters
 #>
 function Set-NetworkAdapter {
-  Invoke-RestMethod "https://raw.githubusercontent.com/luke-beep/all-about-windows/main/scripts/NetworkAdapterManager.ps1" | Invoke-Expression
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM ( ) # No parameters
+  
+  PROCESS {
+    Invoke-RestMethod "https://raw.githubusercontent.com/luke-beep/all-about-windows/main/scripts/NetworkAdapterManager.ps1" | Invoke-Expression
+  }
 }
 
 <# 
@@ -2092,7 +2326,12 @@ function Set-NetworkAdapter {
   This function disables Nagles algorithm
 #>
 function Set-Nagles {
-  Invoke-RestMethod "https://raw.githubusercontent.com/luke-beep/all-about-windows/main/scripts/NaglesAlgorithm.ps1" | Invoke-Expression
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM ( ) # No parameters
+  
+  PROCESS {
+    Invoke-RestMethod "https://raw.githubusercontent.com/luke-beep/all-about-windows/main/scripts/NaglesAlgorithm.ps1" | Invoke-Expression
+  }
 }
 
 <#
@@ -2102,7 +2341,12 @@ function Set-Nagles {
   This function empties the recycle bin
 #>
 function Empty-RecycleBin {
-  Clear-RecycleBin -Force
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM ( ) # No parameters
+
+  PROCESS {
+    Clear-RecycleBin -Force
+  }
 }
 
 <#  
@@ -2112,8 +2356,16 @@ function Empty-RecycleBin {
   This function copies the current path to the clipboard
 #>
 function Copy-Path {
-  $path = (Get-Location).Path
-  Set-Clipboard $path
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM ( ) # No parameters
+
+  BEGIN {
+    $path = (Get-Location).Path
+  }
+
+  PROCESS {
+    Set-Clipboard $path
+  }
 }
 
 <#
@@ -2123,16 +2375,22 @@ function Copy-Path {
   This function backs up the current workspace to a specified directory
 #>
 function Take-Snapshot {
-  $BackupDirectory = "$SystemDrive\Snapshots"
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM ( ) # No parameters
 
-  $currentDirectory = Get-Location
-  $backupPath = Join-Path -Path $BackupDirectory -ChildPath (Get-Date -Format "yyyy-MM-dd_HH-mm-ss") + "_" + (Split-Path -Leaf $currentDirectory.Provider)
-
-  if (!(Test-Path -Path $backupPath)) {
-    New-Item -ItemType Directory -Path $backupPath | Out-Null
+  BEGIN {
+    $BackupDirectory = "$SystemDrive\Snapshots"
+    $currentDirectory = Get-Location
+    $backupPath = Join-Path -Path $BackupDirectory -ChildPath (Get-Date -Format "yyyy-MM-dd_HH-mm-ss") + "_" + (Split-Path -Leaf $currentDirectory.Provider)
   }
 
-  Copy-Item -Path "$currentDirectory\*" -Destination $backupPath -Recurse -Force
+  PROCESS {
+    if (!(Test-Path -Path $backupPath)) {
+      New-Item -ItemType Directory -Path $backupPath | Out-Null
+    }
+  
+    Copy-Item -Path "$currentDirectory\*" -Destination $backupPath -Recurse -Force
+  }
 }
 
 <#
@@ -2142,38 +2400,49 @@ function Take-Snapshot {
   This function displays tips & tricks for using this profile
 #>
 function Get-ShellTips {
-  $PanelWidth = 1000
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM ( ) # No parameters
 
-  $form = New-Object System.Windows.Forms.Form
-  $form.Text = "$($shellType) Profile Tips"
-  $form.BackColor = $nord0
-  $form.Size = New-Object System.Drawing.Size($PanelWidth, 500)
-  $form.StartPosition = 'CenterScreen'
-  $form.FormBorderStyle = 'FixedDialog'
-  $form.Icon = $icon
+  BEGIN {
+    $PanelWidth = 1000
 
-  $panel = New-Object System.Windows.Forms.Panel
-  $panel.Dock = 'Fill'
-  $panel.AutoScroll = $false
+    $form = New-Object System.Windows.Forms.Form
+    $form.Text = "$($shellType) Profile Tips"
+    $form.BackColor = $nord0
+    $form.Size = New-Object System.Drawing.Size($PanelWidth, 500)
+    $form.StartPosition = 'CenterScreen'
+    $form.FormBorderStyle = 'FixedDialog'
+    $form.Icon = $icon
+  
+    $panel = New-Object System.Windows.Forms.Panel
+    $panel.Dock = 'Fill'
+    $panel.AutoScroll = $false
+  
+    $guideText = Invoke-RestMethod "https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/tips.md"
+  
+    $richTextBox = New-Object System.Windows.Forms.RichTextBox
+    $richTextBox.Location = New-Object System.Drawing.Point(0, 0)
+    $richTextBox.Size = New-Object System.Drawing.Size(($PanelWidth + 20), 490)
+    $richTextBox.Text = $guideText
+    $richTextBox.BackColor = $nord0
+    $richTextBox.ForeColor = $nord4
+    $richTextBox.Font = New-Object System.Drawing.Font("Consolas", 10)
+    $richTextBox.ReadOnly = $true
+    $richTextBox.BorderStyle = 'None'
+    $richTextBox.ScrollBars = 'Vertical'
+  
+    $panel.Controls.Add($richTextBox)
+  
+    $form.Controls.Add($panel)
+  }
 
-  $guideText = Invoke-RestMethod "https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/tips.md"
+  PROCESS {
+    $form.ShowDialog()
+  }
 
-  $richTextBox = New-Object System.Windows.Forms.RichTextBox
-  $richTextBox.Location = New-Object System.Drawing.Point(0, 0)
-  $richTextBox.Size = New-Object System.Drawing.Size(($PanelWidth + 20), 490)
-  $richTextBox.Text = $guideText
-  $richTextBox.BackColor = $nord0
-  $richTextBox.ForeColor = $nord4
-  $richTextBox.Font = New-Object System.Drawing.Font("Consolas", 10)
-  $richTextBox.ReadOnly = $true
-  $richTextBox.BorderStyle = 'None'
-  $richTextBox.ScrollBars = 'Vertical'
-
-  $panel.Controls.Add($richTextBox)
-
-  $form.Controls.Add($panel)
-
-  $form.ShowDialog()
+  END {
+    $form.Dispose()
+  }
 }
 
 <#
@@ -2183,146 +2452,150 @@ function Get-ShellTips {
   This function allows you to configure your theme
 #>
 function Set-ShellTheme {
-  $ompConfig = "$env:USERPROFILE\.config\omp.json"
-  $starshipConfig = "$env:USERPROFILE\.config\starship.toml"
-  $starShip = Get-ItemProperty -Path $keyPath -Name 'Starship' -ErrorAction SilentlyContinue
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM ( ) # No parameters
 
-  $PanelWidth = 400
-  $PanelHeight = 200
-
-  if ($starShip.Starship -eq 1) {
-    Start-Process https://starship.rs/presets/
-
-    $form = New-Object System.Windows.Forms.Form
-    $form.Text = "Starship Theme Configuration"
-    $form.BackColor = $nord0
-    $form.Size = New-Object System.Drawing.Size($PanelWidth, $PanelHeight)
-    $form.StartPosition = 'CenterScreen'
-    $form.FormBorderStyle = 'FixedDialog'
-    $form.Icon = $icon
-    $form.Topmost = $true
-    $form.MinimizeBox = $false
-    $form.MaximizeBox = $false
-
-    $panel = New-Object System.Windows.Forms.Panel
-    $panel.Dock = 'Fill'
-    $panel.AutoScroll = $false
-
-    $tableLayoutPanel = New-Object System.Windows.Forms.TableLayoutPanel
-    $tableLayoutPanel.RowCount = 2
-    $tableLayoutPanel.ColumnCount = 1
-    $tableLayoutPanel.Dock = [System.Windows.Forms.DockStyle]::Fill
-    $tableLayoutPanel.ColumnStyles.Add((New-Object System.Windows.Forms.ColumnStyle([System.Windows.Forms.SizeType]::Percent, 100)))
-    $tableLayoutPanel.RowStyles.Clear()
-    $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::Percent, 100)))
-    $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::AutoSize)))
-
-    $richTextBox = New-Object System.Windows.Forms.RichTextBox
-    $richTextBox.Location = New-Object System.Drawing.Point(0, 0)
-    $richTextBox.Size = New-Object System.Drawing.Size(($PanelWidth + 20), ($PanelHeight - 10))
-    $richTextBox.Text = "Enter the URL of the theme you want to use. E.g. https://starship.rs/presets/toml/tokyo-night.toml"
-    $richTextBox.BackColor = $nord0
-    $richTextBox.ForeColor = $nord4
-    $richTextBox.Font = New-Object System.Drawing.Font("Consolas", 10)
-    $richTextBox.BorderStyle = 'None'
-    $richTextBox.ScrollBars = 'Vertical'
-
-    $tableLayoutPanel.Controls.Add($richTextBox, 0, 0)
-
-    $saveButton = New-Object System.Windows.Forms.Button
-    $saveButton.Location = New-Object System.Drawing.Point(0, 0)
-    $saveButton.Size = New-Object System.Drawing.Size(($PanelWidth + 20), 30)
-    $saveButton.Dock = [System.Windows.Forms.DockStyle]::Fill
-    $saveButton.Text = "Save"
-    $saveButton.BackColor = $nord0
-    $saveButton.ForeColor = $nord4
-    $saveButton.FlatStyle = 'Flat'
-    $saveButton.FlatAppearance.BorderSize = 0
-    $saveButton.Add_Click({
-        $url = $richTextBox.Text
-        $urlContent = Invoke-RestMethod $url
-        $urlContent | Out-File $starshipConfig
-
-        [System.Windows.Forms.MessageBox]::Show("Starship theme successfully changed.", "Success")
-      })
-
-    $tableLayoutPanel.Controls.Add($saveButton, 0, 1)
-
-    $panel.Controls.Add($tableLayoutPanel)
-
-    $form.Controls.Add($panel)
-
-    $form.ShowDialog()
-  }
-  else {
-    Start-Process https://ohmyposh.dev/docs/themes
+  BEGIN {
+    $ompConfig = "$env:USERPROFILE\.config\omp.json"
+    $starshipConfig = "$env:USERPROFILE\.config\starship.toml"
+    $starShip = Get-ItemProperty -Path $keyPath -Name 'Starship' -ErrorAction SilentlyContinue
+  
     $PanelWidth = 400
     $PanelHeight = 200
+  }
 
-    $form = New-Object System.Windows.Forms.Form
-    $form.Text = "Oh-my-posh Theme Configuration"
-    $form.BackColor = $nord0
-    $form.Size = New-Object System.Drawing.Size($PanelWidth, $PanelHeight)
-    $form.StartPosition = 'CenterScreen'
-    $form.FormBorderStyle = 'FixedDialog'
-    $form.Icon = $icon
-    $form.Topmost = $true
-    $form.MinimizeBox = $false
-    $form.MaximizeBox = $false
+  PROCESS {
+    if ($starShip.Starship -eq 1) {
+      Start-Process https://starship.rs/presets/
+  
+      $form = New-Object System.Windows.Forms.Form
+      $form.Text = "Starship Theme Configuration"
+      $form.BackColor = $nord0
+      $form.Size = New-Object System.Drawing.Size($PanelWidth, $PanelHeight)
+      $form.StartPosition = 'CenterScreen'
+      $form.FormBorderStyle = 'FixedDialog'
+      $form.Icon = $icon
+      $form.Topmost = $true
+      $form.MinimizeBox = $false
+      $form.MaximizeBox = $false
+  
+      $panel = New-Object System.Windows.Forms.Panel
+      $panel.Dock = 'Fill'
+      $panel.AutoScroll = $false
+  
+      $tableLayoutPanel = New-Object System.Windows.Forms.TableLayoutPanel
+      $tableLayoutPanel.RowCount = 2
+      $tableLayoutPanel.ColumnCount = 1
+      $tableLayoutPanel.Dock = [System.Windows.Forms.DockStyle]::Fill
+      $tableLayoutPanel.ColumnStyles.Add((New-Object System.Windows.Forms.ColumnStyle([System.Windows.Forms.SizeType]::Percent, 100)))
+      $tableLayoutPanel.RowStyles.Clear()
+      $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::Percent, 100)))
+      $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::AutoSize)))
+  
+      $richTextBox = New-Object System.Windows.Forms.RichTextBox
+      $richTextBox.Location = New-Object System.Drawing.Point(0, 0)
+      $richTextBox.Size = New-Object System.Drawing.Size(($PanelWidth + 20), ($PanelHeight - 10))
+      $richTextBox.Text = "Enter the URL of the theme you want to use. E.g. https://starship.rs/presets/toml/tokyo-night.toml"
+      $richTextBox.BackColor = $nord0
+      $richTextBox.ForeColor = $nord4
+      $richTextBox.Font = New-Object System.Drawing.Font("Consolas", 10)
+      $richTextBox.BorderStyle = 'None'
+      $richTextBox.ScrollBars = 'Vertical'
+  
+      $tableLayoutPanel.Controls.Add($richTextBox, 0, 0)
+  
+      $saveButton = New-Object System.Windows.Forms.Button
+      $saveButton.Location = New-Object System.Drawing.Point(0, 0)
+      $saveButton.Size = New-Object System.Drawing.Size(($PanelWidth + 20), 30)
+      $saveButton.Dock = [System.Windows.Forms.DockStyle]::Fill
+      $saveButton.Text = "Save"
+      $saveButton.BackColor = $nord0
+      $saveButton.ForeColor = $nord4
+      $saveButton.FlatStyle = 'Flat'
+      $saveButton.FlatAppearance.BorderSize = 0
+      $saveButton.Add_Click({
+          $url = $richTextBox.Text
+          $urlContent = Invoke-RestMethod $url
+          $urlContent | Out-File $starshipConfig
+  
+          [System.Windows.Forms.MessageBox]::Show("Starship theme successfully changed.", "Success")
+        })
+  
+      $tableLayoutPanel.Controls.Add($saveButton, 0, 1)
+  
+      $panel.Controls.Add($tableLayoutPanel)
+  
+      $form.Controls.Add($panel)
+  
+      $form.ShowDialog()
 
-    $panel = New-Object System.Windows.Forms.Panel
-    $panel.Dock = 'Fill'
-    $panel.AutoScroll = $false
-
-    $tableLayoutPanel = New-Object System.Windows.Forms.TableLayoutPanel
-    $tableLayoutPanel.RowCount = 2
-    $tableLayoutPanel.ColumnCount = 1
-    $tableLayoutPanel.Dock = [System.Windows.Forms.DockStyle]::Fill
-    $tableLayoutPanel.ColumnStyles.Add((New-Object System.Windows.Forms.ColumnStyle([System.Windows.Forms.SizeType]::Percent, 100)))
-    $tableLayoutPanel.RowStyles.Clear()
-    $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::Percent, 100)))
-    $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::AutoSize)))
-
-    $richTextBox = New-Object System.Windows.Forms.RichTextBox
-    $richTextBox.Location = New-Object System.Drawing.Point(0, 0)
-    $richTextBox.Size = New-Object System.Drawing.Size(($PanelWidth + 20), ($PanelHeight - 10))
-    $richTextBox.Text = "Enter the URL of the theme you want to use. E.g. https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/1_shell.omp.json"
-    $richTextBox.BackColor = $nord0
-    $richTextBox.ForeColor = $nord4
-    $richTextBox.Font = New-Object System.Drawing.Font("Consolas", 10)
-    $richTextBox.BorderStyle = 'None'
-    $richTextBox.ScrollBars = 'Vertical'
-
-    
-
-    $tableLayoutPanel.Controls.Add($richTextBox, 0, 0)
-
-    $saveButton = New-Object System.Windows.Forms.Button
-    $saveButton.Location = New-Object System.Drawing.Point(0, 0)
-    $saveButton.Size = New-Object System.Drawing.Size(($PanelWidth + 20), 30)
-    $saveButton.Dock = [System.Windows.Forms.DockStyle]::Fill
-    $saveButton.Text = "Save"
-    $saveButton.BackColor = $nord0
-    $saveButton.ForeColor = $nord4
-    $saveButton.FlatStyle = 'Flat'
-    $saveButton.FlatAppearance.BorderSize = 0
-    $saveButton.Add_Click({
-        $url = $richTextBox.Text
-        $urlContent = Invoke-WebRequest $url
-        $urlContent.Content | Out-File $ompConfig
-
-        [System.Windows.Forms.MessageBox]::Show("Oh-my-posh theme successfully changed.", "Success")
-      })
-    
-    $tableLayoutPanel.Controls.Add($saveButton, 0, 1)
-
-    $panel.Controls.Add($tableLayoutPanel)
-
-    $form.Controls.Add($panel)
-
-    $form.ShowDialog()
-
-    $form.Dispose()
+      $form.Dispose()
+    }
+    else {
+      Start-Process https://ohmyposh.dev/docs/themes
+  
+      $form = New-Object System.Windows.Forms.Form
+      $form.Text = "Oh-my-posh Theme Configuration"
+      $form.BackColor = $nord0
+      $form.Size = New-Object System.Drawing.Size($PanelWidth, $PanelHeight)
+      $form.StartPosition = 'CenterScreen'
+      $form.FormBorderStyle = 'FixedDialog'
+      $form.Icon = $icon
+      $form.Topmost = $true
+      $form.MinimizeBox = $false
+      $form.MaximizeBox = $false
+  
+      $panel = New-Object System.Windows.Forms.Panel
+      $panel.Dock = 'Fill'
+      $panel.AutoScroll = $false
+  
+      $tableLayoutPanel = New-Object System.Windows.Forms.TableLayoutPanel
+      $tableLayoutPanel.RowCount = 2
+      $tableLayoutPanel.ColumnCount = 1
+      $tableLayoutPanel.Dock = [System.Windows.Forms.DockStyle]::Fill
+      $tableLayoutPanel.ColumnStyles.Add((New-Object System.Windows.Forms.ColumnStyle([System.Windows.Forms.SizeType]::Percent, 100)))
+      $tableLayoutPanel.RowStyles.Clear()
+      $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::Percent, 100)))
+      $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::AutoSize)))
+  
+      $richTextBox = New-Object System.Windows.Forms.RichTextBox
+      $richTextBox.Location = New-Object System.Drawing.Point(0, 0)
+      $richTextBox.Size = New-Object System.Drawing.Size(($PanelWidth + 20), ($PanelHeight - 10))
+      $richTextBox.Text = "Enter the URL of the theme you want to use. E.g. https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/1_shell.omp.json"
+      $richTextBox.BackColor = $nord0
+      $richTextBox.ForeColor = $nord4
+      $richTextBox.Font = New-Object System.Drawing.Font("Consolas", 10)
+      $richTextBox.BorderStyle = 'None'
+      $richTextBox.ScrollBars = 'Vertical'
+  
+      $tableLayoutPanel.Controls.Add($richTextBox, 0, 0)
+  
+      $saveButton = New-Object System.Windows.Forms.Button
+      $saveButton.Location = New-Object System.Drawing.Point(0, 0)
+      $saveButton.Size = New-Object System.Drawing.Size(($PanelWidth + 20), 30)
+      $saveButton.Dock = [System.Windows.Forms.DockStyle]::Fill
+      $saveButton.Text = "Save"
+      $saveButton.BackColor = $nord0
+      $saveButton.ForeColor = $nord4
+      $saveButton.FlatStyle = 'Flat'
+      $saveButton.FlatAppearance.BorderSize = 0
+      $saveButton.Add_Click({
+          $url = $richTextBox.Text
+          $urlContent = Invoke-WebRequest $url
+          $urlContent.Content | Out-File $ompConfig
+  
+          [System.Windows.Forms.MessageBox]::Show("Oh-my-posh theme successfully changed.", "Success")
+        })
+      
+      $tableLayoutPanel.Controls.Add($saveButton, 0, 1)
+  
+      $panel.Controls.Add($tableLayoutPanel)
+  
+      $form.Controls.Add($panel)
+      $form.ShowDialog()
+  
+      $form.Dispose()
+    }
   }
 }
 
@@ -2335,12 +2608,15 @@ function Set-ShellTheme {
   The name of the command
 #>
 function Find-Manual {
-  param(
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
     [Parameter(Mandatory = $true)]
     [string]$Name
   )
 
-  Get-Help -Name $Name -Full
+  PROCESS {
+    Get-Help -Name $Name -Full
+  }
 }
 
 <#
@@ -2352,59 +2628,67 @@ function Find-Manual {
   Forces the loading of aliases
 #>
 function Import-Aliases {
-  param (
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
     [Parameter(Mandatory = $false)][switch]$Force
   )
 
-  $newAliasFilePath = Join-Path (Split-Path -Parent $PROFILE) "new-aliases.json"
-  $oldAliasFilePath = Join-Path (Split-Path -Parent $PROFILE) "old-aliases.json"
-
-  if ($Force) {
-    Remove-Item $oldAliasFilePath -Force
-    $oldAliasFileUrl = "https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/old-aliases.json"
-    Invoke-WebRequest -Uri $oldAliasFileUrl -OutFile $oldAliasFilePath
-
-    Remove-Item $newAliasFilePath -Force
-    $newAliasFileUrl = "https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/new-aliases.json"
-    Invoke-WebRequest -Uri $newAliasFileUrl -OutFile $newAliasFilePath
+  BEGIN {
+    $newAliasFilePath = Join-Path (Split-Path -Parent $PROFILE) "new-aliases.json"
+    $oldAliasFilePath = Join-Path (Split-Path -Parent $PROFILE) "old-aliases.json"  
   }
-  else {
-    if (-not (Test-Path $newAliasFilePath)) {
+
+  PROCESS {
+    # Force loading of aliases
+    if ($Force) {
+      Remove-Item $oldAliasFilePath -Force
+      $oldAliasFileUrl = "https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/old-aliases.json"
+      Invoke-WebRequest -Uri $oldAliasFileUrl -OutFile $oldAliasFilePath
+
+      Remove-Item $newAliasFilePath -Force
       $newAliasFileUrl = "https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/new-aliases.json"
       Invoke-WebRequest -Uri $newAliasFileUrl -OutFile $newAliasFilePath
     }
+    else {
+      if (-not (Test-Path $newAliasFilePath)) {
+        $newAliasFileUrl = "https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/new-aliases.json"
+        Invoke-WebRequest -Uri $newAliasFileUrl -OutFile $newAliasFilePath
+      }
   
-    if (-not (Test-Path $oldAliasFilePath)) {
-      $oldAliasFileUrl = "https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/old-aliases.json"
-      Invoke-WebRequest -Uri $oldAliasFileUrl -OutFile $oldAliasFilePath
-    }  
+      if (-not (Test-Path $oldAliasFilePath)) {
+        $oldAliasFileUrl = "https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/old-aliases.json"
+        Invoke-WebRequest -Uri $oldAliasFileUrl -OutFile $oldAliasFilePath
+      }  
 
-    if (Test-Path $oldAliasFilePath) {
-      $oldAliases = Get-Content $oldAliasFilePath | ConvertFrom-Json
+      # Remove old aliases
+      if (Test-Path $oldAliasFilePath) {
+        $oldAliases = Get-Content $oldAliasFilePath | ConvertFrom-Json
   
-      foreach ($alias in $oldAliases) {
-        if (Get-Alias -Name $alias -ErrorAction SilentlyContinue) {
-          if ($shellType -eq "Pwsh") {
-            Remove-Alias $alias -Force -Scope Global 
-          }
-          else {
-            Remove-Item alias:$alias -Force
+        foreach ($alias in $oldAliases) {
+          if (Get-Alias -Name $alias -ErrorAction SilentlyContinue) {
+            if ($shellType -eq "Pwsh") {
+              Remove-Alias $alias -Force -Scope Global 
+            }
+            else {
+              Remove-Item alias:$alias -Force
+            }
           }
         }
       }
-    }
   
-    if (Test-Path $newAliasFilePath) {
-      $newAliases = Get-Content $newAliasFilePath | ConvertFrom-Json
+      # Set new aliases
+      if (Test-Path $newAliasFilePath) {
+        $newAliases = Get-Content $newAliasFilePath | ConvertFrom-Json
   
-      foreach ($alias in $newAliases.PSObject.Properties) {
-        try {
-          Set-Alias -Name $alias.Name -Value $alias.Value -Scope Global -Option AllScope -Force
-        }
-        catch {
-          Write-Error "Error setting alias $($alias.Name): $_"
-        }
-      }  
+        foreach ($alias in $newAliases.PSObject.Properties) {
+          try {
+            Set-Alias -Name $alias.Name -Value $alias.Value -Scope Global -Option AllScope -Force
+          }
+          catch {
+            Write-Error "Error setting alias $($alias.Name): $_"
+          }
+        }  
+      }
     }
   }
 }
@@ -2416,122 +2700,131 @@ function Import-Aliases {
   This function allows you to add aliases through a GUI
 #>
 function Add-Aliases {
-  $AliasConfigFile = "new-aliases.json"
-  $aliasConfigFilePath = Join-Path (Split-Path -Parent $PROFILE) $AliasConfigFile
-
-  if (-not (Test-Path $aliasConfigFilePath)) {
-    $aliasConfigFileUrl = "https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/$AliasConfigFile"
-    Invoke-WebRequest -Uri $aliasConfigFileUrl -OutFile $aliasConfigFilePath
-  }
-
-  $aliasConfig = Get-Content $aliasConfigFilePath | ConvertFrom-Json
-  Write-Host $aliasConfig
-
-  $form = New-Object System.Windows.Forms.Form
-  $form.Text = "Alias Configuration"
-  $form.Size = New-Object System.Drawing.Size(400, 300)
-  $form.StartPosition = "CenterScreen"
-  $form.BackColor = $nord0
-  $form.ForeColor = $nord4
-  $form.FormBorderStyle = "FixedDialog"
-  $form.Icon = $icon
-
-  $tableLayoutPanel = New-Object System.Windows.Forms.TableLayoutPanel
-  $tableLayoutPanel.RowCount = 1
-  $tableLayoutPanel.ColumnCount = 1
-  $tableLayoutPanel.Dock = [System.Windows.Forms.DockStyle]::Fill
-  $tableLayoutPanel.ColumnStyles.Add((New-Object System.Windows.Forms.ColumnStyle([System.Windows.Forms.SizeType]::Percent, 100)))
-  $tableLayoutPanel.RowStyles.Clear()
-  $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::Percent, 100)))
-  $tableLayoutPanel.BorderStyle = [System.Windows.Forms.BorderStyle]::None
-  $tableLayoutPanel.BackColor = $nord0
-  $tableLayoutPanel.ForeColor = $nord4
-
-  $dataGridView = New-Object System.Windows.Forms.DataGridView
-  $dataGridView.BorderStyle = [System.Windows.Forms.BorderStyle]::None
-  $dataGridView.Location = New-Object System.Drawing.Point(10, 10)
-  $dataGridView.Size = New-Object System.Drawing.Size(360, 200)
-  $dataGridView.Dock = [System.Windows.Forms.DockStyle]::Fill
-  $dataGridView.AutoGenerateColumns = $true
-  $dataGridView.RowHeadersVisible = $false
-  $dataGridView.BackgroundColor = $nord0
-  $dataGridView.ForeColor = $nord6
-  $dataGridView.GridColor = $nord3
-  $dataGridView.DefaultCellStyle.BackColor = $nord0
-  $dataGridView.DefaultCellStyle.ForeColor = $nord6
-  $dataGridView.ColumnHeadersDefaultCellStyle.BackColor = $nord3
-  $dataGridView.ColumnHeadersDefaultCellStyle.ForeColor = $nord6
-  $dataGridView.RowHeadersBorderStyle = [System.Windows.Forms.DataGridViewHeaderBorderStyle]::None
-  $dataGridView.ColumnHeadersBorderStyle = [System.Windows.Forms.DataGridViewHeaderBorderStyle]::None
-  $dataGridView.DefaultCellStyle.SelectionBackColor = $nord3
-  $dataGridView.AutoSizeColumnsMode = [System.Windows.Forms.DataGridViewAutoSizeColumnsMode]::Fill
-
-  $contextMenu = New-Object System.Windows.Forms.ContextMenuStrip
-  $deleteMenuItem = New-Object System.Windows.Forms.ToolStripMenuItem
-  $deleteMenuItem.Text = "Delete"
-  $deleteMenuItem.add_Click({
-      if ($dataGridView.SelectedCells.Count -gt 0) {
-        $selectedRowIndex = $dataGridView.SelectedCells[0].RowIndex
-        $dataGridView.Rows.RemoveAt($selectedRowIndex)
-      }
-    })
-  $contextMenu.Items.Add($deleteMenuItem)
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM ( ) # No parameters
   
-  $dataGridView.ContextMenuStrip = $contextMenu
+  BEGIN {
+    $AliasConfigFile = "new-aliases.json"
+    $aliasConfigFilePath = Join-Path (Split-Path -Parent $PROFILE) $AliasConfigFile
 
-  $nameColumn = New-Object System.Windows.Forms.DataGridViewTextBoxColumn
-  $nameColumn.HeaderText = "Alias Name"
-  $nameColumn.DataPropertyName = "Name"
-  $valueColumn = New-Object System.Windows.Forms.DataGridViewTextBoxColumn
-  $valueColumn.HeaderText = "Alias Value"
-  $valueColumn.DataPropertyName = "Value"
+    if (-not (Test-Path $aliasConfigFilePath)) {
+      $aliasConfigFileUrl = "https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/$AliasConfigFile"
+      Invoke-WebRequest -Uri $aliasConfigFileUrl -OutFile $aliasConfigFilePath
+    }
 
-  $dataGridView.Columns.Add($nameColumn)
-  $dataGridView.Columns.Add($valueColumn)
+    $aliasConfig = Get-Content $aliasConfigFilePath | ConvertFrom-Json
+    Write-Host $aliasConfig
 
-  $dataTable = New-Object System.Data.DataTable
+    $form = New-Object System.Windows.Forms.Form
+    $form.Text = "Alias Configuration"
+    $form.Size = New-Object System.Drawing.Size(400, 300)
+    $form.StartPosition = "CenterScreen"
+    $form.BackColor = $nord0
+    $form.ForeColor = $nord4
+    $form.FormBorderStyle = "FixedDialog"
+    $form.Icon = $icon
 
-  $dataTable.Columns.Add("Name", [string])
-  $dataTable.Columns.Add("Value", [string])
+    $tableLayoutPanel = New-Object System.Windows.Forms.TableLayoutPanel
+    $tableLayoutPanel.RowCount = 1
+    $tableLayoutPanel.ColumnCount = 1
+    $tableLayoutPanel.Dock = [System.Windows.Forms.DockStyle]::Fill
+    $tableLayoutPanel.ColumnStyles.Add((New-Object System.Windows.Forms.ColumnStyle([System.Windows.Forms.SizeType]::Percent, 100)))
+    $tableLayoutPanel.RowStyles.Clear()
+    $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::Percent, 100)))
+    $tableLayoutPanel.BorderStyle = [System.Windows.Forms.BorderStyle]::None
+    $tableLayoutPanel.BackColor = $nord0
+    $tableLayoutPanel.ForeColor = $nord4
 
-  $aliasConfig.PSObject.Properties | ForEach-Object {
-    $row = $dataTable.NewRow()
-    $row["Name"] = $_.Name
-    $row["Value"] = $_.Value
-    $dataTable.Rows.Add($row)
+    $dataGridView = New-Object System.Windows.Forms.DataGridView
+    $dataGridView.BorderStyle = [System.Windows.Forms.BorderStyle]::None
+    $dataGridView.Location = New-Object System.Drawing.Point(10, 10)
+    $dataGridView.Size = New-Object System.Drawing.Size(360, 200)
+    $dataGridView.Dock = [System.Windows.Forms.DockStyle]::Fill
+    $dataGridView.AutoGenerateColumns = $true
+    $dataGridView.RowHeadersVisible = $false
+    $dataGridView.BackgroundColor = $nord0
+    $dataGridView.ForeColor = $nord6
+    $dataGridView.GridColor = $nord3
+    $dataGridView.DefaultCellStyle.BackColor = $nord0
+    $dataGridView.DefaultCellStyle.ForeColor = $nord6
+    $dataGridView.ColumnHeadersDefaultCellStyle.BackColor = $nord3
+    $dataGridView.ColumnHeadersDefaultCellStyle.ForeColor = $nord6
+    $dataGridView.RowHeadersBorderStyle = [System.Windows.Forms.DataGridViewHeaderBorderStyle]::None
+    $dataGridView.ColumnHeadersBorderStyle = [System.Windows.Forms.DataGridViewHeaderBorderStyle]::None
+    $dataGridView.DefaultCellStyle.SelectionBackColor = $nord3
+    $dataGridView.AutoSizeColumnsMode = [System.Windows.Forms.DataGridViewAutoSizeColumnsMode]::Fill
+
+    $contextMenu = New-Object System.Windows.Forms.ContextMenuStrip
+    $deleteMenuItem = New-Object System.Windows.Forms.ToolStripMenuItem
+    $deleteMenuItem.Text = "Delete"
+    $deleteMenuItem.add_Click({
+        if ($dataGridView.SelectedCells.Count -gt 0) {
+          $selectedRowIndex = $dataGridView.SelectedCells[0].RowIndex
+          $dataGridView.Rows.RemoveAt($selectedRowIndex)
+        }
+      })
+    $contextMenu.Items.Add($deleteMenuItem)
+  
+    $dataGridView.ContextMenuStrip = $contextMenu
+
+    $nameColumn = New-Object System.Windows.Forms.DataGridViewTextBoxColumn
+    $nameColumn.HeaderText = "Alias Name"
+    $nameColumn.DataPropertyName = "Name"
+    $valueColumn = New-Object System.Windows.Forms.DataGridViewTextBoxColumn
+    $valueColumn.HeaderText = "Alias Value"
+    $valueColumn.DataPropertyName = "Value"
+
+    $dataGridView.Columns.Add($nameColumn)
+    $dataGridView.Columns.Add($valueColumn)
+
+    $dataTable = New-Object System.Data.DataTable
+
+    $dataTable.Columns.Add("Name", [string])
+    $dataTable.Columns.Add("Value", [string])
+
+    $aliasConfig.PSObject.Properties | ForEach-Object {
+      $row = $dataTable.NewRow()
+      $row["Name"] = $_.Name
+      $row["Value"] = $_.Value
+      $dataTable.Rows.Add($row)
+    }
+
+    $dataGridView.DataSource = $dataTable
+
+    $tableLayoutPanel.Controls.Add($dataGridView, 0, 0)
+
+    $button = New-Object System.Windows.Forms.Button
+    $button.Location = New-Object System.Drawing.Point(10, 220)
+    $button.Size = New-Object System.Drawing.Size(150, 30)
+    $button.Text = "Save Configuration"
+    $button.Dock = [System.Windows.Forms.DockStyle]::Fill
+    $button.BackColor = $nord3
+    $button.ForeColor = $nord6
+    $button.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
+    $button.FlatAppearance.BorderColor = $nord3
+    $button.FlatAppearance.BorderSize = 1
+    $button.Add_Click({
+        $updatedConfig = New-Object PSObject
+        $dataGridView.DataSource | ForEach-Object {
+          Add-Member -InputObject $updatedConfig -NotePropertyName $_.Name -NotePropertyValue $_.Value
+        }
+
+        $updatedConfig | ConvertTo-Json | Set-Content -Path $aliasConfigFilePath -Force
+
+        [System.Windows.Forms.MessageBox]::Show("Alias configuration saved.", "Success")
+      })
+    $tableLayoutPanel.Controls.Add($button, 0, 1)
+
+    $form.Controls.Add($tableLayoutPanel)
   }
 
-  $dataGridView.DataSource = $dataTable
+  PROCESS {
+    $form.ShowDialog()
+  }
 
-  $tableLayoutPanel.Controls.Add($dataGridView, 0, 0)
-
-  $button = New-Object System.Windows.Forms.Button
-  $button.Location = New-Object System.Drawing.Point(10, 220)
-  $button.Size = New-Object System.Drawing.Size(150, 30)
-  $button.Text = "Save Configuration"
-  $button.Dock = [System.Windows.Forms.DockStyle]::Fill
-  $button.BackColor = $nord3
-  $button.ForeColor = $nord6
-  $button.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
-  $button.FlatAppearance.BorderColor = $nord3
-  $button.FlatAppearance.BorderSize = 1
-  $button.Add_Click({
-      $updatedConfig = New-Object PSObject
-      $dataGridView.DataSource | ForEach-Object {
-        Add-Member -InputObject $updatedConfig -NotePropertyName $_.Name -NotePropertyValue $_.Value
-      }
-
-      $updatedConfig | ConvertTo-Json | Set-Content -Path $aliasConfigFilePath -Force
-
-      [System.Windows.Forms.MessageBox]::Show("Alias configuration saved.", "Success")
-    })
-  $tableLayoutPanel.Controls.Add($button, 0, 1)
-
-  $form.Controls.Add($tableLayoutPanel)
-
-  $form.ShowDialog()
-
-  $form.Dispose()
+  END {
+    $form.Dispose()
+  }
 }
 
 <#
@@ -2541,120 +2834,133 @@ function Add-Aliases {
   This function allows you to remove aliases through a GUI
 #>
 function Remove-Aliases {
-  $AliasConfigFile = "old-aliases.json"
-  $aliasConfigFilePath = Join-Path (Split-Path -Parent $PROFILE) $AliasConfigFile
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM ( ) # No parameters
 
-  if (-not (Test-Path $aliasConfigFilePath)) {
-    $aliasConfigFileUrl = "https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/$AliasConfigFile"
-    Invoke-WebRequest -Uri $aliasConfigFileUrl -OutFile $aliasConfigFilePath
+  BEGIN {
+    $AliasConfigFile = "old-aliases.json"
+    $aliasConfigFilePath = Join-Path (Split-Path -Parent $PROFILE) $AliasConfigFile
+  
+    if (-not (Test-Path $aliasConfigFilePath)) {
+      $aliasConfigFileUrl = "https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/$AliasConfigFile"
+      Invoke-WebRequest -Uri $aliasConfigFileUrl -OutFile $aliasConfigFilePath
+    }
+  
+    $aliasConfig = Get-Content $aliasConfigFilePath | ConvertFrom-Json
+  
+    $dataTable = New-Object System.Data.DataTable
+    $dataTable.Columns.Add("Name", [string])
+  
+    foreach ($alias in $aliasConfig) {
+      $row = $dataTable.NewRow()
+      $row["Name"] = $alias
+      $dataTable.Rows.Add($row)
+    }
+  
+    $width = 400
+    $height = 300
+  
+    $form = New-Object System.Windows.Forms.Form
+    $form.Width = $width
+    $form.Height = $height
+    $form.Text = "Alias Configuration"
+    $form.StartPosition = "CenterScreen"
+    $form.BackColor = $nord0
+    $form.ForeColor = $nord4
+    $form.FormBorderStyle = "FixedDialog"
+    $form.Icon = $icon
+  
+    $tableLayoutPanel = New-Object System.Windows.Forms.TableLayoutPanel
+    $tableLayoutPanel.Width = $width
+    $tableLayoutPanel.RowCount = 1
+    $tableLayoutPanel.ColumnCount = 1
+    $tableLayoutPanel.Dock = [System.Windows.Forms.DockStyle]::Fill
+    $tableLayoutPanel.ColumnStyles.Add((New-Object System.Windows.Forms.ColumnStyle([System.Windows.Forms.SizeType]::Percent, 100)))
+    $tableLayoutPanel.RowStyles.Clear()
+    $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::Percent, 100)))
+    $tableLayoutPanel.BorderStyle = [System.Windows.Forms.BorderStyle]::None
+    $tableLayoutPanel.AutoScroll = $false
+  
+    $dataGridView = New-Object System.Windows.Forms.DataGridView
+    $dataGridView.BorderStyle = [System.Windows.Forms.BorderStyle]::None
+    $dataGridView.Dock = [System.Windows.Forms.DockStyle]::Fill
+    $dataGridView.AutoGenerateColumns = $true
+    $dataGridView.RowHeadersVisible = $false
+    $dataGridView.BackgroundColor = $nord0
+    $dataGridView.ForeColor = $nord6
+    $dataGridView.GridColor = $nord3
+    $dataGridView.DefaultCellStyle.BackColor = $nord0
+    $dataGridView.DefaultCellStyle.ForeColor = $nord6
+    $dataGridView.ColumnHeadersDefaultCellStyle.BackColor = $nord3
+    $dataGridView.ColumnHeadersDefaultCellStyle.ForeColor = $nord6
+    $dataGridView.RowHeadersBorderStyle = [System.Windows.Forms.DataGridViewHeaderBorderStyle]::None
+    $dataGridView.ColumnHeadersBorderStyle = [System.Windows.Forms.DataGridViewHeaderBorderStyle]::None
+    $dataGridView.DefaultCellStyle.SelectionBackColor = $nord3
+    $dataGridView.AutoSizeColumnsMode = [System.Windows.Forms.DataGridViewAutoSizeColumnsMode]::Fill
+  
+    $dataGridView.DataSource = $dataTable
+  
+    $contextMenu = New-Object System.Windows.Forms.ContextMenuStrip
+    $deleteMenuItem = New-Object System.Windows.Forms.ToolStripMenuItem
+    $deleteMenuItem.Text = "Delete"
+    $deleteMenuItem.add_Click({
+        if ($dataGridView.SelectedCells.Count -gt 0) {
+          $selectedRowIndex = $dataGridView.SelectedCells[0].RowIndex
+          $dataGridView.Rows.RemoveAt($selectedRowIndex)
+        }
+      })
+    $contextMenu.Items.Add($deleteMenuItem)
+    
+    $dataGridView.ContextMenuStrip = $contextMenu
+  
+    $tableLayoutPanel.Controls.Add($dataGridView, 0, 0)
+  
+    $button = New-Object System.Windows.Forms.Button
+    $button.Dock = [System.Windows.Forms.DockStyle]::Fill
+    $button.Text = "Save Configuration"
+    $button.BackColor = $nord3
+    $button.ForeColor = $nord6
+    $button.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
+    $button.FlatAppearance.BorderColor = $nord3
+    $button.FlatAppearance.BorderSize = 1
+    $button.Add_Click({
+        $updatedConfig = $dataGridView.Rows | Where-Object { -not $_.IsNewRow } | ForEach-Object {
+          $_.Cells["Name"].Value
+        }
+  
+        $updatedConfig | ConvertTo-Json | Set-Content -Path $aliasConfigFilePath -Force
+  
+        [System.Windows.Forms.MessageBox]::Show("Alias configuration saved.", "Success")
+      })
+  
+    $tableLayoutPanel.Controls.Add($button, 0, 1)
+  
+    $form.Controls.Add($tableLayoutPanel)
   }
 
-  $aliasConfig = Get-Content $aliasConfigFilePath | ConvertFrom-Json
-
-  $dataTable = New-Object System.Data.DataTable
-  $dataTable.Columns.Add("Name", [string])
-
-  foreach ($alias in $aliasConfig) {
-    $row = $dataTable.NewRow()
-    $row["Name"] = $alias
-    $dataTable.Rows.Add($row)
+  PROCESS {
+    $form.ShowDialog()
   }
 
-  
-
-  $width = 400
-  $height = 300
-
-  $form = New-Object System.Windows.Forms.Form
-  $form.Width = $width
-  $form.Height = $height
-  $form.Text = "Alias Configuration"
-  $form.StartPosition = "CenterScreen"
-  $form.BackColor = $nord0
-  $form.ForeColor = $nord4
-  $form.FormBorderStyle = "FixedDialog"
-  $form.Icon = $icon
-
-  $tableLayoutPanel = New-Object System.Windows.Forms.TableLayoutPanel
-  $tableLayoutPanel.Width = $width
-  $tableLayoutPanel.RowCount = 1
-  $tableLayoutPanel.ColumnCount = 1
-  $tableLayoutPanel.Dock = [System.Windows.Forms.DockStyle]::Fill
-  $tableLayoutPanel.ColumnStyles.Add((New-Object System.Windows.Forms.ColumnStyle([System.Windows.Forms.SizeType]::Percent, 100)))
-  $tableLayoutPanel.RowStyles.Clear()
-  $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::Percent, 100)))
-  $tableLayoutPanel.BorderStyle = [System.Windows.Forms.BorderStyle]::None
-  $tableLayoutPanel.AutoScroll = $false
-
-  $dataGridView = New-Object System.Windows.Forms.DataGridView
-  $dataGridView.BorderStyle = [System.Windows.Forms.BorderStyle]::None
-  $dataGridView.Dock = [System.Windows.Forms.DockStyle]::Fill
-  $dataGridView.AutoGenerateColumns = $true
-  $dataGridView.RowHeadersVisible = $false
-  $dataGridView.BackgroundColor = $nord0
-  $dataGridView.ForeColor = $nord6
-  $dataGridView.GridColor = $nord3
-  $dataGridView.DefaultCellStyle.BackColor = $nord0
-  $dataGridView.DefaultCellStyle.ForeColor = $nord6
-  $dataGridView.ColumnHeadersDefaultCellStyle.BackColor = $nord3
-  $dataGridView.ColumnHeadersDefaultCellStyle.ForeColor = $nord6
-  $dataGridView.RowHeadersBorderStyle = [System.Windows.Forms.DataGridViewHeaderBorderStyle]::None
-  $dataGridView.ColumnHeadersBorderStyle = [System.Windows.Forms.DataGridViewHeaderBorderStyle]::None
-  $dataGridView.DefaultCellStyle.SelectionBackColor = $nord3
-  $dataGridView.AutoSizeColumnsMode = [System.Windows.Forms.DataGridViewAutoSizeColumnsMode]::Fill
-
-  $dataGridView.DataSource = $dataTable
-
-  $contextMenu = New-Object System.Windows.Forms.ContextMenuStrip
-  $deleteMenuItem = New-Object System.Windows.Forms.ToolStripMenuItem
-  $deleteMenuItem.Text = "Delete"
-  $deleteMenuItem.add_Click({
-      if ($dataGridView.SelectedCells.Count -gt 0) {
-        $selectedRowIndex = $dataGridView.SelectedCells[0].RowIndex
-        $dataGridView.Rows.RemoveAt($selectedRowIndex)
-      }
-    })
-  $contextMenu.Items.Add($deleteMenuItem)
-  
-  $dataGridView.ContextMenuStrip = $contextMenu
-
-  $tableLayoutPanel.Controls.Add($dataGridView, 0, 0)
-
-  $button = New-Object System.Windows.Forms.Button
-  $button.Dock = [System.Windows.Forms.DockStyle]::Fill
-  $button.Text = "Save Configuration"
-  $button.BackColor = $nord3
-  $button.ForeColor = $nord6
-  $button.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
-  $button.FlatAppearance.BorderColor = $nord3
-  $button.FlatAppearance.BorderSize = 1
-  $button.Add_Click({
-      $updatedConfig = $dataGridView.Rows | Where-Object { -not $_.IsNewRow } | ForEach-Object {
-        $_.Cells["Name"].Value
-      }
-
-      $updatedConfig | ConvertTo-Json | Set-Content -Path $aliasConfigFilePath -Force
-
-      [System.Windows.Forms.MessageBox]::Show("Alias configuration saved.", "Success")
-    })
-
-  $tableLayoutPanel.Controls.Add($button, 0, 1)
-
-  $form.Controls.Add($tableLayoutPanel)
-
-  $form.ShowDialog()
-
-  $form.Dispose()
+  END {
+    $form.Dispose()
+  }
 }
 
 function Get-ReverseAlias {
-  param (
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
     [Parameter(Mandatory = $true)][string]$Command
   )
 
-  $aliases = Get-Alias | Where-Object { $_.Definition -eq $Command }
-  if ($aliases) {
-    $aliases.Name
+  BEGIN {
+    $aliases = Get-Alias | Where-Object { $_.Definition -eq $Command }
+  }
+
+  PROCESS {
+    if ($aliases) {
+      $aliases.Name
+    }
   }
 }
 
@@ -2667,75 +2973,88 @@ function Get-ReverseAlias {
   Displays the help menu in the console
 #>
 function Get-ProfileHelp {
-  param (
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
     [Parameter(Mandatory = $false)]
     [Alias('c')]
     [switch]$ShowInConsole = $false
   )
-  $excludedNames = 'A:', 'B:', 'C:', 'D:', 'E:', 'F:', 'G:', 'H:', 'I:', 'J:', 'K:', 'L:', 'M:', 'N:', 'O:', 'P:', 'Q:', 'R:', 'S:', 'T:', 'U:', 'V:', 'W:', 'X:', 'Y:', 'Z:'
-  $commands = Get-Command -CommandType Function | Where-Object { $_.Source -eq "" -and $_.Name -notin $excludedNames } | ForEach-Object {
-    $help = Get-Help $_.Name -ErrorAction SilentlyContinue
-    $alias = (Get-ReverseAlias -Command $_.Name -ErrorAction SilentlyContinue | Out-String) -replace "`r`n", ', ' -replace ', $', ''
-    $description = ($help.Synopsis).Trim()
-    $parameters = (($help.Parameters.Parameter | ForEach-Object { $_.Name }) -join ', ').Trim()
 
-    if ($description -and $alias) {
-      [PSCustomObject] @{
-        Name        = "$($_.Name) ($alias)"
-        Description = $description
-        Parameters  = $parameters
+  BEGIN {
+    $excludedNames = 'A:', 'B:', 'C:', 'D:', 'E:', 'F:', 'G:', 'H:', 'I:', 'J:', 'K:', 'L:', 'M:', 'N:', 'O:', 'P:', 'Q:', 'R:', 'S:', 'T:', 'U:', 'V:', 'W:', 'X:', 'Y:', 'Z:'
+    $commands = Get-Command -CommandType Function | Where-Object { $_.Source -eq "" -and $_.Name -notin $excludedNames } | ForEach-Object {
+      $help = Get-Help $_.Name -ErrorAction SilentlyContinue
+      $alias = (Get-ReverseAlias -Command $_.Name -ErrorAction SilentlyContinue | Out-String) -replace "`r`n", ', ' -replace ', $', ''
+      $description = ($help.Synopsis).Trim()
+      $parameters = (($help.Parameters.Parameter | ForEach-Object { $_.Name }) -join ', ').Trim()
+  
+      if ($description -and $alias) {
+        [PSCustomObject] @{
+          Name        = "$($_.Name) ($alias)"
+          Description = $description
+          Parameters  = $parameters
+        }
       }
-    }
-  } | Sort-Object -Property Name
-
-  if ($ShowInConsole) {
-    Clear-Host
-    $commandString = "For more information about a command, type 'Get-Help <command-name>'`n" + ($commands | Out-String)
-    $commandString
+    } | Sort-Object -Property Name
   }
-  else {
-    Clear-Host
-    $commandsOutput = $commands | Format-Table -Wrap -AutoSize | Out-String
-    Show-Help -Output $commandsOutput -Introduction "For more information about a command, type 'Get-Help <command-name>'"
+
+  PROCESS {
+    if ($ShowInConsole) {
+      $commandString = "For more information about a command, type 'Get-Help <command-name>'`n" + ($commands | Out-String)
+      $commandString
+    }
+    else {
+      $commandsOutput = $commands | Format-Table -Wrap -AutoSize | Out-String
+      Show-Help -Output $commandsOutput -Introduction "For more information about a command, type 'Get-Help <command-name>'"
+    }
   }
 }
 
 function Show-Help {
-  param (
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
     [Parameter(Mandatory = $true)][string]$Output,
     [Parameter(Mandatory = $true)][string]$Introduction
   )
 
-  $PanelWidth = 1000
+  BEGIN {
+    $PanelWidth = 1000
 
-  $form = New-Object System.Windows.Forms.Form
-  $form.Text = "$($shellType) Profile Help"
-  $form.BackColor = $nord0
-  $form.Size = New-Object System.Drawing.Size($PanelWidth, 500)
-  $form.StartPosition = 'CenterScreen'
-  $form.FormBorderStyle = 'FixedDialog'
-  $form.Icon = $icon
+    $form = New-Object System.Windows.Forms.Form
+    $form.Text = "$($shellType) Profile Help"
+    $form.BackColor = $nord0
+    $form.Size = New-Object System.Drawing.Size($PanelWidth, 500)
+    $form.StartPosition = 'CenterScreen'
+    $form.FormBorderStyle = 'FixedDialog'
+    $form.Icon = $icon
+  
+    $panel = New-Object System.Windows.Forms.Panel
+    $panel.Dock = 'Fill'
+    $panel.AutoScroll = $false
+  
+    $richTextBox = New-Object System.Windows.Forms.RichTextBox
+    $richTextBox.Location = New-Object System.Drawing.Point(0, 0)
+    $richTextBox.Size = New-Object System.Drawing.Size(($PanelWidth + 20), 490)
+    $richTextBox.Text = $Introduction + "`n" + $Output
+    $richTextBox.BackColor = $nord0
+    $richTextBox.ForeColor = $nord4
+    $richTextBox.Font = New-Object System.Drawing.Font("Consolas", 10)
+    $richTextBox.ReadOnly = $true
+    $richTextBox.BorderStyle = 'None'
+    $richTextBox.ScrollBars = 'Vertical'
+  
+    $panel.Controls.Add($richTextBox)
+  
+    $form.Controls.Add($panel)
+  }
 
-  $panel = New-Object System.Windows.Forms.Panel
-  $panel.Dock = 'Fill'
-  $panel.AutoScroll = $false
+  PROCESS {
+    $form.ShowDialog()
+  }
 
-  $richTextBox = New-Object System.Windows.Forms.RichTextBox
-  $richTextBox.Location = New-Object System.Drawing.Point(0, 0)
-  $richTextBox.Size = New-Object System.Drawing.Size(($PanelWidth + 20), 490)
-  $richTextBox.Text = $Introduction + "`n" + $Output
-  $richTextBox.BackColor = $nord0
-  $richTextBox.ForeColor = $nord4
-  $richTextBox.Font = New-Object System.Drawing.Font("Consolas", 10)
-  $richTextBox.ReadOnly = $true
-  $richTextBox.BorderStyle = 'None'
-  $richTextBox.ScrollBars = 'Vertical'
-
-  $panel.Controls.Add($richTextBox)
-
-  $form.Controls.Add($panel)
-
-  $form.ShowDialog()
+  END {
+    $form.Dispose()
+  }
 }
 
 <#
@@ -2751,28 +3070,36 @@ function Show-Help {
   Calendar 12 2020
 #>
 function Calendar {
-  param(
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
     [Parameter(Position = 0)]
     [int]$Month = (Get-Date).Month,
     [Parameter(Position = 1)]
     [int]$Year = (Get-Date).Year
   )
 
-  $daysInMonth = [DateTime]::DaysInMonth($Year, $Month)
-  $date = New-Object DateTime $Year, $Month, 1
-
-  Write-Host ("    {0} {1}" -f $date.ToString('MMMM'), $Year)
-  Write-Host "Su Mo Tu We Th Fr Sa"
-
-  1..$date.DayOfWeek.value__ | ForEach-Object { Write-Host "   " -NoNewline }
-  1..$daysInMonth | ForEach-Object {
-    $day = $_
-    $date = New-Object DateTime $Year, $Month, $day
-    if ($day -lt 10) { Write-Host " $day" -NoNewline } else { Write-Host "$day" -NoNewline }
-    if ($date.DayOfWeek.value__ -eq 6) { Write-Host "" }
-    else { Write-Host " " -NoNewline }
+  BEGIN {
+    $daysInMonth = [DateTime]::DaysInMonth($Year, $Month)
+    $date = New-Object DateTime $Year, $Month, 1
   }
-  Write-Host ""
+
+  PROCESS {
+    Write-Host ("    {0} {1}" -f $date.ToString('MMMM'), $Year)
+    Write-Host "Su Mo Tu We Th Fr Sa"
+  
+    1..$date.DayOfWeek.value__ | ForEach-Object { Write-Host "   " -NoNewline }
+    1..$daysInMonth | ForEach-Object {
+      $day = $_
+      $date = New-Object DateTime $Year, $Month, $day
+      if ($day -lt 10) { Write-Host " $day" -NoNewline } else { Write-Host "$day" -NoNewline }
+      if ($date.DayOfWeek.value__ -eq 6) { Write-Host "" }
+      else { Write-Host " " -NoNewline }
+    }
+  }
+
+  END {
+    Write-Host ""
+  }
 }
 
 <#
@@ -2782,9 +3109,48 @@ function Calendar {
   This function gets the current shell information
 #>
 function Get-ShellInfo {
-  Write-Output "Profile Path: $PROFILE"
-  Write-Output "Host Name: $($host.Name)"
-  Write-Output "Host Version: $($host.Version) -> $($shellType) ($bitness)"
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM ( ) # No parameters
+
+  BEGIN {
+    $name = $host.Name
+    $version = $host.Version
+  }
+
+  PROCESS {
+    Write-Output "Profile Path: $PROFILE"
+    Write-Output "Host Name: $($name)"
+    Write-Output "Host Version: $($version) -> $($shellType) ($bitness)"
+  }
+}
+
+<#
+.SYNOPSIS
+  Searches for a text pattern
+.DESCRIPTION
+  This function searches for a text pattern, similar to the Unix grep command
+.PARAMETER Pattern
+  The pattern to search for
+.PARAMETER Content
+  The content to search
+.EXAMPLE
+  Pattern-Match "Hello" "Hello World"
+.EXAMPLE
+  "Hello World" | Pattern-Match "Hello"
+#>
+function Pattern-Match {
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
+    [Parameter(Mandatory = $true, Position = 0)]
+    [string]$Pattern,
+
+    [Parameter(ValueFromPipeline = $true)]
+    [string]$Content
+  )
+
+  PROCESS {
+    $Content | Select-String -Pattern $Pattern
+  }
 }
 
 
