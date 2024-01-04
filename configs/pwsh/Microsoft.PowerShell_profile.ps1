@@ -978,12 +978,18 @@ function Change-Directory {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
   PARAM (
     [Parameter(Mandatory = $false)]
-    [string]$Path
+    [string]$Path,
+
+    [Parameter(Mandatory = $false)]
+    [Alias("s")]
+    [switch]$Silent = $false
   )
 
   PROCESS {
     if ($Path) {
       Push-Location -Path $Path
+    }
+    if ($Silent -eq $false) {
       List-Directories
     }
   }
