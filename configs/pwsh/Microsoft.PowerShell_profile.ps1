@@ -2902,6 +2902,24 @@ function Find-Manual {
   }
 }
 
+function Import-Functions {
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM ( ) # No parameters
+
+  BEGIN {
+    $newFunctionsFilePath = Join-Path (Split-Path -Parent $PROFILE) "custom-functions.ps1"
+  }  
+
+  PROCESS {
+    if (-not (Test-Path $newFunctionsFilePath)) {
+      New-Item -Path $newFunctionsFilePath -ItemType File
+    }
+    . $newFunctionsFilePath
+    Write-Host "Sourced $newFunctionsFilePath"
+  }
+}
+Import-Functions
+
 <#
 .SYNOPSIS
   Loads aliases
