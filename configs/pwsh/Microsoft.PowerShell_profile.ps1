@@ -660,6 +660,11 @@ function Preview-Variables {
   }
 }
 
+function Add-Path($Path) {
+  $Path = [Environment]::GetEnvironmentVariable("PATH", "Machine") + [IO.Path]::PathSeparator + $Path
+  [Environment]::SetEnvironmentVariable( "Path", $Path, "Machine" )
+}
+
 function Initialize-Profile {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
   PARAM ( ) # No parameters
@@ -795,12 +800,9 @@ function Initialize-Profile {
         Expand-Archive -Path "$sysinternalsZip" -DestinationPath $sysinternalsPath
         Remove-Item "$sysinternalsZip"
         
-        # Check if the path is already in the environment variable
         if ($env:Path -notlike "*$sysinternalsPath*") {
-          [System.Environment]::SetEnvironmentVariable("Path", $env:Path + "$sysinternalsPath", [System.EnvironmentVariableTarget]::Machine)
+          Add-Path($sysinternalsPath)
         }
-
-        [System.Environment]::SetEnvironmentVariable("Path", $env:Path + "$sysinternalsPath", [System.EnvironmentVariableTarget]::Machine)        
       }
     }
 
