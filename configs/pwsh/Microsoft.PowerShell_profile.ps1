@@ -683,11 +683,14 @@ function Initialize-Profile {
     # Check for the Nerd Fonts registry key
     $nerdfontKey = Get-ItemProperty -Path $KeyPath -Name 'NerdFontInstalled' -ErrorAction SilentlyContinue
 
+    # Check for the Sysinternals registry key
+    $sysinternalsKey = Get-ItemProperty -Path $KeyPath -Name 'SysinternalsInstalled' -ErrorAction SilentlyContinue
+
     # Check for starship and install it if it's not installed
     $starship = Get-Command -Name starship -ErrorAction SilentlyContinue
 
     # Key that determines whether or not the starship prompt is enabled (Disabled by default)
-    $starShip = Get-ItemProperty -Path $KeyPath -Name 'Starship' -ErrorAction SilentlyContinue
+    $starShipKey = Get-ItemProperty -Path $KeyPath -Name 'Starship' -ErrorAction SilentlyContinue
 
     # Path to the oh-my-posh config file
     $ompConfig = "$env:USERPROFILE\.config\omp.json"
@@ -697,6 +700,13 @@ function Initialize-Profile {
 
     # Check for the FirstRun key
     $key = Get-ItemProperty -Path $KeyPath -Name 'FirstRun' -ErrorAction SilentlyContinue
+
+    $loginMessageKey = Get-ItemProperty -Path $KeyPath -Name 'LoginMessage' -ErrorAction SilentlyContinue
+    if ($null -eq $loginMessageKey) {
+      New-ItemProperty -Path $KeyPath -Name 'LoginMessage' -Value 1 -PropertyType 'DWord' -Force 
+    }
+  
+    $loginMessage = $loginMessageKey.LoginMessage
 
     # Create the form
     $form = New-Object System.Windows.Forms.Form
@@ -746,11 +756,11 @@ function Initialize-Profile {
     }
 
     if ($null -eq $nerdfontKey) {
-      New-ItemProperty -Path $KeyPath -Name 'NerdFontInstalled' -Value 0 -PropertyType 'DWord' -Force 
+      New-ItemProperty -Path $KeyPath -Name 'NerdFontInstalled' -Value 1 -PropertyType 'DWord' -Force 
       oh-my-posh font install
     }
 
-    if (-not $starship) {
+    if (-not $starShipKey) {
       scoop install starship
     }
 
@@ -775,6 +785,25 @@ function Initialize-Profile {
       Invoke-Expression (&starship init powershell)
     }
 
+    if ($null -eq $sysinternalsKey) {
+      New-ItemProperty -Path $KeyPath -Name 'SysinternalsInstalled' -Value 1 -PropertyType 'DWord' -Force 
+      $sysinternalsPath = "$SystemDrive\Windows\Utilities\SysinternalsSuite"
+      $sysinternalsZip = "$SystemDrive\Windows\Utilities\SysinternalsSuite.zip"
+      if (-not (Test-Path $sysinternalsPath)) {
+        New-Item -Path $sysinternalsPath -ItemType Directory -Force
+        Invoke-WebRequest -Uri 'https://download.sysinternals.com/files/SysinternalsSuite.zip' -OutFile "$sysinternalsZip"
+        Expand-Archive -Path "$sysinternalsZip" -DestinationPath $sysinternalsPath
+        Remove-Item "$sysinternalsZip"
+        
+        # Check if the path is already in the environment variable
+        if ($env:Path -notlike "*$sysinternalsPath*") {
+          [System.Environment]::SetEnvironmentVariable("Path", $env:Path + "$sysinternalsPath", [System.EnvironmentVariableTarget]::Machine)
+        }
+
+        [System.Environment]::SetEnvironmentVariable("Path", $env:Path + "$sysinternalsPath", [System.EnvironmentVariableTarget]::Machine)        
+      }
+    }
+
     if ($key.FirstRun -eq 1) {
       if (-not (Test-Path $KeyPath)) {
         New-Item -Path $KeyPath -Force 
@@ -786,21 +815,14 @@ function Initialize-Profile {
   }
 
   END {
-    $form.Dispose()
+    $form.Dispose() # Dispose of the form
 
     Import-Functions # Import custom functions
 
     Import-Variables # Import custom variables
 
-    Clear-Host
+    Clear-Host # Clear the host
 
-    $loginMessageKey = Get-ItemProperty -Path $KeyPath -Name 'LoginMessage' -ErrorAction SilentlyContinue
-    if ($null -eq $loginMessageKey) {
-      New-ItemProperty -Path $KeyPath -Name 'LoginMessage' -Value 1 -PropertyType 'DWord' -Force 
-    }
-  
-    # Check for the login message
-    $loginMessage = $loginMessageKey.LoginMessage
     # Display the login message if it's enabled
     if ($loginMessage) {
       Write-Output "Microsoft Windows [Version $($KernelVersion)]"
