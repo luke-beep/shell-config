@@ -765,11 +765,11 @@ function Initialize-Profile {
       oh-my-posh font install
     }
 
-    if (-not $starShipKey) {
+    if (-not $starShip) {
       scoop install starship
     }
 
-    if ($null -eq $starShip) {
+    if ($null -eq $starShipKey) {
       New-ItemProperty -Path $KeyPath -Name 'Starship' -Value 0 -PropertyType 'String' -Force 
     }
 
