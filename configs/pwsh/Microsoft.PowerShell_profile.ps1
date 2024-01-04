@@ -149,6 +149,52 @@ function Write-TimestampedError {
   }
 }
 
+<#
+.SYNOPSIS
+  Writes a colored text
+.DESCRIPTION
+  This function writes a colored text
+.PARAMETER Color
+  The color of the text
+.PARAMETER SpaceCount
+  The number of spaces to write
+.PARAMETER LineCount
+  The number of lines to write
+.PARAMETER NewLine
+  Whether to write a new line
+.EXAMPLE
+  Write-Color -Color Red -SpaceCount 10 -LineCount 1 -NewLine $true
+.OUTPUTS
+  A colored blank text
+.LINK
+  https://github.com/luke-beep/shell-config/wiki/Commands
+#>
+function Write-Color {
+  param(
+    [Parameter(Mandatory = $true)]
+    [System.ConsoleColor]$Color,
+
+    [Parameter(Mandatory = $true)]
+    [int]$SpaceCount,
+
+    [Parameter(Mandatory = $false)]
+    [int]$LineCount = 1,
+
+    [Parameter(Mandatory = $false)]
+    [bool]$NewLine = $true
+  )
+
+  $spaces = " " * $SpaceCount
+
+  for ($i = 0; $i -lt $LineCount; $i++) {
+    Write-Host $spaces -ForegroundColor $Color -BackgroundColor $Color -NoNewline # Write-Host is needed to change the background color
+  }
+
+  if ($NewLine) {
+    Write-Output ""
+  }
+}
+
 function Update-Profile {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
   PARAM (
@@ -3508,7 +3554,7 @@ function Analyze-Profile {
 .LINK
   https://github.com/luke-beep/shell-config/wiki/Commands
 #>
-function Color-Palette {
+function Get-ColorPalette {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
   PARAM ( ) # No parameters
 
@@ -3529,52 +3575,6 @@ function Color-Palette {
         Write-Output " "
       }
     }
-  }
-}
-
-<#
-.SYNOPSIS
-  Writes a colored text
-.DESCRIPTION
-  This function writes a colored text
-.PARAMETER Color
-  The color of the text
-.PARAMETER SpaceCount
-  The number of spaces to write
-.PARAMETER LineCount
-  The number of lines to write
-.PARAMETER NewLine
-  Whether to write a new line
-.EXAMPLE
-  Write-Color -Color Red -SpaceCount 10 -LineCount 1 -NewLine $true
-.OUTPUTS
-  A colored blank text
-.LINK
-  https://github.com/luke-beep/shell-config/wiki/Commands
-#>
-function Write-Color {
-  param(
-    [Parameter(Mandatory = $true)]
-    [System.ConsoleColor]$Color,
-
-    [Parameter(Mandatory = $true)]
-    [int]$SpaceCount,
-
-    [Parameter(Mandatory = $false)]
-    [int]$LineCount = 1,
-
-    [Parameter(Mandatory = $false)]
-    [bool]$NewLine = $true
-  )
-
-  $spaces = " " * $SpaceCount
-
-  for ($i = 0; $i -lt $LineCount; $i++) {
-    Write-Host $spaces -ForegroundColor $Color -BackgroundColor $Color -NoNewline # Write-Host is needed to change the background color
-  }
-
-  if ($NewLine) {
-    Write-Output ""
   }
 }
 

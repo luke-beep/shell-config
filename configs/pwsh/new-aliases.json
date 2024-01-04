@@ -3,6 +3,7 @@
   "echi": "Write-TimestampedInformation",
   "echw": "Write-TimestampedWarning",
   "eche": "Write-TimestampedError",
+  "echc": "Write-Color",
   "profile": "Manage-Profile",
   "apt-get": "Get-Packages",
   "ls": "List-Directories",
@@ -63,5 +64,6 @@
   "shell": "Get-ShellInfo",
   "grep": "Pattern-Match",
   "analyze": "Analyze-Script",
-  "checkhealth": "Analyze-Profile"
+  "checkhealth": "Analyze-Profile",
+  "palette": "Get-ColorPalette"
 }
