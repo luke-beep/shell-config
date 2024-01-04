@@ -91,7 +91,7 @@ function Write-TimestampedInformation {
   )
 
   PROCESS {
-    Write-Output ("[{0}] {1}" -f (Get-Date), $Output)
+    Write-Host ("[{0}] {1}" -f (Get-Date), $Output)
   }
 }
 
@@ -191,7 +191,7 @@ function Write-Color {
   }
 
   if ($NewLine) {
-    Write-Output ""
+    Write-Host ""
   }
 }
 
@@ -811,12 +811,12 @@ function Initialize-Profile {
 
     # Display the login message if it's enabled
     if ($loginMessage) {
-      Write-Output "Microsoft Windows [Version $($KernelVersion)]"
-      Write-Output "(c) Microsoft Corporation. All rights reserved.`n"
+      Write-Host "Microsoft Windows [Version $($KernelVersion)]"
+      Write-Host "(c) Microsoft Corporation. All rights reserved.`n"
     
-      Write-Output "Azrael's $($ShellType) v$($CurrentVersion.Trim())"
-      Write-Output "Copyright (c) 2023-2024 Azrael"
-      Write-Output "https://github.com/luke-beep/shell-config/`n"
+      Write-Host "Azrael's $($ShellType) v$($CurrentVersion.Trim())"
+      Write-Host "Copyright (c) 2023-2024 Azrael"
+      Write-Host "https://github.com/luke-beep/shell-config/`n"
     }
   }
 }
@@ -2561,7 +2561,7 @@ function Invoke-DownloadObject {
         $destinationPath = Join-Path $downloadDirectory $actualObjectName
         if ($Overwrite -and (Test-Path $destinationPath)) {
           if (-not $Silent) {
-            Write-Output "Removing $destinationPath"
+            Write-Host "Removing $destinationPath"
           }
           Remove-Item $destinationPath -Force
         }
@@ -2647,7 +2647,7 @@ function Get-Services {
       $status = $_.Status
       $name = $_.Name
       $displayName = $_.DisplayName
-      Write-Output ("{0} ({1}): {2}" -f $displayName, $name, $status)
+      Write-Host ("{0} ({1}): {2}" -f $displayName, $name, $status)
     }
   }
 }
@@ -2689,15 +2689,15 @@ function Invoke-TargetHack {
     } -ArgumentList $Target
 
     while ($job.State -eq "Running") {
-      Write-Output -NoNewline $progressBar
+      Write-Host -NoNewline $progressBar
       Start-Sleep -Milliseconds 100
     }
   }
 
   END {
-    Write-Output "Hacking complete!"
-    Write-Output "Target: $Target"
-    Write-Output "Status: $($job.State)"
+    Write-Host "Hacking complete!"
+    Write-Host "Target: $Target"
+    Write-Host "Status: $($job.State)"
   }
 }
 
@@ -2719,7 +2719,7 @@ function Get-ProgrammingJoke {
   }
 
   PROCESS {
-    Write-Output ("{0} {1}" -f $joke.setup, $joke.punchline) 
+    Write-Host ("{0} {1}" -f $joke.setup, $joke.punchline) 
   }
 }
 
@@ -2750,7 +2750,7 @@ function Start-MatrixRain {
           $stream = $streams[$i]
           $stream.Position = ($stream.Position + $stream.Speed) % $height
           $host.UI.RawUI.CursorPosition = New-Object -TypeName System.Management.Automation.Host.Coordinates -ArgumentList $i, $stream.Position
-          Write-Output (Get-Random -InputObject ('!'..'/' + ':'..'@' + '['..'`' + '{'..'~' + 0..9)) -NoNewline -ForegroundColor Green
+          Write-Host (Get-Random -InputObject ('!'..'/' + ':'..'@' + '['..'`' + '{'..'~' + 0..9)) -NoNewline -ForegroundColor Green
         }
         Start-Sleep -Milliseconds 200
       } 
@@ -2815,11 +2815,11 @@ function Test-IP {
   }
 
   PROCESS {
-    Write-Output "IP: $($IP)"
-    Write-Output "Country: $($info.country)"
-    Write-Output "Region: $($info.regionName)"
-    Write-Output "City: $($info.city)"
-    Write-Output "ISP: $($info.isp)"
+    Write-Host "IP: $($IP)"
+    Write-Host "Country: $($info.country)"
+    Write-Host "Region: $($info.regionName)"
+    Write-Host "City: $($info.city)"
+    Write-Host "ISP: $($info.isp)"
   }
 }
 
@@ -2851,10 +2851,10 @@ function Test-Ports {
       $success = $tcpClient.ConnectAsync($IP, $port).Wait(1000)
       $tcpClient.Close()
       if ($success) {
-        Write-Output "Port $Port is open."
+        Write-Host "Port $Port is open."
       }
       else {
-        Write-Output "Port $Port is closed."
+        Write-Host "Port $Port is closed."
       }
     }
   }
@@ -3753,21 +3753,21 @@ function Calendar {
   }
 
   PROCESS {
-    Write-Output ("    {0} {1}" -f $date.ToString('MMMM'), $Year)
-    Write-Output "Su Mo Tu We Th Fr Sa"
+    Write-Host ("    {0} {1}" -f $date.ToString('MMMM'), $Year)
+    Write-Host "Su Mo Tu We Th Fr Sa"
   
-    1..$date.DayOfWeek.value__ | ForEach-Object { Write-Output "   " -NoNewline }
+    1..$date.DayOfWeek.value__ | ForEach-Object { Write-Host "   " -NoNewline }
     1..$daysInMonth | ForEach-Object {
       $day = $_
       $date = New-Object DateTime $Year, $Month, $day
-      if ($day -lt 10) { Write-Output " $day" -NoNewline } else { Write-Output "$day" -NoNewline }
-      if ($date.DayOfWeek.value__ -eq 6) { Write-Output "" }
-      else { Write-Output " " -NoNewline }
+      if ($day -lt 10) { Write-Host " $day" -NoNewline } else { Write-Host "$day" -NoNewline }
+      if ($date.DayOfWeek.value__ -eq 6) { Write-Host "" }
+      else { Write-Host " " -NoNewline }
     }
   }
 
   END {
-    Write-Output ""
+    Write-Host ""
   }
 }
 
@@ -3789,9 +3789,9 @@ function Get-ShellInfo {
   }
 
   PROCESS {
-    Write-Output "Profile Path: $PROFILE"
-    Write-Output "Host Name: $($name)"
-    Write-Output "Host Version: $($version) -> $($ShellType) ($Bitness)"
+    Write-Host "Profile Path: $PROFILE"
+    Write-Host "Host Name: $($name)"
+    Write-Host "Host Version: $($version) -> $($ShellType) ($Bitness)"
   }
 }
 
@@ -3955,7 +3955,7 @@ function Get-ColorPalette {
             Write-Color -Color $color -SpaceCount 3 -LineCount 1 -NewLine $false
           }
         }
-        Write-Output " "
+        Write-Host " "
       }
     }
   }
