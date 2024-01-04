@@ -1,5 +1,8 @@
 {
   "restart": "Restart-Shell",
+  "echi": "Write-TimestampedInformation",
+  "echw": "Write-TimestampedWarning",
+  "eche": "Write-TimestampedError",
   "profile": "Manage-Profile",
   "apt-get": "Get-Packages",
   "ls": "List-Directories",
@@ -58,5 +61,7 @@
   "help": "Get-ProfileHelp",
   "cal": "Calendar",
   "shell": "Get-ShellInfo",
-  "grep": "Pattern-Match"
+  "grep": "Pattern-Match",
+  "analyze": "Analyze-Script",
+  "checkhealth": "Analyze-Profile"
 }

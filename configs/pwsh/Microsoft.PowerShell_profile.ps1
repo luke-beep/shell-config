@@ -4,7 +4,7 @@
 
 # Author: LukeHjo (Azrael)
 # Description: This is my PowerShell profile. It contains features that I use on a daily basis.
-# Version: 1.2.0
+# Version: 1.2.1
 # Date: 2023-12-28
 
 Add-Type -AssemblyName System.Windows.Forms
@@ -40,17 +40,113 @@ $kernelVersion = (Get-CimInstance -ClassName Win32_OperatingSystem).Version
 $versionKey = Get-ItemProperty -Path $keyPath -Name 'Version' -ErrorAction SilentlyContinue 
 $currentVersion = if ($null -eq $versionKey) { $null } else { $versionKey.Version }
 $latestVersion = Invoke-RestMethod -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/version'
+$wiki = 'https://github.com/luke-beep/shell-config/wiki/Commands'
 $SystemDrive = $env:SystemDrive
 
+<#
+.SYNOPSIS
+  Restarts the shell
+.DESCRIPTION
+  This function restarts the shell
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
+#>
 function Restart-Shell {
-  . $PROFILE
-  if ($shellType -eq "Pwsh") {
-    pwsh
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM ( ) # No parameters
+  
+  PROCESS {
+    . $PROFILE
+    if ($shellType -eq "Pwsh") {
+      pwsh
+    }
+    else {
+      powershell
+    }
+    Stop-Process -Id $PID
   }
-  else {
-    powershell
+}
+
+<#
+.SYNOPSIS
+  Writes a timestamped information message
+.DESCRIPTION
+  This function writes a timestamped information message
+.PARAMETER Output
+  The message to write
+.EXAMPLE
+  Write-TimestampedInformation "This is an information message" > [2023-12-28 12:00:00] This is an information message
+.OUTPUTS
+  A timestamped information message
+.LINK
+  https://github.com/luke-beep/shell-config/wiki/Commands
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
+#>
+function Write-TimestampedInformation {
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
+    [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+    [string]$Output
+  )
+
+  PROCESS {
+    Write-Output ("[{0}] {1}" -f (Get-Date), $Output)
   }
-  Stop-Process -Id $PID
+}
+
+<#
+.SYNOPSIS
+  Writes a timestamped warning message  
+.DESCRIPTION
+  This function writes a timestamped warning message
+.EXAMPLE
+  Write-TimestampedWarning "This is a warning message" > [2023-12-28 12:00:00] This is a warning message
+.PARAMETER WarningMessage
+  The message to write
+.OUTPUTS
+  A timestamped warning message
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
+#>
+function Write-TimestampedWarning {
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
+    [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+    [string]$WarningMessage
+  )
+
+  PROCESS {
+    Write-Warning ("[{0}] {1}" -f (Get-Date), $WarningMessage)
+  }
+}
+
+<#
+.SYNOPSIS
+  Writes a timestamped error message
+.DESCRIPTION
+  This function writes a timestamped error message
+.EXAMPLE
+  Write-TimestampedError "This is an error message" > [2023-12-28 12:00:00] This is an error message
+.PARAMETER ErrorMessage
+  The message to write
+.OUTPUTS
+  A timestamped error message
+.LINK
+  https://github.com/luke-beep/shell-config/wiki/Commands
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
+#>
+function Write-TimestampedError {
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
+    [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+    [string]$ErrorMessage
+  )
+
+  PROCESS {
+    Write-Error ("[{0}] {1}" -f (Get-Date), $ErrorMessage)
+  }
 }
 
 function Update-Profile {
@@ -63,7 +159,7 @@ function Update-Profile {
   BEGIN {
     # Check for registry key
     if (-not (Test-Path $keyPath)) {
-      New-Item -Path $keyPath -Force | Out-Null
+      New-Item -Path $keyPath -Force 
     }
 
     # Check for the first run key
@@ -123,17 +219,17 @@ function Update-Profile {
       $result = $form.ShowDialog()
 
       if ($result -eq [System.Windows.Forms.DialogResult]::Yes) {
-        New-ItemProperty -Path $keyPath -Name 'AutoUpdate' -Value 1 -PropertyType 'DWord' -Force | Out-Null
+        New-ItemProperty -Path $keyPath -Name 'AutoUpdate' -Value 1 -PropertyType 'DWord' -Force 
       }
       else {
-        New-ItemProperty -Path $keyPath -Name 'AutoUpdate' -Value 0 -PropertyType 'DWord' -Force | Out-Null
+        New-ItemProperty -Path $keyPath -Name 'AutoUpdate' -Value 0 -PropertyType 'DWord' -Force 
       }
 
       $form.Dispose()
 
       Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/Microsoft.PowerShell_profile.ps1' -OutFile $PROFILE
-      New-ItemProperty -Path $keyPath -Name 'Version' -Value $latestVersion -PropertyType 'String' -Force | Out-Null
-      New-ItemProperty -Path $keyPath -Name 'FirstRun' -Value 1 -PropertyType 'DWord' -Force | Out-Null
+      New-ItemProperty -Path $keyPath -Name 'Version' -Value $latestVersion -PropertyType 'String' -Force 
+      New-ItemProperty -Path $keyPath -Name 'FirstRun' -Value 1 -PropertyType 'DWord' -Force 
     }
     if ($Force) {
       # Create the form
@@ -186,7 +282,7 @@ function Update-Profile {
       if ($result -eq [System.Windows.Forms.DialogResult]::Yes) {
         # Resets the entire shell
         Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/Microsoft.PowerShell_profile.ps1' -OutFile $PROFILE
-        New-ItemProperty -Path $keyPath -Name 'Version' -Value $latestVersion -PropertyType 'String' -Force | Out-Null
+        New-ItemProperty -Path $keyPath -Name 'Version' -Value $latestVersion -PropertyType 'String' -Force 
         Restart-Shell 
       }
       $form.Dispose()
@@ -196,7 +292,7 @@ function Update-Profile {
       if ($autoUpdate.AutoUpdate -eq 1 -or $Silent) {
         # Resets the entire shell
         Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/Microsoft.PowerShell_profile.ps1' -OutFile $PROFILE
-        New-ItemProperty -Path $keyPath -Name 'Version' -Value $latestVersion -PropertyType 'String' -Force | Out-Null
+        New-ItemProperty -Path $keyPath -Name 'Version' -Value $latestVersion -PropertyType 'String' -Force 
         Restart-Shell
       }
       else {
@@ -251,7 +347,7 @@ function Update-Profile {
         if ($result -eq [System.Windows.Forms.DialogResult]::Yes) {
           # Resets the entire shell
           Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/Microsoft.PowerShell_profile.ps1' -OutFile $PROFILE
-          New-ItemProperty -Path $keyPath -Name 'Version' -Value $latestVersion -PropertyType 'String' -Force | Out-Null
+          New-ItemProperty -Path $keyPath -Name 'Version' -Value $latestVersion -PropertyType 'String' -Force 
           Restart-Shell
         }
         $form.Dispose()
@@ -346,7 +442,7 @@ function Initialize-Profile {
     }
 
     if ($null -eq $nerdfontKey) {
-      New-ItemProperty -Path $keyPath -Name 'NerdFontInstalled' -Value 0 -PropertyType 'DWord' -Force | Out-Null
+      New-ItemProperty -Path $keyPath -Name 'NerdFontInstalled' -Value 0 -PropertyType 'DWord' -Force 
       oh-my-posh font install
     }
 
@@ -355,16 +451,16 @@ function Initialize-Profile {
     }
 
     if ($null -eq $starShip) {
-      New-ItemProperty -Path $keyPath -Name 'Starship' -Value 0 -PropertyType 'String' -Force | Out-Null
+      New-ItemProperty -Path $keyPath -Name 'Starship' -Value 0 -PropertyType 'String' -Force 
     }
 
     if (-not (Test-Path $ompConfig)) {
-      New-Item -Path $ompConfig -Force | Out-Null
+      New-Item -Path $ompConfig -Force 
       Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/omp/theme.json' -OutFile $ompConfig
     }
 
     if (-not (Test-Path $starshipConfig)) {
-      New-Item -Path $starshipConfig -Force | Out-Null
+      New-Item -Path $starshipConfig -Force 
       Invoke-WebRequest -Uri 'https://starship.rs/presets/toml/tokyo-night.toml' -OutFile $starshipConfig
     }
   
@@ -377,9 +473,9 @@ function Initialize-Profile {
 
     if ($key.FirstRun -eq 1) {
       if (-not (Test-Path $keyPath)) {
-        New-Item -Path $keyPath -Force | Out-Null
+        New-Item -Path $keyPath -Force 
       }
-      New-ItemProperty -Path $keyPath -Name 'FirstRun' -Value 0 -PropertyType 'DWord' -Force | Out-Null
+      New-ItemProperty -Path $keyPath -Name 'FirstRun' -Value 0 -PropertyType 'DWord' -Force 
 
       $form.ShowDialog()
     }
@@ -392,19 +488,19 @@ function Initialize-Profile {
 
     $loginMessageKey = Get-ItemProperty -Path $keyPath -Name 'LoginMessage' -ErrorAction SilentlyContinue
     if ($null -eq $loginMessageKey) {
-      New-ItemProperty -Path $keyPath -Name 'LoginMessage' -Value 1 -PropertyType 'DWord' -Force | Out-Null
+      New-ItemProperty -Path $keyPath -Name 'LoginMessage' -Value 1 -PropertyType 'DWord' -Force 
     }
   
     # Check for the login message
     $loginMessage = $loginMessageKey.LoginMessage
     # Display the login message if it's enabled
     if ($loginMessage) {
-      Write-Host "Microsoft Windows [Version $($kernelVersion)]"
-      Write-Host "(c) Microsoft Corporation. All rights reserved.`n"
+      Write-Output "Microsoft Windows [Version $($kernelVersion)]"
+      Write-Output "(c) Microsoft Corporation. All rights reserved.`n"
     
-      Write-Host "Azrael's $($shellType) v$($currentVersion.Trim())"
-      Write-Host "Copyright (c) 2023-2024 Azrael"
-      Write-Host "https://github.com/luke-beep/shell-config/`n"
+      Write-Output "Azrael's $($shellType) v$($currentVersion.Trim())"
+      Write-Output "Copyright (c) 2023-2024 Azrael"
+      Write-Output "https://github.com/luke-beep/shell-config/`n"
     }
   }
 }
@@ -550,13 +646,15 @@ function Set-ProfileSettings {
   Allows you to manage your entire profile
 .DESCRIPTION 
   This function allows you to manage your profile
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Manage-Profile {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
   PARAM ( ) # No parameters
   
   BEGIN {
-    $PanelWidth = 1000
+    $PanelWidth = 905
 
     $form = New-Object System.Windows.Forms.Form
     $form.Text = "Manage $($shellType) Profile"
@@ -566,9 +664,15 @@ function Manage-Profile {
     $form.FormBorderStyle = 'FixedDialog'
     $form.Icon = $icon
 
-    $buttonPanel = New-Object System.Windows.Forms.Panel
+    $buttonPanel2 = New-Object System.Windows.Forms.Panel # 7 buttons
+    $buttonPanel2.Dock = 'Top'
+    $buttonPanel2.Height = 50
+    $buttonPanel2.Width = $PanelWidth
+
+    $buttonPanel = New-Object System.Windows.Forms.Panel # 7 buttons
     $buttonPanel.Dock = 'Top'
     $buttonPanel.Height = 50
+    $buttonPanel.Width = $PanelWidth
 
     $button1 = New-Object System.Windows.Forms.Button
     $button1.Text = "Update Profile"
@@ -683,12 +787,26 @@ function Manage-Profile {
       })
     $buttonPanel.Controls.Add($button7)
 
+    $button8 = New-Object System.Windows.Forms.Button
+    $button8.Text = "Check Health"
+    $button8.Width = 100
+    $button8.Height = 30
+    $button8.Location = New-Object System.Drawing.Point(10, 0)
+    $button8.BackColor = $nord1
+    $button8.ForeColor = $nord4
+    $button8.FlatStyle = 'Flat'
+    $button8.FlatAppearance.BorderSize = 0
+    $button8.Add_Click({
+        Analyze-Profile -GUI
+      })
+    $buttonPanel2.Controls.Add($button8)
+
     $panel = New-Object System.Windows.Forms.Panel
     $panel.Dock = 'Fill'
     $panel.AutoScroll = $false
 
     $richTextBox = New-Object System.Windows.Forms.RichTextBox
-    $richTextBox.Location = New-Object System.Drawing.Point(0, 0)
+    $richTextBox.Location = New-Object System.Drawing.Point(0, 100)
     $richTextBox.Size = New-Object System.Drawing.Size(($PanelWidth + 20), 490)
     $richTextBox.Text = (Get-Content $profile | Out-String)
     $richTextBox.BackColor = $nord0
@@ -698,6 +816,7 @@ function Manage-Profile {
     $richTextBox.BorderStyle = 'None'
     $richTextBox.ScrollBars = 'Vertical'
 
+    $form.Controls.Add($buttonPanel2)
     $form.Controls.Add($buttonPanel)
 
     $panel.Controls.Add($richTextBox)
@@ -722,6 +841,8 @@ function Manage-Profile {
   This function gets all of the available packages
 .PARAMETER Install 
   If this parameter is specified, the packages will be updated
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Get-Packages {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -788,6 +909,8 @@ function Get-Packages {
   List-Directories -Path "C:\Users\" -Recurse -ShowHidden
 .OUTPUTS
   A list of directories and files at the given path or in the current directory if no path is provided.
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function List-Directories {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -817,11 +940,13 @@ function List-Directories {
 .SYNOPSIS
   Prints the current working directory
 .DESCRIPTION
-    This function prints the current working directory
+  This function prints the current working directory
 .EXAMPLE
-    Print-Working-Directory
+  Print-Working-Directory
 .OUTPUTS
-    The current working directory, e.g. C:\Users\
+  The current working directory, e.g. C:\Users\
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Print-Working-Directory {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -851,6 +976,8 @@ function Print-Working-Directory {
   Change-Directory ..
 .OUTPUTS
   A list of directories and files in the current directory
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Change-Directory {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -884,6 +1011,8 @@ function Change-Directory {
   Make-Directory -Path "C:\Users\", "C:\Users\Public" -Verbose -Permission "W"
 .OUTPUTS
   A list of directories that were created if the Verbose parameter is specified, otherwise nothing
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Make-Directory {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -921,6 +1050,8 @@ function Make-Directory {
   Remove-Directory -Path "C:\Users\", "C:\Users\Public" -Recurse
 .OUTPUTS
   A list of directories that were removed
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Remove-Directory {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -964,6 +1095,8 @@ function Remove-Directory {
   Remove-File -Path "C:\Users\file.txt", "C:\Users\file2.txt"
 .OUTPUTS
   A list of files that were deleted
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Remove-File {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -1018,6 +1151,8 @@ function Remove-File {
   Copy-Item -Source "C:\Users\folder" -Destination "C:\Users\Documents\" -Recurse
 .OUTPUTS
   Nothing.
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Copy-Folder-File {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -1057,6 +1192,8 @@ function Copy-Folder-File {
   Move-Item -Source "C:\Users\folder" -Destination "C:\Users\Documents\"
 .OUTPUTS
   Nothing.
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Move-Folder-File {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -1088,6 +1225,8 @@ function Move-Folder-File {
   Create-File -Path "C:\Users\file.txt", "C:\Users\file2.txt"
 .OUTPUTS
   Nothing.
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Create-File {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -1121,6 +1260,8 @@ function Create-File {
   File-Type -Path "C:\Users\file.txt", "C:\Users\file2.txt"
 .OUTPUTS
   The file's type. E.g. "C:\Users\file.txt" -> ".txt"
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function File-Type {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -1152,6 +1293,8 @@ function File-Type {
   Read-File -Path "C:\Users\file.txt", "C:\Users\file2.txt"
 .OUTPUTS
   The file's contents
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Read-File {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -1186,6 +1329,8 @@ function Read-File {
   Read-File-Reverse -Path "C:\Users\file.txt", "C:\Users\file2.txt"
 .OUTPUTS
   The file's contents in reverse
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Read-File-Reverse {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -1220,6 +1365,8 @@ function Read-File-Reverse {
   Head-File -Path "C:\Users\file.txt" -Lines 5
 .OUTPUTS
   The first few lines of the file (default is 10)
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Head-File {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -1256,6 +1403,8 @@ function Head-File {
   Tail-File -Path "C:\Users\file.txt" -Lines 5
 .OUTPUTS
   The last few lines of the file (default is 10)
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Tail-File {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -1287,6 +1436,8 @@ function Tail-File {
   Compare-File -Path "C:\Users\file.txt", "C:\Users\file2.txt"
 .OUTPUTS
   The differences between the two files
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Differential-File {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -1317,6 +1468,8 @@ function Differential-File {
   "Hello, World!" | Write-OutputAndFile -FilePath "C:\Users\file.txt", "C:\Users\file2.txt"
 .OUTPUTS
   The input written to shell and files
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Write-OutputAndFile {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -1350,6 +1503,8 @@ function Write-OutputAndFile {
   Locate-File -Pattern "file" | Select-Object FullName
 .OUTPUTS
   The file(s) that match the pattern
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Locate-File {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -1396,6 +1551,8 @@ function Locate-File {
 
 .OUTPUTS
   The full paths of the items that match the specified name and type.
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Find-Item {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -1442,6 +1599,8 @@ function Find-Item {
   Get-DiskUsage -Megabytes This command will return the disk usage information for all fixed drives, in megabytes.
 .OUTPUTS
   A custom object for each drive.
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Get-DiskUsage {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -1532,6 +1691,8 @@ function Get-DiskUsage {
   Get-DirectorySize -Path "C:\Users\username\Documents" -Megabytes -LastModified This command will return the total size of all files in the "C:\Users\username\Documents" directory and its subdirectories, in megabytes, as well as the last modification date of the most recently modified file in the directory.
 .OUTPUTS
   A custom object with the following properties: Path, Size, Unit, Last Modified (if the -LastModified switch is provided).
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Get-DirectorySize {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -1603,6 +1764,8 @@ function Get-DirectorySize {
   Get-SystemInfo -NodeHostName
 .OUTPUTS
   A custom object with the following properties: KernelName, NodeHostName.
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Get-SystemInfo {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -1660,6 +1823,8 @@ function Get-SystemInfo {
   Get-HostNameInfo -FQD
 .OUTPUTS
   A custom object with the following properties: Alias, FQDN, IPAddress.
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Get-HostNameInfo {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -1716,6 +1881,8 @@ function Get-HostNameInfo {
   Capture-Commands { cd 'C:\'; New-Item -ItemType file -Name "bashscript.sh"; }
 .OUTPUTS
   A custom object with the following property: ExecutionTime.
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Measure-ExecutionTime {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -1758,6 +1925,8 @@ function Measure-ExecutionTime {
   Get-Jobs -ProcessId
 .OUTPUTS
   A list of jobs.
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Get-Jobs {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -1798,6 +1967,8 @@ function Get-Jobs {
   This function kills a process    
 .PARAMETER ProcessId
   The ID of the process, can be retrieved with Get-Process
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Kill-Process {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -1819,6 +1990,8 @@ function Kill-Process {
   The domain to gather information about
 .PARAMETER Type
   The type of DNS record to gather information about
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Find-DNSRecord {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -1843,6 +2016,8 @@ function Find-DNSRecord {
   Clears the shell history
 .PARAMETER Save
   Saves the shell history to a file
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Shell-History {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -1876,6 +2051,8 @@ function Shell-History {
   This function finds a process
 .PARAMETER Name 
   The name of the process
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Find-Process {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -1899,6 +2076,8 @@ function Find-Process {
   Retrieves the currently installed updates
 .DESCRIPTION
   This function retrieves the currently installed updates
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Get-Updates {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -1920,6 +2099,8 @@ function Get-Updates {
   Generates a system report
 .DESCRIPTION
   This function generates a system report
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Get-SystemReport {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -1935,13 +2116,20 @@ function Get-SystemReport {
   Optimizes PowerShell assemblies
 .DESCRIPTION
   This function optimizes PowerShell assemblies
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Optimize-PowerShell {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
   PARAM ( ) # No parameters
 
   PROCESS {
-    Invoke-RestMethod "https://raw.githubusercontent.com/luke-beep/ps-optimize-assemblies/main/optimize-assemblies.ps1" | Invoke-Expression
+    if (shellType -eq "PowerShell") {
+      Invoke-RestMethod "https://raw.githubusercontent.com/luke-beep/ps-optimize-assemblies/main/optimize-assemblies.ps1" | Invoke-Expression
+    }
+    else {
+      Write-TimestampedError "This command is only available in PowerShell"
+    }
   }
 }
 
@@ -1950,6 +2138,8 @@ function Optimize-PowerShell {
   Activates Windows using MAS
 .DESCRIPTION 
   This function activates Windows using MAS
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Activate-Windows {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -1967,6 +2157,8 @@ function Activate-Windows {
   This function downloads object(s) to the specified path or the current directory
 .PARAMETER Url 
   The URL of the object
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Invoke-DownloadObject {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -1991,7 +2183,7 @@ function Invoke-DownloadObject {
         $destinationPath = Join-Path $downloadDirectory $actualObjectName
         if ($Overwrite -and (Test-Path $destinationPath)) {
           if (-not $Silent) {
-            Write-Host "Removing $destinationPath"
+            Write-TimestampedInformation "Removing $destinationPath"
           }
           Remove-Item $destinationPath -Force
         }
@@ -2002,7 +2194,7 @@ function Invoke-DownloadObject {
           if ($overwrite) {
             $curlCommand += " -O"
           }
-          Invoke-Expression $curlCommand 2>&1 | Out-Null
+          Invoke-Expression $curlCommand 2>&1 
         }
 
         $job = Start-Job -ScriptBlock $scriptBlock -ArgumentList $Url[$i], $destinationPath, $Overwrite, $Silent
@@ -2041,6 +2233,8 @@ function Invoke-DownloadObject {
   The object paths
 .EXAMPLE 
   Invoke-DownloadObject -Url "http://example.com/file1.zip", "http://example.com/file2.zip" | Invoke-Object
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Invoke-Object {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -2063,6 +2257,8 @@ function Invoke-Object {
   Gets the status of all services
 .DESCRIPTION 
   This function gets the status of all services
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Get-Services {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -2073,7 +2269,7 @@ function Get-Services {
       $status = $_.Status
       $name = $_.Name
       $displayName = $_.DisplayName
-      Write-Output ("{0} ({1}): {2}" -f $displayName, $name, $status)
+      Write-TimestampedInformation ("{0} ({1}): {2}" -f $displayName, $name, $status)
     }
   }
 }
@@ -2085,6 +2281,8 @@ function Get-Services {
   This function hacks a target
 .PARAMETER Target 
   The target
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Invoke-TargetHack {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -2113,15 +2311,15 @@ function Invoke-TargetHack {
     } -ArgumentList $Target
 
     while ($job.State -eq "Running") {
-      Write-Host -NoNewline $progressBar
+      Write-TimestampedInformation -NoNewline $progressBar
       Start-Sleep -Milliseconds 100
     }
   }
 
   END {
-    Write-Host "Hacking complete!"
-    Write-Host "Target: $Target"
-    Write-Host "Status: $($job.State)"
+    Write-TimestampedInformation "Hacking complete!"
+    Write-TimestampedInformation "Target: $Target"
+    Write-TimestampedInformation "Status: $($job.State)"
   }
 }
 
@@ -2130,6 +2328,8 @@ function Invoke-TargetHack {
   Gets a programming joke
 .DESCRIPTION 
   This function gets a programming joke
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Get-ProgrammingJoke {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -2141,7 +2341,7 @@ function Get-ProgrammingJoke {
   }
 
   PROCESS {
-    Write-Output ("{0} {1}" -f $joke.setup, $joke.punchline) 
+    Write-TimestampedInformation ("{0} {1}" -f $joke.setup, $joke.punchline) 
   }
 }
 
@@ -2150,6 +2350,8 @@ function Get-ProgrammingJoke {
   Allows you to emulate the Matrix rain effect
 .DESCRIPTION 
   This function allows you to emulate the Matrix rain effect
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Start-MatrixRain {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -2170,7 +2372,7 @@ function Start-MatrixRain {
           $stream = $streams[$i]
           $stream.Position = ($stream.Position + $stream.Speed) % $height
           $host.UI.RawUI.CursorPosition = New-Object -TypeName System.Management.Automation.Host.Coordinates -ArgumentList $i, $stream.Position
-          Write-Host (Get-Random -InputObject ('!'..'/' + ':'..'@' + '['..'`' + '{'..'~' + 0..9)) -NoNewline -ForegroundColor Green
+          Write-TimestampedInformation (Get-Random -InputObject ('!'..'/' + ':'..'@' + '['..'`' + '{'..'~' + 0..9)) -NoNewline -ForegroundColor Green
         }
         Start-Sleep -Milliseconds 200
       } 
@@ -2192,6 +2394,8 @@ function Start-MatrixRain {
   This function searches DuckDuckGo
 .PARAMETER Query 
   The query to search for
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Search-DuckDuckGo {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -2218,6 +2422,8 @@ function Search-DuckDuckGo {
   The IP address
 .PARAMETER Extended
   Whether to show extended information
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Test-IP {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -2231,11 +2437,11 @@ function Test-IP {
   }
 
   PROCESS {
-    Write-Host "IP: $($IP)"
-    Write-Host "Country: $($info.country)"
-    Write-Host "Region: $($info.regionName)"
-    Write-Host "City: $($info.city)"
-    Write-Host "ISP: $($info.isp)"
+    Write-TimestampedInformation "IP: $($IP)"
+    Write-TimestampedInformation "Country: $($info.country)"
+    Write-TimestampedInformation "Region: $($info.regionName)"
+    Write-TimestampedInformation "City: $($info.city)"
+    Write-TimestampedInformation "ISP: $($info.isp)"
   }
 }
 
@@ -2250,6 +2456,8 @@ function Test-IP {
   The start port
 .PARAMETER EndPort 
   The end port
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Test-Ports {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -2265,10 +2473,10 @@ function Test-Ports {
       $success = $tcpClient.ConnectAsync($IP, $port).Wait(1000)
       $tcpClient.Close()
       if ($success) {
-        Write-Host "Port $Port is open."
+        Write-TimestampedInformation "Port $Port is open."
       }
       else {
-        Write-Host "Port $Port is closed."
+        Write-TimestampedInformation "Port $Port is closed."
       }
     }
   }
@@ -2279,6 +2487,8 @@ function Test-Ports {
   Allows you to manage your hosts file
 .DESCRIPTION 
   This function allows you to manage your hosts file
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Edit-Hosts {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -2294,6 +2504,8 @@ function Edit-Hosts {
   Allows you to manage your DNS settings
 .DESCRIPTION 
   This function allows you to manage your DNS settings
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Set-DNS {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -2309,6 +2521,8 @@ function Set-DNS {
   Allows you to manage your network adapters
 .DESCRIPTION 
   This function allows you to manage your network adapters
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Set-NetworkAdapter {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -2324,6 +2538,8 @@ function Set-NetworkAdapter {
   Disables Nagles algorithm
 .DESCRIPTION 
   This function disables Nagles algorithm
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Set-Nagles {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -2339,6 +2555,8 @@ function Set-Nagles {
   Empties the recycle bin
 .DESCRIPTION
   This function empties the recycle bin
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Empty-RecycleBin {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -2354,6 +2572,8 @@ function Empty-RecycleBin {
   Copies the current path to the clipboard
 .DESCRIPTION
   This function copies the current path to the clipboard
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Copy-Path {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -2373,6 +2593,8 @@ function Copy-Path {
   Backs up the current workspace to a specified directory
 .DESCRIPTION
   This function backs up the current workspace to a specified directory
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Take-Snapshot {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -2386,7 +2608,7 @@ function Take-Snapshot {
 
   PROCESS {
     if (!(Test-Path -Path $backupPath)) {
-      New-Item -ItemType Directory -Path $backupPath | Out-Null
+      New-Item -ItemType Directory -Path $backupPath 
     }
   
     Copy-Item -Path "$currentDirectory\*" -Destination $backupPath -Recurse -Force
@@ -2398,6 +2620,8 @@ function Take-Snapshot {
   Tips & tricks for using this profile
 .DESCRIPTION 
   This function displays tips & tricks for using this profile
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Get-ShellTips {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -2450,6 +2674,8 @@ function Get-ShellTips {
   Allows you to configure your theme
 .DESCRIPTION 
   This function allows you to configure your theme
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Set-ShellTheme {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -2606,16 +2832,72 @@ function Set-ShellTheme {
   This function allows you to get the manual for a command
 .PARAMETER Name
   The name of the command
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Find-Manual {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
   PARAM (
     [Parameter(Mandatory = $true)]
-    [string]$Name
+    [string]$Name,
+
+    [Parameter(Mandatory = $false)]
+    [switch]$GUI
   )
 
+  BEGIN {
+    # Assuming that aliases are in lowercase
+    if ($Name -cmatch "[A-Z]") {
+      $Name = Get-ReverseAlias $Name
+    }
+
+    $ManualText = Get-Help -Name $Name -Full | Out-String
+
+    if ($GUI) {
+      $PanelWidth = 750
+  
+      $form = New-Object System.Windows.Forms.Form
+      $form.Text = "Manual for $Name"
+      $form.BackColor = $nord0
+      $form.Size = New-Object System.Drawing.Size($PanelWidth, 500)
+      $form.StartPosition = 'CenterScreen'
+      $form.FormBorderStyle = 'FixedDialog'
+      $form.Icon = $icon
+    
+      $panel = New-Object System.Windows.Forms.Panel
+      $panel.Dock = 'Fill'
+      $panel.AutoScroll = $false
+      
+      $richTextBox = New-Object System.Windows.Forms.RichTextBox
+      $richTextBox.Location = New-Object System.Drawing.Point(0, 0)
+      $richTextBox.Size = New-Object System.Drawing.Size(($PanelWidth + 20), 490)
+      $richTextBox.Text = $ManualText
+      $richTextBox.BackColor = $nord0
+      $richTextBox.ForeColor = $nord4
+      $richTextBox.Font = New-Object System.Drawing.Font("Consolas", 10)
+      $richTextBox.ReadOnly = $true
+      $richTextBox.BorderStyle = 'None'
+      $richTextBox.ScrollBars = 'Vertical'
+    
+      $panel.Controls.Add($richTextBox)
+    
+      $form.Controls.Add($panel)
+    }
+  }
+
   PROCESS {
-    Get-Help -Name $Name -Full
+    if ($GUI) {
+      $form.ShowDialog()
+    }
+    else {
+      $ManualText
+    }
+  }
+
+  END {
+    if ($GUI) {
+      $form.Dispose()
+    }
   }
 }
 
@@ -2626,6 +2908,8 @@ function Find-Manual {
   This function loads aliases
 .PARAMETER Force 
   Forces the loading of aliases
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Import-Aliases {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -2698,6 +2982,8 @@ function Import-Aliases {
   Adds aliases through a GUI
 .DESCRIPTION 
   This function allows you to add aliases through a GUI
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Add-Aliases {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -2713,7 +2999,6 @@ function Add-Aliases {
     }
 
     $aliasConfig = Get-Content $aliasConfigFilePath | ConvertFrom-Json
-    Write-Host $aliasConfig
 
     $form = New-Object System.Windows.Forms.Form
     $form.Text = "Alias Configuration"
@@ -2832,6 +3117,8 @@ function Add-Aliases {
   Removes aliases through a GUI
 .DESCRIPTION  
   This function allows you to remove aliases through a GUI
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Remove-Aliases {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -2856,7 +3143,7 @@ function Remove-Aliases {
       $row["Name"] = $alias
       $dataTable.Rows.Add($row)
     }
-  
+
     $width = 400
     $height = 300
   
@@ -2971,6 +3258,8 @@ function Get-ReverseAlias {
   This function displays the help menu
 .PARAMETER ShowInConsole
   Displays the help menu in the console
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Get-ProfileHelp {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -3068,6 +3357,8 @@ function Show-Help {
   The year
 .EXAMPLE
   Calendar 12 2020
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Calendar {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -3084,21 +3375,21 @@ function Calendar {
   }
 
   PROCESS {
-    Write-Host ("    {0} {1}" -f $date.ToString('MMMM'), $Year)
-    Write-Host "Su Mo Tu We Th Fr Sa"
+    Write-TimestampedInformation ("    {0} {1}" -f $date.ToString('MMMM'), $Year)
+    Write-TimestampedInformation "Su Mo Tu We Th Fr Sa"
   
-    1..$date.DayOfWeek.value__ | ForEach-Object { Write-Host "   " -NoNewline }
+    1..$date.DayOfWeek.value__ | ForEach-Object { Write-TimestampedInformation "   " -NoNewline }
     1..$daysInMonth | ForEach-Object {
       $day = $_
       $date = New-Object DateTime $Year, $Month, $day
-      if ($day -lt 10) { Write-Host " $day" -NoNewline } else { Write-Host "$day" -NoNewline }
-      if ($date.DayOfWeek.value__ -eq 6) { Write-Host "" }
-      else { Write-Host " " -NoNewline }
+      if ($day -lt 10) { Write-TimestampedInformation " $day" -NoNewline } else { Write-TimestampedInformation "$day" -NoNewline }
+      if ($date.DayOfWeek.value__ -eq 6) { Write-TimestampedInformation "" }
+      else { Write-TimestampedInformation " " -NoNewline }
     }
   }
 
   END {
-    Write-Host ""
+    Write-TimestampedInformation ""
   }
 }
 
@@ -3107,6 +3398,8 @@ function Calendar {
   Gets the current shell information
 .DESCRIPTION
   This function gets the current shell information
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Get-ShellInfo {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -3118,9 +3411,9 @@ function Get-ShellInfo {
   }
 
   PROCESS {
-    Write-Output "Profile Path: $PROFILE"
-    Write-Output "Host Name: $($name)"
-    Write-Output "Host Version: $($version) -> $($shellType) ($bitness)"
+    Write-TimestampedInformation "Profile Path: $PROFILE"
+    Write-TimestampedInformation "Host Name: $($name)"
+    Write-TimestampedInformation "Host Version: $($version) -> $($shellType) ($bitness)"
   }
 }
 
@@ -3137,6 +3430,8 @@ function Get-ShellInfo {
   Pattern-Match "Hello" "Hello World"
 .EXAMPLE
   "Hello World" | Pattern-Match "Hello"
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
 #>
 function Pattern-Match {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -3153,6 +3448,104 @@ function Pattern-Match {
   }
 }
 
+<#
+.SYNOPSIS
+  Analyzes a script
+.DESCRIPTION
+  This function analyzes a script
+.PARAMETER Content
+  The content to analyze
+.EXAMPLE
+  Analyze-Script "Write-Host 'Hello World'"
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
+#>
+function Analyze-Script {
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
+    [Parameter(Mandatory = $true, Position = 0)]
+    [string]$Content
+  )
+
+  BEGIN {
+    $scriptAnalyzer = Get-Module -Name PSScriptAnalyzer -ListAvailable -ErrorAction SilentlyContinue
+    if (-not $scriptAnalyzer) {
+      Write-TimestampedError "PSScriptAnalyzer is not installed. Runnning 'Install-Module -Name PSScriptAnalyzer -Force'"
+      Install-Module -Name PSScriptAnalyzer -Force
+    }
+  }
+
+  PROCESS {
+    Invoke-ScriptAnalyzer -ScriptDefinition $Content
+  }
+}
+
+<#
+.SYNOPSIS
+  Analyzes the profile
+.DESCRIPTION
+  This function analyzes the profile
+.LINK
+  https://github.com/luke-beep/shell-config/wiki/Commands
+#>
+function Analyze-Profile {
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
+    [Parameter(Mandatory = $false)]
+    [switch]$GUI = $false
+  )
+
+  BEGIN {
+    $profileContent = Get-Content $PROFILE
+    $profileContentString = $profileContent | Out-String
+
+    $PanelWidth = 1000
+
+    $form = New-Object System.Windows.Forms.Form
+    $form.Text = "Profile Analysis"
+    $form.BackColor = $nord0
+    $form.Size = New-Object System.Drawing.Size($PanelWidth, 500)
+    $form.StartPosition = 'CenterScreen'
+    $form.FormBorderStyle = 'FixedDialog'
+    $form.Icon = $icon
+  
+    $panel = New-Object System.Windows.Forms.Panel
+    $panel.Dock = 'Fill'
+    $panel.AutoScroll = $false
+  
+    $richTextBox = New-Object System.Windows.Forms.RichTextBox
+    $richTextBox.Location = New-Object System.Drawing.Point(0, 0)
+    $richTextBox.Size = New-Object System.Drawing.Size(($PanelWidth + 20), 490)
+    $richTextBox.BackColor = $nord0
+    $richTextBox.ForeColor = $nord4
+    $richTextBox.Font = New-Object System.Drawing.Font("Consolas", 10)
+    $richTextBox.ReadOnly = $true
+    $richTextBox.BorderStyle = 'None'
+    $richTextBox.ScrollBars = 'Vertical'
+  
+    $panel.Controls.Add($richTextBox)
+  
+    $form.Controls.Add($panel)
+  }
+
+  PROCESS {
+    if ($GUI) {
+      $analysis = Analyze-Script -Content $profileContentString
+      $richTextBox.Text = $analysis | Out-String
+      $form.ShowDialog()
+    }
+    else {
+      $analysis = Analyze-Script -Content $profileContentString
+      $analysis | Out-String
+    }
+  }
+
+  END {
+    if ($GUI) {
+      $form.Dispose() 
+    }
+  }
+}
 
 # ----------------------------------------
 # End of profile
