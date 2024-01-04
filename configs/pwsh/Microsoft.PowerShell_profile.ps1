@@ -791,19 +791,8 @@ function Initialize-Profile {
     }
 
     if ($null -eq $sysinternalsKey) {
-      New-ItemProperty -Path $KeyPath -Name 'SysinternalsInstalled' -Value 1 -PropertyType 'DWord' -Force 
-      $sysinternalsPath = "$SystemDrive\Windows\Utilities\SysinternalsSuite"
-      $sysinternalsZip = "$SystemDrive\Windows\Utilities\SysinternalsSuite.zip"
-      if (-not (Test-Path $sysinternalsPath)) {
-        New-Item -Path $sysinternalsPath -ItemType Directory -Force
-        Invoke-WebRequest -Uri 'https://download.sysinternals.com/files/SysinternalsSuite.zip' -OutFile "$sysinternalsZip"
-        Expand-Archive -Path "$sysinternalsZip" -DestinationPath $sysinternalsPath
-        Remove-Item "$sysinternalsZip"
-        
-        if ($env:Path -notlike "*$sysinternalsPath*") {
-          Add-Path($sysinternalsPath)
-        }
-      }
+      New-ItemProperty -Path $KeyPath -Name 'SysinternalsInstalled' -Value 0 -PropertyType 'DWord' -Force
+      choco install sysinternals
     }
 
     if ($key.FirstRun -eq 1) {
