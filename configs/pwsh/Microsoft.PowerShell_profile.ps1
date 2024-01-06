@@ -3769,12 +3769,34 @@ function Calendar {
   PROCESS {
     Write-Host ("    {0} {1}" -f $date.ToString('MMMM'), $Year)
     Write-Host "Su Mo Tu We Th Fr Sa"
-  
+
+    if ($date.Month -eq (Get-Date).Month -and $date.Year -eq (Get-Date).Year) {
+      $today = (Get-Date).Day
+    }
+    else {
+      $today = 0
+    }
+
     1..$date.DayOfWeek.value__ | ForEach-Object { Write-Host "   " -NoNewline }
     1..$daysInMonth | ForEach-Object {
       $day = $_
       $date = New-Object DateTime $Year, $Month, $day
-      if ($day -lt 10) { Write-Host " $day" -NoNewline } else { Write-Host "$day" -NoNewline }
+      if ($day -lt 10) { 
+        if ($day -eq $today) {
+          Write-Host " $day" -NoNewline -ForegroundColor Red 
+        }
+        else {
+          Write-Host " $day" -NoNewline
+        } 
+      }
+      else {
+        if ($day -eq $today) {
+          Write-Host "$day" -NoNewline -ForegroundColor Red 
+        } 
+        else {
+          Write-Host "$day" -NoNewline
+        }
+      }
       if ($date.DayOfWeek.value__ -eq 6) { Write-Host "" }
       else { Write-Host " " -NoNewline }
     }
