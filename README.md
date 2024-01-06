@@ -25,6 +25,7 @@
     - [📝 License](#-license)
     - [📮 Contact](#-contact)
     - [🌟 Acknowledgements](#-acknowledgements)
+  - [](#)
 
 ### 📚 Description
 
@@ -36,6 +37,7 @@ This repository contains my personal configuration for the Windows Terminal. It'
 
 ---
 
+![Screenshot](/assets/Product1.png)
 ![Screenshot](/assets/Product2.png)
 
 ### 🚀 Installation
@@ -144,8 +146,9 @@ If you have any questions, feel free to reach out to me at [lukehjo@duck.com](ma
 
 ---
 
-![Screenshot](/assets/Product1.png)
-
+<p align="center">
+  <img src="assets/LukeHjo.png" alt="Profile" />
+</p>
 ---
 
 **<div align="center" id="footer">© 2023 LukeHjo. All rights reserved. <div>**
