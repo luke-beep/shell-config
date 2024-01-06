@@ -55,6 +55,12 @@ else {
 
     Write-Host "Installing the $ShellType configuration..."
     Invoke-WebRequest -Uri https://github.com/luke-beep/shell-config/raw/main/configs/pwsh/Microsoft.PowerShell_profile.ps1 -OutFile $PROFILE
+    if ($ShellType -eq "PowerShell") {
+        pwsh -Command "Invoke-WebRequest -Uri https://github.com/luke-beep/shell-config/raw/main/configs/pwsh/Microsoft.PowerShell_profile.ps1 -OutFile $PROFILE"
+    }
+    else {
+        powershell -Command "Invoke-WebRequest -Uri https://github.com/luke-beep/shell-config/raw/main/configs/pwsh/Microsoft.PowerShell_profile.ps1 -OutFile $PROFILE"
+    }
 
     Write-Host "Installation complete. Please restart your shell."
 }

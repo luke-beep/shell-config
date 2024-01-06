@@ -42,9 +42,15 @@ This repository contains my personal configuration for the Windows Terminal. It'
 
 ---
 
-1. Clone this repository to your local machine using `https://github.com/luke-beep/shell-config.git`.
-2. Navigate to the cloned repository.
-3. Follow the instructions in the [`installation.md`](/configs/installation.md) file.
+You have two choices for installation. You can either use the automated installation script or manually install the profile. The [automated installation script](./scripts/install-configuration.ps1) is recommended for most users. However, if you want to manually install the profile, you can follow the [manual installation guide](./configs/installation.md).
+
+- **Automated Installation** - The automated installation script is the recommended installation method for most users. It's designed to be user-friendly and easy to use. It will automatically install the profile and configure the Windows Terminal. It will also automatically install the required dependencies. You can use the following command to install the profile:
+
+```powershell
+iwr -useb https://raw.githubusercontent.com/luke-beep/shell-config/main/scripts/install-configuration.ps1 | iex
+```
+
+- **Manual Installation** - The manual installation guide is designed for advanced users who want to manually install the profile. It's designed to be more flexible and customizable. It will also automatically install the required dependencies. You can follow the [manual installation guide](./configs/installation.md) for more information.
 
 ### 🌟 Features
 
@@ -79,7 +85,35 @@ This profile is designed to offer a comprehensive, customizable, and user-friend
 
 ---
 
-After installation, you can use the Windows Terminal as you normally would. The configuration changes should already be applied.
+After installation, you can use the Windows Terminal as you normally would. The configuration changes should already be applied. Make sure to check out the [`wiki`](https://github.com/luke-beep/shell-config/wiki/) page for detailed information on each function. You can also use the `help` command to view the help documentation for each function. You can also alternatively use the `Get-Help` command to view the help documentation for each function. For example, to view the help documentation for the `Write-Color` function, you can use the following command:
+
+```powershell
+Get-Help Write-Color
+```
+
+There are also a few functions that are designed to be used in the Windows Terminal. For example, the `Restart-Shell` function is designed to be used in the Windows Terminal. You can use the following command to restart your PowerShell session:
+
+```powershell
+Restart-Shell
+```
+
+There's also the `Update-Profile` function, which is designed to be used in the Windows Terminal. You can use the following command to update your profile:
+
+```powershell
+Update-Profile
+```
+
+Then we have the `Manage-Profile` function, which is designed to be used in the Windows Terminal. You can use the following command to manage your profile:
+
+```powershell
+Manage-Profile
+```
+
+If you want to get more tips on how to use the Windows Terminal, you can use the following command:
+
+```powershell
+Get-ShellTips
+```
 
 ### 🤝 Contributing
 
@@ -113,4 +147,5 @@ If you have any questions, feel free to reach out to me at [lukehjo@duck.com](ma
 
 **<div align="center" id="footer">© 2023 LukeHjo. All rights reserved. <div>**
 <br>
+
 <div align="right"><a href="#">(Back to top)</a></div>
