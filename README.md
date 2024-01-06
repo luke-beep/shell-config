@@ -109,6 +109,8 @@ If you have any questions, feel free to reach out to me at [lukehjo@duck.com](ma
 
 ![Screenshot](/assets/Product1.png)
 
+---
+
 **<div align="center" id="footer">© 2023 LukeHjo. All rights reserved. <div>**
 <br>
 <div align="right"><a href="#">(Back to top)</a></div>

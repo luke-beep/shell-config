@@ -37,7 +37,19 @@
 
     > Do this for each PowerShell profile you wish to use. E.g. one for PowerShell Core and one for Windows PowerShell.
 
+6. **Install the optional packages**: Download the script [`install-packages.ps1`](/scripts/install-packages.ps1) and run it in an elevated PowerShell session:
+
+    ```powershell
+    .\scripts\install-packages.ps1
+    ```
+
 6. Open the Windows Terminal and enjoy!
 
 > [!NOTE]
 > The PowerShell profile will automatically prompt for updates to the repository when you open a new PowerShell session. If you do not wish to do so simply deny the prompt.
+
+---
+
+**<div align="center" id="footer">© 2023 LukeHjo. All rights reserved. <div>**
+<br>
+<div align="right"><a href="#">(Back to top)</a></div>
