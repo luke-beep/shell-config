@@ -1,4 +1,23 @@
+# ----------------------------------------
+# Header
+# ----------------------------------------
+
+# Author: LukeHjo (Azrael)
+# Description: Installs the shell configuration for Windows Terminal & subshells.
+# Version: 1.2.3
+# Date: 2024-01-04
+
 Set-ExecutionPolicy Bypass -Scope Process -Force
+
+# ----------------------------------------
+# Variables
+# ----------------------------------------
+
+$installationKey = "HKCU:\Software\Azrael\Packages"
+
+# ----------------------------------------
+# Functions
+# ----------------------------------------
 
 function InstallScoopPackage {
     param(
@@ -30,10 +49,19 @@ function InstallChocolateyPackage {
     choco install $PackageName -y
 }
 
-function InstallAllPackages {
-    Write-Host "Microsoft Windows [Version $($KernelVersion)]"
+if ((Get-ItemProperty -Path $installationKey -Name Installed).Installed -eq 1) {
+    Write-Host "Packages are already installed. Exiting..."
+    exit
+}
+else {
+    Write-Host "Packages are not installed. Installing..."
+    if (-not (Test-Path $installationKey)) {
+        New-Item -Path $installationKey -Force
+    }
+    New-ItemProperty -Path $installationKey -Name Installed -Value 1 -PropertyType DWORD -Force
+
+    Write-Host "Microsoft Windows [Version $($KernelVersion)]" # Fun. I like it.
     Write-Host "(c) Microsoft Corporation. All rights reserved.`n"
-  
     Write-Host "Copyright (c) 2023-2024 Azrael"
     Write-Host "https://github.com/luke-beep/shell-config/`n"
     
@@ -61,6 +89,7 @@ function InstallAllPackages {
     InstallScoopPackage neovim
     InstallScoopPackage winget
     InstallScoopPackage zip
+    InstallScoopPackage clink
 
     InstallChocolateyPackage firefox
     InstallChocolateyPackage gimp
@@ -69,8 +98,9 @@ function InstallAllPackages {
     InstallChocolateyPackage sysinternals
     InstallChocolateyPackage ripgrep
 
-    Write-Host "All packages installed."
+    Write-Host "Packages are now installed."
 }
 
-# Initialize and run
-InstallAllPackages
+# ----------------------------------------
+# Footer
+# ----------------------------------------
