@@ -115,6 +115,9 @@ If you want to get more tips on how to use the Windows Terminal, you can use the
 Get-ShellTips
 ```
 
+> [!NOTE]
+> The actual command is `Get-ShellTips`, but you can also use the alias `tips` to run the command. The tips are located in the [`tips.md`](/configs/pwsh/tips.md) file.
+
 ### 🤝 Contributing
 
 ---
