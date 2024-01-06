@@ -148,6 +148,7 @@ If you have any questions, feel free to reach out to me at [lukehjo@duck.com](ma
 <p align="center">
   <img src="assets/LukeHjo.png" alt="Profile" />
 </p>
+
 ---
 
 **<div align="center" id="footer">© 2023 LukeHjo. All rights reserved. <div>**
