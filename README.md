@@ -13,7 +13,7 @@
 ### 🗂️ Table of Contents
 
 ---
-
+<!-- no toc -->
 - [🐚 Shell-Config](#-shell-config)
     - [🗂️ Table of Contents](#️-table-of-contents)
     - [📚 Description](#-description)
@@ -25,7 +25,6 @@
     - [📝 License](#-license)
     - [📮 Contact](#-contact)
     - [🌟 Acknowledgements](#-acknowledgements)
-  - [](#)
 
 ### 📚 Description
 
