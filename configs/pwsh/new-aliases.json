@@ -66,5 +66,12 @@
   "grep": "Pattern-Match",
   "analyze": "Analyze-Script",
   "checkhealth": "Analyze-Profile",
-  "palette": "Get-ColorPalette"
+  "palette": "Get-ColorPalette",
+  "tjson": "To-Json",
+  "fjson": "From-Json",
+  "txml": "ConvertTo-Xml",
+  "fxml": "ConvertFrom-Xml",
+  "tcsv": "ConvertTo-Csv",
+  "fcsv": "ConvertFrom-Csv",
+  "uniq": "Select-Unique"
 }

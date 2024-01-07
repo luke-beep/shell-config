@@ -3868,7 +3868,7 @@ function Get-ShellInfo {
 
 <#
 .SYNOPSIS
-  Searches for a text pattern
+  Searches for a text pattern, please use RipGrep instead
 .DESCRIPTION
   This function searches for a text pattern, similar to the Unix grep command
 .PARAMETER Pattern
@@ -4032,7 +4032,112 @@ function Get-ColorPalette {
   }
 }
 
+<#
+.SYNOPSIS
+  Simplified version of ConvertTo-Json, with minified parameters
+.DESCRIPTION
+  This function is a simplified version of ConvertTo-Json, with minified parameters. Can be used in a pipeline and together with From-Json.
+.PARAMETER Pipe
+  The input object
+.PARAMETER Depth
+  The depth of the conversion
+.EXAMPLE
+  "Hello World" | To-Json
+.EXAMPLE
+  "Hello World" | To-Json -Depth 3
+.OUTPUTS
+  The converted object
+.LINK
+  https://github.com/luke-beep/shell-config/wiki/Commands
+#>
+function To-Json {
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
+    [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+    [Alias("p")]
+    [string]$Pipe,
+      
+    [Parameter(Mandatory = $false)]
+    [Alias("d")]
+    [int]$Depth = 2
+  )
 
+  PROCESS {
+    return $Pipe | ConvertTo-Json -Depth $Depth
+  }
+}
+
+<#
+.SYNOPSIS
+  Simplified version of ConvertFrom-Json, with minified parameters
+.DESCRIPTION
+  This function is a simplified version of ConvertFrom-Json, with minified parameters. Can be used in a pipeline and together with To-Json.
+.PARAMETER Pipe
+  The input object
+.PARAMETER AsHashTable
+  Converts the input object to a hash table
+.EXAMPLE
+  '{"Name": "Azrael"}' | From-Json
+.EXAMPLE
+  '{"Name": "Azrael"}' | From-Json -AsHashTable
+.OUTPUTS
+  The converted object
+.LINK
+  https://github.com/luke-beep/shell-config/wiki/Commands
+#>
+function From-Json {
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
+    [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+    [Alias("p")]
+    [string]$Pipe,
+
+    [Parameter(Mandatory = $false)]
+    [Alias("a")]
+    [switch]$AsHashTable = $false
+  )
+
+  PROCESS {
+    return $Pipe | ConvertFrom-Json -AsHashTable:$AsHashTable
+  }
+}
+
+<#
+.SYNOPSIS
+  Unique select
+.DESCRIPTION
+  This function selects unique lines
+.PARAMETER Pipe
+  The input object
+.EXAMPLE
+  "Hello World" | Select-Unique
+.OUTPUTS
+  The unique lines
+.LINK
+  https://github.com/luke-beep/shell-config/wiki/Commands
+#>
+function Select-Unique {
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
+    [Parameter(Mandatory = $false, ValueFromPipeline = $true)]
+    [Alias("p")]
+    [string]$Pipe
+  )
+
+  BEGIN {
+    $uniqueLines = @()
+  }
+
+  PROCESS {
+    if ($Pipe) {
+      $uniqueLines += $Pipe
+    }
+  }
+
+  END {
+    $uniqueLines | Select-Object -Unique
+  }
+}
 
 # ----------------------------------------
 # End of profile

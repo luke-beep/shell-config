@@ -67,5 +67,12 @@
     "grep",
     "analyze",
     "checkhealth",
-    "palette"
+    "palette",
+    "tjson",
+    "fjson",
+    "txml",
+    "fxml",
+    "tcsv",
+    "fcsv",
+    "uniq"
 ]
