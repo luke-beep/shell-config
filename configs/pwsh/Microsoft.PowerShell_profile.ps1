@@ -3310,11 +3310,9 @@ function Find-Command {
     [string]$Name
   )
 
-  BEGIN {
-    $Command = Get-Command -Name $Name -ErrorAction SilentlyContinue
-  }
-
   PROCESS {
+    $Command = Get-Command -Name $Name -ErrorAction SilentlyContinue
+
     if ($Command) {
       Write-Host "Command: $($Command.Name)"
       Write-Host "Module: $($Command.ModuleName)"
