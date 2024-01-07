@@ -57,6 +57,7 @@
   "tips": "Get-ShellTips",
   "theme": "Set-ShellTheme",
   "man": "Find-Manual",
+  "info": "Find-Command",
   "alias": "Add-Aliases",
   "unalias": "Remove-Aliases",
   "help": "Get-ProfileHelp",

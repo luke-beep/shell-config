@@ -3295,6 +3295,43 @@ function Find-Manual {
 
 <#
 .SYNOPSIS
+  Allows you to get the manual for a command
+.DESCRIPTION
+  This function allows you to get the command information for a command
+.PARAMETER Name
+  The name of the command
+.LINK
+  https://github.com/luke-beep/shell-config/wiki/Commands
+#>
+function Find-Command {
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
+    [Parameter(Mandatory = $true)]
+    [string]$Name
+  )
+
+  BEGIN {
+    $Command = Get-Command -Name $Name -ErrorAction SilentlyContinue
+  }
+
+  PROCESS {
+    if ($Command) {
+      Write-Host "Command: $($Command.Name)"
+      Write-Host "Module: $($Command.ModuleName)"
+      Write-Host "Path: $($Command.Path)"
+    }
+    else {
+      Write-Error "Command not found"
+    }
+  }
+
+  END {
+    $Command
+  }
+}
+
+<#
+.SYNOPSIS
   Loads aliases
 .DESCRIPTION 
   This function loads aliases
