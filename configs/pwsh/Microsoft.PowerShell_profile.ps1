@@ -3306,7 +3306,7 @@ function Find-Manual {
 function Find-Command {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
   PARAM (
-    [Parameter(Mandatory = $true)]
+    [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
     [string]$Name
   )
 

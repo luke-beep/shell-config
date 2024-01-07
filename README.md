@@ -79,6 +79,7 @@ iwr -useb https://raw.githubusercontent.com/luke-beep/shell-config/main/scripts/
 - **Custom Script Incorporation** - Easily add and manage your own scripts.
 - **Help and Documentation** - Access to detailed help and documentation for each function.
 - **Guided Initial Setup** - Initial setup with guided instructions and configuration checks.
+- **Unix-Style Commands** - Unix-style commands for enhanced cross-platform compatibility. *Note* that these commands are only imitations of the real commands. They are not actual Unix commands and won't function the same way.
 
 This profile is designed to offer a comprehensive, customizable, and user-friendly PowerShell environment.
 
