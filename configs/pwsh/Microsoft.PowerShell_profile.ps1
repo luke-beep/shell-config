@@ -3899,6 +3899,54 @@ function Pattern-Match {
 
 <#
 .SYNOPSIS
+  Replaces a text pattern, similar to the Unix sed command
+.DESCRIPTION
+  This function replaces a text pattern, similar to the Unix sed command
+.PARAMETER Pattern
+  The pattern to search for
+.PARAMETER Replacement
+  The replacement text
+.PARAMETER Object
+  The object to search
+.EXAMPLE
+  "Hello World" | Pattern-Replace "Hello" "Hi"
+.LINK
+  https://github.com/luke-beep/shell-config/wiki/Commands
+#>
+function Pattern-Replace {
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
+    [Parameter(Mandatory = $true, Position = 0)]
+    [string]$Pattern,
+
+    [Parameter(Mandatory = $true, Position = 1)]
+    [string]$Replacement,
+
+    [Parameter(ValueFromPipeline = $true)]
+    [string]$Object
+  )
+
+  PROCESS {
+    $Object | ForEach-Object {
+      $content = Get-Content $_ -ErrorAction SilentlyContinue
+      if (-not $content) {
+        $_ | ForEach-Object {
+          $replacedContent = $_ -replace $Pattern, $Replacement
+          Write-Host $replacedContent
+        }
+      }
+      else {
+        $content | ForEach-Object {
+          $replacedContent = $_ -replace $Pattern, $Replacement
+          Write-Host $replacedContent
+        }
+      }
+    }
+  }
+}
+
+<#
+.SYNOPSIS
   Analyzes a script
 .DESCRIPTION
   This function analyzes a script

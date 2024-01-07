@@ -64,6 +64,7 @@
   "cal": "Calendar",
   "shell": "Get-ShellInfo",
   "grep": "Pattern-Match",
+  "sed": "Pattern-Replace",
   "analyze": "Analyze-Script",
   "checkhealth": "Analyze-Profile",
   "palette": "Get-ColorPalette",

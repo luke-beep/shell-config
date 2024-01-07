@@ -65,6 +65,7 @@
     "cal",
     "shell",
     "grep",
+    "sed",
     "analyze",
     "checkhealth",
     "palette",
