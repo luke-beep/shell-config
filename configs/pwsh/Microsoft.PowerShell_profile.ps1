@@ -974,9 +974,9 @@ function Initialize-Profile {
       }
       New-ItemProperty -Path $KeyPath -Name 'FirstRun' -Value 0 -PropertyType 'DWord' -Force 
       
-      Write-TimestampedInformation -Message "Optimizing your shell for the first time. This may take a few minutes..."
+      Write-TimestampedInformation "Optimizing your shell for the first time. This may take a few minutes..."
       Optimize-PowerShell
-      Write-TimestampedInformation -Message "Done!"
+      Write-TimestampedInformation "Done!"
 
       $form.ShowDialog()
     }
