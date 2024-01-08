@@ -1,0 +1,130 @@
+Use help <command> to get help for a command.
+Use F7 to view command history in the command prompt.
+Use command > file to redirect output to a file, overwriting the file.
+Use command >> file to redirect output to a file, appending to the file.
+Use command1 && command2 to execute command2 only if command1 succeeds.
+Use command1 || command2 to execute command2 only if command1 fails.
+Use start command to run a command in a new window.
+Use ctrl + c to stop a running command.
+Use cls to clear the screen.
+Use cd /d to change the drive along with the directory.
+Use dir /s to search for a file in a directory and its subdirectories.
+Use dir /b to display only the file names in a directory.
+Use echo %PATH% to display the PATH environment variable.
+Use set variable=value to set an environment variable.
+Use echo %variable% to display the value of an environment variable.
+Use del /s to delete a file in a directory and its subdirectories.
+Use copy /y to copy files without confirmation.
+Use move /y to move files without confirmation.
+Use findstr to find strings in files.
+Use netstat -an to display all active network connections and listening ports.
+Use ipconfig to display the IP configuration for all network interfaces on your machine.
+Use ping <hostname> to send an ICMP echo request to a network host.
+Use tracert <hostname> to trace the route that packets take to get to a host.
+Use sfc /scannow to scan system files for errors and attempt to fix them.
+Use chkdsk to check a disk for errors and attempt to fix them.
+Use systeminfo to display detailed configuration information about the computer and its operating system.
+Use gpupdate /force to force an immediate update of Group Policy.
+Use shutdown /r /t 0 to immediately restart the computer.
+Use tasklist to display a list of currently running processes.
+Use taskkill /PID <pid> to kill a process by its process ID.
+Use DISM /Online /Cleanup-Image /CheckHealth to check the image health.
+Use net user to display all user accounts on the computer.
+Use net user <username> to display detailed information about a specific user account.
+Use netsh wlan show networks to display all available wireless networks.
+Use schtasks to create, delete, query, change, run, and end scheduled tasks.
+Use gpresult /r to display the Resultant Set of Policy (RSoP) information for the computer.
+Use nslookup <hostname> to query the DNS server for information about the hostname.
+Use driverquery to display a list of all installed device drivers and their properties.
+Use assoc to display or modify file extension associations.
+Use fc /b file1 file2 to compare two files and display the differences.
+Use robocopy for robust file copying, especially over network connections.
+Use net view to display a list of computers in your current domain or network.
+Use netstat -ano to display active TCP connections and listening ports along with the PID of the process that opened the port.
+Use netsh interface ipv4 show config to display the IP configuration for all IPv4 interfaces on your machine.
+Use netsh advfirewall firewall show rule name=all to display all firewall rules.
+Use reg query to read from the registry.
+Use reg add to write to the registry.
+Use reg delete to delete a registry key or value.
+Use wmic process list brief to display a brief list of all running processes.
+Use wmic product get name to display a list of all installed programs.
+Use color to change the color of the command prompt.
+Use title to change the title of the command prompt window.
+Use prompt to change the command prompt.
+Use doskey /history to display the command history.
+Use doskey /macros to display all defined macros.
+Use doskey /reinstall to clear the command history.
+Use pushd <directory> to change the current directory and store the previous directory.
+Use popd to change the current directory back to the previously stored directory.
+Use setlocal to start localization of environment changes in a batch file.
+Use endlocal to end localization of environment changes in a batch file.
+Use call to call one batch program from another.
+Use exit /b to exit a batch program and return to the calling program.
+Use for /f "delims=" %%i in ('command') do @echo %%i to process the output of a command line by line in a batch file.
+Use set /p variable= to prompt for user input in a batch file.
+Use set /a expression to perform arithmetic operations in a batch file.
+Use timeout /t seconds to pause execution of a batch file for a specified number of seconds.
+Use choice /c choices to prompt for user input from a set of choices in a batch file.
+Use shift to shift command line arguments in a batch file.
+Use start /wait command to start a command and wait for it to finish before continuing.
+Use wmic cpu get name to display the name of the CPU.
+Use Get-Help <cmdlet> to get help for a cmdlet.
+Use Get-Command to get a list of all cmdlets.
+Use Get-Process to get a list of all running processes.
+Use Start-Process -FilePath <filepath> to start a process.
+Use Stop-Process -Name <name> to stop a process by its name.
+Use Set-Location -Path <path> to change the current directory.
+Use Get-Content -Path <path> to get the content of a file.
+Use Set-Content -Path <path> -Value <value> to set the content of a file.
+Use Add-Content -Path <path> -Value <value> to append to the content of a file.
+Use Remove-Item -Path <path> to delete a file or directory.
+Use New-Item -Path <path> -ItemType <type> to create a new file or directory.
+Use Copy-Item -Path <source> -Destination <destination> to copy a file or directory.
+Use Move-Item -Path <source> -Destination <destination> to move a file or directory.
+Use Rename-Item -Path <oldname> -NewName <newname> to rename a file or directory.
+Use Get-Date to get the current date and time.
+Use Start-Sleep -Seconds <seconds> to pause execution for a specified number of seconds.
+Use Write-Output <value> to write output to the console.
+Use Write-Error <message> to write an error message to the console.
+Use Write-Verbose <message> -Verbose to write a verbose message to the console.
+Use ForEach-Object {<scriptblock>} to execute a script block for each object in a pipeline.
+Use $array = @(1, 2, 3) to create an array.
+Use $array[0] to access the first element of an array.
+Use $array[-1] to access the last element of an array.
+Use $array.Count to get the number of elements in an array.
+Use $array += 4 to add an element to an array.
+Use $array[1..3] to get a subarray starting from the second element and ending with the fourth.
+Use $array | ForEach-Object {<scriptblock>} to execute a script block for each element in an array.
+Use $array | Where-Object {<condition>} to filter an array based on a condition.
+Use $array | Sort-Object to sort an array.
+Use $array | Measure-Object to get statistical information about the elements in an array.
+Use $array | Group-Object to group the elements of an array based on their properties.
+Use $array | Select-Object -First 5 to select the first five elements of an array.
+Use $array | Select-Object -Last 5 to select the last five elements of an array.
+Use $array | Select-Object -Skip 5 to skip the first five elements of an array.
+Use $array | Select-Object -Unique to select only the unique elements of an array.
+Use @($array) | ForEach-Object {<scriptblock>} to ensure that the script block is executed even if the array contains only one element.
+Use $array.Clone() to create a copy of an array.
+Use $array.Clear() to remove all elements from an array.
+Use $array.Contains(<value>) to check if an array contains a specific value.
+Use $array.IndexOf(<value>) to get the index of the first occurrence of a specific value in an array.
+Use pwsh to start PowerShell Core from the command line.
+Use Get-Command -Type Cmdlet to get a list of all cmdlets.
+Use Get-Module -ListAvailable to get a list of all available modules.
+Use Install-Module -Name <name> to install a module from the PowerShell Gallery.
+Use Update-Module -Name <name> to update a module from the PowerShell Gallery.
+Use Uninstall-Module -Name <name> to uninstall a module from the PowerShell Gallery.
+Use Import-Module -Name <name> to import a module into the current session.
+Use Remove-Module -Name <name> to remove a module from the current session.
+Use Get-PSDrive to get a list of all drives.
+Use New-PSDrive -Name <name> -PSProvider FileSystem -Root <root> to create a new drive.
+Use Remove-PSDrive -Name <name> to remove a drive.
+Use Enter-PSSession -ComputerName <name> to start a remote session.
+Use Exit-PSSession to end a remote session.
+Use Invoke-Command -ComputerName <name> -ScriptBlock {<scriptblock>} to run a script block on a remote computer.
+Use Start-Job -ScriptBlock {<scriptblock>} to start a background job.
+Use Get-Job to get a list of all background jobs.
+Use Receive-Job -Id <id> to get the results of a background job.
+Use Stop-Job -Id <id> to stop a background job.
+Use Remove-Job -Id <id> to remove a background job.
+Use Update-Help to update the help files.

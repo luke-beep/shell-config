@@ -75,5 +75,6 @@
     "fxml",
     "tcsv",
     "fcsv",
-    "uniq"
+    "uniq",
+    "csharp"
 ]

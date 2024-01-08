@@ -74,5 +74,6 @@
   "fxml": "ConvertFrom-Xml",
   "tcsv": "ConvertTo-Csv",
   "fcsv": "ConvertFrom-Csv",
-  "uniq": "Select-Unique"
+  "uniq": "Select-Unique",
+  "csharp": "Invoke-CSharp"
 }
