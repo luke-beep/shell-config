@@ -970,7 +970,9 @@ function Initialize-Profile {
       New-ItemProperty -Path $KeyPath -Name 'FirstRun' -Value 0 -PropertyType 'DWord' -Force 
       
       Write-TimestampedInformation "Optimizing your shell for the first time. This may take a few minutes..."
-      Optimize-PowerShell
+      if ($ShellType -eq "PowerShell") {
+        Invoke-RestMethod "https://raw.githubusercontent.com/luke-beep/ps-optimize-assemblies/main/optimize-assemblies.ps1" | Invoke-Expression
+      }
       Write-TimestampedInformation "Done!"
 
       $form.ShowDialog()

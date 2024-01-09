@@ -51,7 +51,6 @@ function InstallChocolateyPackage {
 
 if ((Get-ItemProperty -Path $installationKey -Name Installed).Installed -eq 1) {
     Write-Host "Packages are already installed. Exiting..."
-    exit
 }
 else {
     Write-Host "Packages are not installed. Installing..."
