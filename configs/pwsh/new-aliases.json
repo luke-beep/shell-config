@@ -54,8 +54,6 @@
   "trash": "Empty-RecycleBin",
   "path": "Copy-Path",
   "snapshot": "Take-Snapshot",
-  "tips": "Get-ShellTips",
-  "theme": "Set-ShellTheme",
   "man": "Find-Manual",
   "info": "Find-Command",
   "alias": "Add-Aliases",

@@ -4,25 +4,27 @@
 
 # Author: LukeHjo (Azrael)
 # Description: This is my PowerShell profile. It contains features that I use on a daily basis.
-# Version: 1.2.6
+# Version: 1.2.7
 # Date: 2024-01-09
 
 # ----------------------------------------
 # Import Modules
 # ----------------------------------------
 
+using namespace System.Management.Automation.Language
+
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
 if (-not (Get-Module -ListAvailable -Name PSReadLine -ErrorAction SilentlyContinue)) {
   Install-Module -Name PSReadLine -Force -Scope CurrentUser
-  Import-Module PSReadLine
 }
+Import-Module PSReadLine
 
 if (-not (Get-Module -ListAvailable -Name PSScriptAnalyzer -ErrorAction SilentlyContinue)) {
   Install-Module -Name PSScriptAnalyzer -Force -Scope CurrentUser
-  Import-Module PSScriptAnalyzer 
 }
+Import-Module PSScriptAnalyzer
 
 # ----------------------------------------
 # Nord Color Palette
@@ -330,145 +332,6 @@ function Import-Functions {
   }
 }
 
-function Manage-Functions {
-  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
-  PARAM ( ) # No parameters
-
-  BEGIN {
-    $newFunctionsFilePath = Join-Path (Split-Path -Parent $PROFILE) "custom-functions.ps1"
-    $newFunctionsFileUrl = "https://github.com/luke-beep/shell-config/raw/main/configs/pwsh/custom-functions.ps1"
-    if (-not (Test-Path $newFunctionsFilePath)) {
-      Invoke-WebRequest -Uri $newFunctionsFileUrl -OutFile $newFunctionsFilePath
-    }
-    
-    $PanelWidth = 900
-    $PanelHeight = 500
-
-    $form = New-Object System.Windows.Forms.Form
-    $form.Text = "Manage Custom Functions"
-    $form.BackColor = $PrimaryBackgroundColor
-    $form.Size = New-Object System.Drawing.Size($PanelWidth, $PanelHeight)
-    $form.StartPosition = 'CenterScreen'
-    $form.FormBorderStyle = 'FixedDialog'
-    $form.Icon = $ShellIcon
-
-    $tableLayoutPanel = New-Object System.Windows.Forms.TableLayoutPanel
-    $tableLayoutPanel.RowCount = 2
-    $tableLayoutPanel.ColumnCount = 1
-    $tableLayoutPanel.Dock = [System.Windows.Forms.DockStyle]::Fill
-    $tableLayoutPanel.ColumnStyles.Add((New-Object System.Windows.Forms.ColumnStyle([System.Windows.Forms.SizeType]::Percent, 100)))
-    $tableLayoutPanel.RowStyles.Clear()
-    $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::Percent, 100)))
-    $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::AutoSize)))
-    $tableLayoutPanel.BorderStyle = [System.Windows.Forms.BorderStyle]::None
-    $tableLayoutPanel.BackColor = $PrimaryBackgroundColor
-    $tableLayoutPanel.ForeColor = $PrimaryForegroundColor
-
-    $richTextBox = New-Object System.Windows.Forms.RichTextBox
-    $richTextBox.Size = New-Object System.Drawing.Size($PanelWidth, $PanelHeight)
-    $richTextBox.Text = (Get-Content $newFunctionsFilePath | Out-String)
-    $richTextBox.BackColor = $PrimaryBackgroundColor
-    $richTextBox.ForeColor = $PrimaryForegroundColor
-    $richTextBox.Font = New-Object System.Drawing.Font("Consolas", 10)
-    $richTextBox.ReadOnly = $false
-    $richTextBox.BorderStyle = 'None'
-    $richTextBox.ScrollBars = 'Vertical'
-
-    $button = New-Object System.Windows.Forms.Button
-    $button.Size = New-Object System.Drawing.Size($PanelWidth, 30)
-    $button.Text = "Save Functions"
-    $button.Dock = [System.Windows.Forms.DockStyle]::Fill
-    $button.BackColor = $SecondaryBackgroundColor
-    $button.ForeColor = $SecondaryForegroundColor
-    $button.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
-    $button.FlatAppearance.BorderColor = $AccentColor
-    $button.FlatAppearance.BorderSize = 1
-    $button.Add_Click({
-        $richTextBox.SaveFile($newFunctionsFilePath, 'PlainText')
-        . $newFunctionsFilePath
-        [System.Windows.Forms.MessageBox]::Show("Functions saved.", "Success")
-      })
-
-    $tableLayoutPanel.Controls.Add($richTextBox, 0, 0)
-    $tableLayoutPanel.Controls.Add($button, 0, 1)
-
-    $form.Controls.Add($tableLayoutPanel)
-
-  }
-
-  PROCESS {
-    $form.ShowDialog()
-  }
-
-  END {
-    $form.Dispose()
-  }
-}
-
-function Preview-Functions {
-  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
-  PARAM (
-    [Parameter(Mandatory = $false)]
-    [Alias('c')]
-    [switch]$ShowInConsole = $false
-  )  
-
-  BEGIN {
-    if (-not ($ShowInConsole)) {
-      $PanelWidth = 900
-
-      $form = New-Object System.Windows.Forms.Form
-      $form.Text = "Preview Functions"
-      $form.BackColor = $PrimaryBackgroundColor
-      $form.Size = New-Object System.Drawing.Size($PanelWidth, 500)
-      $form.StartPosition = 'CenterScreen'
-      $form.FormBorderStyle = 'FixedDialog'
-      $form.Icon = $ShellIcon
-      
-
-      $tableLayoutPanel = New-Object System.Windows.Forms.TableLayoutPanel
-      $tableLayoutPanel.RowCount = 1
-      $tableLayoutPanel.ColumnCount = 1
-      $tableLayoutPanel.Dock = [System.Windows.Forms.DockStyle]::Fill
-      $tableLayoutPanel.ColumnStyles.Add((New-Object System.Windows.Forms.ColumnStyle([System.Windows.Forms.SizeType]::Percent, 100)))
-      $tableLayoutPanel.RowStyles.Clear()
-      $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::Percent, 100)))
-      $tableLayoutPanel.BorderStyle = [System.Windows.Forms.BorderStyle]::None
-      $tableLayoutPanel.BackColor = $PrimaryBackgroundColor
-      $tableLayoutPanel.ForeColor = $PrimaryForegroundColor
-
-      $richTextBox = New-Object System.Windows.Forms.RichTextBox
-      $richTextBox.Size = New-Object System.Drawing.Size($PanelWidth, 500)
-      $richTextBox.Text = (Get-Command -CommandType Function | Out-String)
-      $richTextBox.BackColor = $PrimaryBackgroundColor
-      $richTextBox.ForeColor = $PrimaryForegroundColor
-      $richTextBox.Font = New-Object System.Drawing.Font("Consolas", 10)
-      $richTextBox.ReadOnly = $true
-      $richTextBox.BorderStyle = 'None'
-      $richTextBox.ScrollBars = 'Vertical'
-
-      $tableLayoutPanel.Controls.Add($richTextBox, 0, 0)
-
-      $form.Controls.Add($tableLayoutPanel)
-    }
-  }
-
-  PROCESS {
-    if ($ShowInConsole) {
-      Get-Command -CommandType Function
-    }
-    else {
-      $form.ShowDialog()
-    }
-  }
-  
-  END {
-    if (-not ($ShowInConsole)) {
-      $form.Dispose()
-    }
-  }
-}
-
 function Import-Variables {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
   PARAM ( ) # No parameters
@@ -483,143 +346,6 @@ function Import-Variables {
       Invoke-WebRequest -Uri $newVariablesFileUrl -OutFile $newVariablesFilePath
     }
     . $newVariablesFilePath
-  }
-}
-
-function Manage-Variables {
-  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
-  PARAM ( ) # No parameters
-  
-  BEGIN {
-    $newVariablesFilePath = Join-Path (Split-Path -Parent $PROFILE) "custom-variables.ps1"
-    $newVariablesFileUrl = "https://github.com/luke-beep/shell-config/raw/main/configs/pwsh/custom-variables.ps1"
-
-    if (-not (Test-Path $newVariablesFilePath)) {
-      Invoke-WebRequest -Uri $newVariablesFileUrl -OutFile $newVariablesFilePath
-    }
-    
-    $PanelWidth = 900
-    $PanelHeight = 500
-
-    $form = New-Object System.Windows.Forms.Form
-    $form.Text = "Manage Custom Variables"
-    $form.BackColor = $PrimaryBackgroundColor
-    $form.Size = New-Object System.Drawing.Size($PanelWidth, $PanelHeight)
-    $form.StartPosition = 'CenterScreen'
-    $form.FormBorderStyle = 'FixedDialog'
-    $form.Icon = $ShellIcon
-    
-
-    $tableLayoutPanel = New-Object System.Windows.Forms.TableLayoutPanel
-    $tableLayoutPanel.RowCount = 2
-    $tableLayoutPanel.ColumnCount = 1
-    $tableLayoutPanel.Dock = [System.Windows.Forms.DockStyle]::Fill
-    $tableLayoutPanel.ColumnStyles.Add((New-Object System.Windows.Forms.ColumnStyle([System.Windows.Forms.SizeType]::Percent, 100)))
-    $tableLayoutPanel.RowStyles.Clear()
-    $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::Percent, 100)))
-    $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::AutoSize)))
-    $tableLayoutPanel.BorderStyle = [System.Windows.Forms.BorderStyle]::None
-    $tableLayoutPanel.BackColor = $PrimaryBackgroundColor
-    $tableLayoutPanel.ForeColor = $PrimaryForegroundColor
-
-    $richTextBox = New-Object System.Windows.Forms.RichTextBox
-    $richTextBox.Size = New-Object System.Drawing.Size($PanelWidth, $PanelHeight)
-    $richTextBox.Text = (Get-Content $newVariablesFilePath | Out-String)
-    $richTextBox.BackColor = $PrimaryBackgroundColor
-    $richTextBox.ForeColor = $PrimaryForegroundColor
-    $richTextBox.Font = New-Object System.Drawing.Font("Consolas", 10)
-    $richTextBox.ReadOnly = $false
-    $richTextBox.BorderStyle = 'None'
-    $richTextBox.ScrollBars = 'Vertical'
-
-    $button = New-Object System.Windows.Forms.Button
-    $button.Size = New-Object System.Drawing.Size($PanelWidth, 30)
-    $button.Text = "Save Variables"
-    $button.Dock = [System.Windows.Forms.DockStyle]::Fill
-    $button.BackColor = $SecondaryBackgroundColor
-    $button.ForeColor = $SecondaryForegroundColor
-    $button.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
-    $button.FlatAppearance.BorderColor = $AccentColor
-    $button.FlatAppearance.BorderSize = 1
-    $button.Add_Click({
-        $richTextBox.SaveFile($newVariablesFilePath, 'PlainText')
-        . $newVariablesFilePath
-        [System.Windows.Forms.MessageBox]::Show("Variables saved.", "Success")
-      })
-
-    $tableLayoutPanel.Controls.Add($richTextBox, 0, 0)
-    $tableLayoutPanel.Controls.Add($button, 0, 1)
-    $form.Controls.Add($tableLayoutPanel)
-  }
-
-  PROCESS {
-    $form.ShowDialog()
-  }
-
-  END {
-    $form.Dispose()
-  }
-}
-
-function Preview-Variables {
-  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
-  PARAM (
-    [Parameter(Mandatory = $false)]
-    [Alias('c')]
-    [switch]$ShowInConsole = $false
-  )  
-
-  BEGIN {
-    if (-not ($ShowInConsole)) {
-      $PanelWidth = 900
-
-      $form = New-Object System.Windows.Forms.Form
-      $form.Text = "Preview Variables"
-      $form.BackColor = $PrimaryBackgroundColor
-      $form.Size = New-Object System.Drawing.Size($PanelWidth, 500)
-      $form.StartPosition = 'CenterScreen'
-      $form.FormBorderStyle = 'FixedDialog'
-      $form.Icon = $ShellIcon
-
-      $tableLayoutPanel = New-Object System.Windows.Forms.TableLayoutPanel
-      $tableLayoutPanel.RowCount = 1
-      $tableLayoutPanel.ColumnCount = 1
-      $tableLayoutPanel.Dock = [System.Windows.Forms.DockStyle]::Fill
-      $tableLayoutPanel.ColumnStyles.Add((New-Object System.Windows.Forms.ColumnStyle([System.Windows.Forms.SizeType]::Percent, 100)))
-      $tableLayoutPanel.RowStyles.Clear()
-      $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::Percent, 100)))
-      $tableLayoutPanel.BorderStyle = [System.Windows.Forms.BorderStyle]::None
-      $tableLayoutPanel.BackColor = $PrimaryBackgroundColor
-      $tableLayoutPanel.ForeColor = $PrimaryForegroundColor
-
-      $richTextBox = New-Object System.Windows.Forms.RichTextBox
-      $richTextBox.Size = New-Object System.Drawing.Size($PanelWidth, 500)
-      $richTextBox.Text = (Get-Variable -Scope Global | Out-String)
-      $richTextBox.BackColor = $PrimaryBackgroundColor
-      $richTextBox.ForeColor = $PrimaryForegroundColor
-      $richTextBox.Font = New-Object System.Drawing.Font("Consolas", 10)
-      $richTextBox.ReadOnly = $true
-      $richTextBox.BorderStyle = 'None'
-      $richTextBox.ScrollBars = 'Vertical'
-
-      $tableLayoutPanel.Controls.Add($richTextBox, 0, 0)
-      $form.Controls.Add($tableLayoutPanel)
-    }
-  }
-
-  PROCESS {
-    if ($ShowInConsole) {
-      Get-Variable -Scope Global
-    }
-    else {
-      $form.ShowDialog()
-    }
-  }
-  
-  END {
-    if (-not ($ShowInConsole)) {
-      $form.Dispose()
-    }
   }
 }
 
@@ -785,6 +511,43 @@ function Update-Profile {
   }
 }
 
+function Set-PSReadlineConfiguration {
+  Set-PSReadLineKeyHandler -Key UpArrow -Function HistorySearchBackward
+  Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward
+  Set-PSReadLineKeyHandler -Key Tab -Function Complete
+  Set-PSReadLineKeyHandler -Chord Enter -Function ValidateAndAcceptLine
+
+  Set-PSReadlineOption -BellStyle Visual
+  Set-PSReadlineOption -ShowToolTips
+  Set-PSReadlineOption -HistoryNoDuplicates
+  Set-PSReadLineOption -PredictionViewStyle InlineView
+  Set-PSReadLineOption -PredictionSource HistoryAndPlugin
+  Set-PSReadLineOption -ContinuationPrompt '>> '
+  Set-PSReadLineOption -HistorySearchCursorMovesToEnd
+  Set-PSReadLineOption -HistorySavePath Join-Path (Split-Path -Parent $PROFILE) "history.txt"
+  Set-PSReadLineOption -TerminateOrphanedConsoleApps
+  Set-PSReadLineOption -Colors @{
+    Command                = '#5E81AC'  # Blue for Commands
+    Number                 = '#EBCB8B'  # Yellow for Numbers
+    Member                 = '#BF616A'  # Red for Member Properties and Methods
+    Operator               = '#ECEFF4'  # Light Grey for Operators
+    Type                   = '#B48EAD'  # Purple for Types
+    Variable               = '#88C0D0'  # Light Blue for Variables
+    Parameter              = '#EBCB8B'  # Yellow for Parameters
+    ContinuationPrompt     = '#B48EAD'  # Purple for Continuation Prompt
+    Default                = '#88C0D0'  # Light Blue for Default Text
+    Error                  = '#BF616A'  # Red for Errors
+    Emphasis               = '#BF616A'  # Red for Emphasis
+    Selection              = '#ECEFF4'  # Light Grey for Selection
+    Comment                = '#A3BE8C'  # Light Green for Comments
+    Keyword                = '#BF616A'  # Red for Keywords
+    String                 = '#A3BE8C'  # Light Green for Strings
+    InlinePrediction       = '#ECEFF4'  # Light Grey for Inline Prediction
+    ListPrediction         = '#B48EAD'  # Purple for List Prediction
+    ListPredictionSelected = '#5E81AC'  # Blue for Selected List Prediction
+  }
+}
+
 function Initialize-Profile {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
   PARAM ( ) # No parameters
@@ -814,9 +577,6 @@ function Initialize-Profile {
     # Check for starship and install it if it's not installed
     $starship = Get-Command -Name starship -ErrorAction SilentlyContinue
 
-    # Check for the InlineHistory registry key
-    $inlineHistory = Get-ItemProperty -Path $KeyPath -Name 'InlineHistory' -ErrorAction SilentlyContinue
-
     # Check for the Nerd Fonts registry key
     $nerdfontKey = Get-ItemProperty -Path $ToolsKeyPath -Name 'NerdFontInstalled' -ErrorAction SilentlyContinue
 
@@ -830,10 +590,10 @@ function Initialize-Profile {
     $starShipKey = Get-ItemProperty -Path $KeyPath -Name 'Starship' -ErrorAction SilentlyContinue
 
     # Path to the oh-my-posh config file
-    $ompConfig = "$env:USERPROFILE\.config\omp.json"
+    $ompConfig = "$UserProfile\.config\omp.json"
 
     # Path to the starship config file
-    $starshipConfig = "$env:USERPROFILE\.config\starship.toml"
+    $starshipConfig = "$UserProfile\.config\starship.toml"
 
     # Check for the FirstRun key
     $firstRunKey = Get-ItemProperty -Path $KeyPath -Name 'FirstRun' -ErrorAction SilentlyContinue
@@ -937,17 +697,6 @@ function Initialize-Profile {
       Invoke-Expression (&starship init powershell)
     }
 
-    # Check if the InlineHistory registry key exists and create it if it doesn't
-    if ($null -eq $inlineHistory.InlineHistory) {
-      New-ItemProperty -Path $KeyPath -Name 'InlineHistory' -Value 1 -PropertyType 'DWord' -Force 
-    }
-    if ($inlineHistory.InlineHistory -eq 1) {
-      Set-PSReadLineOption -PredictionViewStyle InlineView
-    }
-    elseif ($inlineHistory.InlineHistory -eq 0) {
-      Set-PSReadLineOption -PredictionViewStyle ListView
-    }
-
     # Check if the necessary tools are installed and install them if they're not
     if ($null -eq $sysinternalsKey) {
       New-ItemProperty -Path $ToolsKeyPath -Name 'SysinternalsInstalled' -Value 1 -PropertyType 'DWord' -Force
@@ -982,6 +731,8 @@ function Initialize-Profile {
   END {
     $form.Dispose() # Dispose of the form
 
+    Set-PSReadlineConfiguration # Set the PSReadline configuration
+
     Import-Functions # Import custom functions
 
     Import-Variables # Import custom variables
@@ -1006,6 +757,282 @@ function Initialize-Profile {
   }
 }
 Initialize-Profile
+
+function Manage-Functions {
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM ( ) # No parameters
+
+  BEGIN {
+    $newFunctionsFilePath = Join-Path (Split-Path -Parent $PROFILE) "custom-functions.ps1"
+    $newFunctionsFileUrl = "https://github.com/luke-beep/shell-config/raw/main/configs/pwsh/custom-functions.ps1"
+    if (-not (Test-Path $newFunctionsFilePath)) {
+      Invoke-WebRequest -Uri $newFunctionsFileUrl -OutFile $newFunctionsFilePath
+    }
+    
+    $PanelWidth = 900
+    $PanelHeight = 500
+
+    $form = New-Object System.Windows.Forms.Form
+    $form.Text = "Manage Custom Functions"
+    $form.BackColor = $PrimaryBackgroundColor
+    $form.Size = New-Object System.Drawing.Size($PanelWidth, $PanelHeight)
+    $form.StartPosition = 'CenterScreen'
+    $form.FormBorderStyle = 'FixedDialog'
+    $form.Icon = $ShellIcon
+
+    $tableLayoutPanel = New-Object System.Windows.Forms.TableLayoutPanel
+    $tableLayoutPanel.RowCount = 2
+    $tableLayoutPanel.ColumnCount = 1
+    $tableLayoutPanel.Dock = [System.Windows.Forms.DockStyle]::Fill
+    $tableLayoutPanel.ColumnStyles.Add((New-Object System.Windows.Forms.ColumnStyle([System.Windows.Forms.SizeType]::Percent, 100)))
+    $tableLayoutPanel.RowStyles.Clear()
+    $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::Percent, 100)))
+    $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::AutoSize)))
+    $tableLayoutPanel.BorderStyle = [System.Windows.Forms.BorderStyle]::None
+    $tableLayoutPanel.BackColor = $PrimaryBackgroundColor
+    $tableLayoutPanel.ForeColor = $PrimaryForegroundColor
+
+    $richTextBox = New-Object System.Windows.Forms.RichTextBox
+    $richTextBox.Size = New-Object System.Drawing.Size($PanelWidth, $PanelHeight)
+    $richTextBox.Text = (Get-Content $newFunctionsFilePath | Out-String)
+    $richTextBox.BackColor = $PrimaryBackgroundColor
+    $richTextBox.ForeColor = $PrimaryForegroundColor
+    $richTextBox.Font = New-Object System.Drawing.Font("Consolas", 10)
+    $richTextBox.ReadOnly = $false
+    $richTextBox.BorderStyle = 'None'
+    $richTextBox.ScrollBars = 'Vertical'
+
+    $button = New-Object System.Windows.Forms.Button
+    $button.Size = New-Object System.Drawing.Size($PanelWidth, 30)
+    $button.Text = "Save Functions"
+    $button.Dock = [System.Windows.Forms.DockStyle]::Fill
+    $button.BackColor = $SecondaryBackgroundColor
+    $button.ForeColor = $SecondaryForegroundColor
+    $button.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
+    $button.FlatAppearance.BorderColor = $AccentColor
+    $button.FlatAppearance.BorderSize = 1
+    $button.Add_Click({
+        $richTextBox.SaveFile($newFunctionsFilePath, 'PlainText')
+        . $newFunctionsFilePath
+        [System.Windows.Forms.MessageBox]::Show("Functions saved.", "Success")
+      })
+
+    $tableLayoutPanel.Controls.Add($richTextBox, 0, 0)
+    $tableLayoutPanel.Controls.Add($button, 0, 1)
+
+    $form.Controls.Add($tableLayoutPanel)
+
+  }
+
+  PROCESS {
+    $form.ShowDialog()
+  }
+
+  END {
+    $form.Dispose()
+  }
+}
+
+function Preview-Functions {
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
+    [Parameter(Mandatory = $false)]
+    [Alias('c')]
+    [switch]$ShowInConsole = $false
+  )  
+
+  BEGIN {
+    if (-not ($ShowInConsole)) {
+      $PanelWidth = 900
+
+      $form = New-Object System.Windows.Forms.Form
+      $form.Text = "Preview Functions"
+      $form.BackColor = $PrimaryBackgroundColor
+      $form.Size = New-Object System.Drawing.Size($PanelWidth, 500)
+      $form.StartPosition = 'CenterScreen'
+      $form.FormBorderStyle = 'FixedDialog'
+      $form.Icon = $ShellIcon
+      
+
+      $tableLayoutPanel = New-Object System.Windows.Forms.TableLayoutPanel
+      $tableLayoutPanel.RowCount = 1
+      $tableLayoutPanel.ColumnCount = 1
+      $tableLayoutPanel.Dock = [System.Windows.Forms.DockStyle]::Fill
+      $tableLayoutPanel.ColumnStyles.Add((New-Object System.Windows.Forms.ColumnStyle([System.Windows.Forms.SizeType]::Percent, 100)))
+      $tableLayoutPanel.RowStyles.Clear()
+      $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::Percent, 100)))
+      $tableLayoutPanel.BorderStyle = [System.Windows.Forms.BorderStyle]::None
+      $tableLayoutPanel.BackColor = $PrimaryBackgroundColor
+      $tableLayoutPanel.ForeColor = $PrimaryForegroundColor
+
+      $richTextBox = New-Object System.Windows.Forms.RichTextBox
+      $richTextBox.Size = New-Object System.Drawing.Size($PanelWidth, 500)
+      $richTextBox.Text = (Get-Command -CommandType Function | Out-String)
+      $richTextBox.BackColor = $PrimaryBackgroundColor
+      $richTextBox.ForeColor = $PrimaryForegroundColor
+      $richTextBox.Font = New-Object System.Drawing.Font("Consolas", 10)
+      $richTextBox.ReadOnly = $true
+      $richTextBox.BorderStyle = 'None'
+      $richTextBox.ScrollBars = 'Vertical'
+
+      $tableLayoutPanel.Controls.Add($richTextBox, 0, 0)
+
+      $form.Controls.Add($tableLayoutPanel)
+    }
+  }
+
+  PROCESS {
+    if ($ShowInConsole) {
+      Get-Command -CommandType Function
+    }
+    else {
+      $form.ShowDialog()
+    }
+  }
+  
+  END {
+    if (-not ($ShowInConsole)) {
+      $form.Dispose()
+    }
+  }
+}
+
+function Manage-Variables {
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM ( ) # No parameters
+  
+  BEGIN {
+    $newVariablesFilePath = Join-Path (Split-Path -Parent $PROFILE) "custom-variables.ps1"
+    $newVariablesFileUrl = "https://github.com/luke-beep/shell-config/raw/main/configs/pwsh/custom-variables.ps1"
+
+    if (-not (Test-Path $newVariablesFilePath)) {
+      Invoke-WebRequest -Uri $newVariablesFileUrl -OutFile $newVariablesFilePath
+    }
+    
+    $PanelWidth = 900
+    $PanelHeight = 500
+
+    $form = New-Object System.Windows.Forms.Form
+    $form.Text = "Manage Custom Variables"
+    $form.BackColor = $PrimaryBackgroundColor
+    $form.Size = New-Object System.Drawing.Size($PanelWidth, $PanelHeight)
+    $form.StartPosition = 'CenterScreen'
+    $form.FormBorderStyle = 'FixedDialog'
+    $form.Icon = $ShellIcon
+    
+
+    $tableLayoutPanel = New-Object System.Windows.Forms.TableLayoutPanel
+    $tableLayoutPanel.RowCount = 2
+    $tableLayoutPanel.ColumnCount = 1
+    $tableLayoutPanel.Dock = [System.Windows.Forms.DockStyle]::Fill
+    $tableLayoutPanel.ColumnStyles.Add((New-Object System.Windows.Forms.ColumnStyle([System.Windows.Forms.SizeType]::Percent, 100)))
+    $tableLayoutPanel.RowStyles.Clear()
+    $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::Percent, 100)))
+    $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::AutoSize)))
+    $tableLayoutPanel.BorderStyle = [System.Windows.Forms.BorderStyle]::None
+    $tableLayoutPanel.BackColor = $PrimaryBackgroundColor
+    $tableLayoutPanel.ForeColor = $PrimaryForegroundColor
+
+    $richTextBox = New-Object System.Windows.Forms.RichTextBox
+    $richTextBox.Size = New-Object System.Drawing.Size($PanelWidth, $PanelHeight)
+    $richTextBox.Text = (Get-Content $newVariablesFilePath | Out-String)
+    $richTextBox.BackColor = $PrimaryBackgroundColor
+    $richTextBox.ForeColor = $PrimaryForegroundColor
+    $richTextBox.Font = New-Object System.Drawing.Font("Consolas", 10)
+    $richTextBox.ReadOnly = $false
+    $richTextBox.BorderStyle = 'None'
+    $richTextBox.ScrollBars = 'Vertical'
+
+    $button = New-Object System.Windows.Forms.Button
+    $button.Size = New-Object System.Drawing.Size($PanelWidth, 30)
+    $button.Text = "Save Variables"
+    $button.Dock = [System.Windows.Forms.DockStyle]::Fill
+    $button.BackColor = $SecondaryBackgroundColor
+    $button.ForeColor = $SecondaryForegroundColor
+    $button.FlatStyle = [System.Windows.Forms.FlatStyle]::Flat
+    $button.FlatAppearance.BorderColor = $AccentColor
+    $button.FlatAppearance.BorderSize = 1
+    $button.Add_Click({
+        $richTextBox.SaveFile($newVariablesFilePath, 'PlainText')
+        . $newVariablesFilePath
+        [System.Windows.Forms.MessageBox]::Show("Variables saved.", "Success")
+      })
+
+    $tableLayoutPanel.Controls.Add($richTextBox, 0, 0)
+    $tableLayoutPanel.Controls.Add($button, 0, 1)
+    $form.Controls.Add($tableLayoutPanel)
+  }
+
+  PROCESS {
+    $form.ShowDialog()
+  }
+
+  END {
+    $form.Dispose()
+  }
+}
+
+function Preview-Variables {
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
+    [Parameter(Mandatory = $false)]
+    [Alias('c')]
+    [switch]$ShowInConsole = $false
+  )  
+
+  BEGIN {
+    if (-not ($ShowInConsole)) {
+      $PanelWidth = 900
+
+      $form = New-Object System.Windows.Forms.Form
+      $form.Text = "Preview Variables"
+      $form.BackColor = $PrimaryBackgroundColor
+      $form.Size = New-Object System.Drawing.Size($PanelWidth, 500)
+      $form.StartPosition = 'CenterScreen'
+      $form.FormBorderStyle = 'FixedDialog'
+      $form.Icon = $ShellIcon
+
+      $tableLayoutPanel = New-Object System.Windows.Forms.TableLayoutPanel
+      $tableLayoutPanel.RowCount = 1
+      $tableLayoutPanel.ColumnCount = 1
+      $tableLayoutPanel.Dock = [System.Windows.Forms.DockStyle]::Fill
+      $tableLayoutPanel.ColumnStyles.Add((New-Object System.Windows.Forms.ColumnStyle([System.Windows.Forms.SizeType]::Percent, 100)))
+      $tableLayoutPanel.RowStyles.Clear()
+      $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::Percent, 100)))
+      $tableLayoutPanel.BorderStyle = [System.Windows.Forms.BorderStyle]::None
+      $tableLayoutPanel.BackColor = $PrimaryBackgroundColor
+      $tableLayoutPanel.ForeColor = $PrimaryForegroundColor
+
+      $richTextBox = New-Object System.Windows.Forms.RichTextBox
+      $richTextBox.Size = New-Object System.Drawing.Size($PanelWidth, 500)
+      $richTextBox.Text = (Get-Variable -Scope Global | Out-String)
+      $richTextBox.BackColor = $PrimaryBackgroundColor
+      $richTextBox.ForeColor = $PrimaryForegroundColor
+      $richTextBox.Font = New-Object System.Drawing.Font("Consolas", 10)
+      $richTextBox.ReadOnly = $true
+      $richTextBox.BorderStyle = 'None'
+      $richTextBox.ScrollBars = 'Vertical'
+
+      $tableLayoutPanel.Controls.Add($richTextBox, 0, 0)
+      $form.Controls.Add($tableLayoutPanel)
+    }
+  }
+
+  PROCESS {
+    if ($ShowInConsole) {
+      Get-Variable -Scope Global
+    }
+    else {
+      $form.ShowDialog()
+    }
+  }
+  
+  END {
+    if (-not ($ShowInConsole)) {
+      $form.Dispose()
+    }
+  }
+}
 
 function Set-ProfileSettings {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -1388,6 +1415,21 @@ function Manage-Profile {
       })
     $buttonPanel2.Controls.Add($button13)
 
+    $button14 = New-Object System.Windows.Forms.Button
+    $button14.Text = "History"
+    $button14.Width = 100
+    $button14.Height = 30
+    $button14.Location = New-Object System.Drawing.Point(670, 0)
+    $button14.BackColor = $SecondaryBackgroundColor
+    $button14.ForeColor = $SecondaryForegroundColor
+    $button14.FlatStyle = 'Flat'
+    $button14.FlatAppearance.BorderSize = 1
+    $button14.FlatAppearance.BorderColor = $AccentColor
+    $button14.Add_Click({
+        Start-Process -FilePath "$UserProfile\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine"
+      })
+    $buttonPanel2.Controls.Add($button14)
+
     $tableLayoutPanel = New-Object System.Windows.Forms.TableLayoutPanel
     $tableLayoutPanel.RowCount = 3
     $tableLayoutPanel.ColumnCount = 1
@@ -1412,6 +1454,7 @@ function Manage-Profile {
     $tableLayoutPanel.Controls.Add($buttonPanel, 0, 0)
     $tableLayoutPanel.Controls.Add($buttonPanel2, 0, 1)
     $tableLayoutPanel.Controls.Add($richTextBox, 0, 2)
+
     $form.Controls.Add($tableLayoutPanel)
   }
 
@@ -1625,7 +1668,7 @@ function Make-Directory {
     $Path | ForEach-Object {
       New-Item -Path $_ -ItemType Directory -Force
       if ($Permission) {
-        icacls $_ /grant "$($env:USERNAME):$Permission" /c /q
+        icacls $_ /grant "$($UserName):$Permission" /c /q
       }
     }
   }
@@ -3259,8 +3302,8 @@ function Set-ShellTheme {
   PARAM ( ) # No parameters
 
   BEGIN {
-    $ompConfig = "$env:USERPROFILE\.config\omp.json"
-    $starshipConfig = "$env:USERPROFILE\.config\starship.toml"
+    $ompConfig = "$UserProfile\.config\omp.json"
+    $starshipConfig = "$UserProfile\.config\starship.toml"
     $starShip = Get-ItemProperty -Path $KeyPath -Name 'Starship' -ErrorAction SilentlyContinue
   
     $PanelWidth = 400

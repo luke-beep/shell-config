@@ -51,7 +51,7 @@ You have two choices for installation. You can either use the automated installa
 iwr -useb https://raw.githubusercontent.com/luke-beep/shell-config/main/scripts/install-configuration.ps1 | iex
 ```
 
-- **Manual Installation** - The manual installation guide is designed for advanced users who want to manually install the profile. It's designed to be more flexible and customizable. It will also automatically install the required dependencies. You can follow the [manual installation guide](./configs/installation.md) for more information.
+- **Manual Installation** - The manual installation guide is designed for advanced users who want to manually install the profile. It's designed to be more flexible and customizable. It will also automatically install the required dependencies. You can follow the [manual installation guide](./configs/installation.md) for more information. **NOTE**: The manual installation guide is not recommended for most users.
 
 ### 🌟 Features
 
