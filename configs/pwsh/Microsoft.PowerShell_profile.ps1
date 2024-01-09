@@ -4,7 +4,7 @@
 
 # Author: LukeHjo (Azrael)
 # Description: This is my PowerShell profile. It contains features that I use on a daily basis.
-# Version: 1.2.5
+# Version: 1.2.6
 # Date: 2024-01-09
 
 # ----------------------------------------
@@ -15,13 +15,13 @@ Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
 if (-not (Get-Module -ListAvailable -Name PSReadLine -ErrorAction SilentlyContinue)) {
-  Install-Module -Name PSReadLine -Force
+  Install-Module -Name PSReadLine -Force -Scope CurrentUser
   Import-Module PSReadLine
 }
 
 if (-not (Get-Module -ListAvailable -Name PSScriptAnalyzer -ErrorAction SilentlyContinue)) {
-  Install-Module -Name PSScriptAnalyzer -Force
-  Import-Module PSScriptAnalyzer
+  Install-Module -Name PSScriptAnalyzer -Force -Scope CurrentUser
+  Import-Module PSScriptAnalyzer # 
 }
 
 # ----------------------------------------
@@ -170,8 +170,8 @@ function Optimize-PowerShell {
 
   PROCESS {
     if ($ShellType -eq "PowerShell") {
-      Invoke-RestMethod "https://raw.githubusercontent.com/luke-beep/ps-optimize-assemblies/main/optimize-assemblies.ps1" | Invoke-Expression
       Update-Help -Force -ErrorAction SilentlyContinue
+      Invoke-RestMethod "https://raw.githubusercontent.com/luke-beep/ps-optimize-assemblies/main/optimize-assemblies.ps1" | Invoke-Expression
     }
     else {
       Update-Help -Force -ErrorAction SilentlyContinue
@@ -796,10 +796,6 @@ function Initialize-Profile {
     # Check for updates
     Update-Profile
 
-    #                 #
-    # Necessary tools #
-    #                 #
-
     # Check for Scoop and install it if it's not installed
     $scoop = Get-Command -Name scoop -ErrorAction SilentlyContinue
 
@@ -865,7 +861,6 @@ function Initialize-Profile {
     $form.MaximizeBox = $false
     $form.MinimizeBox = $false
     $form.Icon = $ShellIcon
-    
     
     $label = New-Object System.Windows.Forms.Label
     $label.Text = "Hello, $UserName! Welcome to $($ShellType). For more information, please type 'help' or 'tips' for more information."

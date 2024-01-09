@@ -4,8 +4,6 @@
 
 # Author: LukeHjo (Azrael)
 # Description: Installs the shell configuration for Windows Terminal & subshells.
-# Version: 1.2.3
-# Date: 2024-01-04
 
 # ----------------------------------------
 # Variables
@@ -16,14 +14,22 @@ $TerminalSettingsPath = "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8w
 $ClinkThemePath = "$env:SystemDrive\Program Files (x86)\clink\oh-my-posh.lua"
 $ompConfig = "$env:USERPROFILE\.config\omp.json"
 $installationKey = "HKCU:\Software\Azrael\Configuration"
+$KernelVersion = (Get-CimInstance -ClassName Win32_OperatingSystem).Version
 
 # ----------------------------------------
-# Functions
+# Start
 # ----------------------------------------
 
 if ((Get-ItemProperty -Path $installationKey -Name Installed).Installed -eq 1) {
-    Write-Host "Shell configuration is already installed. Exiting..."
-    exit
+    Remove-Item -Path 'HKCU:\Software\Azrael' -Force -Recurse
+    $PROFILE | Split-Path | Get-ChildItem | Remove-Item -Force -Recurse
+    if ($ShellType -eq "PowerShell") {
+        pwsh -Command "`$PROFILE | Split-Path | Get-ChildItem | Remove-Item -Force -Recurse" 
+    }
+    else {
+        powershell -Command "`$PROFILE | Split-Path | Get-ChildItem | Remove-Item -Force -Recurse"
+    }
+    Write-Host "Shell configuration is already installed. Exiting... re-run the script to reinstall."
 }
 else {
     Write-Host "Shell configuration is not installed. Installing..."
@@ -56,15 +62,15 @@ else {
     Write-Host "Installing the $ShellType configuration..."
     Invoke-WebRequest -Uri https://github.com/luke-beep/shell-config/raw/main/configs/pwsh/Microsoft.PowerShell_profile.ps1 -OutFile $PROFILE
     if ($ShellType -eq "PowerShell") {
-        pwsh -Command "Invoke-WebRequest -Uri https://github.com/luke-beep/shell-config/raw/main/configs/pwsh/Microsoft.PowerShell_profile.ps1 -OutFile $PROFILE"
+        pwsh -Command "Invoke-WebRequest -Uri https://github.com/luke-beep/shell-config/raw/main/configs/pwsh/Microsoft.PowerShell_profile.ps1 -OutFile `$PROFILE"
     }
     else {
-        powershell -Command "Invoke-WebRequest -Uri https://github.com/luke-beep/shell-config/raw/main/configs/pwsh/Microsoft.PowerShell_profile.ps1 -OutFile $PROFILE"
+        powershell -Command "Invoke-WebRequest -Uri https://github.com/luke-beep/shell-config/raw/main/configs/pwsh/Microsoft.PowerShell_profile.ps1 -OutFile `$PROFILE"
     }
 
     Write-Host "Installation complete. Please restart your shell."
 }
 
 # ----------------------------------------
-# Footer
+# End
 # ----------------------------------------
