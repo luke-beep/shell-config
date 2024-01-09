@@ -524,7 +524,6 @@ function Set-PSReadlineConfiguration {
   Set-PSReadLineOption -PredictionSource HistoryAndPlugin
   Set-PSReadLineOption -ContinuationPrompt '>> '
   Set-PSReadLineOption -HistorySearchCursorMovesToEnd
-  Set-PSReadLineOption -HistorySavePath Join-Path (Split-Path -Parent $PROFILE) "history.txt"
   Set-PSReadLineOption -TerminateOrphanedConsoleApps
   Set-PSReadLineOption -Colors @{
     Command                = '#5E81AC'  # Blue for Commands
