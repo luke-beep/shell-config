@@ -1,0 +1,2482 @@
+aadauthhelper.dll - Microsoft® AAD Auth Helper
+aadtb.dll - AAD Token Broker Helper Library
+aadWamExtension.dll - AAD WAM extension DLL
+AarSvc.dll - Agent Activation Runtime Service
+AboveLockAppHost.dll - AboveLockAppHost
+accessibilitycpl.dll - Ease of access  control panel
+accountaccessor.dll - Sync data model to access accounts
+AccountsRt.dll - Accounts RT utilities for mail, contacts, calendar
+AcGenral.dll - Windows Compatibility DLL
+AcLayers.dll - Windows Compatibility DLL
+acledit.dll - Access Control List Editor
+aclui.dll - Security Descriptor Editor
+acppage.dll - Compatibility Tab Shell Extension Library
+AcSpecfc.dll - Windows Compatibility DLL
+ActionCenter.dll - Security and Maintenance
+ActionCenterCPL.dll - Security and Maintenance Control Panel
+ActivationClient.dll - Activation Client
+ActivationManager.dll - Activation Manager
+activeds.dll - ADs Router Layer DLL
+ActiveSyncProvider.dll - The engine that syncs ActiveSync accounts
+actxprxy.dll - ActiveX Interface Marshaling Library
+AcWinRT.dll - Windows Compatibility DLL
+acwow64.dll - Windows Compatibility for 32bit Apps on Win64
+AcXtrnal.dll - Windows Compatibility DLL
+adal.dll - ADAL.Native
+AdaptiveCards.dll - Windows Adaptive Cards API Server
+AddressParser.dll - ADDRESSPARSER
+AdmTmpl.dll - Administrative Templates Extension
+adprovider.dll - adprovider DLL
+adrclient.dll - Microsoft® Access Denied Remediation Client
+adsldp.dll - ADs LDAP Provider DLL
+adsldpc.dll - ADs LDAP Provider C DLL
+adsmsext.dll - ADs LDAP Provider DLL
+adsnt.dll - ADs Windows NT Provider DLL
+adtschema.dll - Security Audit Schema DLL
+advapi32.dll - Advanced Windows 32 Base API
+advapi32res.dll - Advanced Windows 32 Base API
+advpack.dll - ADVPACK
+aeevts.dll - Application Experience Event Resources
+aepic.dll - Application Experience Program Cache
+agentactivationruntime.dll - Agent Activation Runtime Common DLL
+agentactivationruntimewindows.dll - Agent Activation Runtime Windows DLL
+amsi.dll - Anti-Malware Scan Interface
+amstream.dll - DirectShow Runtime.
+AnalogCommonProxyStub.dll - Analog Common Proxy Stub
+apds.dll - Microsoft® Help Data Services Module
+APHostClient.dll - Accounts Host Service RPC Client 
+ApiSetHost.AppExecutionAlias.dll - ApiSetHost.AppExecutionAlias
+AppContracts.dll - Windows AppContracts API Server
+AppExtension.dll - AppExtension API
+apphelp.dll - Application Compatibility Client Library
+Apphlpdm.dll - Application Compatibility Help Module
+appidapi.dll - Application Identity APIs Dll
+AppIdPolicyEngineApi.dll - AppId Policy Engine API Module
+AppInstallerPrompt.Desktop.dll - AppInstaller Prompt Desktop
+AppLockerCSP.dll - AppLockerCSP
+AppManagementConfiguration.dll - Application Management Configuration
+appmgmts.dll - Software installation Service
+appmgr.dll - Software Installation Snapin Extenstion
+AppointmentActivation.dll - DLL for AppointmentActivation
+AppointmentApis.dll - DLL for CalendarRT
+apprepapi.dll - Application Reputation APIs Dll
+AppResolver.dll - App Resolver
+AppVClientPS.dll - Microsoft Application Virtualization Client API Proxy Stub
+AppVEntSubsystems32.dll - Client Virtualization Subsystems
+appverifUI.dll - 
+AppVSentinel.dll - Microsoft Application Virtualization Client Sentinel DLL
+AppVTerminator.dll - Microsoft Application Virtualization Terminator
+AppxAllUserStore.dll - AppX All User Store DLL
+AppxApplicabilityEngine.dll - AppX Applicability Engine
+AppXDeploymentClient.dll - AppX Deployment Client DLL
+AppxPackaging.dll - Native Code Appx Packaging Library
+AppxSip.dll - Appx Subject Interface Package
+archiveint.dll - Windows-internal libarchive library
+asferror.dll - ASF Error Definitions
+aspnet_counters.dll - Microsoft ASP.NET Performance Counter Shim DLL
+AssignedAccessRuntime.dll - AssignedAccessRuntime
+asycfilt.dll - ASYCFILT.DLL
+atl.dll - ATL Module for Windows XP (Unicode)
+atl100.dll - ATL Module for Windows
+atl110.dll - ATL Module for Windows
+atlthunk.dll - atlthunk.dll
+atmlib.dll - Windows NT OpenType/Type 1 API Library.
+audiodev.dll - Portable Media Devices Shell Extension
+AudioEng.dll - Audio Engine
+AUDIOKSE.dll - Audio Ks Endpoint
+AudioSes.dll - Audio Session
+AuditNativeSnapIn.dll - Audit Policy Group Policy Editor Extension
+auditpolcore.dll - Audit Policy Program
+AuditPolicyGPInterop.dll - Audit Policy GP Module
+auditpolmsg.dll - Audit Policy MMC SnapIn Messages
+AuthBroker.dll - Web Authentication WinRT API
+AuthBrokerUI.dll - AuthBroker UI
+AuthExt.dll - Authentication Extensions
+authfwcfg.dll - Windows Defender Firewall with Advanced Security Configuration Helper
+AuthFWGP.dll - Windows Defender Firewall with Advanced Security Group Policy Editor Extension
+AuthFWSnapin.dll - Microsoft.WindowsFirewall.SnapIn
+AuthFWWizFwk.dll - Wizard Framework
+authui.dll - Windows Authentication UI
+authz.dll - Authorization Framework
+autoplay.dll - AutoPlay Control Panel
+avicap32.dll - AVI Capture window class
+avifil32.dll - Microsoft AVI File support library
+avrt.dll - Multimedia Realtime Runtime
+azroles.dll - azroles Module
+azroleui.dll - Authorization Manager
+AzSqlExt.dll - AzMan Sql Audit Extended Stored Procedures Dll
+BackgroundMediaPolicy.dll - <d> Background Media Policy DLL
+BamSettingsClient.dll - Background Activity Moderator Settings Client
+basecsp.dll - Microsoft Base Smart Card Crypto Provider
+batmeter.dll - Battery Meter Helper DLL
+bcastdvr.proxy.dll - Broadcast DVR Proxy
+BcastDVRBroker.dll - Windows Runtime BcastDVRBroker DLL
+BcastDVRClient.dll - Windows Runtime BcastDVRClient DLL
+BcastDVRCommon.dll - Windows Runtime BcastDVRCommon DLL
+bcd.dll - BCD DLL
+BCP47Langs.dll - BCP47 Language Classes
+BCP47mrm.dll - BCP47 Language Classes for Resource Management
+bcrypt.dll - Windows Cryptographic Primitives Library (Wow64)
+bcryptprimitives.dll - Windows Cryptographic Primitives Library
+bidispl.dll - Bidispl DLL
+BingMaps.dll - Bing Map Control
+BingOnlineServices.dll - Bing online services
+BioCredProv.dll - WinBio Credential Provider
+BitLockerCsp.dll - BitLockerCSP
+bitsperf.dll - Perfmon Counter Access
+BitsProxy.dll - Background Intelligent Transfer Service Proxy
+biwinrt.dll - Windows Background Broker Infrastructure
+BluetoothApis.dll - Bluetooth Usermode Api host
+BluetoothOppPushClient.dll - 
+BOOTVID.DLL - VGA Boot Driver
+BrokerFileDialog.dll - brokerfiledialog
+browcli.dll - Browser Service Client DLL
+browseui.dll - Shell Browser UI Library
+BTAGService.dll - Bluetooth Audio Gateway Service
+BthRadioMedia.dll - Bluetooth Radio Media Provider
+BthTelemetry.dll - Bluetooth Telemetry Agent
+btpanui.dll - Bluetooth PAN User Interface
+BWContextHandler.dll - ContextH Application
+C_G18030.DLL - GB18030 DBCS-Unicode Conversion DLL
+c_GSM7.DLL - GSM 7bit Code Page Translation DLL for SMS
+C_IS2022.DLL - ISO-2022 Code Page Translation DLL
+C_ISCII.DLL - ISCII Code Page Translation DLL
+cabapi.dll - Mobile Cabinet Library
+cabinet.dll - Microsoft® Cabinet File API
+cabview.dll - Cabinet File Viewer Shell Extension
+CallButtons.dll - Windows Runtime CallButtonsServer DLL
+CallButtons.ProxyStub.dll - Windows Runtime CallButtonsServer ProxyStub DLL
+CallHistoryClient.dll - Client DLL for accessing CallHistory information
+CameraCaptureUI.dll - 
+camext.dll - 
+CapabilityAccessManagerClient.dll - Capability Access Manager Client
+capauthz.dll - Capability Authorization APIs
+capiprovider.dll - capiprovider DLL
+capisp.dll - Sysprep cleanup dll for CAPI
+CastingShellExt.dll - Casting Shell Extensions
+catsrv.dll - COM+ Configuration Catalog Server
+catsrvps.dll - COM+ Configuration Catalog Server Proxy/Stub
+catsrvut.dll - COM+ Configuration Catalog Server Utilities
+cca.dll - CCA DirectShow Filter.
+cdosys.dll - Microsoft CDO for Windows Library
+cdp.dll - Microsoft (R) CDP Client API
+cdprt.dll - Microsoft (R) CDP Client WinRT API
+cemapi.dll - CEMAPI
+certca.dll - Microsoft® Active Directory Certificate Services CA
+certcli.dll - Microsoft® Active Directory Certificate Services Client
+certCredProvider.dll - Cert Credential Provider
+certenc.dll - Active Directory Certificate Services Encoding
+CertEnroll.dll - Microsoft® Active Directory Certificate Services Enrollment Client
+CertEnrollUI.dll - X509 Certificate Enrollment UI
+certmgr.dll - Certificates snap-in
+CertPKICmdlet.dll - Microsoft® PKI Client Cmdlets
+CertPolEng.dll - Certificate Policy Engine
+cewmdm.dll - Windows CE WMDM Service Provider
+cfgbkend.dll - Configuration Backend Interface
+cfgmgr32.dll - Configuration Manager DLL
+cfmifs.dll - FmIfs Engine
+cfmifsproxy.dll - Microsoft® FmIfs Proxy Library
+Chakra.dll - Microsoft ® Chakra (Private)
+Chakradiag.dll - Microsoft ® Chakra Diagnostics (Private)
+Chakrathunk.dll - chakrathunk.dll
+chartv.dll - Chart View
+ChatApis.dll - DLL for ChatRT
+CHxReadingStringIME.dll - CHxReadingStringIME
+cic.dll - CIC - MMC controls for Taskpad
+CIWmi.dll - WMIv2 Provider for CI Policy Management
+clbcatq.dll - COM+ Configuration Catalog
+cldapi.dll - Cloud API user mode API
+clfsw32.dll - Common Log Marshalling Win32 DLL
+cliconfg.dll - SQL Client Configuration Utility DLL
+ClipboardServer.dll - Modern Clipboard API Server
+Clipc.dll - Client Licensing Platform Client
+CloudExperienceHostCommon.dll - CloudExperienceHostCommon
+CloudExperienceHostUser.dll - CloudExperienceHost User Operations
+clrhost.dll - In Proc server for managed servers in the Windows Runtime
+clusapi.dll - Cluster API Library
+cmcfg32.dll - Microsoft Connection Manager Configuration Dll
+cmdext.dll - cmd.exe Extension DLL
+cmdial32.dll - Microsoft Connection Manager
+cmgrcspps.dll - cmgrcspps
+cmifw.dll - Windows Defender Firewall rule configuration plug-in
+cmintegrator.dll - cmintegrator.dll
+cmlua.dll - Connection Manager Admin API Helper
+cmpbk32.dll - Microsoft Connection Manager Phonebook
+cmstplua.dll - Connection Manager Admin API Helper for Setup
+cmutil.dll - Microsoft Connection Manager Utility Lib
+cngcredui.dll - Microsoft CNG CredUI Provider
+cngprovider.dll - cngprovider DLL
+cnvfat.dll - FAT File System Conversion Utility DLL
+colbact.dll - COM+
+COLORCNV.DLL - Windows Media Color Conversion
+colorui.dll - Microsoft Color Control Panel
+combase.dll - Microsoft COM for Windows
+comcat.dll - Microsoft Component Category Manager Library
+comctl32.dll - Common Controls Library
+comdlg32.dll - Common Dialogs DLL
+coml2.dll - Microsoft COM for Windows
+compobj.dll - Windows Win16 Application Launcher
+ComposableShellProxyStub.dll - Composable Shell Shared Proxy Stub
+CompPkgSup.dll - Component Package Support DLL
+compstui.dll - Common Property Sheet User Interface DLL
+comrepl.dll - COM+
+comres.dll - COM+ Resources
+comsnap.dll - COM+ Explorer MMC Snapin
+comsvcs.dll - COM+ Services
+comuid.dll - COM+ Explorer UI
+concrt140.dll - Microsoft® Concurrency Runtime Library
+concrt140d.dll - Microsoft® Concurrency Runtime Library
+ConfigureExpandedStorage.dll - ConfigureExpandedStorage
+connect.dll - Get Connected Wizards
+ConnectedAccountState.dll - ConnectedAccountState.dll
+console.dll - Control Panel Console Applet
+ConsoleLogon.dll - Console Logon User Experience
+ContactActivation.dll - DLL for ContactActivation
+ContactApis.dll - DLL for ContactsRT
+container.dll - Windows Containers
+ContentDeliveryManager.Utilities.dll - ContentDeliveryManager.Utilities
+coreglobconfig.dll - Core Globalization Configuration
+CoreMas.dll - 
+CoreMessaging.dll - Microsoft CoreMessaging Dll
+CoreMmRes.dll - General Core Multimedia Resources
+CorePrivacySettingsStore.dll - CorePrivacySettingsStore
+CoreShellAPI.dll - CoreShellAPI
+CoreUIComponents.dll - Microsoft Core UI Components Dll
+correngine.dll - Correlation Engine
+CPFilters.dll -  PTFilter & Encypter/Decrypter Tagger Filters.
+CredProv2faHelper.dll - Credential Provider 2FA Helper
+CredProvCommonCore.dll - Microsoft (R) Credential Provider Common Core
+CredProvDataModel.dll - Cred Prov Data Model
+CredProvHelper.dll - Credential Provider Helper
+credprovhost.dll - Credential Provider Framework Host
+credprovs.dll - Credential Providers
+credprovslegacy.dll - Credential Providers Legacy
+credssp.dll - Credential Delegation Security Package
+credui.dll - Credential Manager User Interface
+crtdll.dll - Microsoft C Runtime Library
+crypt32.dll - Crypto API32
+cryptbase.dll - Base cryptographic API DLL
+cryptdlg.dll - Microsoft Common Certificate Dialogs
+cryptdll.dll - Cryptography Manager
+cryptext.dll - Crypto Shell Extensions
+cryptnet.dll - Crypto Network Related API
+cryptngc.dll - Microsoft Passport API
+CryptoWinRT.dll - Crypto WinRT Library
+cryptsp.dll - Cryptographic Service Provider API
+crypttpmeksvc.dll - Cryptographic TPM Endorsement Key Services
+cryptui.dll - Microsoft Trust UI Provider
+cryptuiwizard.dll - Microsoft Trust UI Provider
+cryptxml.dll - XML DigSig API
+cscapi.dll - Offline Files Win32 API
+cscdll.dll - Offline Files Temporary Shim
+cscobj.dll - In-proc COM object used by clients of CSC API
+ctl3d32.dll - Ctl3D 3D Windows Controls
+cuzzapi.dll - Application Verifier Provider - Cuzz API Provider
+d2d1.dll - Microsoft D2D Library
+D2D1Debug2.dll - Microsoft Direct2D Debug Layer Library
+d2d1debug3.dll - Microsoft Direct2D Debug Layer Library
+d3d10_1.dll - Direct3D 10.1 Runtime
+d3d10_1core.dll - Direct3D 10.1 Runtime
+d3d10.dll - Direct3D 10 Runtime
+d3d10core.dll - Direct3D 10 Runtime
+d3d10level9.dll - Direct3D 10 to Direct3D9 Translation Runtime
+d3d10ref.dll - Direct3D 10.1 Reference Device
+d3d10sdklayers.dll - Direct3D 10.1 SDK Layers
+d3d10warp.dll - Direct3D Rasterizer
+d3d11_1sdklayers.dll - Direct3D 11.1 SDK Layers
+d3d11_2sdklayers.dll - Direct3D 11.2 SDK Layers
+d3d11_3SDKLayers.dll - Direct3D 11.3 SDK Layers
+d3d11.dll - Direct3D 11 Runtime
+d3d11on12.dll - Direct3D 11On12 Runtime
+d3d11ref.dll - Direct3D 11 Reference Device
+d3d11sdklayers.dll - Direct3D 11 SDK Layers
+D3D12.dll - Direct3D 12 Runtime
+D3D12Core.dll - Direct3D 12 Core Runtime
+d3d12SDKLayers.dll - Direct3D 12 SDK Layers
+d3d8.dll - Microsoft Direct3D
+d3d8thk.dll - Microsoft Direct3D OS Thunk Layer
+d3d9.dll - Direct3D 9 Runtime
+d3d9on12.dll - Direct3D9 DDI to Direct3D12 API Mapping Layer
+D3DCompiler_33.dll - Microsoft Direct3D
+D3DCompiler_34.dll - Microsoft Direct3D
+D3DCompiler_35.dll - Microsoft Direct3D
+D3DCompiler_36.dll - Microsoft Direct3D
+D3DCompiler_37.dll - Microsoft Direct3D
+D3DCompiler_38.dll - Microsoft Direct3D
+D3DCompiler_39.dll - Microsoft Direct3D
+D3DCompiler_40.dll - Direct3D HLSL Compiler
+D3DCompiler_41.dll - Direct3D HLSL Compiler
+D3DCompiler_42.dll - Direct3D HLSL Compiler
+D3DCompiler_43.dll - Direct3D HLSL Compiler
+D3DCompiler_47.dll - Direct3D HLSL Compiler
+d3dcsx_42.dll - Direct3D 10.1 Extensions
+d3dcsx_43.dll - Direct3D 10.1 Extensions
+d3dim.dll - Microsoft Direct3D
+d3dim700.dll - Microsoft Direct3D
+d3dramp.dll - Microsoft Direct3D
+d3dref9.dll - Direct3D 9 Reference Device
+D3DSCache.dll - Microsoft (R) D3D Shader Caching Library
+d3dx10_33.dll - Microsoft Direct3D
+d3dx10_34.dll - Microsoft Direct3D
+d3dx10_35.dll - Microsoft Direct3D
+d3dx10_36.dll - Microsoft Direct3D
+d3dx10_37.dll - Microsoft Direct3D
+d3dx10_38.dll - Microsoft Direct3D
+d3dx10_39.dll - Microsoft Direct3D
+d3dx10_40.dll - Direct3D 10.1 Extensions
+d3dx10_41.dll - Direct3D 10.1 Extensions
+d3dx10_42.dll - Direct3D 10.1 Extensions
+d3dx10_43.dll - Direct3D 10.1 Extensions
+d3dx10.dll - Microsoft Direct3D
+d3dx11_42.dll - Direct3D 10.1 Extensions
+d3dx11_43.dll - Direct3D 10.1 Extensions
+d3dx9_24.dll - 
+d3dx9_25.dll - 
+d3dx9_26.dll - 
+d3dx9_27.dll - 
+d3dx9_28.dll - 
+d3dx9_29.dll - 
+d3dx9_30.dll - 
+d3dx9_31.dll - 
+d3dx9_32.dll - 
+d3dx9_33.dll - 
+d3dx9_34.dll - 
+d3dx9_35.dll - 
+d3dx9_36.dll - 
+D3DX9_37.dll - 
+D3DX9_38.dll - 
+D3DX9_39.dll - 
+D3DX9_40.dll - Direct3D 9 Extensions
+D3DX9_41.dll - Direct3D 9 Extensions
+D3DX9_42.dll - Direct3D 9 Extensions
+D3DX9_43.dll - Direct3D 9 Extensions
+d3dxof.dll - DirectX Files DLL
+dabapi.dll - Desktop Activity Broker API
+DaOtpCredentialProvider.dll - DirectAccess One-Time Password Credential Provider
+dataclen.dll - Disk Space Cleaner for Windows
+DataExchange.dll - Data exchange
+davclnt.dll - Web DAV Client DLL
+davhlpr.dll - DAV Helper DLL
+DavSyncProvider.dll - DAV sync engine for contacts, calendar
+daxexec.dll - daxexec
+dbgcore.dll - Windows Core Debugging Helpers
+dbgeng.dll - Windows Symbolic Debugger Engine
+dbghelp.dll - Windows Image Helper
+DbgModel.dll - Windows Debugger Data Model
+dbnetlib.dll - Winsock Oriented Net DLL for SQL Clients
+dbnmpntw.dll - Named Pipes Net DLL for SQL Clients
+dciman32.dll - DCI Manager
+dcomp.dll - Microsoft DirectComposition Library
+DDACLSys.dll - SysPrep module for Resetting Data Drive ACL 
+ddisplay.dll - DirectDisplay
+DDOIProxy.dll - DDOI Interface Proxy
+DDORes.dll - Device Category information and resources
+ddraw.dll - Microsoft DirectDraw
+ddrawex.dll - Direct Draw Ex
+DefaultDeviceManager.dll - Default Device Manager
+DefaultPrinterProvider.dll - Microsoft Windows Default Printer Provider
+delegatorprovider.dll - WMI PassThru Provider for Storage Management
+DesktopShellAppStateContract.dll - Desktop Switcher Data Model
+DevDispItemProvider.dll - DeviceItem inproc devquery subsystem
+devenum.dll - Device enumeration.
+deviceaccess.dll - Device Broker And Policy COM Server
+deviceassociation.dll - Device Association Client DLL
+DeviceCenter.dll - Device Center
+DeviceCredential.dll - Microsoft Companion Authenticator Client
+DeviceDisplayStatusManager.dll - Device Display Status Manager
+DeviceFlows.DataModel.dll - DeviceFlows DataModel
+devicengccredprov.dll - Microsoft Companion Authenticator Credential Provider
+DevicePairing.dll - Shell extensions for Device Pairing
+DevicePairingFolder.dll - Device Pairing Folder
+DevicePairingProxy.dll - Device Pairing Proxy Dll
+DeviceReactivation.dll - DeviceReactivation
+DeviceSetupStatusProvider.dll - Device Setup Status Provider Dll
+DeviceUxRes.dll - Windows Device User Experience Resource File
+devmgr.dll - Device Manager MMC Snapin
+devobj.dll - Device Information Set DLL
+devrtl.dll - Device Management Run Time Library
+dfscli.dll - Windows NT Distributed File System Client DLL
+dfshim.dll - ClickOnce Application Deployment Support Library
+DfsShlEx.dll - Distributed File System shell extension
+dhcpcmonitor.dll - DHCP Client Monitor Dll
+dhcpcore.dll - DHCP Client Service
+dhcpcore6.dll - DHCPv6 Client
+dhcpcsvc.dll - DHCP Client Service
+dhcpcsvc6.dll - DHCPv6 Client
+dhcpsapi.dll - DHCP Server API Stub DLL
+diagnosticdataquery.dll - Microsoft Windows Diagnostic data Helper API
+DiagnosticDataSettings.dll - Microsoft Windows Diagnostic Data Settings
+DiagnosticInvoker.dll - Microsoft Windows operating system.
+dialclient.dll - DIAL DLL
+DialogBlockerProc.dll - Shared process library for DialogBlocker
+DictationManager.dll - Dictation Manager
+difxapi.dll - Driver Install Frameworks for API library module
+dimsjob.dll - DIMS Job DLL
+dimsroam.dll - Key Roaming DIMS Provider DLL
+dinput.dll - Microsoft DirectInput
+dinput8.dll - Microsoft DirectInput
+Direct2DDesktop.dll - Microsoft Direct2D Desktop Components
+directmanipulation.dll - Microsoft Direct Manipulation Component
+DirectML.Debug.dll - Debug Layer For Microsoft's DirectML Library
+directml.dll - DirectML Library
+directxdatabasehelper.dll - DirectXDatabaseHelper
+DismApi.dll - DISM API Framework
+DispBroker.dll - Display Broker API
+dispex.dll - Microsoft ® DispEx
+Display.dll - Display Control Panel
+DisplayManager.dll - DisplayManager
+dlnashext.dll - DLNA Namespace DLL
+DMAlertListener.ProxyStub.dll - ProxyStub for DeviceManagment Alert
+DmApiSetExtImplDesktop.dll - DmApiSetExtImplDesktop
+DMAppsRes.dll - DMAppsRes
+dmband.dll - Microsoft DirectMusic Band
+dmcfgutils.dll - dmcfgutils
+dmcmnutils.dll - dmcmnutils
+dmcommandlineutils.dll - dmcommandlineutils
+dmcompos.dll - Microsoft DirectMusic Composer
+dmdlgs.dll - Disk Management Snap-in Dialogs
+dmdskmgr.dll - Disk Management Snap-in Support Library
+dmdskres.dll - Disk Management Snap-in Resources
+dmdskres2.dll - Disk Management Snap-in Resources
+dmenrollengine.dll - Enroll Engine DLL
+dmime.dll - Microsoft DirectMusic Interactive Engine
+dmintf.dll - Disk Management DCOM Interface Stub
+dmiso8601utils.dll - dmiso8601utils
+dmloader.dll - Microsoft DirectMusic Loader
+dmocx.dll - TreeView OCX
+dmoleaututils.dll - dmoleaututils
+dmprocessxmlfiltered.dll - dmprocessxmlfiltered
+dmpushproxy.dll - dmpushproxy
+DMRCDecoder.dll - Digimarc Decoder 4/2/2021
+dmscript.dll - Microsoft DirectMusic Scripting
+dmstyle.dll - Microsoft DirectMusic Style Engline
+dmsynth.dll - Microsoft DirectMusic Software Synthesizer
+dmusic.dll - Microsoft DirectMusic Core Services
+dmutil.dll - Logical Disk Manager Utility Library
+dmvdsitf.dll - Disk Management Snap-in Support Library
+dmxmlhelputils.dll - dmxmlhelputils
+dnsapi.dll - DNS Client API DLL
+dnscmmc.dll - DNS Client MMC Snap-in DLL
+docprop.dll - OLE DocFile Property Page
+DolbyDecMFT.dll - Media Foundation Dolby Digital Atmos Decoders
+dot3api.dll - 802.3 Autoconfiguration API
+dot3cfg.dll - 802.3 Netsh Helper
+dot3dlg.dll - 802.3 UI Helper
+dot3gpclnt.dll - 802.3 Group Policy Client
+dot3gpui.dll - 802.3 Network Policy Management Snap-in
+dot3hc.dll - Dot3 Helper Class
+dot3msm.dll - 802.3 Media Specific Module
+dot3ui.dll - 802.3 Advanced UI
+dpapi.dll - Data Protection API
+dpapiprovider.dll - dpapiprovider DLL
+dplayx.dll - DirectPlay Stub
+dpmodemx.dll - DirectPlay Stub
+dpnaddr.dll - DirectPlay Stub
+dpnathlp.dll - DirectPlay Stub
+dpnet.dll - DirectPlay Stub
+dpnhpast.dll - DirectPlay Stub
+dpnhupnp.dll - DirectPlay Stub
+dpnlobby.dll - DirectPlay Stub
+dpwsockx.dll - DirectPlay Stub
+dpx.dll - Microsoft(R) Delta Package Expander
+DragDropExperienceCommon.dll - In-Proc WinRT server for Windows.Internal.PlatformExtensions.DragDropExperienceCommon
+DragDropExperienceDataExchangeDelegated.dll - In-Proc WinRT server for Windows.Internal.PlatformExtensions.DragDropExperienceDataExchangeDelegated
+drprov.dll - Microsoft Remote Desktop Session Host Server Network Provider
+drt.dll - Distributed Routing Table
+drtprov.dll - Distributed Routing Table Providers
+drttransport.dll - Distributed Routing Table Transport Provider
+drvsetup.dll - Microsoft (R) Driver Setup
+drvstore.dll - Driver Store API
+dsauth.dll - DS Authorization for Services
+DscCoreConfProv.dll - DSC
+dsclient.dll - Data Sharing Service Client DLL
+dsdmo.dll - DirectSound Effects
+dskquota.dll - Windows Shell Disk Quota Support DLL
+dskquoui.dll - Windows Shell Disk Quota UI DLL
+dsound.dll - DirectSound
+dsparse.dll - Active Directory Domain Services API
+dsprop.dll - Windows Active Directory Property Pages
+dsquery.dll - Directory Service Find
+dsreg.dll - AD/AAD User Device Registration
+dsrole.dll - DS Setup Client DLL
+dssec.dll - Directory Service Security UI
+dssenh.dll - Microsoft Enhanced DSS and Diffie-Hellman Cryptographic Provider
+Dsui.dll - Device Setup UI Pages
+dsuiext.dll - Directory Service Common UI
+dswave.dll - Microsoft DirectMusic Wave
+dtsh.dll - Detection and Sharing Status API
+dui70.dll - Windows DirectUI Engine
+duser.dll - Windows DirectUser Engine
+dusmapi.dll - Data Usage API
+dwmapi.dll - Microsoft Desktop Window Manager API
+DWrite.dll - Microsoft DirectX Typography Services
+DXCaptureReplay.dll - DirectX Capture/Replay
+DXCore.dll - DXCore
+dxdiagn.dll - Microsoft DirectX Diagnostic Tool
+dxgi.dll - DirectX Graphics Infrastructure
+DXGIDebug.dll - DXGI Debug Binary
+dxilconv.dll - DirectX IL Converter DLL
+dxmasf.dll - Microsoft Windows Media Component Removal File.
+DxpTaskSync.dll - Microsoft Windows DXP Sync.
+dxtmsft.dll - DirectX Media -- Image DirectX Transforms
+DXToolsMonitor.dll - DirectX Tools Monitor
+DXToolsOfflineAnalysis.dll - DirectX Tools Offline Analysis
+DxToolsReportGenerator.dll -  
+DXToolsReporting.dll - DirectX Tools Reporting
+dxtrans.dll - DirectX Media -- DirectX Transform Core
+dxva2.dll - DirectX Video Acceleration 2.0 DLL
+eapp3hst.dll - Microsoft ThirdPartyEapDispatcher
+eappcfg.dll - Eap Peer Config
+eappgnui.dll - EAP Generic UI
+eapphost.dll - Microsoft EAPHost Peer service
+eappprxy.dll - Microsoft EAPHost Peer Client DLL
+eapprovp.dll - EAP extension DLL
+eapputil.dll - EAP Private Utility DLL
+eapsimextdesktop.dll - EAP SIM EXT config dll
+EapTeapConfig.dll - EAP Teap Config DLL
+EapTeapExt.dll - EAP Teap Desktop Extension DLL
+easwrt.dll - Exchange ActiveSync Windows Runtime DLL
+edgehtml.dll - Microsoft Edge Web Platform
+edgeIso.dll - Isolation Library for edgehtml hosts
+EdgeManager.dll - Microsoft Edge Manager
+EditBufferTestHook.dll - "EditBufferTestHook.DYNLINK"
+EditionUpgradeHelper.dll - EDITIONUPGRADEHELPER.DLL
+EditionUpgradeManagerObj.dll - Get your Windows license
+edpauditapi.dll - EDP Audit API
+edputil.dll - EDP util
+efsadu.dll - File Encryption Utility
+efsext.dll - EFSEXT.DLL
+efsutil.dll - EFS Utility Library
+efswrt.dll - Storage Protection Windows Runtime DLL
+EhStorAPI.dll - Windows Enhanced Storage API
+EhStorPwdMgr.dll - Microsoft Enhanced Storage Password Manager
+els.dll - Event Viewer Snapin
+ELSCore.dll - Els Core Platform DLL
+elshyph.dll - ELS Hyphenation Service
+elslad.dll - ELS Language Detection
+elsTrans.dll - ELS Transliteration Service
+EmailApis.dll - DLL for EmailRT
+embeddedmodesvcapi.dll - Embedded Mode Service Client DLL
+encapi.dll - Encoder API
+enrollmentapi.dll - Legacy Phone Enrollment API BackCompat Shim
+EnterpriseAppMgmtClient.dll - EnterpriseAppMgmtClient.dll
+enterpriseresourcemanager.dll - enterpriseresourcemanager DLL
+eqossnap.dll - EQoS Snapin extension
+ErrorDetails.dll - Microsoft Windows operating system.
+ErrorDetailsCore.dll - Microsoft Windows operating system.
+es.dll - COM+
+EsdSip.dll - Crypto SIP provider for signing and verifying .esd Electronic Software Distribution files
+esent.dll - Extensible Storage Engine for Microsoft(R) Windows(R)
+esentprf.dll - Extensible Storage Engine Performance Monitoring Library for Microsoft(R) Windows(R)
+esevss.dll - Microsoft(R) ESENT shadow utilities
+ETWCoreUIComponentsResources.dll - Microsoft CoreComponents UI ETW manifest Dll
+ETWESEProviderResources.dll - Microsoft ESE ETW
+EtwRundown.dll - Etw Rundown Helper Library
+eventcls.dll - Microsoft® Volume Shadow Copy Service event class
+evntagnt.dll - Event Translator SNMP subagent
+evr.dll - Enhanced Video Renderer DLL
+ExecModelClient.dll - ExecModelClient
+execmodelproxy.dll - ExecModelProxy
+ExplorerFrame.dll - ExplorerFrame
+expsrv.dll - Visual Basic for Applications Runtime - Expression Service
+ExSMime.dll - LExsmime
+ExtrasXmlParser.dll - Extras XML parser used to extract extension information from XML
+f3ahvoas.dll - JP Japanese Keyboard Layout for Fujitsu FMV oyayubi-shift keyboard
+FamilySafetyExt.dll - FamilySafety ChildAccount Extensions
+Faultrep.dll - Windows User Mode Crash Reporting DLL
+fcon.dll - Feature Configuration
+fdBth.dll - Function Discovery Bluetooth Provider Dll
+fdBthProxy.dll - Bluetooth Provider Proxy Dll
+FdDevQuery.dll - Microsoft Windows Device Query Helper
+fde.dll - Folder Redirection Snapin Extension
+fdeploy.dll - Folder Redirection Group Policy Extension
+fdPnp.dll - Pnp Provider Dll
+fdprint.dll - Function Discovery Print Provider Dll
+fdProxy.dll - Function Discovery Proxy Dll
+fdSSDP.dll - Function Discovery SSDP Provider Dll
+fdWCN.dll - Windows Connect Now - Config Function Discovery Provider DLL
+fdWNet.dll - Function Discovery WNet Provider Dll
+fdWSD.dll - Function Discovery WS Discovery Provider Dll
+feclient.dll - Windows NT File Encryption Client Interfaces
+ffbroker.dll - Force Feedback Broker And Policy COM Server
+fidocredprov.dll - FIDO Credential Provider
+filemgmt.dll - Services and Shared Folders
+findnetprinters.dll - Find Network Printers COM Component
+fingerprintcredential.dll - WinBio Fingerprint Credential
+FirewallAPI.dll - Windows Defender Firewall API
+FirewallControlPanel.dll - Windows Defender Firewall Control Panel
+FlightSettings.dll - Flight Settings
+fltLib.dll - Filter Library
+fmifs.dll - FM IFS Utility DLL
+fms.dll - Font Management Services
+fontext.dll - Windows Font Folder
+FontGlyphAnimator.dll - Font Glyph Animator
+fontsub.dll - Font Subsetting DLL
+fphc.dll - Filtering Platform Helper Class
+framedyn.dll - WMI SDK Provider Framework
+framedynos.dll - WMI SDK Provider Framework
+FrameServerClient.dll - Frame Server Client DLL
+FrameServerMonitorClient.dll - Frame Server Monitor Client DLL
+frprov.dll - Folder Redirection WMI Provider
+fsutilext.dll - FS Utility Extension DLL
+fundisc.dll - Function Discovery Dll
+fveapi.dll - Windows BitLocker Drive Encryption API
+fveapibase.dll - Windows BitLocker Drive Encryption Base API
+fvecerts.dll - BitLocker Certificates Library
+FvSDK_x86.dll - 
+fwbase.dll - Firewall Base DLL
+fwcfg.dll - Windows Defender Firewall Configuration Helper
+fwpolicyiomgr.dll - FwPolicyIoMgr DLL
+FWPUCLNT.DLL - FWP/IPsec User-Mode API
+GameBarPresenceWriter.proxy.dll - GameBar Presence Writer Proxy
+GameChatOverlayExt.dll - GameChat Overlay Extension
+GameChatTranscription.dll - GameChatTranscription
+GameInput.dll - GameInput API
+gamemode.dll - Game Mode Client
+GamePanelExternalHook.dll - GamePanelExternalHook.dll
+gameux.dll - Games Explorer
+gamingtcui.dll - Windows Gaming Internal CallableUI dll
+gcdef.dll - Game Controllers Default Sheets
+gdi32.dll - GDI Client DLL
+gdi32full.dll - GDI Client DLL
+GdiPlus.dll - Microsoft GDI+
+Geocommon.dll - Geocommon
+Geolocation.dll - Geolocation Runtime DLL
+getuname.dll - Unicode name Dll for UCE
+glmf32.dll - OpenGL Metafiling DLL
+globinputhost.dll - Windows Globalization Extension API for Input
+glu32.dll - OpenGL Utility Library DLL
+gmsaclient.dll - "gmsaclient.DYNLINK"
+gnsdk_fp.dll - Gracenote SDK component
+gpapi.dll - Group Policy Client API
+gpedit.dll - GPEdit
+gpprefcl.dll - Group Policy Preference Client
+gpprnext.dll - Group Policy Printer Extension
+gpscript.dll - Script Client Side Extension
+gptext.dll - GPTExt
+GraphicsCapture.dll - Microsoft Windows Graphics Capture Api
+hbaapi.dll - HBA API data interface dll for HBA_API_Rev_2-18_2002MAR1.doc
+hcproviders.dll - Security and Maintenance Providers
+HdcpHandler.dll - Hdcp Handler DLL
+HeatCore.dll - Microsoft (R) Windows HEAT processor framework
+HelpPaneProxy.dll - Microsoft® Help Proxy
+hgcpl.dll - HomeGroup Control Panel
+hhsetup.dll - Microsoft® HTML Help
+hid.dll - Hid User Library
+hidserv.dll - Human Interface Device Service
+hlink.dll - Microsoft Office 2000 component
+hmkd.dll - Windows HMAC Key Derivation API
+hnetcfg.dll - Home Networking Configuration Manager
+HNetCfgClient.dll - Home Networking Configuration API Client
+hnetmon.dll - Home Networking Monitor DLL
+HoloShellRuntime.dll - Hologram Shell Runtime
+hostmib.dll - Host Resources MIB
+HrtfApo.dll - Spatial Audio Processing Library
+HrtfDspCpu.dll - 
+httpapi.dll - HTTP Protocol Stack API
+htui.dll - Common halftone Color Adjustment Dialogs
+HvsiManagementApi.dll - 
+IA2ComProxy.dll - IAccessible2 COM Proxy Stub DLL
+ias.dll - Network Policy Server
+iasacct.dll - NPS Accounting Provider
+iasads.dll - NPS Active Directory Data Store
+iasdatastore.dll - NPS Datastore server
+iashlpr.dll - NPS Surrogate Component
+IasMigPlugin.dll - NPS Migration DLL
+iasnap.dll - NPS NAP Provider
+iaspolcy.dll - NPS Pipeline
+iasrad.dll - NPS RADIUS Protocol Component
+iasrecst.dll - NPS XML Datastore Access
+iassam.dll - NPS NT SAM Provider
+iassdo.dll - NPS SDO Component
+iassvcs.dll - NPS Services Component
+iccvid.dll - Cinepak® Codec
+icm32.dll - Microsoft Color Management Module (CMM)
+icmp.dll - ICMP DLL
+icmui.dll - Microsoft Color Matching System User Interface DLL
+IconCodecService.dll - Converts a PNG part of the icon to a legacy bmp icon
+icsigd.dll - Internet Gateway Device properties
+icu.dll - ICU Combined Library
+icuin.dll - ICU I18N Forwarder DLL (deprecated)
+icuuc.dll - ICU Common Forwarder DLL (deprecated)
+IdCtrls.dll - Identity Controls
+IDStore.dll - Identity Store
+IEAdvpack.dll - ADVPACK
+ieapfltr.dll - Microsoft SmartScreen Filter
+iedkcs32.dll - IEAK branding
+ieframe.dll - Internet Browser
+iemigplugin.dll - IE Migration Plugin
+iepeers.dll - Internet Explorer Peer Objects
+ieproxy.dll - IE ActiveX Interface Marshaling Library
+IEProxyDesktop.dll - IE Desktop ActiveX Interface Marshaling Library
+iernonce.dll - Extended RunOnce processing with UI
+iertutil.dll - Run time utility for Internet Explorer
+iesetup.dll - IOD Version Map
+iesysprep.dll - IE Sysprep Provider
+ieui.dll - Internet Explorer UI Engine
+ifmon.dll - IF Monitor DLL
+ifsutil.dll - IFS Utility DLL
+ifsutilx.dll - IFS Utility Extension DLL
+imagehlp.dll - Windows NT Image Helper
+imageres.dll - Windows Image Resource
+imagesp1.dll - Windows SP1 Image Resource
+imapi.dll - Image Mastering API
+imapi2.dll - Image Mastering API v2
+imapi2fs.dll - Image Mastering File System Imaging API v2
+ime_textinputhelpers.dll - "IME_TextInputHelpers.DYNLINK"
+imgutil.dll - IE plugin image decoder support DLL
+imm32.dll - Multi-User Windows IMM32 API Client DLL
+IndexedDbLegacy.dll - "IndexedDbLegacy.DYNLINK"
+inetcomm.dll - Microsoft Internet Messaging API Resources
+inetmib1.dll - Microsoft MIB-II subagent
+INETRES.dll - Microsoft Internet Messaging API Resources
+InkEd.dll - Microsoft Tablet PC InkEdit Control
+InkObjCore.dll - Microsoft Tablet PC Ink Platform Component
+input.dll - InputSetting DLL
+InputHost.dll - InputHost
+InputInjectionBroker.dll - Broker for WinRT input injection.
+InputSwitch.dll - Microsoft Windows Input Switcher
+inseng.dll - Install engine
+InstallService.dll - InstallService
+InstallServiceTasks.dll - InstallService Tasks
+iologmsg.dll - IO Logging DLL
+IPELoggingDictationHelper.dll - IPE Logging Library Helper
+IPHLPAPI.DLL - IP Helper API
+IpNatHlpClient.dll - IP NAT Helper Client
+iprop.dll - OLE PropertySet Implementation
+iprtprio.dll - IP Routing Protocol Priority DLL
+iprtrmgr.dll - IP Router Manager
+ipsecsnp.dll - IP Security Policy Management Snap-in
+ipsmsnap.dll - IP Security Monitor Snap-in
+ir32_32.dll - IR32_32 WRAPPER DLL
+ir32_32original.dll - 
+ir41_32original.dll - Intel Indeo® Video 4.5
+ir41_qc.dll - IR41_QC WRAPPER DLL
+ir41_qcoriginal.dll - Intel Indeo® Video Interactive Quick Compressor
+ir41_qcx.dll - IR41_QCX WRAPPER DLL
+ir41_qcxoriginal.dll - Intel Indeo® Video Interactive Quick Compressor
+ir50_32.dll - IR50_32 WRAPPER DLL
+ir50_32original.dll - Intel Indeo® video 5.10
+ir50_qc.dll - IR50_QC WRAPPER DLL
+ir50_qcoriginal.dll - Intel Indeo® video 5.10 Quick Compressor
+ir50_qcx.dll - IR50_QCX WRAPPER DLL
+ir50_qcxoriginal.dll - Intel Indeo® video 5.10 Quick Compressor
+iri.dll - iri
+iscsicpl.dll - iSCSI Initiator Control Panel Applet
+iscsidsc.dll - iSCSI Discovery api
+iscsied.dll - iSCSI Extension DLL
+iscsium.dll - iSCSI Discovery api
+iscsiwmi.dll - MS iSCSI Initiator WMI Provider
+iscsiwmiv2.dll - WMI Provider for iSCSI
+itircl.dll - Microsoft® InfoTech IR Local DLL
+itss.dll - Microsoft® InfoTech Storage System Library
+iyuv_32.dll - Intel Indeo(R) Video YUV Codec
+JavaScriptCollectionAgent.dll - JavaScript Performance Collection Agent
+JHI.dll - Intel(R) Dynamic Application Loader Host Interface DLL
+joinproviderol.dll - Online Join Provider DLL
+joinutil.dll - Join Utility DLL
+JpMapControl.dll - Jupiter Map Control
+jscript.dll - Microsoft ® JScript
+jscript9.dll - Microsoft ® JScript
+jscript9diag.dll - Microsoft ® JScript Diagnostics
+jscript9Legacy.dll - Microsoft ® JScript
+jsproxy.dll - JScript Proxy Auto-Configuration
+kbd101.DLL - JP Japanese Keyboard Layout for 101
+kbd101a.DLL - KO Hangeul Keyboard Layout for 101 (Type A)
+kbd101b.DLL - KO Hangeul Keyboard Layout for 101(Type B)
+kbd101c.DLL - KO Hangeul Keyboard Layout for 101(Type C)
+kbd103.DLL - KO Hangeul Keyboard Layout for 103
+kbd106.dll - JP Japanese Keyboard Layout for 106
+kbd106n.dll - JP Japanese Keyboard Layout for 106
+KBDA1.DLL - Arabic_English_101 Keyboard Layout
+KBDA2.DLL - Arabic_2 Keyboard Layout
+KBDA3.DLL - Arabic_French_102 Keyboard Layout
+KBDADLM.DLL - Adlam Keyboard Layout
+KBDAL.DLL - Albania Keyboard Layout
+KBDARME.DLL - Eastern Armenian Keyboard Layout
+kbdarmph.dll - Armenian Phonetic Keyboard Layout
+kbdarmty.dll - Armenian Typewriter Keyboard Layout
+KBDARMW.DLL - Western Armenian Keyboard Layout
+kbdax2.dll - JP Japanese Keyboard Layout for AX2
+KBDAZE.DLL - Azerbaijan_Cyrillic Keyboard Layout
+KBDAZEL.DLL - Azeri-Latin Keyboard Layout
+KBDAZST.DLL - Azerbaijani (Standard) Keyboard Layout
+KBDBASH.DLL - Bashkir Keyboard Layout
+KBDBE.DLL - Belgian Keyboard Layout
+KBDBENE.DLL - Belgian Dutch Keyboard Layout
+KBDBGPH.DLL - Bulgarian Phonetic Keyboard Layout
+KBDBGPH1.DLL - Bulgarian (Phonetic Traditional) Keyboard Layout
+KBDBHC.DLL - Bosnian (Cyrillic) Keyboard Layout
+KBDBLR.DLL - Belarusian Keyboard Layout
+KBDBR.DLL - Brazilian Keyboard Layout
+KBDBU.DLL - Bulgarian (Typewriter) Keyboard Layout
+KBDBUG.DLL - Buginese Keyboard Layout
+KBDBULG.DLL - Bulgarian Keyboard Layout
+KBDCA.DLL - Canadian Multilingual Keyboard Layout
+KBDCAN.DLL - Canadian Multilingual Standard Keyboard Layout
+KBDCHER.DLL - Cherokee Nation Keyboard Layout
+KBDCHERP.DLL - Cherokee Phonetic Keyboard Layout
+KBDCR.DLL - Croatian/Slovenian Keyboard Layout
+KBDCZ.DLL - Czech Keyboard Layout
+KBDCZ1.DLL - Czech_101 Keyboard Layout
+KBDCZ2.DLL - Czech_Programmer's Keyboard Layout
+KBDDA.DLL - Danish Keyboard Layout
+KBDDIV1.DLL - Divehi Phonetic Keyboard Layout
+KBDDIV2.DLL - Divehi Typewriter Keyboard Layout
+KBDDV.DLL - Dvorak US English Keyboard Layout
+KBDDZO.DLL - Dzongkha Keyboard Layout
+KBDES.DLL - Spanish Alernate Keyboard Layout
+KBDEST.DLL - Estonia Keyboard Layout
+KBDFA.DLL - Persian Keyboard Layout
+kbdfar.dll - Persian Standard Keyboard Layout
+KBDFC.DLL - Canadian French Keyboard Layout
+KBDFI.DLL - Finnish Keyboard Layout
+KBDFI1.DLL - Finnish-Swedish with Sami Keyboard Layout
+KBDFO.DLL - Færoese Keyboard Layout
+KBDFR.DLL - French Keyboard Layout
+KBDFTHRK.DLL - Futhark Keyboard Layout
+KBDGAE.DLL - Scottish Gaelic (United Kingdom) Keyboard Layout
+KBDGEO.DLL - Georgian Keyboard Layout
+kbdgeoer.dll - Georgian (Ergonomic) Keyboard Layout
+kbdgeome.dll - Georgian (MES) Keyboard Layout
+kbdgeooa.dll - Georgian (Old Alphabets) Keyboard Layout
+kbdgeoqw.dll - Georgian (QWERTY) Keyboard Layout
+KBDGKL.DLL - Greek_Latin Keyboard Layout
+KBDGN.DLL - Guarani Keyboard Layout
+KBDGR.DLL - German Keyboard Layout
+KBDGR1.DLL - German_IBM Keyboard Layout
+KBDGRLND.DLL - Greenlandic Keyboard Layout
+KBDGTHC.DLL - Gothic Keyboard Layout
+KBDHAU.DLL - Hausa Keyboard Layout
+KBDHAW.DLL - Hawaiian Keyboard Layout
+KBDHE.DLL - Greek Keyboard Layout
+KBDHE220.DLL - Greek IBM 220 Keyboard Layout
+KBDHE319.DLL - Greek IBM 319 Keyboard Layout
+KBDHEB.DLL - KBDHEB Keyboard Layout
+kbdhebl3.dll - Hebrew Standard Keyboard Layout
+KBDHELA2.DLL - Greek IBM 220 Latin Keyboard Layout
+KBDHELA3.DLL - Greek IBM 319 Latin Keyboard Layout
+KBDHEPT.DLL - Greek_Polytonic Keyboard Layout
+KBDHU.DLL - Hungarian Keyboard Layout
+KBDHU1.DLL - Hungarian 101-key Keyboard Layout
+kbdibm02.DLL - JP Japanese Keyboard Layout for IBM 5576-002/003
+KBDIBO.DLL - Igbo Keyboard Layout
+KBDIC.DLL - Icelandic Keyboard Layout
+KBDINASA.DLL - Assamese (Inscript) Keyboard Layout
+KBDINBE1.DLL - Bengali - Inscript (Legacy) Keyboard Layout
+KBDINBE2.DLL - Bengali (Inscript) Keyboard Layout
+KBDINBEN.DLL - Bengali Keyboard Layout
+KBDINDEV.DLL - Devanagari Keyboard Layout
+KBDINEN.DLL - English (India) Keyboard Layout
+KBDINGUJ.DLL - Gujarati Keyboard Layout
+KBDINHIN.DLL - Hindi Keyboard Layout
+KBDINKAN.DLL - Kannada Keyboard Layout
+KBDINMAL.DLL - Malayalam Keyboard Layout Keyboard Layout
+KBDINMAR.DLL - Marathi Keyboard Layout
+KBDINORI.DLL - Odia Keyboard Layout
+KBDINPUN.DLL - Punjabi/Gurmukhi Keyboard Layout
+KBDINTAM.DLL - Tamil Keyboard Layout
+KBDINTEL.DLL - Telugu Keyboard Layout
+KBDINUK2.DLL - Inuktitut Naqittaut Keyboard Layout
+KBDIR.DLL - Irish Keyboard Layout
+KBDIT.DLL - Italian Keyboard Layout
+KBDIT142.DLL - Italian 142 Keyboard Layout
+KBDIULAT.DLL - Inuktitut Latin Keyboard Layout
+KBDJAV.DLL - Javanese Keyboard Layout
+KBDJPN.DLL - JP Japanese Keyboard Layout Stub driver
+KBDKAZ.DLL - Kazak_Cyrillic Keyboard Layout
+KBDKHMR.DLL - Cambodian Standard Keyboard Layout
+KBDKNI.DLL - Khmer (NIDA) Keyboard Layout
+KBDKOR.DLL - KO Hangeul Keyboard Layout Stub driver
+KBDKURD.DLL - Central Kurdish Keyboard Layout
+KBDKYR.DLL - Kyrgyz Keyboard Layout
+KBDLA.DLL - Latin-American Spanish Keyboard Layout
+KBDLAO.DLL - Lao Standard Keyboard Layout
+kbdlisub.dll - Lisu Basic Keyboard Layout
+kbdlisus.dll - Lisu Standard Keyboard Layout
+kbdlk41a.dll - DEC LK411-AJ Keyboard Layout
+KBDLT.DLL - Lithuania Keyboard Layout
+KBDLT1.DLL - Lithuanian Keyboard Layout
+KBDLT2.DLL - Lithuanian Standard Keyboard Layout
+KBDLV.DLL - Latvia Keyboard Layout
+KBDLV1.DLL - Latvia-QWERTY Keyboard Layout
+KBDLVST.DLL - Latvian (Standard) Keyboard Layout
+KBDMAC.DLL - Macedonian (North Macedonia) Keyboard Layout
+KBDMACST.DLL - Macedonian (North Macedonia) - Standard Keyboard Layout
+KBDMAORI.DLL - Maori Keyboard Layout
+KBDMLT47.DLL - Maltese 47-key Keyboard Layout
+KBDMLT48.DLL - Maltese 48-key Keyboard Layout
+KBDMON.DLL - Mongolian Keyboard Layout
+KBDMONMO.DLL - Mongolian (Mongolian Script) Keyboard Layout
+KBDMONST.DLL - Traditional Mongolian (Standard) Keyboard Layout
+KBDMYAN.DLL - Myanmar Keyboard Layout
+KBDNE.DLL - Dutch Keyboard Layout
+kbdnec.DLL - JP Japanese Keyboard Layout for (NEC PC-9800)
+kbdnec95.DLL - JP Japanese Keyboard Layout for (NEC PC-9800 Windows 95)
+kbdnecat.DLL - JP Japanese Keyboard Layout for (NEC PC-9800 on PC98-NX)
+kbdnecnt.DLL - JP Japanese NEC PC-9800 Keyboard Layout
+KBDNEPR.DLL - Nepali Keyboard Layout
+kbdnko.dll - N'Ko Keyboard Layout
+KBDNO.DLL - Norwegian Keyboard Layout
+KBDNO1.DLL - Norwegian with Sami Keyboard Layout
+KBDNSO.DLL - Sesotho sa Leboa Keyboard Layout
+KBDNTL.DLL - New Tai Leu Keyboard Layout
+KBDOGHAM.DLL - Ogham Keyboard Layout
+KBDOLCH.DLL - Ol Chiki Keyboard Layout
+KBDOLDIT.DLL - Old Italic Keyboard Layout
+KBDOSA.DLL - Osage Keyboard Layout
+KBDOSM.DLL - Osmanya Keyboard Layout
+KBDPASH.DLL - Pashto (Afghanistan) Keyboard Layout
+kbdphags.dll - Phags-pa Keyboard Layout
+KBDPL.DLL - Polish Keyboard Layout
+KBDPL1.DLL - Polish Programmer's Keyboard Layout
+KBDPO.DLL - Portuguese Keyboard Layout
+KBDRO.DLL - Romanian (Legacy) Keyboard Layout
+KBDROPR.DLL - Romanian (Programmers) Keyboard Layout
+KBDROST.DLL - Romanian (Standard) Keyboard Layout
+KBDRU.DLL - Russian Keyboard Layout
+KBDRU1.DLL - Russia(Typewriter) Keyboard Layout
+KBDRUM.DLL - Russian - Mnemonic Keyboard Layout
+KBDSF.DLL - Swiss French Keyboard Layout
+KBDSG.DLL - Swiss German Keyboard Layout
+KBDSL.DLL - Slovak Keyboard Layout
+KBDSL1.DLL - Slovak(QWERTY) Keyboard Layout
+KBDSMSFI.DLL - Sami Extended Finland-Sweden Keyboard Layout
+KBDSMSNO.DLL - Sami Extended Norway Keyboard Layout
+KBDSN1.DLL - Sinhala Keyboard Layout
+KBDSORA.DLL - Sora Keyboard Layout
+KBDSOREX.DLL - Sorbian Extended Keyboard Layout
+KBDSORS1.DLL - Sorbian Standard Keyboard Layout
+KBDSORST.DLL - Sorbian Standard (Legacy) Keyboard Layout
+KBDSP.DLL - Spanish Keyboard Layout
+KBDSW.DLL - Swedish Keyboard Layout
+KBDSW09.DLL - Sinhala - Wij 9 Keyboard Layout
+KBDSYR1.DLL - Syriac Standard Keyboard Layout
+KBDSYR2.DLL - Syriac Phoenetic Keyboard Layout
+KBDTAILE.DLL - Tai Le Keyboard Layout
+KBDTAJIK.DLL - Tajik Keyboard Layout
+KBDTAT.DLL - Tatar (Legacy) Keyboard Layout
+KBDTH0.DLL - Thai Kedmanee Keyboard Layout
+KBDTH1.DLL - Thai Pattachote Keyboard Layout
+KBDTH2.DLL - Thai Kedmanee (non-ShiftLock) Keyboard Layout
+KBDTH3.DLL - Thai Pattachote (non-ShiftLock) Keyboard Layout
+KBDTIFI.DLL - Tifinagh (Basic) Keyboard Layout
+KBDTIFI2.DLL - Tifinagh (Extended) Keyboard Layout
+KBDTIPRC.DLL - Tibetan (PRC) Keyboard Layout
+KBDTIPRD.DLL - Tibetan (PRC) - Updated Keyboard Layout
+KBDTT102.DLL - Tatar Keyboard Layout
+KBDTUF.DLL - Turkish F Keyboard Layout
+KBDTUQ.DLL - Turkish Q Keyboard Layout
+KBDTURME.DLL - Turkmen Keyboard Layout
+KBDTZM.DLL - Central Atlas Tamazight Keyboard Layout
+KBDUGHR.DLL - Uyghur (Legacy) Keyboard Layout
+KBDUGHR1.DLL - Uyghur Keyboard Layout
+KBDUK.DLL - United Kingdom Keyboard Layout
+KBDUKX.DLL - United Kingdom Extended Keyboard Layout
+KBDUR.DLL - Ukrainian Keyboard Layout
+KBDUR1.DLL - Ukrainian (Enhanced) Keyboard Layout
+KBDURDU.DLL - Urdu Keyboard Layout
+KBDUS.DLL - United States Keyboard Layout
+KBDUSA.DLL - US IBM Arabic 238_L Keyboard Layout
+KBDUSL.DLL - Dvorak Left-Hand US English Keyboard Layout
+KBDUSR.DLL - Dvorak Right-Hand US English Keyboard Layout
+KBDUSX.DLL - US Multinational Keyboard Layout
+KBDUZB.DLL - Uzbek_Cyrillic Keyboard Layout
+KBDVNTC.DLL - Vietnamese Keyboard Layout
+KBDWOL.DLL - Wolof Keyboard Layout
+KBDYAK.DLL - Sakha - Russia Keyboard Layout
+KBDYBA.DLL - Yoruba Keyboard Layout
+KBDYCC.DLL - Serbian (Cyrillic) Keyboard Layout
+KBDYCL.DLL - Serbian (Latin) Keyboard Layout
+KerbClientShared.dll - Kerberos Client Shared Functionality
+kerberos.dll - Kerberos Security Package
+kernel.appcore.dll - AppModel API Host
+kernel32.dll - Windows NT BASE API Client DLL
+KernelBase.dll - Windows NT BASE API Client DLL
+KeyboardFilterCore.dll - Keyboard Filter Hooks
+KeyboardFilterShim.dll - Keyboard Filter AppShim
+KeyCredMgr.dll - Microsoft Key Credential Manager
+keyiso.dll - CNG Key Isolation Service
+keymgr.dll - Stored User Names and Passwords
+ksuser.dll - User CSA Library
+ktmw32.dll - Windows KTM Win32 Client DLL
+l2gpstore.dll - Policy Storage dll
+l2nacp.dll - Windows Onex Credential Provider
+L2SecHC.dll - Layer 2 Security Diagnostics Helper Classes
+LanguageOverlayUtil.dll - Provides helper APIs for managing overlaid localized Windows resources.
+LAPRXY.DLL - Windows Media Logagent Proxy
+libomp140.i386.dll - LLVM* OpenMP* Runtime Library
+libomp140d.i386.dll - LLVM* OpenMP* Runtime Library
+LicenseManager.dll - LicenseManager
+LicenseManagerApi.dll - "LicenseManagerApi.DYNLINK"
+LicensingDiagSpp.dll - Licensing Diagnostics SPP Plugin
+LicensingWinRT.dll - LicensingWinRuntime
+licmgr10.dll - Microsoft® License Manager DLL
+linkinfo.dll - Windows Volume Tracking
+lmmib2.dll - SNMP LanMan MIB
+loadperf.dll - Load & Unload Performance Counters
+localsec.dll - Local Users and Groups MMC Snapin
+LocationApi.dll - Microsoft Windows Location API
+LocationFrameworkInternalPS.dll - Windows Geolocation Framework Internal PS
+LocationFrameworkPS.dll - Windows Geolocation Framework PS
+LockAppBroker.dll - Windows Lock App Broker DLL
+LockScreenData.dll - Windows Lock Screen Data DLL
+loghours.dll - Schedule Dialog
+logoncli.dll - Net Logon Client DLL
+lpk.dll - Language Pack
+lsmproxy.dll - LSM interfaces proxy Dll
+luiapi.dll - LUI API
+lxutil.dll - lxutil
+lz32.dll - LZ Expand/Compress API DLL
+Magnification.dll - Microsoft Magnification API
+MapConfiguration.dll - MapConfiguration
+MapControlCore.dll - Map Control Core
+MapControlStringsRes.dll - Map control resource strings
+MapGeocoder.dll - Maps Geocoder
+mapi32.dll - Extended MAPI 1.0 for Windows NT
+mapistub.dll - Extended MAPI 1.0 for Windows NT
+MapRouter.dll - Maps Router
+MapsBtSvc.dll - Maps Background Transfer Service
+MbaeApi.dll - Mobile Broadband Account Experience API
+MbaeApiPublic.dll - Mobile Broadband Account API
+mbsmsapi.dll - Microsoft Windows Mobile Broadband SMS API
+mbussdapi.dll - Microsoft Windows Mobile Broadband USSD API
+MCCSEngineShared.dll - Utilies shared among OneSync engines
+mciavi32.dll - Video For Windows MCI driver
+mcicda.dll - MCI driver for cdaudio devices
+mciqtz32.dll - DirectShow MCI Driver
+mciseq.dll - MCI driver for MIDI sequencer
+mciwave.dll - MCI driver for waveform audio
+MCRecvSrc.dll - Miracast Media Foundation Source DLL
+mdminst.dll - Modem Class Installer
+mdmlocalmanagement.dll - MDM Local Management DLL
+mdmregistration.dll - MDM Registration DLL
+MessagingDataModel2.dll - MessagingDataModel2
+mf.dll - Media Foundation DLL
+mf3216.dll - 32-bit to 16-bit Metafile Conversion DLL
+mfAACEnc.dll - Media Foundation AAC Encoder
+mfasfsrcsnk.dll - Media Foundation ASF Source and Sink DLL
+mfaudiocnv.dll - Media Foundation Audio Converter DLL
+mfc100.dll - MFCDLL Shared Library - Retail Version
+mfc100chs.dll - MFC Language Specific Resources
+mfc100cht.dll - MFC Language Specific Resources
+mfc100deu.dll - MFC Language Specific Resources
+mfc100enu.dll - MFC Language Specific Resources
+mfc100esn.dll - MFC Language Specific Resources
+mfc100fra.dll - MFC Language Specific Resources
+mfc100ita.dll - MFC Language Specific Resources
+mfc100jpn.dll - MFC Language Specific Resources
+mfc100kor.dll - MFC Language Specific Resources
+mfc100rus.dll - MFC Language Specific Resources
+mfc100u.dll - MFCDLL Shared Library - Retail Version
+mfc110.dll - MFCDLL Shared Library - Retail Version
+mfc110chs.dll - MFC Language Specific Resources
+mfc110cht.dll - MFC Language Specific Resources
+mfc110deu.dll - MFC Language Specific Resources
+mfc110enu.dll - MFC Language Specific Resources
+mfc110esn.dll - MFC Language Specific Resources
+mfc110fra.dll - MFC Language Specific Resources
+mfc110ita.dll - MFC Language Specific Resources
+mfc110jpn.dll - MFC Language Specific Resources
+mfc110kor.dll - MFC Language Specific Resources
+mfc110rus.dll - MFC Language Specific Resources
+mfc110u.dll - MFCDLL Shared Library - Retail Version
+mfc120.dll - MFCDLL Shared Library - Retail Version
+mfc120chs.dll - MFC Language Specific Resources
+mfc120cht.dll - MFC Language Specific Resources
+mfc120deu.dll - MFC Language Specific Resources
+mfc120enu.dll - MFC Language Specific Resources
+mfc120esn.dll - MFC Language Specific Resources
+mfc120fra.dll - MFC Language Specific Resources
+mfc120ita.dll - MFC Language Specific Resources
+mfc120jpn.dll - MFC Language Specific Resources
+mfc120kor.dll - MFC Language Specific Resources
+mfc120rus.dll - MFC Language Specific Resources
+mfc120u.dll - MFCDLL Shared Library - Retail Version
+mfc140.dll - MFCDLL Shared Library - Retail Version
+mfc140chs.dll - MFC Language Specific Resources
+mfc140cht.dll - MFC Language Specific Resources
+mfc140d.dll - MFCDLL Shared Library - Debug Version
+mfc140deu.dll - MFC Language Specific Resources
+mfc140enu.dll - MFC Language Specific Resources
+mfc140esn.dll - MFC Language Specific Resources
+mfc140fra.dll - MFC Language Specific Resources
+mfc140ita.dll - MFC Language Specific Resources
+mfc140jpn.dll - MFC Language Specific Resources
+mfc140kor.dll - MFC Language Specific Resources
+mfc140rus.dll - MFC Language Specific Resources
+mfc140u.dll - MFCDLL Shared Library - Retail Version
+mfc140ud.dll - MFCDLL Shared Library - Debug Version
+mfc40.dll - MFCDLL Shared Library - Retail Version
+mfc40u.dll - MFCDLL Shared Library - Retail Version
+mfc42.dll - MFCDLL Shared Library - Retail Version
+mfc42u.dll - MFCDLL Shared Library - Retail Version
+MFCaptureEngine.dll - Media Foundation CaptureEngine DLL
+mfcm100.dll - MFC Managed Library - Retail Version
+mfcm100u.dll - MFC Managed Library - Retail Version
+mfcm110.dll - MFC Managed Library - Retail Version
+mfcm110u.dll - MFC Managed Library - Retail Version
+mfcm120.dll - MFC Managed Library - Retail Version
+mfcm120u.dll - MFC Managed Library - Retail Version
+mfcm140.dll - MFC Managed Library - Retail Version
+mfcm140d.dll - MFC Managed Library - Debug Version
+mfcm140u.dll - MFC Managed Library - Retail Version
+mfcm140ud.dll - MFC Managed Library - Debug Version
+mfcore.dll - Media Foundation Core DLL
+mfcsubs.dll - COM+
+mfds.dll - Media Foundation Direct Show wrapper DLL
+mfdvdec.dll - Media Foundation DV Decoder
+mferror.dll - Media Foundation Error DLL
+mfh263enc.dll - Media Foundation h263 Encoder
+mfh264enc.dll - Media Foundation H264 Encoder
+mfksproxy.dll - Dshow MF Bridge DLL DLL
+MFMediaEngine.dll - Media Foundation Media Engine DLL
+mfmjpegdec.dll - Media Foundation MJPEG Decoder
+mfmkvsrcsnk.dll - Media Foundation MKV Media Source and Sink DLL 
+mfmp4srcsnk.dll - Media Foundation MPEG4 Source and Sink DLL
+mfmpeg2srcsnk.dll - Media Foundation MPEG2 Source and Sink DLL
+mfnetcore.dll - Media Foundation Net Core DLL
+mfnetsrc.dll - Media Foundation Net Source DLL
+mfperfhelper.dll - MFPerf DLL
+mfplat.dll - Media Foundation Platform DLL
+MFPlay.dll - Media Foundation Playback API DLL
+mfps.dll - Media Foundation Proxy DLL
+mfreadwrite.dll - Media Foundation ReadWrite DLL
+mfsensorgroup.dll - Media Foundation Sensor Group DLL
+mfsrcsnk.dll - Media Foundation Source and Sink DLL
+mfsvr.dll - Media Foundation Simple Video Renderer DLL
+mftranscode.dll - Media Foundation Transcode DLL
+mfvdsp.dll - Windows Media Foundation Video DSP Components
+mfvfw.dll - MF VFW MFT
+MFWMAAEC.DLL - Windows Media Audio AEC for Media Foundation
+mgmtapi.dll - Microsoft SNMP Manager API (uses WinSNMP)
+mi.dll - Management Infrastructure
+mibincodec.dll - Management Infrastructure binary codec component
+Microsoft.Bluetooth.Proxy.dll - Microsoft Bluetooth COM Proxy DLL
+Microsoft.Internal.FrameworkUdk.System.dll - Microsoft Framework UDK System DLL
+Microsoft.Management.Infrastructure.Native.Unmanaged.dll - Microsoft.Management.Infrastructure.Native.Unmanaged.dll
+Microsoft.Uev.AppAgent.dll - Microsoft.Uev.AppAgent DLL
+Microsoft.Uev.Office2010CustomActions.dll - Microsoft.Uev.Office2010CustomActions DLL
+Microsoft.Uev.Office2013CustomActions.dll - Microsoft.Uev.Office2013CustomActions DLL
+Microsoft.Windows.Storage.Core.dll -  
+Microsoft.Windows.Storage.StorageBusCache.dll -  
+MicrosoftAccountTokenProvider.dll - Microsoft® Account Token Provider
+MicrosoftAccountWAMExtension.dll - Microsoft Account WAM Extension DLL
+midimap.dll - Microsoft MIDI Mapper
+migisol.dll - Migration System Isolation Layer
+miguiresource.dll - MIG wini32 resources
+mimefilt.dll - MIME Filter
+mimofcodec.dll - Management Infrastructure mof codec component
+MinstoreEvents.dll - Minstore Event Resource
+MiracastReceiver.dll - Miracast Receiver API
+MiracastReceiverExt.dll - Miracast Receiver Extensions
+MirrorDrvCompat.dll - Mirror Driver Compatibility Helper
+mispace.dll - Storage Management Provider for Spaces
+MitigationConfiguration.dll - Exploit Guard Configuration Helper
+miutils.dll - Management Infrastructure
+MixedRealityRuntime.dll - MixedRealityRuntime DLL
+mlang.dll - Multi Language Support DLL
+MLS6.dll - Microsoft Neutral Natural Language Server Data and Code
+mmcbase.dll - MMC Base DLL
+mmcndmgr.dll - MMC Node Manager DLL
+mmcshext.dll - MMC Shell Extension DLL
+MMDevAPI.dll - MMDevice API
+mmgaclient.dll - MMGA
+mmgaproxystub.dll - MMGA
+mmres.dll - General Audio Resources
+mobilenetworking.dll - "MobileNetworking.DYNLINK"
+modemui.dll - Windows Modem Properties
+moricons.dll - Windows NT Setup Icon Resources Library
+MosHostClient.dll - MosHostClient
+MosStorage.dll - MosStorage
+MP3DMOD.DLL - Microsoft MP3 Decoder DMO
+MP43DECD.DLL - Windows Media MPEG-4 Video Decoder
+MP4SDECD.DLL - Windows Media MPEG-4 S Video Decoder
+MPG4DECD.DLL - Windows Media MPEG-4 Video Decoder
+mpr.dll - Multiple Provider Router DLL
+mprapi.dll - Windows NT MP Router Administration DLL
+mprddm.dll - Demand Dial Manager Supervisor
+mprdim.dll - Dynamic Interface Manager
+mprext.dll - Multiple Provider Router Extension DLL
+mprmsg.dll - Multi-Protocol Router Service Messages DLL
+MrmCoreR.dll - Microsoft Windows MRM
+MrmDeploy.dll - Microsoft Windows MRM Deployment
+MrmIndexer.dll - Microsoft Windows MRM
+mrt_map.dll - Microsoft .NET Native Error Reporting Helper
+mrt100.dll - Microsoft .NET Native Runtime
+ms3dthumbnailprovider.dll - 3D Builder
+msaatext.dll - Active Accessibility text support
+MSAC3ENC.DLL - Microsoft AC-3 Encoder
+msacm32.dll - Microsoft ACM Audio Filter
+msafd.dll - Microsoft Windows Sockets 2.0 Service Provider
+MSAJApi.dll - AllJoyn API Library
+MSAlacDecoder.dll - Media Foundation ALAC Decoder
+MSAlacEncoder.dll - Media Foundation ALAC Encoder
+MSAMRNBDecoder.dll - AMR Narrowband Decoder DLL
+MSAMRNBEncoder.dll - AMR Narrowband Encoder DLL
+MSAMRNBSink.dll - AMR Narrowband Sink DLL
+MSAMRNBSource.dll - AMR Narrowband Source DLL
+msasn1.dll - ASN.1 Runtime APIs
+MSAudDecMFT.dll - Media Foundation Audio Decoders
+msaudite.dll - Security Audit Events DLL
+msauserext.dll - MSA USER Extension DLL
+mscandui.dll - MSCANDUI Server DLL
+mscat32.dll - MSCAT32 Forwarder DLL
+msclmd.dll - Microsoft Class Mini-driver
+mscms.dll - Microsoft Color Matching System DLL
+mscoree.dll - Microsoft .NET Runtime Execution Engine
+mscorier.dll - Microsoft .NET Runtime IE resources
+mscories.dll - Microsoft .NET IE SECURITY REGISTRATION
+mscpx32r.dLL - ODBC Code Page Translator Resources
+mscpxl32.dLL - ODBC Code Page Translator
+msctf.dll - MSCTF Server DLL
+MsCtfMonitor.dll - MsCtfMonitor DLL
+msctfp.dll - MSCTFP Server DLL
+msctfui.dll - MSCTFUI Server DLL
+msctfuimanager.dll - Microsoft UIManager DLL
+msdadiag.dll - Built-In Diagnostics
+msdart.dll - OLE DB Runtime Routines
+msdelta.dll - Microsoft Patch Engine
+msdmo.dll - DMO Runtime
+msdrm.dll - Windows Rights Management client
+msdtcprx.dll - Microsoft Distributed Transaction Coordinator OLE Transactions Interface Proxy DLL
+msdtcspoffln.dll - Microsoft Distributed Transaction Coordinator SysPrep Specialize Offline DLL
+msdtcuiu.dll - Microsoft Distributed Transaction Coordinator Administrative DLL
+msdtcVSp1res.dll - Microsoft Distributed Transaction Coordinator Resources for Vista SP1
+msexch40.dll - Microsoft Jet Exchange Isam
+msexcl40.dll - Microsoft Jet Excel Isam
+msfeeds.dll - Microsoft Feeds Manager
+msfeedsbs.dll - Microsoft Feeds Background Sync
+MSFlacDecoder.dll - Media Foundation FLAC Decoder
+MSFlacEncoder.dll - Media Foundation FLAC Encoder
+msftedit.dll - Rich Text Edit Control, v8.5
+MSHEIF.dll - HEIF DLL
+mshtml.dll - Microsoft (R) HTML Viewer
+MshtmlDac.dll - DAC for Trident DOM
+mshtmled.dll - Microsoft® HTML Editing Component
+mshtmler.dll - Microsoft® HTML Editing Component's Resource DLL
+msi.dll - Windows Installer
+msidcrl40.dll - Microsoft® Account Dynamic Link Library
+msident.dll - Microsoft Identity Manager
+msidle.dll - User Idle Monitor
+msidntld.dll - Microsoft Identity Manager
+msieftp.dll - Microsoft Internet Explorer FTP Folder Shell Extension
+msihnd.dll - Windows® installer
+msiltcfg.dll - Windows Installer Configuration API Stub
+msimg32.dll - GDIEXT Client DLL
+msimsg.dll - Windows® Installer International Messages
+msimtf.dll - Active IMM Server DLL
+msisip.dll - MSI Signature SIP Provider
+msIso.dll - Isolation Library for Internet Explorer
+msiwer.dll - MSI Windows Error Reporting
+msjet40.dll - Microsoft Jet Engine Library
+msjetoledb40.dll - Microsoft OLE DB Provider for Jet
+msjint40.dll - Microsoft Jet Database Engine International DLL
+msjter40.dll - Microsoft Jet Database Engine Error DLL
+msjtes40.dll - Microsoft Jet Expression Service
+mskeyprotcli.dll - Windows Client Key Protection Provider
+mskeyprotect.dll - Microsoft Key Protection Provider
+msls31.dll - Microsoft Line Services library file
+msltus40.dll - Microsoft Jet Lotus 1-2-3 Isam
+msmpeg2adec.dll - Microsoft DTV-DVD Audio Decoder
+MSMPEG2ENC.DLL - Microsoft MPEG-2 Encoder
+msmpeg2vdec.dll - Microsoft DTV-DVD Video Decoder
+msobjs.dll - System object audit names
+msodbcdiag17.dll - Microsoft ODBC Driver 17.7 for SQL Server Diagnostics
+msodbcsql17.dll - Microsoft ODBC Driver 17.7 for SQL Server
+msoert2.dll - Microsoft Windows Mail RT Lib
+MSOpusDecoder.dll - Media Foundation Opus Decoder
+msorc32r.dll - ODBC Driver for Oracle Resources
+msorcl32.dll - ODBC Driver for Oracle
+mspatcha.dll - Microsoft File Patch Application API
+mspatchc.dll - Microsoft Patch Creation Engine
+mspbde40.dll - Microsoft Jet Paradox Isam
+MSPhotography.dll - MS Photography DLL
+msports.dll - Ports Class Installer
+msrating.dll - "msrating.DYNLINK"
+MSRAWImage.dll - MS RAW Image Decoder DLL
+msrd2x40.dll - Microsoft (R) Red ISAM
+msrd3x40.dll - Microsoft (R) Red ISAM
+msrdc.dll - Remote Differential Compression COM server
+MsRdpWebAccess.dll - Microsoft Remote Desktop Services Web Access Control
+msrepl40.dll - Microsoft Replication Library
+msrle32.dll - Microsoft RLE Compressor
+msscntrs.dll - PKM Perfmon Counter DLL
+mssign32.dll - Microsoft Trust Signing APIs
+mssip32.dll - MSSIP32 Forwarder DLL
+mssitlb.dll - mssitlb
+MsSpellCheckingFacility.dll - Microsoft Spell Checking Facility
+mssph.dll - Microsoft Search Protocol Handler
+mssprxy.dll - Microsoft Search Proxy
+mssrch.dll - Microsoft Embedded Search
+mssvp.dll - MSSearch Vista Platform
+mstask.dll - Task Scheduler interface DLL
+mstext40.dll - Microsoft Jet Text Isam
+mstscax.dll - Remote Desktop Services ActiveX Client
+msutb.dll - MSUTB Server DLL
+msv1_0.dll - Microsoft Authentication Package v1.0
+msvbvm60.dll - Visual Basic Virtual Machine
+msvcirt.dll - Windows NT IOStreams DLL
+msvcp_win.dll - Microsoft® C Runtime Library
+msvcp100.dll - Microsoft® C Runtime Library
+msvcp110_win.dll - Microsoft® STL110 C++ Runtime Library
+msvcp110.dll - Microsoft® C Runtime Library
+msvcp120_clr0400.dll - Microsoft® C Runtime Library
+msvcp120.dll - Microsoft® C Runtime Library
+msvcp140_1.dll - Microsoft® C Runtime Library _1
+msvcp140_1d.dll - Microsoft® C Runtime Library _1
+msvcp140_2.dll - Microsoft® C Runtime Library _2
+msvcp140_2d.dll - Microsoft® C Runtime Library _2
+msvcp140_atomic_wait.dll - Microsoft® C Runtime Library _atomic_wait
+msvcp140_clr0400.dll - Microsoft® C Runtime Library
+msvcp140_codecvt_ids.dll - Microsoft® C Runtime Library _codecvt_ids
+msvcp140.dll - Microsoft® C Runtime Library
+msvcp140d_atomic_wait.dll - Microsoft® C Runtime Library _atomic_wait
+msvcp140d_codecvt_ids.dll - Microsoft® C Runtime Library _codecvt_ids
+msvcp140d.dll - Microsoft® C Runtime Library
+msvcp60.dll - Windows NT C++ Runtime Library DLL
+msvcr100_clr0400.dll - Microsoft® .NET Framework
+msvcr100.dll - Microsoft® C Runtime Library
+msvcr110.dll - Microsoft® C Runtime Library
+msvcr120_clr0400.dll - Microsoft® C Runtime Library
+msvcr120.dll - Microsoft® C Runtime Library
+msvcrt.dll - Windows NT CRT DLL
+msvcrt20.dll - Microsoft® C Runtime Library
+msvcrt40.dll - VC 4.x CRT DLL (Forwarded to msvcrt.dll)
+msvfw32.dll - Microsoft Video for Windows DLL
+msvidc32.dll - Microsoft Video 1 Compressor
+MSVidCtl.dll - ActiveX control for streaming video
+MSVideoDSP.dll - Video Stabilization MFT
+MSVP9DEC.dll - Windows VP9 Video Decoder
+msvproc.dll - Media Foundation Video Processor
+MSVPXENC.dll - Windows VPX Video Encoder
+MSWB7.dll - MSWB7 DLL
+mswdat10.dll - Microsoft Jet Sort Tables
+MSWebp.dll - WEBP DLL
+mswmdm.dll - Windows Media Device Manager Core
+mswsock.dll - Microsoft Windows Sockets 2.0 Service Provider
+mswstr10.dll - Microsoft Jet Sort Library
+msxbde40.dll - Microsoft Jet xBASE Isam
+msxml3.dll - MSXML 3.0
+msxml3r.dll - XML Resources
+msxml6.dll - MSXML 6.0
+msxml6r.dll - XML Resources
+msyuv.dll - Microsoft UYVY Video Decompressor
+MTF.dll - "MTF.DYNLINK"
+mtxclu.dll - Microsoft Distributed Transaction Coordinator Failover Clustering Support DLL
+mtxdm.dll - COM+
+mtxex.dll - COM+
+mtxlegih.dll - COM+
+mtxoci.dll - Microsoft Distributed Transaction Coordinator Database Support DLL for Oracle
+muifontsetup.dll - MUI Callback for font registry settings
+mycomput.dll - Computer Management
+mydocs.dll - My Documents Folder UI
+NAPCRYPT.DLL - NAP Cryptographic API helper
+NapiNSP.dll - E-mail Naming Shim Provider
+NaturalLanguage6.dll - Natural Language Development Platform 6
+NcaApi.dll - Microsoft Network Connectivity Assistant API
+NcdProp.dll - Advanced network device properties
+nci.dll - CoInstaller: NET
+ncobjapi.dll - 
+ncrypt.dll - Windows NCrypt Router
+ncryptprov.dll - Microsoft KSP
+ncryptsslp.dll - Microsoft SChannel Provider
+nddeapi.dll - Network DDE Share Management APIs
+ndfapi.dll - Network Diagnostic Framework Client API
+ndfetw.dll - Network Diagnostic Engine Event Interface
+ndfhcdiscovery.dll - Network Diagnostic Framework HC Discovery API
+ndishc.dll - NDIS Helper Classes
+ndproxystub.dll - Network Diagnostic Engine Proxy/Stub
+negoexts.dll - NegoExtender Security Package
+netapi32.dll - Net Win32 API DLL
+netbios.dll - NetBIOS Interface Library
+netcenter.dll - Network Center control panel
+netcfgx.dll - Network Configuration Objects
+netcorehc.dll - Networking Core Diagnostics Helper Classes
+netdiagfx.dll - Network Diagnostic Framework
+NetDriverInstall.dll - Network Driver Installation
+netevent.dll - Net Event Handler
+netfxperf.dll - Extensible Performance Counter Shim
+neth.dll - Net Help Messages DLL
+netid.dll - System Control Panel Applet; Network ID Page
+netiohlp.dll - Netio Helper DLL
+netjoin.dll - Domain Join DLL
+netlogon.dll - Net Logon Services DLL
+netmsg.dll - Net Messages DLL
+netplwiz.dll - Map Network Drives/Network Places Wizard
+netprofm.dll - Network List Manager
+netprovfw.dll - Provisioning Service Framework DLL
+netprovisionsp.dll - Provisioning Service Provider DLL
+NetSetupApi.dll - Network Configuration API
+NetSetupEngine.dll - Network Configuration Engine
+NetSetupShim.dll - Network Configuration API
+netshell.dll - Network Connections Shell
+nettrace.dll - Network Trace Helper
+netutils.dll - Net Win32 API Helpers DLL
+NetworkCollectionAgent.dll - Network Collection Agent
+networkexplorer.dll - Network Explorer
+networkhelper.dll - Network utilities for mail, contacts, calendar
+networkitemfactory.dll - NetworkItem Factory
+newdev.dll - Add Hardware Device Library
+ngccredprov.dll - Microsoft Passport Credential Provider
+ngckeyenum.dll - Microsoft Passport Key Enumeration Manager
+ngcksp.dll - Microsoft Passport Key Storage Provider
+ngclocal.dll - NGC Local Account APIs
+ngcutils.dll - Microsoft Passport Utils Outside OneCore
+ninput.dll - Microsoft Pen and Touch Input Component
+nlaapi.dll - Network Location Awareness 2
+nlansp_c.dll - NLA Namespace Service Provider DLL
+nlhtml.dll - HTML filter
+nlmgp.dll - Network List Manager Snapin
+nlmproxy.dll - Network List Manager Public Proxy
+nlmsprep.dll - Network List Manager Sysprep Module
+nlsbres.dll - NLSBuild resource DLL
+NlsData0000.dll - Microsoft Neutral Natural Language Server Data and Code
+NlsData0009.dll - Microsoft English Natural Language Server Data and Code
+NlsData001d.dll - Microsoft Neutral Natural Language Server Data and Code
+Nlsdl.dll - Deprecated Nls Downlevel DLL
+NmaDirect.dll - Nma Direct
+noise.dll - Windows Noise Protocol Implementation
+normaliz.dll - Unicode Normalization DLL
+npmproxy.dll - Network List Manager Proxy
+NPSM.dll - NPSM
+NPSMDesktopProvider.dll - <d> NPSM Desktop Local Provider DLL
+nrtapi.dll - Name Resolution Tracker API
+nshhttp.dll - HTTP netsh DLL
+nshipsec.dll - Net Shell IP Security helper DLL
+nshwfp.dll - Windows Filtering Platform Netsh Helper
+nsi.dll - NSI User-mode interface DLL
+ntasn1.dll - Microsoft ASN.1 API
+ntdll.dll - NT Layer DLL
+ntdsapi.dll - Active Directory Domain Services API
+ntlanman.dll - Microsoft® Lan Manager
+ntlanui2.dll - Network object shell UI
+NtlmShared.dll - NTLM Shared Functionality
+ntmarta.dll - Windows NT MARTA provider
+ntprint.dll - Spooler Setup DLL
+ntshrui.dll - Shell extensions for sharing
+ntvdm64.dll - 16-bit Emulation on NT64
+nvapi.dll - NVIDIA NVAPI Library, Version 546.29 
+nvaudcap32v.dll - 
+nvcuda.dll - NVIDIA CUDA Driver, Version 546.29 
+nvcuvid.dll - NVIDIA CUDA Video Decode API, Version 546.29 
+nvEncodeAPI.dll - NVIDIA Video Encoder API, Version 11.0 
+NvFBC.dll - NVIDIA Frame Buffer Capture Library, Version 
+NvIFR.dll - NVIDIA In-band Frame Rendering Library, Version 
+nvofapi.dll - NVIDIA Optical Flow API, Version 5.0 
+nvspcap.dll - NVIDIA Game Proxy
+objsel.dll - Object Picker Dialog
+occache.dll - Object Control Viewer
+ocsetapi.dll - Windows Optional Component Setup API
+odbc32.dll - ODBC Driver Manager
+odbcbcp.dll - BCP for ODBC
+odbcconf.dll - ODBC Driver Configuration Program
+odbccp32.dll - ODBC Installer
+odbccr32.dll - ODBC Cursor Library
+odbccu32.dll - ODBC Cursor Library
+odbcint.dll - ODBC Resources
+odbcji32.dll - Microsoft ODBC Desktop Driver Pack 3.5
+odbcjt32.dll - Microsoft ODBC Desktop Driver Pack 3.5
+odbctrac.dll - ODBC Driver Manager Trace
+oddbse32.dll - ODBC (3.0) driver for DBase
+odexl32.dll - ODBC (3.0) driver for Excel
+odfox32.dll - ODBC (3.0) driver for FoxPro
+odpdx32.dll - ODBC (3.0) driver for Paradox
+odtext32.dll - ODBC (3.0) driver for text files
+oemlicense.dll - Client Licensing Platform Client Provisioning
+offfilt.dll - OFFICE Filter
+offlinelsa.dll - Windows
+offlinesam.dll - Windows
+offreg.dll - Offline registry DLL
+ole2.dll - Windows Win16 Application Launcher
+ole2disp.dll - Windows Win16 Application Launcher
+ole2nls.dll - Windows Win16 Application Launcher
+ole32.dll - Microsoft OLE for Windows
+oleacc.dll - Active Accessibility Core Component
+oleacchooks.dll - Active Accessibility Event Hooks Library
+oleaccrc.dll - Active Accessibility Resource DLL
+oleaut32.dll - OLEAUT32.DLL
+olecli32.dll - Object Linking and Embedding Client Library
+oledlg.dll - OLE User Interface Support
+oleprn.dll - Oleprn DLL
+olepro32.dll - OLEPRO32.DLL
+olesvr32.dll - Object Linking and Embedding Server Library
+olethk32.dll - Microsoft OLE for Windows
+omadmapi.dll - omadmapi
+OnDemandBrokerClient.dll - OnDemandBrokerClient
+OnDemandConnRouteHelper.dll - On Demand Connctiond Route Helper
+OneCoreCommonProxyStub.dll - OneCore Common Proxy Stub
+OneCoreUAPCommonProxyStub.dll - OneCoreUAP Common Proxy Stub
+OneSettingsClient.dll - Microsoft OneSettings Client
+onex.dll - IEEE 802.1X supplicant library
+onexui.dll - IEEE 802.1X supplicant UI library
+onnxruntime.dll - ONNX Runtime
+OpcServices.dll - Native Code OPC Services Library
+OpenCL.dll - OpenCL Client DLL
+opengl32.dll - OpenGL Client DLL
+ortcengine.dll - Microsoft Skype ORTC Engine
+osbaseln.dll - Service Reporting API
+osuninst.dll - Uninstall Interface
+P2P.dll - Peer-to-Peer Grouping
+P2PGraph.dll - Peer-to-Peer Graphing
+p2pnetsh.dll - Peer-to-Peer NetSh Helper
+p9np.dll - Plan 9 Network Provider
+packager.dll - Object Packager2
+panmap.dll - PANOSE(tm) Font Mapper
+pautoenr.dll - Auto Enrollment DLL
+PayloadRestrictions.dll - Payload Restrictions Mitigation Provider
+PaymentMediatorServiceProxy.dll - Payment Mediator Service Proxy
+pcacli.dll - Program Compatibility Assistant Client Module
+pcaui.dll - Program Compatibility Assistant User Interface Module
+PCPKsp.dll - Microsoft Platform Key Storage Provider for Platform Crypto Provider
+PCShellCommonProxyStub.dll - PCShell Common Proxy Stub
+pcwum.dll - Performance Counters for Windows Native DLL
+pdh.dll - Windows Performance Data Helper DLL
+pdhui.dll - PDH UI
+PeerDist.dll - BranchCache Client Library
+PeerDistSh.dll - BranchCache Netshell Helper
+PeopleAPIs.dll - DLL for PeopleRT
+PerceptionDevice.dll - Perception Device
+PerceptionSimulation.ProxyStubs.dll - Windows Perception Simulation Proxy Stubs
+perf_gputiming.dll - Performance Analyzer AddIn: Gputiming
+perfdisk.dll - Windows Disk Performance Objects DLL
+perfnet.dll - Windows Network Service Performance Objects DLL
+perfos.dll - Windows System Performance Objects DLL
+perfproc.dll - Windows System Process Performance Objects DLL
+perfts.dll - Windows Remote Desktop Services Performance Objects
+pfclient.dll - SysMain Client
+PhoneCallHistoryApis.dll - DLL for PhoneCallHistoryRT
+PhoneOm.dll - Phone Object Model
+PhonePlatformAbstraction.dll - Phone Platform Abstraction
+Phoneutil.dll - Phone utilities
+PhoneutilRes.dll - Resource DLL for Phone utilities
+PhotoMetadataHandler.dll - Photo Metadata Handler
+photowiz.dll - Photo Printing Wizard
+PickerPlatform.dll - PickerPlatform
+pid.dll - Microsoft PID
+pidgenx.dll - Pid Generation
+pifmgr.dll - Windows NT PIF Manager Icon Resources Library
+PimIndexMaintenanceClient.dll - Client dll for Pim Index Maintenance
+Pimstore.dll - POOM
+pku2u.dll - Pku2u Security Package
+pla.dll - Performance Logs & Alerts
+playlistfolder.dll - Playlist Folder
+PlaySndSrv.dll - PlaySound Service
+PlayToDevice.dll - PLAYTODEVICE DLL
+PlayToManager.dll - Microsoft Windows PlayTo Manager
+playtomenu.dll - Cast to Device Menu DLL
+PlayToReceiver.dll - DLNA DMR DLL
+PlayToStatusProvider.dll - PlayTo Status Provider Dll
+pngfilt.dll - IE PNG plugin image decoder
+pnrpnsp.dll - PNRP Name Space Provider
+policymanager.dll - Policy Manager DLL
+polstore.dll - Policy Storage dll
+PortableDeviceApi.dll - Windows Portable Device API Components
+PortableDeviceClassExtension.dll - Windows Portable Device Class Extension Component
+PortableDeviceConnectApi.dll - Portable Device Connection API Components
+PortableDeviceStatus.dll - Microsoft Windows Portable Device Status Provider
+PortableDeviceSyncProvider.dll - Microsoft Windows Portable Device Provider.
+PortableDeviceTypes.dll - Windows Portable Device (Parameter) Types Component
+PortableDeviceWiaCompat.dll - PortableDevice WIA Compatibility Driver
+POSyncServices.dll - Change Tracking
+pots.dll - Power Troubleshooter
+powercpl.dll - Power Options Control Panel
+powrprof.dll - Power Profile Helper DLL
+PresentationCFFRasterizerNative_v0300.dll - WinFX OpenType/CFF Rasterizer
+PresentationHostProxy.dll - Windows Presentation Foundation Host Proxy
+PresentationNative_v0300.dll - PresentationNative_v0300.dll
+prflbmsg.dll - Perflib Event Messages
+Print.PrintSupport.Source.dll - Microsoft Windows Print Support
+Print.Workflow.Source.dll - Microsoft Windows Print Workflow Source App Library
+PrintConfig.dll - PrintConfig User Interface
+PrintPlatformConfig.dll - Legacy Print Platform Adapter
+PrintRenderAPIHost.DLL - PDF Writer
+printui.dll - Printer Settings User Interface
+PrintWorkflowService.dll - Microsoft Windows Print Workflow Service Internal
+PrintWSDAHost.dll - PrintWSDAHost
+prncache.dll - Print UI Cache
+prnfldr.dll - prnfldr dll
+prnntfy.dll - prnntfy DLL
+prntvpt.dll - Print Ticket Services Module
+profapi.dll - User Profile Basic API
+profext.dll - profext
+propsys.dll - Microsoft Property System
+provcore.dll - Microsoft Wireless Provisioning Core
+provisioningcommandscsp.dll - Provisioning package command configuration service provider
+provmigrate.dll - Provisioning Migration Handler
+provplatformdesktop.dll - Provisioning platform for desktop editions
+provthrd.dll - WMI Provider Thread & Log Library
+ProximityCommon.dll - Proximity Common Implementation
+ProximityCommonPal.dll - Proximity Common PAL
+ProximityRtapiPal.dll - Proximity WinRT API PAL
+prvdmofcomp.dll - WMI
+prxyqry.dll - ProxyQuery
+psapi.dll - Process Status Helper
+PSHED.DLL - Platform Specific Hardware Error Driver
+psisdecd.dll - Microsoft SI/PSI parser for MPEG2 based networks.
+PSModuleDiscoveryProvider.dll - WMI
+pstorec.dll - Deprecated Protected Storage COM interfaces
+puiapi.dll - puiapi DLL
+puiobj.dll - PrintUI Objects DLL
+pwrshplugin.dll - pwrshplugin.dll
+pwrshsip.dll - Crypto SIP provider for signing and verifying PowerShell script files (.ps1/.ps1xml)
+qasf.dll - DirectShow ASF Support
+qcap.dll - DirectShow Runtime.
+qdv.dll - DirectShow Runtime.
+qdvd.dll - DirectShow DVD PlayBack Runtime.
+qedit.dll - DirectShow Editing.
+qedwipes.dll - DirectShow Editing SMPTE Wipes
+quartz.dll - DirectShow Runtime.
+Query.dll - Content Index Utility DLL
+qwave.dll - Windows NT
+RacEngn.dll - Reliability analysis metrics calculation engine
+racpldlg.dll - Remote Assistance Contact List
+radardt.dll - Microsoft Windows Resource Exhaustion Detector
+radarrs.dll - Microsoft Windows Resource Exhaustion Resolver
+RADCUI.dll - RemoteApp and Desktop Connection UI Component
+rasadhlp.dll - Remote Access AutoDial Helper
+rasapi32.dll - Remote Access API
+raschap.dll - Remote Access PPP CHAP
+raschapext.dll - Windows Extension library for raschap
+rasctrs.dll - Windows NT Remote Access Perfmon Counter dll
+rasdiag.dll - RAS Diagnostics Helper Classes
+rasdlg.dll - Remote Access Common Dialog API
+rasgcw.dll - RAS Wizard Pages
+rasman.dll - Remote Access Connection Manager
+rasmontr.dll - RAS Monitor DLL
+rasplap.dll - RAS PLAP Credential Provider
+rasppp.dll - Remote Access PPP
+rastapi.dll - Remote Access TAPI Compliance Layer
+rastls.dll - Remote Access PPP EAP-TLS
+rastlsext.dll - Windows Extension library for rastls
+rdpbase.dll - Rdp OneCore Base Services
+rdpendp.dll - RDP Audio Endpoint
+RdpSaPs.dll - RDP Session Agent Proxy Stub
+rdpserverbase.dll - Rdp Server OneCore Base Services
+rdpsharercom.dll - RDPSRAPI Sharer COM Objects
+rdpviewerax.dll - RDPSRAPI Viewer COM Objects and ActiveX
+rdvvmtransport.dll - RdvVmTransport EndPoints
+ReAgent.dll - Microsoft Windows Recovery Agent DLL
+regapi.dll - Registry Configuration APIs
+RegCtrl.dll - RegCtrl
+reguwpapi.dll - UWP Registry API
+ReInfo.dll - Microsoft Windows Recovery Info DLL
+remoteaudioendpoint.dll - Remote Audio Endpoint
+remotepg.dll - Remote Sessions CPL Extension
+RemoveDeviceContextHandler.dll - Devices & Printers Remove Device Context Menu Handler
+RemoveDeviceElevated.dll - RemoveDeviceElevated Proxy Dll
+RESAMPLEDMO.DLL - Windows Media Resampler
+ResourcePolicyClient.dll - Resource Policy Client
+resutils.dll - Microsoft Cluster Resource Utility DLL
+rgb9rast.dll - 
+riched20.dll - Rich Text Edit Control, v3.1
+riched32.dll - Wrapper Dll for Richedit 1.0
+rmclient.dll - Resource Manager Client
+rnr20.dll - Windows Socket2 NameSpace DLL
+rometadata.dll - Microsoft MetaData Library
+rpchttp.dll - RPC HTTP DLL
+RpcNs4.dll - Remote Procedure Call Name Service Client
+rpcnsh.dll - RPC Netshell Helper
+rpcrt4.dll - Remote Procedure Call Runtime
+RpcRtRemote.dll - Remote RPC Extension
+rsaenh.dll - Microsoft Enhanced Cryptographic Provider
+rshx32.dll - Security Shell Extension
+RstrtMgr.dll - Restart Manager
+rtffilt.dll - RTF Filter
+rtm.dll - Routing Table Manager
+rtmcodecs.dll - Microsoft Real Time Media Codec Library
+RTMediaFrame.dll - Windows Runtime MediaFrame DLL
+rtmmvrortc.dll - Microsoft Real Time Media ORTC Video Renderer
+rtmpal.dll - Microsoft Real Time Media Stack PAL
+rtmpltfm.dll - Microsoft Real Time Media Stack
+rtutils.dll - Routing Utilities
+RTWorkQ.dll - Realtime WorkQueue DLL
+samcli.dll - Security Accounts Manager Client DLL
+samlib.dll - SAM Library DLL
+sas.dll - WinLogon Software SAS Library
+sbe.dll - DirectShow Stream Buffer Filter.
+sbeio.dll - Stream Buffer IO DLL
+sberes.dll - DirectShow Stream Buffer Filter Resouces.
+scansetting.dll - Microsoft® Windows(TM) ScanSettings Profile and Scanning implementation
+SCardDlg.dll - SCardDlg - Smart Card Common Dialog
+scecli.dll - Windows Security Configuration Editor Client Engine
+scesrv.dll - Windows Security Configuration Editor Engine
+schannel.dll - TLS / SSL Security Provider
+schedcli.dll - Scheduler Service Client DLL
+scksp.dll - Microsoft Smart Card Key Storage Provider
+scripto.dll - Microsoft ScriptO
+scrobj.dll - Windows ® Script Component Runtime
+scrptadm.dll - Script Adm Extension
+scrrun.dll - Microsoft ® Script Runtime
+sdiageng.dll - Scripted Diagnostics Execution Engine
+sdiagprv.dll - Windows Scripted Diagnostic Provider API
+sdohlp.dll - NPS SDO Helper Component
+Search.ProtocolHandler.MAPI2.dll - Microsoft Search Protocol Handler for MAPI2
+SearchFolder.dll - SearchFolder
+SearchIndexerCore.dll - Search Indexer Core
+sechost.dll - Host for SCM/SDDL/LSA Lookup APIs
+secproc_isv.dll - Windows Rights Management Desktop Security Processor
+secproc_ssp_isv.dll - Windows Rights Management Services Server Security Processor (Pre-production)
+secproc_ssp.dll - Windows Rights Management Services Server Security Processor
+secproc.dll - Windows Rights Management Desktop Security Processor
+secur32.dll - Security Support Provider Interface
+security.dll - Security Support Provider Interface
+SecurityCenterBrokerPS.dll - SecurityCenterBrokerPS
+SEMgrPS.dll - SEMgrSvc Proxy
+sendmail.dll - Send Mail
+SensApi.dll - SENS Connectivity API DLL
+SensorsApi.dll - Sensor API
+SensorsCpl.dll - Open Location and Other Sensors
+SensorsNativeApi.dll - Sensors Native API
+SensorsNativeApi.V2.dll - Sensors Native API (V2 stack)
+SensorsUtilsV2.dll - Sensors v2 Utilities DLL
+serialui.dll - Serial Port Property Pages
+ServicingCommon.dll - Servicing Base DLL
+serwvdrv.dll - Unimodem Serial Wave driver
+SessEnv.dll - Remote Desktop Configuration service
+SettingSyncDownloadHelper.dll - SettingSyncDownloadHelper
+setupapi.dll - Windows Setup API
+setupcl.dll - System Clone Library
+setupcln.dll - Setup Files Cleanup
+sfc_os.dll - Windows File Protection
+sfc.dll - Windows File Protection
+shacct.dll - Shell Accounts Classes
+shacctprofile.dll - Shell Accounts Profile Classes
+ShareHost.dll - ShareHost
+SHCore.dll - SHCORE
+shdocvw.dll - Shell Doc Object and Control Library
+shell32.dll - Windows Shell Common Dll
+ShellCommonCommonProxyStub.dll - ShellCommon Common Proxy Stub
+shellstyle.dll - Windows Shell Style Resource Dll
+shfolder.dll - Shell Folder Service
+shgina.dll - Windows Shell User Logon
+shimeng.dll - Shim Engine DLL
+shimgvw.dll - Photo Gallery Viewer
+shlwapi.dll - Shell Light-weight Utility Library
+shpafact.dll - Windows Shell LUA/PA Elevation Factory Dll
+shsetup.dll - Shell setup helper
+shsvcs.dll - Windows Shell Services Dll
+shunimpl.dll - Windows Shell Obsolete APIs
+shutdownext.dll - Shutdown Graphic User Interface
+shwebsvc.dll - Windows Shell Web Services
+signdrv.dll - WMI provider for Signed Drivers
+SimAuth.dll - EAP SIM run-time dll
+SimCfg.dll - EAP SIM config dll
+slc.dll - Software Licensing Client Dll
+slcext.dll - Software Licensing Client Extension Dll
+slwga.dll - Software Licensing WGA API
+SmartcardCredentialProvider.dll - Windows Smartcard Credential Provider
+smartscreen.dll - SmartScreen Dynamic Link Library
+smartscreenps.dll - SmartScreenPS
+SMBHelperClass.dll - SMB (File Sharing) Helper Class for Network Diagnostic Framework
+smphost.dll - Storage Management Provider (SMP) host service
+SndVolSSO.dll - SCA Volume
+snmpapi.dll - SNMP Utility Library
+snmpmib.dll - Microsoft SNMP subagent
+snmpsnap.dll - SNMP snap-in
+socialapis.dll - DLL for SocialRT
+softkbd.dll - Soft Keyboard Server and Tip
+softpub.dll - Softpub Forwarder DLL
+SortServer2003Compat.dll - Sort Version Server 2003
+SortWindows61.dll - SortWindows61 Dll
+SortWindows62.dll - SortWindows62 Dll
+SortWindows63.dll - SortWindows63 Dll
+SortWindows6Compat.dll - Sort Version Windows 6.0
+spatialinteraction.dll - SpatialInteraction
+spbcd.dll - BCD Sysprep Plugin
+spfileq.dll - Windows SPFILEQ
+spinf.dll - Windows SPINF
+spnet.dll - Net Sysprep Plugin
+spopk.dll - OPK Sysprep Plugin
+spp.dll - Microsoft® Windows Shared Protection Point Library
+sppc.dll - Software Licensing Client Dll
+sppcext.dll - Software Protection Platform Client Extension Dll
+sppcomapi.dll - Software Licensing Library
+sppwmi.dll - Software Protection Platform WMI provider
+spwinsat.dll - WinSAT Sysprep Plugin
+spwizeng.dll - Setup Wizard Framework
+spwmp.dll - Windows Media Player System Preparation DLL
+SqlServerSpatial150.dll - SQL Server Spatial Library
+sqlsrv32.dll - SQL Server ODBC Driver
+sqlunirl.dll - String Function .DLL for SQL Enterprise Components
+sqlwid.dll - Unicode Function .DLL for SQL Enterprise Components
+sqlwoa.dll - Unicode/ANSI Function .DLL for SQL Enterprise Components
+sqmapi.dll - SQM Client
+srchadmin.dll - Indexing Options
+srclient.dll - Microsoft® Windows System Restore Client Library
+srm_ps.dll - Microsoft® FSRM internal proxy/stub
+srm.dll - Microsoft® File Server Resource Manager Common Library
+srmclient.dll - Microsoft® File Server Resource Management Client Extensions
+srmlib.dll - Microsoft (R) File Server Resource Management Interop Assembly
+srmscan.dll - Microsoft® File Server Storage Reports Scan Engine
+srmshell.dll - Microsoft® File Server Resource Management Shell Extension
+srmstormod.dll - Microsoft® File Server Resource Management Office Parser
+srmtrace.dll - Microsoft® File Server Resource Management Tracing Library
+srpapi.dll - SRP APIs Dll
+SrpUxNativeSnapIn.dll - Application Control Policies Group Policy Editor Extension
+srumapi.dll - System Resource Usage Monitor API
+srumsvc.dll - System Resource Usage Monitor Service
+srvcli.dll - Server Service Client DLL
+sscore.dll - Server Service Core DLL
+ssdm.dll - Spatial Audio Shared Memory Manager
+ssdpapi.dll - SSDP Client API DLL
+sspicli.dll - Security Support Provider Interface
+SSShim.dll - Windows Componentization Platform Servicing API
+sstpcfg.dll - SSTP config
+Startupscan.dll - Startup scan task DLL
+StateRepository.Core.dll - StateRepository Core
+stclient.dll - COM+ Configuration Catalog Client
+sti.dll - Still Image Devices client DLL 
+stobject.dll - Systray shell service object
+storage.dll - Windows Win16 Application Launcher
+StorageContextHandler.dll - Device Center Storage Context Menu Handler
+storagewmi_passthru.dll - WMI PassThru Provider for Storage Management
+storagewmi.dll - WMI Provider for Storage Management
+Storprop.dll - Property Pages for Storage Devices
+StructuredQuery.dll - Structured Query
+sud.dll - SUD Control Panel
+sxproxy.dll - Microsoft® Windows System Protection Proxy Library
+sxs.dll - Fusion 2.5
+sxshared.dll - Microsoft® Windows SX Shared Library
+sxsstore.dll - Sxs Store DLL
+SyncCenter.dll - Microsoft Sync Center
+SyncController.dll - SyncController for managing sync of mail, contacts, calendar
+SyncHostps.dll - Proxystub for sync host
+SyncInfrastructure.dll - Microsoft Windows Sync Infrastructure.
+SyncInfrastructureps.dll - Microsoft Windows sync infrastructure proxy stub.
+SyncProxy.dll - SyncProxy for RPC communication about sync of mail, contacts, calendar
+Syncreg.dll - Microsoft Synchronization Framework Registration
+SyncRes.dll - ActiveSync Resources
+SyncSettings.dll - Sync Settings
+syncutil.dll - Sync utilities for mail, contacts, calendar
+syssetup.dll - Windows NT System Setup
+systemcpl.dll - My System CPL
+SystemEventsBrokerClient.dll - system Events Broker Client Library
+SystemSettings.DataModel.dll - SystemSettings.Datamodel private API
+SystemSupportInfo.dll - Microsoft Windows operating system.
+t2embed.dll - Microsoft T2Embed Font Embedding
+tapi3.dll - Microsoft TAPI3
+tapi32.dll - Microsoft® Windows(TM) Telephony API Client DLL
+TapiMigPlugin.dll - Microsoft® Windows(TM) TAPI Migration Plugin Dll
+tapiperf.dll - Microsoft® Windows(TM) Telephony Performance Monitor
+tapisrv.dll - Microsoft® Windows(TM) Telephony Server
+TapiSysprep.dll - Microsoft® Windows(TM) Telephony Sysprep Work
+tapiui.dll - Microsoft® Windows(TM) Telephony API UI DLL
+TaskApis.dll - DLL for TaskRT
+taskcomp.dll - Task Scheduler Backward Compatibility Plug-in
+TaskManagerDataLayer.dll - 
+taskschd.dll - Task Scheduler COM API
+TaskSchdPS.dll - Task Scheduler Interfaces Proxy
+tbauth.dll - TBAuth protocol handler
+tbs.dll - TBS
+tcpipcfg.dll - Network Configuration Objects
+tcpmib.dll - Standard TCP/IP Port Monitor Helper DLL
+tcpmonui.dll - Standard TCP/IP Port Monitor UI DLL
+tdh.dll - Event Trace Helper Library
+tdhres.dll - Event Trace Helper Library Resources
+TEEManagement.dll - Intel(R) Dynamic Application Loader Host Interface DLL
+TempSignedLicenseExchangeTask.dll - TempSignedLicenseExchangeTask Task
+TenantRestrictionsPlugin.dll - Tenant Restrictions Plugin DLL
+termmgr.dll - Microsoft TAPI3 Terminal Manager
+tetheringclient.dll - Tethering Client
+TextInputFramework.dll - "TextInputFramework.DYNLINK"
+TextInputMethodFormatter.dll - TextInputMethodFormatter DLL
+TextShaping.dll - Microsoft Text Shaping Library
+themecpl.dll - Personalization CPL
+themeui.dll - Windows Theme API
+threadpoolwinrt.dll - Windows WinRT Threadpool
+thumbcache.dll - Microsoft Thumbnail Cache
+TileDataRepository.dll - Tile Data Repository
+TimeDateMUICallback.dll - Time Date Control UI Language Change plugin
+tlscsp.dll - Microsoft® Remote Desktop Services Cryptographic Utility
+tokenbinding.dll - Token Binding Protocol
+TokenBroker.dll - Token Broker
+TokenBrokerUI.dll - Token Broker UI
+TpmCertResources.dll - TpmCertResources
+tpmcompc.dll - Computer Chooser Dialog
+TpmCoreProvisioning.dll - TPM Core Provisioning Library
+tquery.dll - Microsoft Tripoli Query
+traffic.dll - Microsoft Traffic Control 1.0 DLL
+TrustedSignalCredProv.dll - TrustedSignal Credential Provider
+tsbyuv.dll - Toshiba Video Codec
+tsgqec.dll - RD Gateway QEC
+tsmf.dll - RDP MF Plugin
+TSpkg.dll - Web Service Security Package
+TSWorkspace.dll - RemoteApp and Desktop Connection Component
+ttdloader.dll - Time Travel Debugging Runtime Loader
+ttdplm.dll - Time Travel Debugger PLM APIs
+ttdrecord.dll - Time Travel Debugging Recording Manager
+ttdrecordcpu.dll - Time Travel Debugging CPU Recorder Runtime
+TtlsAuth.dll - EAP TTLS run-time dll
+TtlsCfg.dll - EAP TTLS configuration dll
+TtlsExt.dll - Windows Extension library for EAP TTLS
+tvratings.dll - Module for managing TV ratings
+twext.dll - Previous Versions property page
+twinapi.appcore.dll - twinapi.appcore
+twinapi.dll - twinapi
+twinui.appcore.dll - TWINUI.APPCORE
+twinui.dll - TWINUI
+txflog.dll - COM+
+txfw32.dll - TxF Win32 DLL
+typelib.dll - Windows Win16 Application Launcher
+tzautoupdate.dll - Auto Time Zone Updater
+tzres.dll - Time Zones resource DLL
+ucmhc.dll - UCM Helper Class
+ucrtbase_clr0400.dll - Microsoft® C Runtime Library
+ucrtbase.dll - Microsoft® C Runtime Library
+ucrtbased.dll - Microsoft® C Runtime Library
+udhisapi.dll - UPnP Device Host ISAPI Extension
+uexfat.dll - eXfat Utility DLL
+ufat.dll - FAT Utility DLL
+UiaManager.dll - UiaManager
+UIAnimation.dll - Windows Animation Manager
+UIAutomationCore.dll - Microsoft UI Automation Core
+uicom.dll - Add/Remove Modems
+UIManagerBrokerps.dll - Microsoft UIManager Broker Proxy Stub
+uireng.dll - UI Recording Engine Library
+UIRibbon.dll - Windows Ribbon Framework
+ulib.dll - File Utilities Support DLL
+umdmxfrm.dll - Unimodem Tranform Module
+umpdc.dll - User Mode Power Dependency Coordinator
+unenrollhook.dll - unenrollhook DLL
+unimdmat.dll - Unimodem Service Provider AT Mini Driver
+uniplat.dll - Unimodem AT Mini Driver Platform Driver for Windows NT
+Unistore.dll - Unified Store
+untfs.dll - NTFS Utility DLL
+upnp.dll - UPnP Control Point API
+upnphost.dll - UPnP Device Host
+uReFS.dll - UREFS Utility DLL
+uReFSv1.dll - NTFS Utility DLL
+ureg.dll - Registry Utility DLL
+url.dll - Internet Shortcut Shell Extension DLL
+urlmon.dll - OLE32 Extensions for Win32
+usbceip.dll - USBCEIP Task
+usbperf.dll - USB Performance Objects DLL
+usbui.dll - USB UI Dll
+user32.dll - Multi-User Windows USER API Client DLL
+UserAccountControlSettings.dll - UserAccountControlSettings
+useractivitybroker.dll - useractivitybroker
+usercpl.dll - User control panel
+UserDataAccessRes.dll - Resource DLL for the UserDataAccess stack
+UserDataAccountApis.dll - DLL for UserDataAccountsRT
+UserDataLanguageUtil.dll - Language-related helper functions for user data
+UserDataPlatformHelperUtil.dll - Platform Utilities for data access
+UserDataTimeUtil.dll - Time-related helper functions for user data
+UserDataTypeHelperUtil.dll - Type Utilities for data access
+UserDeviceRegistration.dll - AAD User Device Registration WinRT
+UserDeviceRegistration.Ngc.dll - AD/AAD User Device Registration WinRT
+userenv.dll - Userenv
+userinitext.dll - UserInit Utility Extension DLL
+UserLanguageProfileCallback.dll - MUI Callback for User Language profile changed
+usermgrcli.dll - UserMgr API DLL
+UserMgrProxy.dll - UserMgrProxy
+usoapi.dll - Update Session Orchestrator API
+usp10.dll - Uniscribe Unicode script processor
+ustprov.dll - User State WMI Provider
+utcapi.dll - Microsoft Diagtrack RPC API surface
+utildll.dll - WinStation utility support DLL
+uudf.dll - UDF Utility DLL
+UXInit.dll - Windows User Experience Session Initialization Dll
+uxlib.dll - Setup Wizard Framework
+uxlibres.dll - UXLib Resources
+uxtheme.dll - Microsoft UxTheme Library
+VAN.dll - View Available Networks
+Vault.dll - Windows vault Control Panel
+vaultcli.dll - Credential Vault Client Library
+vbajet32.dll - Visual Basic for Applications Development Environment - Expression Service Loader
+vbscript.dll - Microsoft ® VBScript
+vcamp110.dll - Microsoft® C++ AMP Runtime
+vcamp120.dll - Microsoft® C++ AMP Runtime
+vcamp140.dll - Microsoft® C++ AMP Runtime
+vcamp140d.dll - Microsoft® C++ AMP Runtime
+VCardParser.dll - Supports the parsing of VCard and ICal formatted data
+vccorlib110.dll - Microsoft ® VC WinRT core library
+vccorlib120.dll - Microsoft ® VC WinRT core library
+vccorlib140.dll - Microsoft ® VC WinRT core library
+vccorlib140d.dll - Microsoft ® VC WinRT core library
+vcomp100.dll - Microsoft® C/C++ OpenMP Runtime
+vcomp110.dll - Microsoft® C/C++ OpenMP Runtime
+vcomp120.dll - Microsoft® C/C++ OpenMP Runtime
+vcomp140.dll - Microsoft® C/C++ OpenMP Runtime
+vcomp140d.dll - Microsoft® C/C++ OpenMP Runtime
+vcruntime140_clr0400.dll - Microsoft® C Runtime Library
+vcruntime140_threads.dll - Microsoft® C Runtime Library
+vcruntime140.dll - Microsoft® C Runtime Library
+vcruntime140d.dll - Microsoft® C Runtime Library
+vdmdbg.dll - VDMDBG.DLL
+vds_ps.dll - Microsoft® Virtual Disk Service proxy/stub
+verifier.dll - Standard application verifier provider dll
+version.dll - Version Checking and File Installation Libraries
+vfbasics.dll - Application Verifier Provider - Basics Provider
+vfcompat.dll - Application Verifier Provider - OS compatibility issues detection.
+vfcuzz.dll - Application Verifier Provider - Cuzz Provider
+vfluapriv.dll - Application Verifier Provider - LuaPriv Provider
+vfnet.dll - Application Verifier Provider - Networking Provider
+vfntlmless.dll - Application Verifier Provider - NTLMLess Provider
+vfnws.dll - Application Verifier Provider - Native Web Services
+vfprint.dll - Application Verifier Provider - Printing Provider
+vfprintpthelper.dll - Application Verifier Provider - Printing PT Provider
+vfrdvcompat.dll - Application Verifier Provider - Terminal Services Compatibility Provider
+vfwwdm32.dll - VfW MM Driver for WDM Video Capture Devices
+VIDRESZR.DLL - Windows Media Resizer
+virtdisk.dll - Virtual Disk API DLL
+VirtualSurroundApo.dll - VirtualSurround APO
+VoiceActivationManager.dll - Windows Voice Activation Manager
+VoipRT.dll - Voip Runtime
+vpnikeapi.dll - VPN IKE API's
+vrfcore.dll - Application Verifier Provider - Core Verification and SDK
+VscMgrPS.dll - Microsoft Virtual Smart Card Manager Proxy/Stub
+vscover170.dll - Code Coverage Collection DLL
+VSD3DRefDebug.dll - VSD3D Debugger for Direct3D 11 Reference Device
+VSD3DWARPDebug.dll - Direct3D Rasterizer Shader Debugging Helper
+VsGraphicsCapture.dll - Microsoft Visual Studio Graphics Capture
+VsGraphicsExperiment.dll - VsGraphics Experiment Dll
+VsGraphicsHelper.dll - Microsoft Visual Studio Graphics Helper DLL
+VsGraphicsProxyStub.dll - Microsoft Visual Studio Graphics Engine Proxy-Stub DLL
+VSPerf170.dll - VSPerf Data Collection DLL
+vss_ps.dll - Microsoft® Volume Shadow Copy Service proxy/stub
+vssapi.dll - Microsoft® Volume Shadow Copy Requestor/Writer Services API DLL
+vsstrace.dll - Microsoft® Volume Shadow Copy Service Tracing Library
+vulkan-1-999-0-0-0.dll - Vulkan Loader
+vulkan-1.dll - Vulkan Loader
+w32topl.dll - Windows NT Topology Maintenance Tool
+WABSyncProvider.dll - Microsoft Windows Contacts Sync Provider
+WalletBackgroundServiceProxy.dll - Wallet Background Proxy
+WalletProxy.dll - Wallet proxy
+wavemsp.dll - Microsoft Wave MSP
+wbemcomn.dll - WMI
+wcmapi.dll - Windows Connection Manager Client API
+WcnApi.dll - Windows Connect Now - API Helper DLL
+wcnwiz.dll - Windows Connect Now Wizards
+wdc.dll - Performance Monitor
+wdi.dll - Windows Diagnostic Infrastructure
+wdigest.dll - Microsoft Digest Access
+wdscore.dll - Panther Engine Module
+webauthn.dll - Web Authentication
+WebcamUi.dll - 
+webcheck.dll - Web Site Monitor
+WebClnt.dll - Web DAV Service DLL
+webio.dll - Web Transfer Protocols API
+webplatstorageserver.dll - "webplatstorageserver.DYNLINK"
+webservices.dll - Windows Web Services Runtime
+Websocket.dll - Web Socket API
+wecapi.dll - Event Collector Configuration API
+wer.dll - Windows Error Reporting DLL
+werdiagcontroller.dll - WER Diagnostic Controller
+WerEnc.dll - Windows Error Reporting Dump Encoding Library
+weretw.dll - WERETW.DLL
+werui.dll - Windows Error Reporting UI DLL
+wevtapi.dll - Eventing Consumption and Configuration API
+wevtfwd.dll - WS-Management Event Forwarding Plug-in
+wfapigp.dll - Windows Defender Firewall GPO Helper dll
+wfdprov.dll - Private WPS provisioning API DLL for Wi-Fi Direct
+WfHC.dll - Windows Defender Firewall  Helper Class
+whhelper.dll - Net shell helper DLL for winHttp
+wiaaut.dll - WIA Automation Layer
+wiadefui.dll - WIA Scanner Default UI
+wiadss.dll - WIA TWAIN compatibility layer
+wiascanprofiles.dll - Microsoft Windows ScanProfiles
+wiashext.dll - Imaging Devices Shell Folder UI
+wiatrace.dll - WIA Tracing
+WiFiDisplay.dll - Wi-Fi Display DLL
+wimgapi.dll - Windows Imaging Library
+win32u.dll - Win32u
+winbio.dll - Windows Biometrics Client API
+winbioext.dll - Windows Biometrics Client Extension API
+winbrand.dll - Windows Branding Resources
+wincorlib.dll - Microsoft Windows ® WinRT core library
+wincredprovider.dll - wincredprovider DLL
+wincredui.dll - Credential Manager User Internal Interface
+WindowManagementAPI.dll - Window Management API
+Windows.AccountsControl.dll - Windows Accounts Control
+Windows.AI.MachineLearning.dll - Windows Machine Learning Runtime
+Windows.AI.MachineLearning.Preview.dll - WinRT Windows Machine Learning Preview DLL
+Windows.ApplicationModel.Background.SystemEventsBroker.dll - Windows Background System Events Broker API Server
+Windows.ApplicationModel.Background.TimeBroker.dll - Windows Background Time Broker API Server
+Windows.ApplicationModel.ConversationalAgent.dll - Windows Voice Agent Services DLL
+windows.applicationmodel.conversationalagent.internal.proxystub.dll - Windows Voice Agent Services Internal Proxy Stub DLL
+windows.applicationmodel.conversationalagent.proxystub.dll - Windows Voice Agent Services Proxy Stub DLL
+Windows.ApplicationModel.Core.dll - Windows Application Model Core API
+windows.applicationmodel.datatransfer.dll - Windows.ApplicationModel.DataTransfer
+Windows.ApplicationModel.dll - Windows ApplicationModel API Server
+Windows.ApplicationModel.LockScreen.dll - Windows Lock Application Framework DLL
+Windows.ApplicationModel.Store.dll - Microsoft Store Runtime DLL
+Windows.ApplicationModel.Store.Preview.DOSettings.dll - Delivery Optimization Settings
+Windows.ApplicationModel.Store.TestingFramework.dll - Microsoft Store Testing Framework Runtime DLL
+Windows.ApplicationModel.Wallet.dll - Windows ApplicationModel Wallet Runtime DLL
+Windows.Data.Pdf.dll - PDF WinRT APIs
+Windows.Devices.AllJoyn.dll - Windows.Devices.AllJoyn DLL
+Windows.Devices.Background.dll - Windows.Devices.Background
+Windows.Devices.Background.ps.dll - Windows.Devices.Background Interface Proxy
+Windows.Devices.Bluetooth.dll - Windows.Devices.Bluetooth DLL
+Windows.Devices.Custom.dll - Windows.Devices.Custom
+Windows.Devices.Custom.ps.dll - Windows.Devices.Custom Interface Proxy
+Windows.Devices.Enumeration.dll - Windows.Devices.Enumeration
+Windows.Devices.Haptics.dll - Windows Runtime Haptics DLL
+Windows.Devices.HumanInterfaceDevice.dll - Windows.Devices.HumanInterfaceDevice DLL
+Windows.Devices.Lights.dll - Windows Runtime Lights DLL
+Windows.Devices.LowLevel.dll - Windows.Devices.LowLevel DLL
+Windows.Devices.Midi.dll - Windows Runtime MIDI Device server DLL
+Windows.Devices.Perception.dll - Windows Devices Perception API
+Windows.Devices.Picker.dll - Device Picker
+Windows.Devices.PointOfService.dll - Windows Runtime PointOfService DLL
+Windows.Devices.Portable.dll - Windows Runtime Portable Devices DLL
+Windows.Devices.Printers.dll - Windows Runtime Devices Printers DLL
+Windows.Devices.Printers.Extensions.dll - Windows.Devices.Printers.Extensions
+Windows.Devices.Radios.dll - Windows.Devices.Radios DLL
+Windows.Devices.Scanners.dll - Windows Runtime Devices Scanners DLL
+Windows.Devices.Sensors.dll - Windows Runtime Sensors DLL
+Windows.Devices.SerialCommunication.dll - Windows.Devices.SerialCommunication DLL
+Windows.Devices.SmartCards.dll - Windows Runtime Smart Card API DLL
+Windows.Devices.SmartCards.Phone.dll - Windows Runtime Phone Smart Card Api DLL
+Windows.Devices.Usb.dll - Windows Runtime Usb DLL
+Windows.Devices.WiFi.dll - Windows.Devices.WiFi DLL
+Windows.Devices.WiFiDirect.dll - Windows.Devices.WiFiDirect DLL
+Windows.Energy.dll - Windows Energy Runtime DLL
+Windows.FileExplorer.Common.dll - Windows.FileExplorer.Common
+Windows.Gaming.Input.dll - Windows Gaming Input API
+Windows.Gaming.Preview.dll - Windows Gaming API Preview
+Windows.Gaming.UI.GameBar.dll - Windows Gaming UI API GameBar
+Windows.Gaming.XboxLive.Storage.dll - Xbox Connected Storage WinRT implementation
+Windows.Globalization.dll - Windows Globalization
+Windows.Globalization.Fontgroups.dll - Fonts Mapping API
+Windows.Globalization.PhoneNumberFormatting.dll - Windows Libphonenumber OSS component
+Windows.Graphics.Display.BrightnessOverride.dll - Windows Runtime Brightness Override DLL
+Windows.Graphics.Display.DisplayEnhancementOverride.dll - Windows Runtime Display Enhancement Override DLL
+Windows.Graphics.dll - WinRT Windows Graphics DLL
+Windows.Graphics.Printing.3D.dll - Microsoft Windows Printing Support
+Windows.Graphics.Printing.dll - Microsoft Windows Printing Support
+Windows.Graphics.Printing.Workflow.dll - Microsoft Windows Print Workflow
+Windows.Graphics.Printing.Workflow.Native.dll - Microsoft Windows Print Workflow Native
+Windows.Internal.Devices.Bluetooth.dll - Windows.Internal.Devices.Bluetooth DLL
+Windows.Internal.Devices.Sensors.dll - Windows Runtime Sensors (Internal) DLL
+Windows.Internal.Graphics.Display.DisplayColorManagement.dll - Windows Runtime Display Color Management DLL
+Windows.Internal.Graphics.Display.DisplayEnhancementManagement.dll - Windows Runtime Display Enhancement Management DLL
+Windows.Internal.Management.dll - Windows Managent Service DLL
+Windows.Internal.SecurityMitigationsBroker.dll - Windows Security Mitigations Broker DLL
+windows.internal.shellcommon.AccountsControlExperience.dll - Shell Position default shell contract handler
+windows.internal.shellcommon.AppResolverModal.dll - App resolver default shell contract handler
+Windows.Internal.ShellCommon.PrintExperience.dll - Print Experience default shell contract handler
+windows.internal.shellcommon.TokenBrokerModal.dll - Token broker default shell contract handler
+Windows.Internal.UI.Dialogs.dll - Windows.Internal.UI.Dialogs.dll
+Windows.Internal.UI.Logon.ProxyStub.dll - Logon User Experience Proxy Stub
+Windows.Internal.UI.Shell.WindowTabManager.dll - Windows.Internal.UI.Shell.WindowTabManager
+Windows.Management.Workplace.dll - Windows Runtime MdmPolicy DLL
+Windows.Management.Workplace.WorkplaceSettings.dll - Windows Runtime WorkplaceSettings DLL
+Windows.Media.Audio.dll - Windows Runtime Window Media Audio server DLL
+Windows.Media.BackgroundMediaPlayback.dll - Windows Media BackgroundMediaPlayback DLL
+Windows.Media.Devices.dll - Windows Runtime media device server DLL
+Windows.Media.dll - Windows Media Runtime DLL
+Windows.Media.Editing.dll - Windows Media Editing DLL
+Windows.Media.FaceAnalysis.dll - Microsoft (R) Face Detection DLL
+Windows.Media.Import.dll - Windows Photo Import API (WinRT/COM)
+Windows.Media.MediaControl.dll - Windows Runtime MediaControl server DLL
+Windows.Media.MixedRealityCapture.dll - "Windows.Media.MixedRealityCapture.DYNLINK"
+Windows.Media.Ocr.dll - Windows OCR Runtime DLL
+Windows.Media.Playback.BackgroundMediaPlayer.dll - Windows Media Playback BackgroundMediaPlayer DLL
+Windows.Media.Playback.MediaPlayer.dll - Windows Media Playback MediaPlayer DLL
+Windows.Media.Playback.ProxyStub.dll - BackgroundMediaPlayer Proxy Stub DLL
+Windows.Media.Protection.PlayReady.dll - Microsoft PlayReady Client Framework Dll
+Windows.Media.Speech.dll - Windows Speech Runtime DLL
+Windows.Media.Streaming.dll - DLNA DLL
+Windows.Media.Streaming.ps.dll - DLNA Proxy-Stub DLL
+Windows.Mirage.dll - Windows Perception API
+Windows.Mirage.Internal.dll - "Windows.Mirage.Internal.DYNLINK"
+Windows.Networking.BackgroundTransfer.BackgroundManagerPolicy.dll - Background Transfer Background Manager Policy DLL
+Windows.Networking.BackgroundTransfer.dll - Windows.Networking.BackgroundTransfer DLL
+Windows.Networking.Connectivity.dll - Windows Networking Connectivity Runtime DLL
+Windows.Networking.dll - Windows.Networking DLL
+Windows.Networking.HostName.dll - Windows.Networking.HostName DLL
+Windows.Networking.NetworkOperators.ESim.dll - ESIM API
+Windows.Networking.NetworkOperators.HotspotAuthentication.dll - Microsoft Windows Hotspot Authentication API
+Windows.Networking.Proximity.dll - Windows Runtime Proximity API DLL
+Windows.Networking.ServiceDiscovery.Dnssd.dll - Windows.Networking.ServiceDiscovery.Dnssd DLL
+Windows.Networking.Sockets.PushEnabledApplication.dll - Windows.Networking.Sockets.PushEnabledApplication DLL
+Windows.Networking.Vpn.dll - Windows.Networking.Vpn DLL
+Windows.Networking.XboxLive.ProxyStub.dll - Windows.Networking.XboxLive Proxy Stub Dll
+Windows.Payments.dll - Payment Windows Runtime DLL
+Windows.Perception.Stub.dll - Windows Perception Api Stub
+Windows.Security.Authentication.Identity.Provider.dll - Secondary Factor Authentication Windows Runtime DLL
+Windows.Security.Authentication.OnlineId.dll - Windows Runtime OnlineId Authentication DLL
+Windows.Security.Authentication.Web.Core.dll - Token Broker WinRT API
+Windows.Security.Credentials.UI.CredentialPicker.dll - WinRT Credential Picker Server
+Windows.Security.Credentials.UI.UserConsentVerifier.dll - Windows User Consent Verifier API
+Windows.Security.Integrity.dll - Windows S-Mode and App Control API Server
+Windows.Services.TargetedContent.dll - Windows.Services.TargetedContent
+Windows.Shell.ServiceHostBuilder.dll - Windows.Shell.ServiceHostBuilder
+Windows.StateRepository.dll - Windows StateRepository API Server
+Windows.StateRepositoryBroker.dll - Windows StateRepository API Broker
+Windows.StateRepositoryClient.dll - Windows StateRepository Client API
+Windows.StateRepositoryCore.dll - Windows StateRepository API Core
+Windows.StateRepositoryPS.dll - Windows StateRepository Proxy/Stub Server
+Windows.StateRepositoryUpgrade.dll - Windows StateRepository Upgrade
+Windows.Storage.ApplicationData.dll - Windows Application Data API Server
+Windows.Storage.Compression.dll - WinRT Compression
+windows.storage.dll - Microsoft WinRT Storage API
+Windows.Storage.OneCore.dll - Microsoft Windows.Storage OneCore API
+Windows.Storage.Search.dll - Windows.Storage.Search
+Windows.System.Diagnostics.dll - Windows System Diagnostics DLL
+Windows.System.Diagnostics.Telemetry.PlatformTelemetryClient.dll - Platform Telemetry Client DLL
+Windows.System.Diagnostics.TraceReporting.PlatformDiagnosticActions.dll - Platform Diagnostic Actions DLL
+Windows.System.Launcher.dll - Windows.System.Launcher
+Windows.System.Profile.HardwareId.dll - Windows System Profile HardwareId DLL
+Windows.System.Profile.PlatformDiagnosticsAndUsageDataSettings.dll - Platform Diagnostics and Usage Settings DLL
+Windows.System.Profile.RetailInfo.dll - Windows.System.Profile.RetailInfo Runtime DLL
+Windows.System.Profile.SystemId.dll - Windows System Profile SystemId DLL
+Windows.System.Profile.SystemManufacturers.dll - Windows.System.Profile.SystemManufacturers
+Windows.System.RemoteDesktop.dll - Windows System RemoteDesktop Runtime DLL
+Windows.System.SystemManagement.dll - Windows Runtime SystemManagement DLL
+Windows.System.UserDeviceAssociation.dll - Windows System User Device Association API
+Windows.System.UserProfile.DiagnosticsSettings.dll - Diagnostics Settings DLL
+Windows.UI.Accessibility.dll - Windows.UI.Accessibility System DLL
+Windows.UI.Core.TextInput.dll - Windows.UI.Core.TextInput dll
+Windows.UI.Cred.dll - Credential Prompt User Experience
+Windows.UI.CredDialogController.dll - Credential UX Dialog Controller
+Windows.UI.dll - Windows Runtime UI Foundation DLL
+Windows.UI.FileExplorer.dll - Windows.UI.FileExplorer
+Windows.UI.FileExplorer.WASDK.dll - Windows.UI.FileExplorer.WASDK
+Windows.UI.Immersive.dll - WINDOWS.UI.IMMERSIVE
+Windows.UI.Input.Inking.Analysis.dll - Windows.UI.Input.Inking.Analysis.dll
+Windows.UI.Input.Inking.dll - WinRT Windows Inking DLL
+Windows.UI.Search.dll - Windows.UI.Search
+Windows.UI.Xaml.Controls.dll - Windows.UI.Xaml.Controls
+Windows.UI.Xaml.dll - Windows.UI.Xaml dll
+Windows.UI.Xaml.InkControls.dll - Windows UI XAML InkControls API
+Windows.UI.Xaml.Maps.dll - Windows UI XAML Maps API
+Windows.UI.Xaml.Phone.dll - Windows UI XAML Phone API
+Windows.UI.XamlHost.dll - XAML Host
+Windows.Web.Diagnostics.dll - Windows.Web.Diagnostics
+Windows.Web.dll - Web Client DLL
+Windows.Web.Http.dll - Windows.Web.Http DLL
+WindowsCodecs.dll - Microsoft Windows Codecs Library
+WindowsCodecsExt.dll - Microsoft Windows Codecs Extended Library
+WindowsDefaultHeatProcessor.dll - Microsoft (R) Windows default HEAT processor
+windowsdefenderapplicationguardcsp.dll - Microsoft Defender Application Guard CSP
+windowslivelogin.dll - Microsoft® Account Login Helper
+windowsperformancerecordercontrol.dll - Microsoft Windows Performance Recorder Control Library
+windowsudk.shellcommon.dll - Windows Undocked Dev Kit Shellcommon DLL
+winhttp.dll - Windows HTTP Services
+winhttpcom.dll - Windows COM interface for WinHttp
+wininet.dll - Internet Extensions for Win32
+wininetlui.dll - Provides legacy UI for wininet
+wininitext.dll - WinInit Utility Extension DLL
+winipcfile.dll - Microsoft Active Directory Rights Management Services File API
+winipcsecproc.dll - Microsoft Active Directory Rights Management Services Desktop Security Processor
+winipsec.dll - Windows IPsec SPD Client DLL
+Winlangdb.dll - Windows Bcp47 Language Database
+winml.dll - Windows Machine Learning Runtime
+winmm.dll - MCI API DLL
+winmmbase.dll - Base Multimedia Extension API DLL
+winmsipc.dll - Microsoft Active Directory Rights Management Services Client
+WinMsoIrmProtector.dll - Windows Office file format IRM Protector
+winnlsres.dll - NLSBuild resource DLL
+winnsi.dll - Network Store Information RPC interface
+WinOpcIrmProtector.dll - Windows Office file format IRM Protector
+winrnr.dll - LDAP RnR Provider DLL
+winrscmd.dll - remtsvc
+winrsmgr.dll - WSMan Shell API
+winrssrv.dll - winrssrv
+WinRtTracing.dll - Windows Diagnostics Tracing
+WinSATAPI.dll - Windows System Assessment Tool API
+WinSCard.dll - Microsoft Smart Card API
+winshfhc.dll - File Risk Estimation
+winsku.dll - Windows SKU Library
+winsockhc.dll - Winsock Network Diagnostic Helper Class
+winsqlite3.dll - SQLite is a software library that implements a self-contained, serverless, zero-configuration, transactional SQL database engine.
+WINSRPC.DLL - WINS RPC LIBRARY
+winsta.dll - Winstation Library
+WinSync.dll - Synchronization Framework
+WinSyncMetastore.dll - Windows Synchronization Metadata Store
+WinSyncProviders.dll - Windows Synchronization Provider Framework
+wintrust.dll - Microsoft Trust Verification APIs
+WinTypes.dll - Windows Base Types DLL
+WinUICohabitation.dll - 
+winusb.dll - Windows USB Driver User Library
+wisp.dll - Microsoft Pen and Touch Input Component
+wkscli.dll - Workstation Service Client DLL
+wkspbrokerAx.dll - Microsoft Workspace Broker ActiveX Control
+wksprtPS.dll - WorkspaceRuntime ProxyStub DLL
+wlanapi.dll - Windows WLAN AutoConfig Client Side API DLL
+wlancfg.dll - Wlan Netsh Helper DLL
+WLanConn.dll - Dot11 Connection Flows
+wlandlg.dll - Wireless Lan Dialog Wizards
+wlangpui.dll - Wireless Network Policy Management Snap-in
+wlanhlp.dll - Windows Wireless LAN 802.11 Client Side Helper API
+WlanMM.dll - Dot11 Media and AdHoc Managers
+wlanpref.dll - Wireless Preferred Networks
+wlanui.dll - Wireless Profile UI
+wlanutil.dll - Windows Wireless LAN 802.11 Utility DLL
+Wldap32.dll - Win32 LDAP API DLL
+wldp.dll - Windows Lockdown Policy
+wlgpclnt.dll - 802.11 Group Policy Client
+wlidcli.dll - Microsoft® Account Dynamic Link Library
+wlidcredprov.dll - Microsoft® Account Credential Provider
+wlidfdp.dll - Microsoft® Account Function Discovery Provider
+wlidnsp.dll - Microsoft® Account Namespace Provider
+wlidprov.dll - Microsoft® Account Provider
+wlidres.dll - Microsoft® Windows Live ID Resource
+WMADMOD.DLL - Windows Media Audio Decoder
+WMADMOE.DLL - Windows Media Audio 10 Encoder/Transcoder
+WMASF.DLL - Windows Media ASF DLL
+wmcodecdspps.dll - Windows Media CodecDSP Proxy Stub Dll
+wmdmlog.dll - Windows Media Device Manager Logger
+wmdmps.dll - Windows Media Device Manager Proxy Stub
+wmdrmsdk.dll - WMDRM backwards compatibility stub
+wmerror.dll - Windows Media Error Definitions (English)
+wmi.dll - WMI DC and DP functionality
+wmiclnt.dll - WMI Client API
+wmidcom.dll - WMI
+wmidx.dll - Windows Media Indexer DLL
+wmiprop.dll - WDM Provider Dynamic Property Page CoInstaller
+wmitomi.dll - CIM Provider Adapter
+WMNetMgr.dll - Windows Media Network Plugin Manager DLL
+wmp.dll - Windows Media Player
+wmpdxm.dll - Windows Media Player Extension
+wmpeffects.dll - Windows Media Player Effects
+WMPhoto.dll - Windows Media Photo Codec
+wmploc.DLL - Windows Media Player Legacy Resources
+wmpps.dll - Windows Media Player Proxy Stub Dll
+wmpshell.dll - Windows Media Player Legacy Launcher
+wmsgapi.dll - WinLogon IPC Client
+WMSPDMOD.DLL - Windows Media Audio Voice Decoder
+WMSPDMOE.DLL - Windows Media Audio Voice Encoder
+WMVCORE.DLL - Windows Media Playback/Authoring DLL
+WMVDECOD.DLL - Windows Media Video Decoder
+wmvdspa.dll - Windows Media Video DSP Components - Advanced
+WMVENCOD.DLL - Windows Media Video 9 Encoder
+WMVSDECD.DLL - Windows Media Screen Decoder
+WMVSENCD.DLL - Windows Media Screen Encoder
+WMVXENCD.DLL - Windows Media Video Encoder
+WofUtil.dll - Windows Overlay File System Filter user mode API
+WordBreakers.dll - "WordBreakers.DYNLINK"
+WorkFoldersRes.dll - Work Folders Resources
+wow32.dll - Wow32
+wpbcreds.dll - WP 8.1 upgrade support utility
+Wpc.dll - WPC Settings Library
+WpcWebFilter.dll - WpcWebFilter.dll
+wpdshext.dll - Portable Devices Shell Extension
+WPDShServiceObj.dll - Windows Portable Device Shell Service Object
+WPDSp.dll - WMDM Service Provider for Windows Portable Devices
+wpnapps.dll - Windows Push Notification Apps
+wpnclient.dll - Windows Push Notifications Client
+WpPortingLibrary.dll - <d> DLL
+ws2_32.dll - Windows Socket 2.0 32-Bit DLL
+ws2help.dll - Windows Socket 2.0 Helper for Windows NT
+wscapi.dll - Windows Security Center API
+wscinterop.dll - Windows Health Center WSC Interop
+wscisvif.dll - Windows Security Center ISV API
+WSClient.dll - Microsoft Store Licensing Client
+wscproxystub.dll - Windows Security Center ISV Proxy Stub
+WSDApi.dll - Web Services for Devices API DLL
+wsdchngr.dll - WSD Challenge Component
+WsdProviderUtil.dll - WsdProviderUtil dll
+wsecedit.dll - Security Configuration UI Module
+wshbth.dll - Windows Sockets Helper DLL
+wshcon.dll - Microsoft ® Windows Script Controller
+wshelper.dll - Winsock Net shell helper DLL for winsock
+wshext.dll - Microsoft ® Shell Extension for Windows Script Host
+wshhyperv.dll - Hyper-V Winsock2 Helper DLL
+wship6.dll - Winsock2 Helper DLL (TL/IPv6)
+wshqos.dll - QoS Winsock2 Helper DLL
+wshrm.dll - Windows Sockets Helper DLL for PGM
+WSHTCPIP.DLL - Winsock2 Helper DLL (TL/IPv4)
+wshunix.dll - AF_UNIX Winsock2 Helper DLL
+WsmAgent.dll - WinRM Agent
+WSManMigrationPlugin.dll - WinRM Migration Plugin
+WsmAuto.dll - WSMAN Automation
+wsmplpxy.dll - wsmplpxy
+WsmRes.dll - WSMan Resource DLL
+WsmSvc.dll - WSMan Service
+WsmWmiPl.dll - WSMAN WMI Provider
+wsnmp32.dll - Microsoft WinSNMP v2.0 Manager API
+wsock32.dll - Windows Socket 32-Bit DLL
+wsp_fs.dll - Windows Storage Provider for FileShare management
+wsp_health.dll - Windows Storage Provider for Health Agent API
+wsp_sr.dll - Windows Storage Provider for Storage Replication management
+wtdccm.dll - 
+wtdsensor.dll - WTD Framework Sensor Client
+wtsapi32.dll - Windows Remote Desktop Session Host Server SDK APIs
+wuapi.dll - Windows Update Client API
+wuceffects.dll - Microsoft Composition Effects
+wudriver.dll - Windows Update WUDriver Stub
+wups.dll - Windows Update client proxy stub
+wusys.dll - Windows Update System Library
+wvc.dll - Windows Visual Components
+WwaApi.dll - Microsoft Web Application Host API library
+WwaExt.dll - Microsoft Web Application Host Extension library
+WWanAPI.dll - Mbnapi
+wwancfg.dll - MBN Netsh Helper DLL
+WwanPrfl.dll - WWAN Profile Operations Binary
+wwapi.dll - WWAN API
+x3daudio1_0.dll - X3DAudio
+x3daudio1_1.dll - X3DAudio
+X3DAudio1_2.dll - X3DAudio
+X3DAudio1_3.dll - X3DAudio
+X3DAudio1_4.dll - X3DAudio
+X3DAudio1_5.dll - X3DAudio
+X3DAudio1_6.dll - 3D Audio Library
+X3DAudio1_7.dll - 3D Audio Library
+xactengine2_0.dll - XACT Engine API
+xactengine2_1.dll - XACT Engine API
+xactengine2_10.dll - XACT Engine API
+xactengine2_2.dll - XACT Engine API
+xactengine2_3.dll - XACT Engine API
+xactengine2_4.dll - XACT Engine API
+xactengine2_5.dll - XACT Engine API
+xactengine2_6.dll - XACT Engine API
+xactengine2_7.dll - XACT Engine API
+xactengine2_8.dll - XACT Engine API
+xactengine2_9.dll - XACT Engine API
+xactengine3_0.dll - XACT Engine API
+xactengine3_1.dll - XACT Engine API
+xactengine3_2.dll - XACT Engine API
+xactengine3_3.dll - XACT Engine API
+xactengine3_4.dll - XACT Engine API
+xactengine3_5.dll - XACT Engine API
+xactengine3_6.dll - XACT Engine API
+xactengine3_7.dll - XACT Engine API
+XAPOFX1_0.dll - XAPOFX
+XAPOFX1_1.dll - XAPOFX
+XAPOFX1_2.dll - XAPOFX
+XAPOFX1_3.dll - Audio Effect Library
+XAPOFX1_4.dll - Audio Effect Library
+XAPOFX1_5.dll - Audio Effect Library
+XAudio2_0.dll - XAudio2 Game Audio API
+XAudio2_1.dll - XAudio2 Game Audio API
+XAudio2_2.dll - XAudio2 Game Audio API
+XAudio2_3.dll - XAudio2 Game Audio API
+XAudio2_4.dll - XAudio2 Game Audio API
+XAudio2_5.dll - XAudio2 Game Audio API
+XAudio2_6.dll - XAudio2 Game Audio API
+XAudio2_7.dll - XAudio2 Game Audio API
+XAudio2_8.dll - XAudio2 Game Audio API
+XAudio2_9.dll - XAudio2 Game Audio API
+XblAuthManagerProxy.dll - XblAuthManagerProxy
+XblAuthTokenBrokerExt.dll - Xbox Live Token Broker Extension
+XblGameSaveProxy.dll - Xbox Live Game Save Service Proxies and Stubs
+xboxgipsynthetic.dll - 
+xinput1_1.dll - Microsoft Common Controller API
+xinput1_2.dll - Microsoft Common Controller API
+xinput1_3.dll - Microsoft Common Controller API
+XInput1_4.dll - Microsoft Common Controller API
+XInput9_1_0.dll - XNA Common Controller
+XInputUap.dll - Microsoft Common Controller API
+xmlfilter.dll - XML Filter
+xmllite.dll - Microsoft XmlLite Library
+xmlprovi.dll - Network Provisioning Service Client API
+xolehlp.dll - Microsoft Distributed Transaction Coordinator Helper APIs DLL
+XpsDocumentTargetPrint.dll - XPS DocumentTargetPrint DLL
+XpsGdiConverter.dll - XPS to GDI Converter
+XpsPrint.dll - XPS Printing DLL
+xpspushlayer.dll - Xps Push Layer Component
+XpsRasterService.dll - XPS Rasterization Service Component
+xpsservices.dll - Xps Object Model in memory creation and deserialization
+XpsToPclmConverter.dll - XPS to PCLm Converter
+XpsToPwgrConverter.dll - XPS to PWGR Converter
+xwizards.dll - Extensible Wizards Manager Module
+xwreg.dll - Extensible Wizard Registration Manager Module
+xwtpdui.dll - Extensible Wizard Type Plugin for DUI
+xwtpw32.dll - Extensible Wizard Type Plugin for Win32
+zipcontainer.dll - Zip Container DLL
+zipfldr.dll - Compressed (zipped) Folders
+ztrace_maps.dll - ZTrace Event Resources

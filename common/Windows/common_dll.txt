@@ -1,0 +1,1 @@
+twain_32.dll - Twain_32 Source Manager (Image Acquisition Interface)

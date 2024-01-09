@@ -1,0 +1,18 @@
+appwiz.cpl - Shell Application Manager
+bthprops.cpl - Bluetooth Control Panel Applet
+desk.cpl - Desktop Settings Control Panel
+Firewall.cpl - Windows Defender Firewall Control Panel DLL Launching Stub
+hdwwiz.cpl - Add Hardware Control Panel Applet
+inetcpl.cpl - Internet Control Panel
+intl.cpl - Control Panel DLL
+irprops.cpl - Infrared Control Panel Applet
+joy.cpl - Game Controllers Control Panel Applet
+main.cpl - Mouse and Keyboard Control Panel Applets
+mmsys.cpl - Audio Control Panel
+ncpa.cpl - Network Connections Control-Panel Stub
+powercfg.cpl - Power Management Configuration Control Panel Applet
+sysdm.cpl - System Applet for the Control Panel
+TabletPC.cpl - Tablet PC Control Panel
+telephon.cpl - Telephony Control Panel
+timedate.cpl - Time Date Control Panel Applet
+wscui.cpl - Security and Maintenance

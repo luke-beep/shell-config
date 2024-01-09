@@ -1,0 +1,651 @@
+agentactivationruntimestarter.exe - AgentActivationRuntime Starter
+AgentService.exe - AgentService EXE
+AggregatorHost.exe - Microsoft (R) Aggregator Host
+aitstatic.exe - Application Impact Telemetry Static Analyzer
+alg.exe - Application Layer Gateway Service
+AppHostRegistrationVerifier.exe - App Uri Handlers Registration Verifier
+appidcertstorecheck.exe - AppID Certificate Store Verification Task
+appidpolicyconverter.exe - AppID Policy Converter Task
+appidtel.exe - Initializes Appid ManagedInstaller and Smartscreen Telemetry
+AppInstallerBackgroundUpdate.exe - 
+ApplicationFrameHost.exe - Application Frame Host
+ApplySettingsTemplateCatalog.exe - ApplySettingsTemplateCatalog EXE
+ApplyTrustOffline.exe - "ApplyTrustOffline.PROGRAM"
+ApproveChildRequest.exe - Grant more screen time
+AppVClient.exe - Microsoft Application Virtualization Client Service
+AppVDllSurrogate.exe - Client DLL Surrogate Host
+appverif.exe - Application Verifier User Interface Utility
+AppVNice.exe - Microsoft Application Virtualization appvnice
+AppVShNotify.exe - Microsoft Application Virtualization Client Shell Notifier
+ARP.EXE - TCP/IP Arp Command
+AssignedAccessGuard.exe - AssignedAccessGuard
+at.exe - Schedule service command line interface
+AtBroker.exe - Windows Assistive Technology Manager
+attrib.exe - Attribute Utility
+audiodg.exe - Windows Audio Device Graph Isolation 
+auditpol.exe - Audit Policy Program
+AuthHost.exe - Microsoft AuthHost
+autochk.exe - Auto Check Utility
+AxInstUI.exe - ActiveX Installer Service
+baaupdate.exe - BitLocker Access Agent Update Utility
+backgroundTaskHost.exe - Background Task Host
+BackgroundTransferHost.exe - Download/Upload Host
+bcdboot.exe - Bcdboot utility
+bcdedit.exe - Boot Configuration Data Editor
+bdechangepin.exe - BitLocker Drive Encryption: PIN Change Tool
+BdeHdCfg.exe - BitLocker Drive Encryption: Drive Preparation Tool
+BdeUISrv.exe - BDE UI Launcher
+bdeunlock.exe - BitLocker Unlock
+BioIso.exe - Secure Biometrics
+BitLockerDeviceEncryption.exe - BitLocker Device Encryption Tool
+BitLockerWizard.exe - BitLocker Drive Encryption Wizard
+BitLockerWizardElev.exe - BitLocker Drive Encryption Wizard
+bitsadmin.exe - BITS administration utility
+bootim.exe - boot immersive menus
+bootsect.exe - Boot Sector Manipulation Tool
+bridgeunattend.exe - Bridge Unattend Utility
+browser_broker.exe - Browser_Broker
+browserexport.exe - Microsoft Edge Browser Exporter
+bthudtask.exe - Bluetooth Uninstall Device Task
+ByteCodeGenerator.exe - AppX Deployment Bytecode Generator EXE
+cacls.exe - Control ACLs Program
+calc.exe - Windows Calculator
+CameraSettingsUIHost.exe - Camera Settings UI Host
+CastSrv.exe - Casting protocol connection listener
+CertEnrollCtrl.exe - Certificate Enrollment Control
+certreq.exe - CertReq.exe
+certutil.exe - CertUtil.exe
+change.exe - Remote Desktop Services Change Utility
+changepk.exe - Windows Activation
+charmap.exe - Character Map
+CheckNetIsolation.exe - AppContainer Network Isolation Diagnostic Tool
+chglogon.exe - Change Logon Utility
+chgport.exe - Change port Utility
+chgusr.exe - Change INI File Mapping Utility
+chkdsk.exe - Check Disk Utility
+chkntfs.exe - NTFS Volume Maintenance Utility
+choice.exe - Offers the user a choice
+CIDiag.exe - CodeIntegrity Diagnostic Tool
+cipher.exe - File Encryption Utility
+CiTool.exe - CodeIntegrity Generic Tool
+cleanmgr.exe - Disk Space Cleanup Manager for Windows
+cliconfg.exe - SQL Client Configuration Utility EXE
+clip.exe - Clip - copies the data into clipboard
+ClipDLS.exe - Device Licensing Subscription
+ClipRenew.exe - Acquire License From Store
+ClipUp.exe - Client License Platform migration tool
+CloudExperienceHostBroker.exe - CloudExperienceHost Broker
+CloudNotifications.exe - Cloud notifications
+cmd.exe - Windows Command Processor
+cmdkey.exe - Credential Manager Command Line Utility
+cmdl32.exe - Microsoft Connection Manager Auto-Download
+cmmon32.exe - Microsoft Connection Manager Monitor
+cmstp.exe - Microsoft Connection Manager Profile Installer
+cofire.exe - Corrupted File Recovery Client
+colorcpl.exe - Microsoft Color Control Panel
+comp.exe - File Compare Utility
+compact.exe - File Compress Utility
+CompatTelRunner.exe - Microsoft Compatibility Telemetry
+CompMgmtLauncher.exe - Computer Management Snapin Launcher
+CompPkgSrv.exe - Component Package Support Server
+ComputerDefaults.exe - Set Program Access and Computer Defaults Control Panel
+conhost.exe - Console Window Host
+consent.exe - Consent UI for administrative applications
+control.exe - Windows Control Panel
+convert.exe - File System Conversion Utility
+convertvhd.exe - VHD Conversion Tool
+coredpussvr.exe - coredpussvr.exe
+CredentialEnrollmentManager.exe - Credential Enrollment Manager
+CredentialUIBroker.exe - Credential Manager UI Host
+credwiz.exe - Credential Backup and Restore Wizard
+cscript.exe - Microsoft ® Console Based Script Host
+csrss.exe - Client Server Runtime Process
+ctfmon.exe - CTF Loader
+cttune.exe - ClearType Tuner
+cttunesvr.exe - ClearType Tuner
+curl.exe - The curl executable
+CustomInstallExec.exe - Microsoft Store Package Dependency Installer
+CustomShellHost.exe - CustomShellHost
+d3dconfig.exe - D3DConfig Utility
+dasHost.exe - Device Association Framework Provider Host
+DataExchangeHost.exe - Data Exchange Host
+DataStoreCacheDumpTool.exe - Windows Data Store Cache Dump Tool
+dccw.exe - Display Color Calibration
+dcomcnfg.exe - COM+
+ddodiag.exe - DDODiag is a tool that collects Device Display Object (DDO) information from the system and logs it
+Defrag.exe - Disk Defragmenter Module
+deploymentcsphelper.exe - 
+desktopimgdownldr.exe - desktopimgdownldr.exe
+DeviceCensus.exe - Device Census
+DeviceCredentialDeployment.exe - "DeviceCredentialDeployment.exe"
+DeviceEject.exe - Eject Device
+DeviceEnroller.exe - API for MDM Enrollment
+DevicePairingWizard.exe - Device Pairing Application
+DeviceProperties.exe - Device Properties
+DFDWiz.exe - Windows Disk Diagnostic User Resolver
+dfrgui.exe - Microsoft® Drive Optimizer
+dialer.exe - Microsoft Windows Phone Dialer
+directxdatabaseupdater.exe - DirectX Database Updater
+diskpart.exe - DiskPart
+diskperf.exe - Disk Performance Configuration Utility
+diskraid.exe - DiskRAID
+DiskSnapshot.exe - DiskSnapshot.exe
+diskusage.exe - diskusage.exe
+Dism.exe - Dism Image Servicing Utility
+dispdiag.exe - Display Diagnostics
+DisplaySwitch.exe - Display Switch
+djoin.exe - Unattended Setup Generic Command For Domain Join
+dllhost.exe - COM Surrogate
+dllhst3g.exe - COM Surrogate
+dmcertinst.exe - DM Certificate Installer
+dmcfghost.exe - Host Process for Push Router Client of OMA-CP
+dmclient.exe - Microsoft Feedback SIUF Deployment Manager Client
+DmNotificationBroker.exe - DmNotificationBroker
+DmOmaCpMo.exe - Host Process for OMA-CP Client
+dnscacheugc.exe - DNSCache Unattend Generic Command
+doskey.exe - Keyboard History Utility
+dpapimig.exe - DPAPI Key Migration Wizard
+DpiScaling.exe - Display Control Panel
+dpnsvr.exe - DirectPlay Stub
+driverquery.exe - Queries the drivers on a system
+drvinst.exe - Driver Installation Module
+DsmUserTask.exe - Device Setup Manager User Task Handler
+dsregcmd.exe - DSREG commandline tool
+dstokenclean.exe - Data Sharing Service Maintenance Driver
+dtdump.exe - DTDUMP.EXE
+dusmtask.exe - DUSM Task
+dvdplay.exe - dvdplay placeholder Application
+dwm.exe - Desktop Window Manager
+DWWIN.EXE - Windows Error Reporting
+DXCap.exe - DXCap command line tool
+DXCpl.exe - Microsoft (R) DirectX Control Panel
+dxdiag.exe - Microsoft DirectX Diagnostic Tool
+dxgiadaptercache.exe - DXGI Adapter Cache
+Dxpserver.exe - Device Stage Platform Server
+Eap3Host.exe - Eap Third Party Surrogate Host
+EaseOfAccessDialog.exe - Ease of Access Dialog Host
+easinvoker.exe - Exchange ActiveSync Invoker
+EASPolicyManagerBrokerHost.exe - Exchange Active Sync Policy Manager Broker
+EDPCleanup.exe - EDP Cleanup
+edpnotify.exe - Microsoft Enterpise Data Protection
+EduPrintProv.exe - Printer Provision Utility for EDU
+efsui.exe - EFS UI Application
+EhStorAuthn.exe - Microsoft Enhanced Storage Authentication Program
+EoAExperiences.exe - Ease of access experiences
+esentutl.exe - Extensible Storage Engine Utilities for Microsoft(R) Windows(R)
+esimtool.exe - 
+eudcedit.exe - Private Character Editor
+eventcreate.exe - Event Create - Creates a custom event in an event log
+eventvwr.exe - Event Viewer Snapin Launcher
+evntcmd.exe - Event Translator Configuration Tool
+evntwin.exe - Event Translator Config Tool
+expand.exe - LZ Expansion Utility
+extrac32.exe - Microsoft® CAB File Extract Utility
+fc.exe - DOS 5 File Compare Utility
+fclip.exe - Acquire IMDS response
+fhmanagew.exe - File History Management Tool
+FileDialogBroker.exe - Common file dialog broker process
+FileHistory.exe - File History
+find.exe - Find String (grep) Utility
+findstr.exe - Find String (QGREP) Utility
+finger.exe - TCPIP Finger Command
+fixmapi.exe - FIXMAPI 1.0 MAPI Repair Tool
+fltMC.exe - Filter Manager Control Program
+fodhelper.exe - Features On Demand Helper
+Fondue.exe - Windows Features on Demand UX
+fontdrvhost.exe - Usermode Font Driver Host
+fontview.exe - Windows Font Viewer
+forfiles.exe - ForFiles - Executes a command on selected files
+fsavailux.exe - Microsoft\fsavailux
+FsIso.exe - Secure Frame Server Helper
+fsquirt.exe - 
+fsutil.exe - fsutil.exe
+ftp.exe - File Transfer Program
+fvenotify.exe - BitLocker Drive Encryption Notification Utility
+fveprompt.exe - BitLocker Drive Encryption
+GameBarPresenceWriter.exe - Gamebar Presence Writer
+GameInputSvc.exe - GameInput Host Service
+GamePanel.exe - Game Bar
+GenValObj.exe - Microsoft Software Protection Platform Admin Object
+getmac.exe - Displays NIC MAC information
+gpresult.exe - Query Group Policy RSOP Data
+gpscript.exe - Group Policy Script Application
+gpupdate.exe - Microsoft® Group Policy Update Utility
+grpconv.exe - Windows Progman Group Converter
+hcsdiag.exe - Hyper-V Host Compute Service Diagnostics Tool
+hdwwiz.exe - Add Hardware Wizard
+help.exe - Command Line Help Utility
+hnsdiag.exe - Hyper-V Host Network Service Diagnostics Tool
+HOSTNAME.EXE - Hostname APP
+hvax64.exe - Hypervisor V2.0
+hvix64.exe - Hypervisor V2.0
+hvsievaluator.exe - Microsoft Defender Application Guard Policy Evaluator
+icacls.exe - 
+IcsEntitlementHost.exe - ICS Entitlement Host
+icsunattend.exe - ICS Unattend Utility
+ie4uinit.exe - IE Per-User Initialization Utility
+ie4ushowIE.exe - IE Per-User Show IE Icon Utility
+IESettingSync.exe - Microsoft ® IE Setting Sync Background Application
+ieUnatt.exe - IE 7.0 Unattended Install Utility
+iexpress.exe - Wizard
+immersivetpmvscmgrsvr.exe - Immersive TPM Virtual Smart Card Manager COM Server
+InfDefaultInstall.exe - INF Default Install
+InputSwitchToastHandler.exe - Input Switch Toast Handler
+iotstartup.exe - IotStartup
+ipconfig.exe - IP Configuration Utility
+iscsicli.exe - iSCSI Discovery tool
+iscsicpl.exe - Microsoft iSCSI Initiator Configuration Tool
+ISM.exe - ISM
+isoburn.exe - Windows Disc Image Burning Tool
+klist.exe - Tool for managing the Kerberos ticket cache
+ksetup.exe - Kerberos Setup tool
+ktmutil.exe - Kernel Transaction Management Utility
+la57setup.exe - LA57 Setup
+label.exe - Disk Label Utility
+LanguageComponentsInstallerComHandler.exe - LanguageComponentsInstaller COM Handler
+LaunchTM.exe - Task Manager Launcher
+LaunchWinApp.exe - Launch Windows App
+LegacyNetUXHost.exe - Legacy Net UX Host
+LicenseManagerShellext.exe - LicenseManagerShellExt
+licensingdiag.exe - Licensing Diagnostic Tool
+LicensingUI.exe - Licensing UI
+LiveCaptions.exe - Live captions
+LocationNotificationWindows.exe - Location Notification
+Locator.exe - Rpc Locator
+LockAppHost.exe - LockAppHost
+LockScreenContentServer.exe - LockScreenContent Server
+lodctr.exe - Load PerfMon Counters
+logagent.exe - Windows Media Player Logagent
+logman.exe - Performance Log Utility
+logoff.exe - Session Logoff Utility
+LogonUI.exe - Windows Logon User Interface Host
+lpkinstall.exe - Language Pack Installer
+lpksetup.exe - Language Pack Installer
+lpremove.exe - MUI Language pack cleanup
+LsaIso.exe - Credential Guard & VBS Key Isolation
+lsass.exe - Local Security Authority Process
+Magnify.exe - Microsoft Screen Magnifier
+makecab.exe - Microsoft® Cabinet Maker
+manage-bde.exe - BitLocker Drive Encryption: Configuration Tool
+mavinject.exe - Microsoft Application Virtualization Injector
+mblctr.exe - Windows Mobility Center
+MBR2GPT.EXE - Converts disk MBR to GPT
+mcbuilder.exe - Resource cache builder tool
+MCU.exe - NVIDIA Maximus Configuration Utility
+MDEServer.exe - Cast to Device Server
+MDMAgent.exe - MDMAgent
+MDMAppInstaller.exe - MDM App Installer
+MdmDiagnosticsTool.exe - MdmDiagnosticsTool
+MdRes.exe - Windows Memory Diagnostic
+MdSched.exe - Windows Memory Diagnostics Tool
+mfpmp.exe - Media Foundation Protected Pipeline EXE
+Microsoft.Uev.CscUnpinTool.exe - Microsoft.Uev.CscUnpinTool EXE
+Microsoft.Uev.SyncController.exe -  
+microsoft.windows.softwarelogo.showdesktop.exe - Desktop Switch Utility
+MicrosoftEdgeBCHost.exe - Microsoft Edge Content Process
+MicrosoftEdgeCP.exe - Microsoft Edge Content Process
+MicrosoftEdgeDevTools.exe - Microsoft Edge Content Process
+MicrosoftEdgeSH.exe - Microsoft Edge Web Platform
+MicrosoftWebDriver.exe - Microsoft Web Driver
+mmc.exe - Microsoft Management Console
+mmgaserver.exe - MMGA Server
+mobsync.exe - Microsoft Sync Center
+MoNotificationUxStub.exe - Undocked MoNotificationUx Stub
+mountvol.exe - Mount Volume Utility
+mpnotify.exe - Windows NT Multiple Provider Notification Application
+MpSigStub.exe - Microsoft Malware Protection Signature Update Stub
+MRINFO.EXE - Multicast Information
+MRT.exe - Microsoft Windows Malicious Software Removal Tool
+MSchedExe.exe - Automatic Maintenance
+msconfig.exe - System Configuration Utility
+msdt.exe - Diagnostics Troubleshooting Wizard
+msdtc.exe - Microsoft Distributed Transaction Coordinator Service
+msfeedssync.exe - Microsoft Feeds Synchronization
+msg.exe - Message Utility
+mshta.exe - Microsoft (R) HTML Application host
+msiexec.exe - Windows® installer
+msinfo32.exe - System Information
+msra.exe - Windows Remote Assistance
+MsSpellCheckingHost.exe - Microsoft Spell Checking Host
+mstsc.exe - Remote Desktop Connection
+mtstocom.exe - COM+
+MuiUnattend.exe - MUI unattend action
+MultiDigiMon.exe - Digitizer to Monitor Mapping Tool
+Narrator.exe - Screen Reader
+nbtstat.exe - TCP/IP NetBios Information
+ndadmin.exe - Device driver software installation
+NDKPerfCmd.exe - RDMA Perf Cmd
+NDKPing.exe - RDMA Ping Cmd
+net.exe - Net Command
+net1.exe - Net Command
+netbtugc.exe - NetBT Unattend Generic Command
+netcfg.exe - WinPE network installer
+NetCfgNotifyObjectHost.exe - Host Process for Network Driver Configuration Plugins
+NetEvtFwdr.exe - Event Forwarder
+NetHost.exe - EXE for configuring VPN proxy
+netiougc.exe - Netio Unattend Generic Command
+Netplwiz.exe - Advanced User Accounts Control Panel
+netsh.exe - Network Command Shell
+NETSTAT.EXE - TCP/IP Netstat Command
+newdev.exe - Device driver software installation
+NgcIso.exe - Windows Hello Security Process
+nltest.exe - Microsoft® Logon Server Test Utility
+nmbind.exe - Hyper-V Network Core Bind Application
+nmscrub.exe - Network Management Scrub
+notepad.exe - Notepad
+nslookup.exe - nslookup
+ntkrla57.exe - NT Kernel & System
+ntoskrnl.exe - NT Kernel & System
+ntprint.exe - Printer driver software installation
+nvdebugdump.exe - NVIDIA Debug Dump
+nvidia-smi.exe - NVIDIA-SMI 546.29
+nvspinfo.exe - "nvspinfo.PROGRAM"
+odbcad32.exe - ODBC Administrator
+odbcconf.exe - ODBC Driver Configuration Program
+ofdeploy.exe - Office Deployment
+omadmclient.exe - Host Process for OMA-DM Client
+omadmprc.exe - Host Process for Push Router Client of OMA-DM
+OneDriveSetup.exe - Microsoft OneDrive (64 bit) Setup
+OOBE-Maintenance.exe - OOBE-Maintenance
+openfiles.exe - Displays the current open files list
+OpenWith.exe - Pick an app
+OptionalFeatures.exe - Windows Features
+osk.exe - Accessibility On-Screen Keyboard
+pacjsworker.exe - HTTP Auto Proxy Detection Worker Process
+PackagedCWALauncher.exe - Packaged CWA Launcher
+PackageInspector.exe - PackageInspector allows creation of a catalog containing all executable files laid down by an installer
+PasswordOnWakeSettingFlyout.exe - User CPL Password on wake setting flyout
+PATHPING.EXE - TCP/IP PathPing Command
+pcalua.exe - Program Compatibility Assistant
+pcaui.exe - Program Compatibility Assistant User Interface
+pcwrun.exe - Program Compatibility Troubleshooter Invoker
+perfmon.exe - Resource and Performance Monitor
+phoneactivate.exe - Phone Activation UI
+PickerHost.exe - File Picker UI Host
+PinEnrollmentBroker.exe - PinEnrollmentBroker
+PING.EXE - TCP/IP Ping Command
+PkgMgr.exe - Windows Package Manager
+PktMon.exe - Packet Monitor
+plasrv.exe - Performance Logs and Alerts DCOM Server
+PnPUnattend.exe - PnP unattend action
+pnputil.exe - Microsoft PnP Utility - Tool to add, delete, export, and enumerate driver packages.
+poqexec.exe - Primitive Operations Queue Executor
+pospaymentsworker.exe - 
+powercfg.exe - Power Settings Command-Line Tool
+PresentationHost.exe - Windows Presentation Foundation Host
+PresentationSettings.exe - Microsoft Mobile PC Presentation Adaptability Client
+prevhost.exe - Preview Handler Surrogate Host
+print.exe - Print Utility
+PrintBrmUi.exe - PrintBrm Application
+printfilterpipelinesvc.exe - Print Filter Pipeline Host
+PrintIsolationHost.exe - PrintIsolationHost
+printui.exe - Change Printing Settings
+proquota.exe - ProQuota
+provlaunch.exe - Provisioning package runtime command launching tool
+provtool.exe - Provisioning package runtime processing tool
+ProximityUxHost.exe - Proximity UX Host
+prproc.exe - PlayReady Process EXE
+psr.exe - Steps Recorder
+pwlauncher.exe - Windows To Go Startup Options Command Line Tool
+qappsrv.exe - Query Remote Desktop Session Host Server Utility
+qprocess.exe - Query Process Utility
+query.exe - MultiUser Query Utility
+quser.exe - Query User Utility
+qwinsta.exe - Query Session Utility
+rasautou.exe - Remote Access Dialer
+rasdial.exe - Remote Access Command Line Dial UI
+raserver.exe - Windows Remote Assistance COM Server
+rasphone.exe - Remote Access Phonebook
+rdpclip.exe - RDP Clipboard Monitor
+rdpinit.exe - RemoteApp Logon Application
+rdpinput.exe - RDP Session Input Handler
+RdpSa.exe - RDP Session Agent
+RdpSaProxy.exe - RDP Session Agent Proxy
+RdpSaUacHelper.exe - RDP Session Agent UAC Helper
+rdpshell.exe - RemoteApp Shell
+rdpsign.exe - Remote Desktop Session Host Server Sign Tool
+rdrleakdiag.exe - Microsoft Windows Resource Leak Diagnostic
+ReAgentc.exe - Microsoft Windows Recovery Agent
+recdisc.exe - Microsoft® Windows Repair Disc
+recover.exe - Recover Files Utility
+RecoveryDrive.exe - Recovery Media Creator
+refsutil.exe - refsutil.exe
+reg.exe - Registry Console Tool
+regedt32.exe - Registry Editor Utility
+regini.exe - Registry Initializer
+Register-CimProvider.exe - WMI
+regsvr32.exe - Microsoft(C) Register Server
+rekeywiz.exe - EFS REKEY wizard
+relog.exe - Performance Relogging Utility
+RelPost.exe - Windows Diagnosis and Recovery
+RemoteAppLifetimeManager.exe - RemoteAppLifetimeManager_ServerExe.exe
+RemotePosWorker.exe - Remote Pos Driver Worker
+repair-bde.exe - BitLocker Drive Encryption: Repair Tool
+replace.exe - Replace File Utility
+reset.exe - Remote Desktop Services Reset Utility
+ResetEngine.exe - Push-Button Reset Engine
+resmon.exe - Resource Monitor
+RMActivate_isv.exe - Windows Rights Management Services Activation for Desktop Security Processor
+RMActivate_ssp_isv.exe - Windows Rights Management Services Activation for Server Security Processor (Pre-production)
+RMActivate_ssp.exe - Windows Rights Management Services Activation for Server Security Processor
+RMActivate.exe - Windows Rights Management Services Activation for Desktop Security Processor
+RmClient.exe - Restart Manager LUA Restart Client
+rmttpmvscmgrsvr.exe - TPM Virtual Smart Card Manager DCOM Server
+Robocopy.exe - Microsoft Robocopy
+ROUTE.EXE - TCP/IP Route Command
+RpcPing.exe - RPC Ping Utility
+rrinstaller.exe - R&R installer
+rstrui.exe - Microsoft® Windows System Restore
+runas.exe - Run As Utility
+rundll32.exe - Windows host process (Rundll32)
+runexehelper.exe - Microsoft (R) Run Exe Helper
+RunLegacyCPLElevated.exe - Run a legacy CPL elevated
+runonce.exe - Run Once Wrapper
+RuntimeBroker.exe - Runtime Broker
+rwinsta.exe - Reset Session Utility
+sc.exe - Service Control Manager Configuration Tool
+schtasks.exe - Task Scheduler Configuration Tool
+ScriptRunner.exe -  
+sdbinst.exe - Application Compatibility Database Installer
+sdchange.exe - Windows Remote Assistance SD Server
+sdclt.exe - Microsoft® Windows Backup
+sdiagnhost.exe - Scripted Diagnostics Native Host
+SearchFilterHost.exe - Microsoft Windows Search Filter Host
+SearchIndexer.exe - Microsoft Windows Search Indexer
+SearchProtocolHost.exe - Microsoft Windows Search Protocol Host
+SecEdit.exe - Windows Security Configuration Editor Command Tool
+secinit.exe - Security Init
+SecureBootEncodeUEFI.exe - Secure Boot UEFI Encoder
+securekernel.exe - NT Secure Kernel
+securekernella57.exe - NT Secure Kernel
+SecurityHealthHost.exe - Windows Security Health Host
+SecurityHealthService.exe - Windows Security Health Service
+SecurityHealthSystray.exe - Windows Security notification icon
+SensorDataService.exe - Sensor Data Service
+SensorRuntimeBroker.exe - Sensor Runtime Broker
+services.exe - Services and Controller app
+sessionmsg.exe - Microsoft Remote Desktop Services Session Message Server
+sethc.exe - Accessibility shortcut keys
+setspn.exe - Query or reset the computer's SPN attribute
+setupcl.exe - System Clone Tool
+setupugc.exe - Setup Unattend Generic Command Processor
+setx.exe - Setx - Sets environment variables
+sfc.exe - System Integrity Check and Repair
+ShellAppRuntime.exe - ShellAppRuntime
+shrpubw.exe - Share Creation Wizard
+shutdown.exe - Windows Shutdown and Annotation Tool
+sigverif.exe - File Signature Verification
+SIHClient.exe - SIH Client
+sihost.exe - Shell Infrastructure Host
+SlideToShutDown.exe - SlideToShutDown
+slui.exe - Windows Activation Client
+smartscreen.exe - Windows Defender SmartScreen
+smss.exe - Windows Session Manager
+SndVol.exe - Volume Mixer
+snmp.exe - SNMP Service
+snmptrap.exe - SNMP Trap
+sort.exe - Sort Utility
+SpaceAgent.exe - Storage Spaces Settings
+spaceman.exe - Storage Spaces Manager
+spaceutil.exe - Console utility for management of Storage Spaces
+SpatialAudioLicenseSrv.exe - Spatial License AppService Broker
+Spectrum.exe - Windows Perception Service
+spoolsv.exe - Spooler SubSystem App
+SppExtComObj.Exe - KMS Connection Broker
+sppsvc.exe - Microsoft Software Protection Platform Service
+srdelayed.exe - Microsoft® Windows System Restore Delayed File Renamer
+SrTasks.exe - Microsoft® Windows System Protection background tasks.
+stordiag.exe - 
+subst.exe - Subst Utility
+svchost.exe - Host Process for Windows Services
+sxstrace.exe - Sxs Tracing Tool
+SyncAppvPublishingServer.exe - Microsoft Application Virtualization Sync Utility
+SyncHost.exe - Host Process for Windows Sync
+SysResetErr.exe - Windows System Reset
+systeminfo.exe - Displays system information
+SystemPropertiesAdvanced.exe - Advanced System Settings
+SystemPropertiesComputerName.exe - Change Computer Settings
+SystemPropertiesDataExecutionPrevention.exe - Change Data Execution Prevention Settings
+SystemPropertiesHardware.exe - Hardware Settings
+SystemPropertiesPerformance.exe - Change Computer Performance Settings
+SystemPropertiesProtection.exe - System Protection Settings
+SystemPropertiesRemote.exe - System Remote Settings
+systemreset.exe - System Reset for Windows
+SystemSettingsAdminFlows.exe - Settings
+SystemSettingsBroker.exe - System Settings Broker
+SystemSettingsRemoveDevice.exe - SystemSettingsRemoveDevice
+SystemUWPLauncher.exe - SystemUWPLauncher
+systray.exe - Systray .exe stub
+tabcal.exe - Digitizer Calibration Tool
+takeown.exe - Takes ownership of a file
+TapiUnattend.exe - Microsoft® Windows(TM) Telephony Unattend Action
+tar.exe - bsdtar archive tool
+taskhostw.exe - Host Process for Windows Tasks
+taskkill.exe - Terminates Processes
+tasklist.exe - Lists the current running tasks
+Taskmgr.exe - Task Manager
+tcblaunch.exe - TCB Launcher
+tcmsetup.exe - Microsoft® Windows(TM) Telephony Administration Setup
+TCPSVCS.EXE - TCP/IP Services Application
+ThumbnailExtractionHost.exe - Thumbnail Handler Extraction Host
+TieringEngineService.exe - Storage Tiers Management
+timeout.exe - timeout - pauses command processing
+TokenBrokerCookies.exe - Token Broker Cookie Helper
+TpmInit.exe - TPM Initialization Wizard
+TpmTool.exe - Microsoft (R) TPM utility
+tpmvscmgr.exe - TPM Virtual Smartcard Setup Utility
+tpmvscmgrsvr.exe - TPM Virtual Smart Card Manager COM Server
+tracerpt.exe - Event Trace Report Tool
+TRACERT.EXE - TCP/IP Traceroute Command
+tscon.exe - Session Connection Utility
+tsdiscon.exe - Session Disconnection Utility
+tskill.exe - Remote Desktop Services End Process Utility
+TSTheme.exe - TSTheme Server Module
+TSWbPrxy.exe - Microsoft Remote Desktop Services Web Proxy
+TsWpfWrp.exe - Windows Presentation Foundation Terminal Server Print Wrapper
+ttdinject.exe - Time Traver Debugging Application Injector
+tttracer.exe - Time Travel Debugging Tracer Tool
+typeperf.exe - Command line performance monitor
+tzsync.exe - TimeZone Sync Task
+tzutil.exe - Windows Time Zone Utility
+UCPDMgr.exe - User Choice Protection Manager
+ucsvc.exe - Boot File Servicing Utility
+UevAgentPolicyGenerator.exe -  
+UevAppMonitor.exe -  
+UevTemplateBaselineGenerator.exe -  
+UevTemplateConfigItemGenerator.exe -  
+UIMgrBroker.exe - Microsoft UIManager Broker
+unlodctr.exe - Unload PerfMon Counters
+unregmp2.exe - Microsoft Windows Media Player Legacy Setup Utility
+upfc.exe - Updateability From SCM
+UpgradeResultsUI.exe - Add features to Windows Results
+upnpcont.exe - UPnP Device Host Container
+UPPrinterInstaller.exe - UPPrinterInstaller
+UserAccountBroker.exe - User Account Control Panel Host
+UserAccountControlSettings.exe - UserAccountControlSettings
+UserDataSource.exe - AppX Deployment User Data Source EXE
+userinit.exe - Userinit Logon Application
+UsoClient.exe - UsoClient
+UtcDecoderHost.exe - Microsoft Windows Diagnostics Tracking Decoder Host
+Utilman.exe - Utility Manager
+VaultCmd.exe - Vault cmdline Program
+vds.exe - Virtual Disk Service
+vdsldr.exe - Virtual Disk Service Loader
+verclsid.exe - Extension CLSID Verification Host
+verifier.exe - Verifier Configuration Editor
+verifiergui.exe - Driver Verifier Manager
+vfpctrl.exe - vfpctrl.exe
+vmcompute.exe - Hyper-V Host Compute Service
+vmwp.exe - Virtual Machine Worker Process
+VoiceAccess.exe - Voice access
+VsGraphicsDesktopEngine.exe - VsGraphics Desktop Engine
+VsGraphicsRemoteEngine.exe - VsGraphics Remote Engine
+vsjitdebugger.exe - Visual Studio Just-In-Time Debugger
+vssadmin.exe - Command Line Interface for Microsoft® Volume Shadow Copy Service 
+VSSVC.exe - Microsoft® Volume Shadow Copy Service
+vulkaninfo-1-999-0-0-0.exe - vulkaninfo
+vulkaninfo.exe - vulkaninfo
+w32tm.exe - Windows Time Service Diagnostic Tool
+waitfor.exe - waitfor - wait/send a signal over a network
+WallpaperHost.exe - Wallpaper Host Process
+wbadmin.exe - Command Line Interface for Microsoft® BLB Backup
+wbengine.exe - Microsoft® Block Level Backup Engine Service EXE
+wecutil.exe - Event Collector Command Line Utility
+WerFault.exe - Windows Problem Reporting
+WerFaultSecure.exe - Windows Fault Reporting
+wermgr.exe - Windows Problem Reporting
+wevtutil.exe - Windows Event Log Utility
+wextract.exe - Win32 Cabinet Self-Extractor                                           
+where.exe - Where - Lists location of files
+whoami.exe - whoami - displays logged on user information
+wiaacmgr.exe - Windows Picture Acquisition Wizard
+wiawow64.exe - Thunking WIA APIS from 32 to 64 Process
+wifitask.exe - Wireless Background Task
+wimserv.exe - Wimfltr v2 extractor
+WinBioDataModelOOBE.exe - WinBioDataModel OOBE
+Windows.Media.BackgroundPlayback.exe - Windows Media Playback EXE
+Windows.WARP.JITService.exe - D3D10Warp JIT Service
+WindowsActionDialog.exe - Windows Action Dialog Broker
+WindowsUpdateElevatedInstaller.exe - WindowsUpdateElevatedInstaller
+wininit.exe - Windows Start-Up Application
+winload.exe - OS Loader
+winlogon.exe - Windows Logon Application
+winresume.exe - Resume From Hibernate boot application
+winrs.exe - winrs
+winrshost.exe - Host Process for WinRM's Remote Shell plugin
+WinRTNetMUAHostServer.exe - WinRTNet MUA HostServer EXE
+WinSAT.exe - Windows System Assessment Tool
+winver.exe - Version Reporter Applet
+wkspbroker.exe - RemoteApp and Desktop Connection Runtime Broker
+wksprt.exe - RemoteApp and Desktop Connection Runtime
+wlanext.exe - Windows Wireless LAN 802.11 Extensibility Framework
+wlrmdr.exe - Windows logon reminder
+WMPDMC.exe - Cast to Device
+WorkFolders.exe - Work Folders
+wowreg32.exe - SetupAPI 64-bit Surrogate
+WpcMon.exe - Family Safety Monitor
+WpcTok.exe - Family Safety Token Auth
+WPDShextAutoplay.exe - Windows Portable Device Shell Extension Autoplay Handler
+wpnpinst.exe - Support exe for Internet Printing
+wpr.exe - Microsoft Windows Performance Recorder
+write.exe - Windows Write
+wscadminui.exe - Windows Security Center Elevated UI App
+WSCollect.exe - This tool collects Windows Store log files
+wscript.exe - Microsoft ® Windows Based Script Host
+wsl.exe - Windows Subsystem for Linux
+wslg.exe - Microsoft Windows Subsystem for Linux GUI App Launcher
+WSManHTTPConfig.exe - WSMan HTTP Configuration File
+wsmprovhost.exe - Host process for WinRM plug-ins
+wsqmcons.exe - Windows SQM Consolidator
+WSReset.exe - This tool resets the Windows Store without changing account settings or deleting installed apps
+wuapihost.exe - wuapihost
+wuauclt.exe - Windows Update
+WUDFCompanionHost.exe - Windows Driver Foundation - User-mode Driver Companion Framework Host Process
+WUDFHost.exe - Windows Driver Foundation - User-mode Driver Framework Host Process
+wusa.exe - Windows Update Standalone Installer
+WWAHost.exe - Microsoft WWA Host
+XblGameSaveTask.exe - XblGameSave Standby Task
+xcopy.exe - Extended Copy Utility
+xgamecontrol.exe - Microsoft Gaming Services
+xgamehelper.exe - Microsoft Gaming Services
+xwizard.exe - Extensible Wizards Host Process

@@ -1,0 +1,9 @@
+bfsvc.exe - Boot File Servicing Utility
+explorer.exe - Windows Explorer
+HelpPane.exe - Microsoft Help and Support
+hh.exe - Microsoft® HTML Help Executable
+notepad.exe - Notepad
+regedit.exe - Registry Editor
+splwow64.exe - Print driver host for applications
+winhlp32.exe - Windows Winhlp32 Stub
+write.exe - Windows Write
