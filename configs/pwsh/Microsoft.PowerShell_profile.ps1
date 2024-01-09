@@ -21,7 +21,7 @@ if (-not (Get-Module -ListAvailable -Name PSReadLine -ErrorAction SilentlyContin
 
 if (-not (Get-Module -ListAvailable -Name PSScriptAnalyzer -ErrorAction SilentlyContinue)) {
   Install-Module -Name PSScriptAnalyzer -Force -Scope CurrentUser
-  Import-Module PSScriptAnalyzer # 
+  Import-Module PSScriptAnalyzer 
 }
 
 # ----------------------------------------
