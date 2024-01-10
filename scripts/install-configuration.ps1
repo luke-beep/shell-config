@@ -12,9 +12,26 @@
 $ShellType = if ($host.Version.Major -ge 7) { "Pwsh" } else { "PowerShell" }
 $TerminalSettingsPath = "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
 $ClinkThemePath = "$env:SystemDrive\Program Files (x86)\clink\oh-my-posh.lua"
-$ompConfig = "$env:USERPROFILE\.config\omp.json"
+$OmpConfig = "$env:USERPROFILE\.config\omp.json"
 $installationKey = "HKCU:\Software\Azrael\Configuration"
 $KernelVersion = (Get-CimInstance -ClassName Win32_OperatingSystem).Version
+
+# ----------------------------------------
+# Admin
+# ----------------------------------------
+
+if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
+    if ($ShellType -eq "Pwsh") {
+        Write-Host "Relaunching as an elevated process..."
+        Start-Process pwsh.exe "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs
+        exit
+    }
+    else {
+        Write-Host "Relaunching as an elevated process..."
+        Start-Process powershell.exe "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs
+        exit
+    }   
+}
 
 # ----------------------------------------
 # Start
@@ -46,9 +63,9 @@ else {
     Write-Host "Warning: These settings may cause issues with Windows Terminal. Please check the settings.json file in $TerminalSettingsPath. If you encounter any issues, please open an issue on GitHub."
 
     Write-Host "Installing the oh-my-posh theme for Clink..."
-    if (-not (Test-Path $ompConfig)) {
-        New-Item -Path $ompConfig -Force 
-        Invoke-WebRequest -Uri https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/omp/theme.json -OutFile $ompConfig
+    if (-not (Test-Path $OmpConfig)) {
+        New-Item -Path $OmpConfig -Force 
+        Invoke-WebRequest -Uri https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/omp/theme.json -OutFile $OmpConfig
     }
     Invoke-WebRequest -Uri https://github.com/luke-beep/shell-config/raw/main/configs/clink/oh-my-posh.lua -OutFile $ClinkThemePath
 

@@ -4,17 +4,98 @@
 
 # Author: LukeHjo (Azrael)
 # Description: This is my PowerShell profile. It contains features that I use on a daily basis.
-# Version: 1.2.7
+# Version: 1.2.8
 # Date: 2024-01-09
+
+# ----------------------------------------
+# Transcription
+# ----------------------------------------
+
+$CurrentDate = Get-Date -Format "yyyy-MM-dd"
+$CurrentTime = Get-Date -Format "HH-mm-ss"
+$ProfilePath = $PROFILE | Split-Path
+$TranscriptPath = "$ProfilePath\Transcripts"
+$TranscriptFile = "$TranscriptPath\$CurrentDate\$CurrentTime.txt"
+
+if (-not (Test-Path -Path $TranscriptPath)) {
+  New-Item -ItemType Directory -Force -Path "$TranscriptPath\$CurrentDate"
+} # Semi-redundant but it's needed to create the directory for compatibility reasons.
+
+Start-Transcript -Path $TranscriptFile -Append
+
+# ----------------------------------------
+# Event Log
+# ----------------------------------------
+
+$LogName = "Azrael"
+$SourceName = "Azrael"
+
+if (-not (Get-EventLog -LogName $LogName -Source $sourceName -ErrorAction SilentlyContinue)) {
+  New-EventLog -LogName $logName -Source $sourceName
+}
+
+function Write-InformationEvent {
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
+    [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+    [string]$Message
+  )
+
+  PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
+    Write-EventLog -LogName $LogName -Source $SourceName -EntryType Information -EventId 1 -Message $Message
+  }
+}
+
+function Write-WarningEvent {
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
+    [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+    [string]$Message
+  )
+
+  PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
+    Write-EventLog -LogName $LogName -Source $SourceName -EntryType Warning -EventId 2 -Message $Message
+  }
+}
+
+function Write-ErrorEvent {
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
+    [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+    [string]$Message
+  )
+
+  PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
+    Write-EventLog -LogName $LogName -Source $SourceName -EntryType Error -EventId 3 -Message $Message
+  }
+}
+
+# Write errors to the event log - non-redundant because it's needed for logging errors in the profile. Only catches profile errors, not errors in the shell environment.
+TRAP {
+  Write-ErrorEvent $_.Exception.Message
+  continue
+}
+
 
 # ----------------------------------------
 # Import Modules
 # ----------------------------------------
 
-using namespace System.Management.Automation.Language
-
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
+Add-Type -AssemblyName System.Management.Automation
 
 if (-not (Get-Module -ListAvailable -Name PSReadLine -ErrorAction SilentlyContinue)) {
   Install-Module -Name PSReadLine -Force -Scope CurrentUser
@@ -147,6 +228,10 @@ function Restart-Shell {
   PARAM ( ) # No parameters
   
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     . $PROFILE
     if ($ShellType -eq "Pwsh") {
       pwsh
@@ -171,6 +256,10 @@ function Optimize-PowerShell {
   PARAM ( ) # No parameters
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     if ($ShellType -eq "PowerShell") {
       Update-Help -Force -ErrorAction SilentlyContinue
       Invoke-RestMethod "https://raw.githubusercontent.com/luke-beep/ps-optimize-assemblies/main/optimize-assemblies.ps1" | Invoke-Expression
@@ -205,6 +294,10 @@ function Write-TimestampedInformation {
   )
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     Write-Host ("[{0}] {1}" -f (Get-Date), $Output)
   }
 }
@@ -231,6 +324,10 @@ function Write-TimestampedWarning {
   )
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     Write-Warning ("[{0}] {1}" -f (Get-Date), $WarningMessage)
   }
 }
@@ -259,6 +356,10 @@ function Write-TimestampedError {
   )
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     Write-Error ("[{0}] {1}" -f (Get-Date), $ErrorMessage)
   }
 }
@@ -299,16 +400,28 @@ function Write-Color {
   )
 
   BEGIN {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $spaces = " " * $SpaceCount
   }
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     for ($i = 0; $i -lt $LineCount; $i++) {
       Write-Host $spaces -ForegroundColor $Color -BackgroundColor $Color -NoNewline # Write-Host is needed to change the background color
     }
   }
 
   END {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     if ($NewLine) {
       Write-Host ""
     }
@@ -320,11 +433,19 @@ function Import-Functions {
   PARAM ( ) # No parameters
 
   BEGIN {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $newFunctionsFilePath = Join-Path (Split-Path -Parent $PROFILE) "custom-functions.ps1"
     $newFunctionsFileUrl = "https://github.com/luke-beep/shell-config/raw/main/configs/pwsh/custom-functions.ps1"
   }  
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     if (-not (Test-Path $newFunctionsFilePath)) {
       Invoke-WebRequest -Uri $newFunctionsFileUrl -OutFile $newFunctionsFilePath
     }
@@ -337,11 +458,19 @@ function Import-Variables {
   PARAM ( ) # No parameters
 
   BEGIN {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $newVariablesFilePath = Join-Path (Split-Path -Parent $PROFILE) "custom-variables.ps1"
     $newVariablesFileUrl = "https://github.com/luke-beep/shell-config/raw/main/configs/pwsh/custom-variables.ps1"
   }
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     if (-not (Test-Path $newVariablesFilePath)) {
       Invoke-WebRequest -Uri $newVariablesFileUrl -OutFile $newVariablesFilePath
     }
@@ -357,6 +486,11 @@ function Update-Profile {
   )
 
   BEGIN {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
+    Write-InformationEvent "Checking for updates"
     # Check for registry key
     if (-not (Test-Path $KeyPath)) {
       New-Item -Path $KeyPath -Force 
@@ -420,6 +554,10 @@ function Update-Profile {
   }
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     if ($null -eq $firstRun.FirstRun) {
       $form = New-Object System.Windows.Forms.Form
       $form.Text = "Auto Update"
@@ -512,38 +650,47 @@ function Update-Profile {
 }
 
 function Set-PSReadlineConfiguration {
-  Set-PSReadLineKeyHandler -Key UpArrow -Function HistorySearchBackward
-  Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward
-  Set-PSReadLineKeyHandler -Key Tab -Function Complete
-  Set-PSReadLineKeyHandler -Chord Enter -Function ValidateAndAcceptLine
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM ( ) # No parameters
 
-  Set-PSReadlineOption -BellStyle Visual
-  Set-PSReadlineOption -ShowToolTips
-  Set-PSReadlineOption -HistoryNoDuplicates
-  Set-PSReadLineOption -PredictionViewStyle InlineView
-  Set-PSReadLineOption -PredictionSource HistoryAndPlugin
-  Set-PSReadLineOption -ContinuationPrompt '>> '
-  Set-PSReadLineOption -HistorySearchCursorMovesToEnd
-  Set-PSReadLineOption -TerminateOrphanedConsoleApps
-  Set-PSReadLineOption -Colors @{
-    Command                = '#5E81AC'  # Blue for Commands
-    Number                 = '#EBCB8B'  # Yellow for Numbers
-    Member                 = '#BF616A'  # Red for Member Properties and Methods
-    Operator               = '#ECEFF4'  # Light Grey for Operators
-    Type                   = '#B48EAD'  # Purple for Types
-    Variable               = '#88C0D0'  # Light Blue for Variables
-    Parameter              = '#EBCB8B'  # Yellow for Parameters
-    ContinuationPrompt     = '#B48EAD'  # Purple for Continuation Prompt
-    Default                = '#88C0D0'  # Light Blue for Default Text
-    Error                  = '#BF616A'  # Red for Errors
-    Emphasis               = '#BF616A'  # Red for Emphasis
-    Selection              = '#ECEFF4'  # Light Grey for Selection
-    Comment                = '#A3BE8C'  # Light Green for Comments
-    Keyword                = '#BF616A'  # Red for Keywords
-    String                 = '#A3BE8C'  # Light Green for Strings
-    InlinePrediction       = '#ECEFF4'  # Light Grey for Inline Prediction
-    ListPrediction         = '#B48EAD'  # Purple for List Prediction
-    ListPredictionSelected = '#5E81AC'  # Blue for Selected List Prediction
+  PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
+    Set-PSReadLineKeyHandler -Key UpArrow -Function HistorySearchBackward
+    Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward
+    Set-PSReadLineKeyHandler -Key Tab -Function Complete
+    Set-PSReadLineKeyHandler -Chord Enter -Function ValidateAndAcceptLine
+
+    Set-PSReadlineOption -BellStyle Visual
+    Set-PSReadlineOption -ShowToolTips
+    Set-PSReadlineOption -HistoryNoDuplicates
+    Set-PSReadLineOption -PredictionViewStyle InlineView
+    Set-PSReadLineOption -PredictionSource HistoryAndPlugin
+    Set-PSReadLineOption -ContinuationPrompt '>> '
+    Set-PSReadLineOption -HistorySearchCursorMovesToEnd
+    Set-PSReadLineOption -TerminateOrphanedConsoleApps
+    Set-PSReadLineOption -Colors @{
+      Command                = '#5E81AC'  # Blue for Commands
+      Number                 = '#EBCB8B'  # Yellow for Numbers
+      Member                 = '#BF616A'  # Red for Member Properties and Methods
+      Operator               = '#ECEFF4'  # Light Grey for Operators
+      Type                   = '#B48EAD'  # Purple for Types
+      Variable               = '#88C0D0'  # Light Blue for Variables
+      Parameter              = '#EBCB8B'  # Yellow for Parameters
+      ContinuationPrompt     = '#B48EAD'  # Purple for Continuation Prompt
+      Default                = '#88C0D0'  # Light Blue for Default Text
+      Error                  = '#BF616A'  # Red for Errors
+      Emphasis               = '#BF616A'  # Red for Emphasis
+      Selection              = '#ECEFF4'  # Light Grey for Selection
+      Comment                = '#A3BE8C'  # Light Green for Comments
+      Keyword                = '#BF616A'  # Red for Keywords
+      String                 = '#A3BE8C'  # Light Green for Strings
+      InlinePrediction       = '#ECEFF4'  # Light Grey for Inline Prediction
+      ListPrediction         = '#B48EAD'  # Purple for List Prediction
+      ListPredictionSelected = '#5E81AC'  # Blue for Selected List Prediction
+    }
   }
 }
 
@@ -552,6 +699,7 @@ function Initialize-Profile {
   PARAM ( ) # No parameters
 
   BEGIN {
+    Write-InformationEvent "Initializing $($ShellType) Profile"
     # Set the execution policy
     Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
         
@@ -762,6 +910,10 @@ function Manage-Functions {
   PARAM ( ) # No parameters
 
   BEGIN {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $newFunctionsFilePath = Join-Path (Split-Path -Parent $PROFILE) "custom-functions.ps1"
     $newFunctionsFileUrl = "https://github.com/luke-beep/shell-config/raw/main/configs/pwsh/custom-functions.ps1"
     if (-not (Test-Path $newFunctionsFilePath)) {
@@ -824,10 +976,18 @@ function Manage-Functions {
   }
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $form.ShowDialog()
   }
 
   END {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $form.Dispose()
   }
 }
@@ -841,6 +1001,10 @@ function Preview-Functions {
   )  
 
   BEGIN {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     if (-not ($ShowInConsole)) {
       $PanelWidth = 900
 
@@ -881,6 +1045,10 @@ function Preview-Functions {
   }
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     if ($ShowInConsole) {
       Get-Command -CommandType Function
     }
@@ -890,6 +1058,10 @@ function Preview-Functions {
   }
   
   END {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     if (-not ($ShowInConsole)) {
       $form.Dispose()
     }
@@ -901,6 +1073,10 @@ function Manage-Variables {
   PARAM ( ) # No parameters
   
   BEGIN {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $newVariablesFilePath = Join-Path (Split-Path -Parent $PROFILE) "custom-variables.ps1"
     $newVariablesFileUrl = "https://github.com/luke-beep/shell-config/raw/main/configs/pwsh/custom-variables.ps1"
 
@@ -963,10 +1139,18 @@ function Manage-Variables {
   }
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $form.ShowDialog()
   }
 
   END {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $form.Dispose()
   }
 }
@@ -980,6 +1164,10 @@ function Preview-Variables {
   )  
 
   BEGIN {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     if (-not ($ShowInConsole)) {
       $PanelWidth = 900
 
@@ -1018,6 +1206,10 @@ function Preview-Variables {
   }
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     if ($ShowInConsole) {
       Get-Variable -Scope Global
     }
@@ -1027,6 +1219,10 @@ function Preview-Variables {
   }
   
   END {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     if (-not ($ShowInConsole)) {
       $form.Dispose()
     }
@@ -1038,6 +1234,10 @@ function Set-ProfileSettings {
   PARAM ( ) # No parameters
   
   BEGIN {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $PanelWidth = 1000
     $PanelHeight = 500
 
@@ -1160,10 +1360,18 @@ function Set-ProfileSettings {
   }
   
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $form.ShowDialog()
   }
   
   END {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $form.Dispose()
   }
 }
@@ -1181,6 +1389,10 @@ function Manage-Profile {
   PARAM ( ) # No parameters
   
   BEGIN {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $PanelWidth = 905
 
     $form = New-Object System.Windows.Forms.Form
@@ -1458,10 +1670,18 @@ function Manage-Profile {
   }
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $form.ShowDialog()
   }
 
   END {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $form.Dispose()
   }
 }
@@ -1484,12 +1704,20 @@ function Get-Packages {
   )
 
   BEGIN {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $scoop = Get-Command -Name scoop -ErrorAction SilentlyContinue
     $winget = Get-Command -Name winget -ErrorAction SilentlyContinue
     $choco = Get-Command -Name choco -ErrorAction SilentlyContinue
   }
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     # Check if scoop is installed
     if ($scoop) {
       scoop list
@@ -1560,6 +1788,10 @@ function List-Directories {
   )
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     if ($Recurse) {
       Get-ChildItem -Path $Path -Recurse -Force:$ShowHidden | Format-Table -AutoSize
     }
@@ -1585,10 +1817,18 @@ function Print-Working-Directory {
   PARAM ( ) # No parameters
 
   BEGIN {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $CurrentDirectory = Get-Location
   }
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $CurrentDirectory.Path
   }
 }
@@ -1623,6 +1863,10 @@ function Change-Directory {
   )
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     if ($Path) {
       Push-Location -Path $Path
     }
@@ -1664,6 +1908,10 @@ function Make-Directory {
   )
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $Path | ForEach-Object {
       New-Item -Path $_ -ItemType Directory -Force
       if ($Permission) {
@@ -1703,6 +1951,10 @@ function Remove-Directory {
   )
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $Path | ForEach-Object {
       if ($Recurse) {
         Remove-Item -Path $_ -Recurse -Force
@@ -1756,6 +2008,10 @@ function Remove-File {
   )
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $Path | ForEach-Object {
       if ($Prompt) {
         $result = [System.Windows.Forms.MessageBox]::Show("Are you sure you want to delete $_?", "Delete File", [System.Windows.Forms.MessageBoxButtons]::YesNo)
@@ -1807,6 +2063,10 @@ function Copy-Folder-File {
   )
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     foreach ($item in $Source) {
       Copy-Item $item $Destination -Recurse:$Recurse
     }
@@ -1844,6 +2104,10 @@ function Move-Folder-File {
   )
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     foreach ($item in $Source) {
       Move-Item $item $Destination
     }
@@ -1874,6 +2138,10 @@ function Create-File {
   )
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     foreach ($item in $Path) {
       if (!(Test-Path $item)) {
         New-Item -ItemType File -Path $item -Force
@@ -1909,6 +2177,10 @@ function File-Type {
   )
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     foreach ($item in $Path) {
       if (Test-Path $item) {
         $file = Get-Item -Path $item
@@ -1942,6 +2214,10 @@ function Read-File {
   )
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     foreach ($item in $Path) {
       if (Test-Path $item) {
         $file = Get-Item -Path $item
@@ -1978,6 +2254,10 @@ function Read-File-Reverse {
   )
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     foreach ($item in $Path) {
       $content = Get-Content $item -ReadCount 0
       [array]::Reverse($content)
@@ -2018,6 +2298,10 @@ function Head-File {
   )
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     foreach ($item in $Path) {
       Get-Content $item -TotalCount $Lines
     }
@@ -2056,6 +2340,10 @@ function Tail-File {
   )
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     foreach ($item in $Path) {
       $content = Get-Content $item
       $content[ - $Lines..-1]
@@ -2085,6 +2373,10 @@ function Differential-File {
   )
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     foreach ($item in $Path) {
       Compare-Object -ReferenceObject (Get-Content $item) -DifferenceObject (Get-Content $item)
     }
@@ -2120,6 +2412,10 @@ function Write-OutputAndFile {
   )
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     foreach ($file in $FilePath) {
       $InputObject | Tee-Object -FilePath $file -Append
     }
@@ -2152,10 +2448,18 @@ function Locate-File {
   )
 
   BEGIN {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $currentLocation = Get-Location
   }
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     Get-ChildItem -Path $currentLocation -Filter "*$Pattern*" -File -Recurse -ErrorAction SilentlyContinue | Select-Object FullName
   }
 }
@@ -2209,6 +2513,10 @@ function Find-Item {
   )
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     if ($ItemType -eq "f") {
       Get-ChildItem -Path $Path -Filter $ItemName -File -Recurse -ErrorAction SilentlyContinue | Select-Object FullName
     }
@@ -2260,6 +2568,10 @@ function Get-DiskUsage {
   )
 
   BEGIN {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $sizeType = "GB"
     if ($Megabytes) {
       $sizeType = "MB"
@@ -2270,6 +2582,10 @@ function Get-DiskUsage {
   }
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     if ($Drive) {
       $vol = Get-Volume -DriveLetter $Drive
       $vol | Format-Table -AutoSize
@@ -2352,11 +2668,19 @@ function Get-DirectorySize {
   )
 
   BEGIN {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $items = Get-ChildItem $Path -Recurse -File
     $size = ($items | Measure-Object -Property Length -Sum).Sum
   }
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     if ($Megabytes) {
       $size = $size / 1MB
       $unit = "MB"
@@ -2383,6 +2707,10 @@ function Get-DirectorySize {
   }
 
   END {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     return $output
   }
 }
@@ -2418,6 +2746,10 @@ function Get-SystemInfo {
   )
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     if ($KernelName) {
       $output = [PSCustomObject]@{
         'Kernel version' = (Get-CimInstance -ClassName Win32_OperatingSystem).Version
@@ -2440,6 +2772,10 @@ function Get-SystemInfo {
   }
 
   END {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     return $output
   }
 }
@@ -2481,6 +2817,10 @@ function Get-HostNameInfo {
   )
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     if ($Alias) {
       $output = [PSCustomObject]@{
         Alias = [System.Net.Dns]::GetHostName()
@@ -2504,6 +2844,10 @@ function Get-HostNameInfo {
   }
 
   END {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     return $output
   }
 }
@@ -2530,16 +2874,28 @@ function Measure-ExecutionTime {
   )
 
   BEGIN {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $result = Measure-Command -Expression $ScriptBlock
   }
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $output = [PSCustomObject]@{
       'Execution Time (ms)' = $result.TotalMilliseconds
     }
   }
 
   END {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     return $output
   }
 }
@@ -2583,6 +2939,10 @@ function Get-Jobs {
   )
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     if ($ProcessId) {
       Get-Job | ForEach-Object { $_.Id }
     }
@@ -2615,6 +2975,10 @@ function Kill-Process {
     [string]$ProcessId
   )
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     Stop-Process -Id $ProcessId
   }
 }
@@ -2641,6 +3005,10 @@ function Find-DNSRecord {
     [string]$Type
   )
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     Resolve-DnsName -Name $Domain -Type $Type
   }
 }
@@ -2670,6 +3038,10 @@ function Shell-History {
   )
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     if ($Clear) {
       Clear-History
     }
@@ -2699,6 +3071,10 @@ function Find-Process {
   )
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     Get-Process | Where-Object { $_.Name -like "*$Name*" } | Format-Table `
     @{Label = "NPM(K)"; Expression = { [int]($_.NPM / 1024) } },
     @{Label = "PM(K)"; Expression = { [int]($_.PM / 1024) } },
@@ -2722,10 +3098,18 @@ function Get-Updates {
   PARAM ( ) # No parameters
 
   BEGIN {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $updates = Get-CimInstance -ClassName Win32_QuickFixEngineering
   }
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $updates | Format-Table `
     @{Label = "InstalledOn"; Expression = { if ($_.InstalledOn) { $_.InstalledOn.ToString("yyyy-MM-dd") } } },
     Description, HotFixID, InstalledBy
@@ -2745,6 +3129,10 @@ function Get-SystemReport {
   PARAM ( ) # No parameters
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     Invoke-RestMethod "https://raw.githubusercontent.com/luke-beep/GSR/main/GenerateSystemReport.ps1" | Invoke-Expression
   }
 }
@@ -2762,6 +3150,10 @@ function Activate-Windows {
   PARAM ( ) # No parameters
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     Invoke-RestMethod https://massgrave.dev/get | Invoke-Expression
   }
 }
@@ -2787,42 +3179,43 @@ function Invoke-DownloadObject {
   )
   
   BEGIN {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $downloadDirectory = if ($ObjectPath) { $ObjectPath } else { Get-Location }
     $downloadedObjects = @()
     $jobs = @()
   }
 
-  PROCESS { 
+  PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    } 
     for ($i = 0; $i -lt $Url.Length; $i++) {
-      try {
-        $actualObjectName = if ($ObjectName.Length -gt $i) { $ObjectName[$i] } else { [System.IO.Path]::GetFileName($Url[$i]) }
-        $destinationPath = Join-Path $downloadDirectory $actualObjectName
-        if ($Overwrite -and (Test-Path $destinationPath)) {
-          if (-not $Silent) {
-            Write-Host "Removing $destinationPath"
-          }
-          Remove-Item $destinationPath -Force
-        }
-
-        $scriptBlock = {
-          PARAM ($url, $destinationPath, $overwrite, $silent)
-          $curlCommand = "curl -o `"$destinationPath`" -L `"$url`" -s"
-          if ($overwrite) {
-            $curlCommand += " -O"
-          }
-          Invoke-Expression $curlCommand 2>&1 
-        }
-
-        $job = Start-Job -ScriptBlock $scriptBlock -ArgumentList $Url[$i], $destinationPath, $Overwrite, $Silent
-        $jobs += $job
-
-        $downloadedObjects += $destinationPath
-      }
-      catch {
+      $actualObjectName = if ($ObjectName.Length -gt $i) { $ObjectName[$i] } else { [System.IO.Path]::GetFileName($Url[$i]) }
+      $destinationPath = Join-Path $downloadDirectory $actualObjectName
+      if ($Overwrite -and (Test-Path $destinationPath)) {
         if (-not $Silent) {
-          Write-Error "An error occurred: $_"
+          Write-Host "Removing $destinationPath"
         }
+        Remove-Item $destinationPath -Force
       }
+
+      $scriptBlock = {
+        PARAM ($url, $destinationPath, $overwrite, $silent)
+        $curlCommand = "curl -o `"$destinationPath`" -L `"$url`" -s"
+        if ($overwrite) {
+          $curlCommand += " -O"
+        }
+        Invoke-Expression $curlCommand 2>&1 
+      }
+
+      $job = Start-Job -ScriptBlock $scriptBlock -ArgumentList $Url[$i], $destinationPath, $Overwrite, $Silent
+      $jobs += $job
+
+      $downloadedObjects += $destinationPath
     }
     $jobs | Wait-Job
 
@@ -2833,6 +3226,10 @@ function Invoke-DownloadObject {
   }
 
   END {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     if (-not $Silent) {
       Invoke-Item -Path $downloadDirectory  
     }
@@ -2860,6 +3257,10 @@ function Invoke-Object {
   )
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     foreach ($object in $Objects) {
       if (Test-Path $object) {
         Start-Process $object
@@ -2881,6 +3282,10 @@ function Get-Services {
   PARAM ( ) # No parameters
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     Get-Service | ForEach-Object {
       $status = $_.Status
       $name = $_.Name
@@ -2907,6 +3312,10 @@ function Invoke-TargetHack {
   )
 
   BEGIN {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $progress = 0
     $progressMax = 100
     $progressStep = 10
@@ -2914,6 +3323,10 @@ function Invoke-TargetHack {
   }
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $job = Start-Job -ScriptBlock {
       $progress = 0
       $progressMax = 100
@@ -2933,6 +3346,10 @@ function Invoke-TargetHack {
   }
 
   END {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     Write-Host "Hacking complete!"
     Write-Host "Target: $Target"
     Write-Host "Status: $($job.State)"
@@ -2952,11 +3369,19 @@ function Get-ProgrammingJoke {
   PARAM ( ) # No parameters
 
   BEGIN {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $response = Invoke-RestMethod -Uri 'https://official-joke-api.appspot.com/jokes/programming/random'
     $joke = $response[0]
   }
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     Write-Host ("{0} {1}" -f $joke.setup, $joke.punchline) 
   }
 }
@@ -2974,6 +3399,10 @@ function Start-MatrixRain {
   PARAM ( ) # No parameters
 
   BEGIN {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $width = $host.UI.RawUI.BufferSize.Width
     $height = $host.UI.RawUI.BufferSize.Height
     $streams = 1..($width * 200) | ForEach-Object { @{ Position = Get-Random -Minimum 0 -Maximum $height; Speed = Get-Random -Minimum 1 -Maximum 2 } }
@@ -2981,24 +3410,27 @@ function Start-MatrixRain {
   }
 
   PROCESS {
-    try {
-      while ($true) {
-        Clear-Host
-        for ($i = 0; $i -lt $width; $i++) {
-          $stream = $streams[$i]
-          $stream.Position = ($stream.Position + $stream.Speed) % $height
-          $host.UI.RawUI.CursorPosition = New-Object -TypeName System.Management.Automation.Host.Coordinates -ArgumentList $i, $stream.Position
-          Write-Host (Get-Random -InputObject ('!'..'/' + ':'..'@' + '['..'`' + '{'..'~' + 0..9)) -NoNewline -ForegroundColor Green
-        }
-        Start-Sleep -Milliseconds 200
-      } 
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
     }
-    finally {
+    while ($true) {
       Clear-Host
-    }
+      for ($i = 0; $i -lt $width; $i++) {
+        $stream = $streams[$i]
+        $stream.Position = ($stream.Position + $stream.Speed) % $height
+        $host.UI.RawUI.CursorPosition = New-Object -TypeName System.Management.Automation.Host.Coordinates -ArgumentList $i, $stream.Position
+        Write-Host (Get-Random -InputObject ('!'..'/' + ':'..'@' + '['..'`' + '{'..'~' + 0..9)) -NoNewline -ForegroundColor Green
+      }
+      Start-Sleep -Milliseconds 200
+    } 
   }
 
   END {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     Clear-Host
   }
 }
@@ -3020,11 +3452,19 @@ function Search-DuckDuckGo {
   )
 
   BEGIN {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $encodedQuery = [System.Web.HttpUtility]::UrlEncode($Query)
     $url = "https://duckduckgo.com/?q=$encodedQuery&t=h_&ia=web"
   }
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     Start-Process $url
   }
 }
@@ -3049,10 +3489,18 @@ function Test-IP {
   )
 
   BEGIN {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $info = Invoke-RestMethod -Uri "http://ip-api.com/json/$($IP)"
   }
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     Write-Host "IP: $($IP)"
     Write-Host "Country: $($info.country)"
     Write-Host "Region: $($info.regionName)"
@@ -3084,6 +3532,10 @@ function Test-Ports {
   )
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     for ($port = $StartPort; $port -le $EndPort; $port++) {
       $tcpClient = New-Object System.Net.Sockets.TcpClient
       $success = $tcpClient.ConnectAsync($IP, $port).Wait(1000)
@@ -3111,6 +3563,10 @@ function Edit-Hosts {
   PARAM ( ) # No parameters
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     Invoke-RestMethod "https://raw.githubusercontent.com/luke-beep/all-about-windows/main/scripts/HostEntryManager.ps1" | Invoke-Expression
   }
 }
@@ -3128,6 +3584,10 @@ function Set-DNS {
   PARAM ( ) # No parameters
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     Invoke-RestMethod "https://raw.githubusercontent.com/luke-beep/all-about-windows/main/scripts/DNSChanger.ps1" | Invoke-Expression
   }
 }
@@ -3145,6 +3605,10 @@ function Set-NetworkAdapter {
   PARAM ( ) # No parameters
   
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     Invoke-RestMethod "https://raw.githubusercontent.com/luke-beep/all-about-windows/main/scripts/NetworkAdapterManager.ps1" | Invoke-Expression
   }
 }
@@ -3162,6 +3626,10 @@ function Set-Nagles {
   PARAM ( ) # No parameters
   
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     Invoke-RestMethod "https://raw.githubusercontent.com/luke-beep/all-about-windows/main/scripts/NaglesAlgorithm.ps1" | Invoke-Expression
   }
 }
@@ -3179,6 +3647,10 @@ function Empty-RecycleBin {
   PARAM ( ) # No parameters
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     Clear-RecycleBin -Force
   }
 }
@@ -3196,10 +3668,18 @@ function Copy-Path {
   PARAM ( ) # No parameters
 
   BEGIN {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $path = (Get-Location).Path
   }
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     Set-Clipboard $path
   }
 }
@@ -3217,12 +3697,20 @@ function Take-Snapshot {
   PARAM ( ) # No parameters
 
   BEGIN {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $BackupDirectory = "$SystemDrive\Snapshots"
     $currentDirectory = Get-Location
     $backupPath = Join-Path -Path $BackupDirectory -ChildPath (Get-Date -Format "yyyy-MM-dd_HH-mm-ss") + "_" + (Split-Path -Leaf $currentDirectory.Provider)
   }
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     if (!(Test-Path -Path $backupPath)) {
       New-Item -ItemType Directory -Path $backupPath 
     }
@@ -3244,6 +3732,10 @@ function Get-ShellTips {
   PARAM ( ) # No parameters
 
   BEGIN {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $PanelWidth = 1000
 
     $form = New-Object System.Windows.Forms.Form
@@ -3280,10 +3772,18 @@ function Get-ShellTips {
   }
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $form.ShowDialog()
   }
 
   END {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $form.Dispose()
   }
 }
@@ -3301,6 +3801,10 @@ function Set-ShellTheme {
   PARAM ( ) # No parameters
 
   BEGIN {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $ompConfig = "$UserProfile\.config\omp.json"
     $starshipConfig = "$UserProfile\.config\starship.toml"
     $starShip = Get-ItemProperty -Path $KeyPath -Name 'Starship' -ErrorAction SilentlyContinue
@@ -3415,10 +3919,18 @@ function Set-ShellTheme {
   }
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $form.ShowDialog()
   }
 
   END {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $form.Dispose()
   }
 }
@@ -3444,6 +3956,10 @@ function Find-Manual {
   )
 
   BEGIN {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     # Assuming that aliases are in lowercase
     if ($Name -cmatch "[A-Z]") {
       $Name = Get-ReverseAlias $Name
@@ -3491,6 +4007,10 @@ function Find-Manual {
   }
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     if ($GUI) {
       $form.ShowDialog()
     }
@@ -3500,6 +4020,10 @@ function Find-Manual {
   }
 
   END {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     if ($GUI) {
       $form.Dispose()
     }
@@ -3524,6 +4048,10 @@ function Find-Command {
   )
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $Command = Get-Command -Name $Name -ErrorAction SilentlyContinue
 
     if ($Command) {
@@ -3537,6 +4065,10 @@ function Find-Command {
   }
 
   END {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $Command
   }
 }
@@ -3558,11 +4090,19 @@ function Import-Aliases {
   )
 
   BEGIN {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $newAliasFilePath = Join-Path (Split-Path -Parent $PROFILE) "new-aliases.json"
     $oldAliasFilePath = Join-Path (Split-Path -Parent $PROFILE) "old-aliases.json"  
   }
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     # Force loading of aliases
     if ($Force) {
       Remove-Item $oldAliasFilePath -Force
@@ -3605,12 +4145,7 @@ function Import-Aliases {
         $newAliases = Get-Content $newAliasFilePath | ConvertFrom-Json
   
         foreach ($alias in $newAliases.PSObject.Properties) {
-          try {
-            Set-Alias -Name $alias.Name -Value $alias.Value -Scope Global -Option AllScope -Force
-          }
-          catch {
-            Write-Error "Error setting alias $($alias.Name): $_"
-          }
+          Set-Alias -Name $alias.Name -Value $alias.Value -Scope Global -Option AllScope -Force
         }  
       }
     }
@@ -3630,6 +4165,10 @@ function Add-Aliases {
   PARAM ( ) # No parameters
   
   BEGIN {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     
     $AliasConfigFile = "new-aliases.json"
     $aliasConfigFilePath = Join-Path (Split-Path -Parent $PROFILE) $AliasConfigFile
@@ -3748,10 +4287,18 @@ function Add-Aliases {
   }
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $form.ShowDialog()
   }
 
   END {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $form.Dispose()
   }
 }
@@ -3769,6 +4316,10 @@ function Remove-Aliases {
   PARAM ( ) # No parameters
 
   BEGIN {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $AliasConfigFile = "old-aliases.json"
     $aliasConfigFilePath = Join-Path (Split-Path -Parent $PROFILE) $AliasConfigFile
   
@@ -3872,10 +4423,18 @@ function Remove-Aliases {
   }
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $form.ShowDialog()
   }
 
   END {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $form.Dispose()
   }
 }
@@ -3887,10 +4446,18 @@ function Get-ReverseAlias {
   )
 
   BEGIN {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $aliases = Get-Alias | Where-Object { $_.Definition -eq $Command }
   }
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     if ($aliases) {
       $aliases.Name
     }
@@ -3916,6 +4483,10 @@ function Get-ProfileHelp {
   )
 
   BEGIN {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $excludedNames = 'A:', 'B:', 'C:', 'D:', 'E:', 'F:', 'G:', 'H:', 'I:', 'J:', 'K:', 'L:', 'M:', 'N:', 'O:', 'P:', 'Q:', 'R:', 'S:', 'T:', 'U:', 'V:', 'W:', 'X:', 'Y:', 'Z:'
     $commands = Get-Command -CommandType Function | Where-Object { $_.Source -eq "" -and $_.Name -notin $excludedNames } | ForEach-Object {
       $help = Get-Help $_.Name -ErrorAction SilentlyContinue
@@ -3934,6 +4505,10 @@ function Get-ProfileHelp {
   }
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     if (-not $ShowInGUI) {
       $commandString = "For more information about a command, type 'Get-Help <command-name>'`n" + ($commands | Out-String)
       $commandString
@@ -3953,6 +4528,10 @@ function Show-Help {
   )
 
   BEGIN {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $PanelWidth = 1000
 
     $form = New-Object System.Windows.Forms.Form
@@ -3987,10 +4566,18 @@ function Show-Help {
   }
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $form.ShowDialog()
   }
 
   END {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $form.Dispose()
   }
 }
@@ -4019,11 +4606,19 @@ function Calendar {
   )
 
   BEGIN {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $daysInMonth = [DateTime]::DaysInMonth($Year, $Month)
     $date = New-Object DateTime $Year, $Month, 1
   }
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     Write-Host ("    {0} {1}" -f $date.ToString('MMMM'), $Year)
     Write-Host "Su Mo Tu We Th Fr Sa"
 
@@ -4060,6 +4655,10 @@ function Calendar {
   }
 
   END {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     Write-Host ""
   }
 }
@@ -4077,11 +4676,19 @@ function Get-ShellInfo {
   PARAM ( ) # No parameters
 
   BEGIN {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $name = $host.Name
     $version = $host.Version
   }
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     Write-Host "Profile Path: $PROFILE"
     Write-Host "Host Name: $($name)"
     Write-Host "Host Version: $($version) -> $($ShellType) ($Bitness)"
@@ -4115,6 +4722,10 @@ function Pattern-Match {
   )
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $Content | Select-String -Pattern $Pattern
   }
 }
@@ -4149,6 +4760,10 @@ function Pattern-Replace {
   )
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $Object | ForEach-Object {
       $content = Get-Content $_ -ErrorAction SilentlyContinue
       if (-not $content) {
@@ -4187,6 +4802,10 @@ function Analyze-Script {
   )
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     Invoke-ScriptAnalyzer -ScriptDefinition $Content
   }
 }
@@ -4207,6 +4826,10 @@ function Analyze-Profile {
   )
 
   BEGIN {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $profileContent = Get-Content $PROFILE
     $profileContentString = $profileContent | Out-String
 
@@ -4244,6 +4867,10 @@ function Analyze-Profile {
   }
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     if ($GUI) {
       $analysis = Analyze-Script -Content $profileContentString
       $richTextBox.Text = $analysis | Out-String
@@ -4256,6 +4883,10 @@ function Analyze-Profile {
   }
 
   END {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     if ($GUI) {
       $form.Dispose() 
     }
@@ -4279,11 +4910,19 @@ function Get-ColorPalette {
   PARAM ( ) # No parameters
 
   BEGIN {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $colors = [System.Enum]::GetValues([System.ConsoleColor])
     $colors = $colors | Sort-Object
   }
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     for ($i = 0; $i -lt $colors.Length; $i += 8) {
       for ($j = 0; $j -lt 1; $j++) {
         for ($k = 0; $k -lt 8; $k++) {
@@ -4329,6 +4968,10 @@ function To-Json {
   )
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     return $Pipe | ConvertTo-Json -Depth $Depth
   }
 }
@@ -4364,6 +5007,10 @@ function From-Json {
   )
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     return $Pipe | ConvertFrom-Json -AsHashTable:$AsHashTable
   }
 }
@@ -4391,16 +5038,28 @@ function Select-Unique {
   )
 
   BEGIN {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $uniqueLines = @()
   }
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     if ($Pipe) {
       $uniqueLines += $Pipe
     }
   }
 
   END {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     $uniqueLines | Select-Object -Unique
   }
 }
@@ -4460,6 +5119,10 @@ function Invoke-CSharp {
   )
 
   BEGIN {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     if ($Help) {
       csharprepl --help
       break
@@ -4495,6 +5158,10 @@ function Invoke-CSharp {
   }
 
   PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
     Invoke-Expression "csharprepl $ThemeCommand $FrameworkCommand $usingString $referenceString $additionalParametersString"
   }
 }
@@ -4504,3 +5171,7 @@ Import-Aliases # Import aliases
 # ----------------------------------------
 # End of Azrael's PowerShell/Pwsh Profile
 # ----------------------------------------
+
+Register-EngineEvent -SourceIdentifier PowerShell.Exiting -Action {
+  Stop-Transcript
+} -SupportEvent

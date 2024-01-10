@@ -21,6 +21,7 @@
     - [🚀 Installation](#-installation)
     - [🌟 Features](#-features)
     - [🛠️ Usage](#️-usage)
+    - [📚 Customization](#-customization)
     - [🤝 Contributing](#-contributing)
     - [📝 License](#-license)
     - [📮 Contact](#-contact)
@@ -43,7 +44,7 @@ This repository contains my personal configuration for the Windows Terminal. It'
 
 ---
 
-You have two choices for installation. You can either use the automated installation script or manually install the profile. The [automated installation script](./scripts/install-configuration.ps1) is recommended for most users. However, if you want to manually install the profile, you can follow the [manual installation guide](./configs/installation.md).
+You have two choices for installation. You can either use the automated installation script or manually install the profile. The [automated installation script](./scripts/install-configuration.ps1) is recommended for most users. However, if you want to manually install the profile, you can follow the [manual installation guide](./docs/installation.md).
 
 - **Automated Installation** - The automated installation script is the recommended installation method for most users. It's designed to be user-friendly and easy to use. It will automatically install the profile and configure the Windows Terminal. It will also automatically install the required dependencies. You can use the following command to install the profile:
 
@@ -51,7 +52,10 @@ You have two choices for installation. You can either use the automated installa
 iwr -useb https://raw.githubusercontent.com/luke-beep/shell-config/main/scripts/install-configuration.ps1 | iex
 ```
 
-- **Manual Installation** - The manual installation guide is designed for advanced users who want to manually install the profile. It's designed to be more flexible and customizable. It will also automatically install the required dependencies. You can follow the [manual installation guide](./configs/installation.md) for more information. **NOTE**: The manual installation guide is not recommended for most users.
+- **Manual Installation** - The manual installation guide is designed for advanced users who want to manually install the profile. It's designed to be more flexible and customizable. It will also automatically install the required dependencies. You can follow the [manual installation guide](./docs/installation.md) for more information. 
+
+> [!NOTE]
+> The automated installation script is the recommended installation method for most users. It's designed to be user-friendly and easy to use. It will automatically install the profile and configure the Windows Terminal. It will also automatically install the required dependencies.
 
 ### 🌟 Features
 
@@ -80,6 +84,8 @@ iwr -useb https://raw.githubusercontent.com/luke-beep/shell-config/main/scripts/
 - **Help and Documentation** - Access to detailed help and documentation for each function.
 - **Guided Initial Setup** - Initial setup with guided instructions and configuration checks.
 - **Unix-Style Commands** - Unix-style commands for enhanced cross-platform compatibility. *Note* that these commands are only imitations of the real commands. They are not actual Unix commands and won't function the same way.
+- **Tips for Terminal usage** - Tips for using the Windows Terminal.
+- **Profile customization** - Customize your profile using the following guide [here](./docs/customizing.md).
 
 This profile is designed to offer a comprehensive, customizable, and user-friendly PowerShell environment.
 
@@ -119,6 +125,13 @@ Get-ShellTips
 
 > [!NOTE]
 > The actual command is `Get-ShellTips`, but you can also use the alias `tips` to run the command. The tips are located in the [`tips.md`](/configs/pwsh/tips.md) file.
+
+### 📚 Customization
+
+The profile is designed to be customizable. You can customize the profile by using the `profile` command. This will open a new immersive window with a profile template. You can then use the available options to customize your profile. When you're done, simply restart your shell and the changes will be applied.
+
+> [!NOTE]
+> The guide to customizing your profile can be found [here](./docs/customizing.md).
 
 ### 🤝 Contributing
 
