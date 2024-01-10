@@ -34,7 +34,7 @@ function InstallScoopPackage {
 
     if (!(Get-Command scoop -ErrorAction SilentlyContinue)) {
         Write-Host "Scoop is not installed. Installing..."
-        Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')
+        iex "& {$(irm get.scoop.sh)} -RunAsAdmin"
     }
 
     Write-Host "Installing $PackageName..."

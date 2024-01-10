@@ -794,7 +794,7 @@ function Initialize-Profile {
   PROCESS {
     # Check if the necessary tools are installed and install them if they're not
     if (-not $scoop) {
-      Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')
+      iex "& {$(irm get.scoop.sh)} -RunAsAdmin"
     }
 
     if (-not $choco) {

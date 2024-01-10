@@ -52,6 +52,10 @@ else {
     Write-Host "https://github.com/luke-beep/shell-config/`n"
     
     Write-Host "This script covers the following shells: PowerShell, PowerShell Core, Windows Terminal & Command Prompt/Clink."
+        
+    Write-Host "Installing the necessary packages..."
+    Start-Process powershell -Verb runAs -ArgumentList "-NoProfile -Command `"& { Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/luke-beep/shell-config/main/scripts/packages/install-packages.ps1') }`""
+    Write-Host "Packages installed."
 
     Write-Host "Applying Windows Terminal settings..."
     Invoke-WebRequest -Uri https://github.com/luke-beep/shell-config/raw/main/configs/terminal/settings.json -OutFile $TerminalSettingsPath
@@ -66,9 +70,6 @@ else {
 
     Write-Host "Installing the $ShellType configuration..."
     Invoke-WebRequest -Uri https://github.com/luke-beep/shell-config/raw/main/configs/pwsh/Microsoft.PowerShell_profile.ps1 -OutFile $PROFILE
-
-    Write-Host "Installing the necessary packages..."
-    Start-Process powershell -Verb runAs -ArgumentList "-NoProfile -Command `"& { Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/luke-beep/shell-config/main/scripts/packages/install-packages.ps1') }`""
 
     Write-Host "Installation complete. Please restart your shell."
     New-ItemProperty -Path $installationKey -Name "$($ShellType)Installed" -Value 1 -PropertyType DWORD -Force
