@@ -104,6 +104,8 @@ else {
     InstallChocolateyPackage sysinternals
     InstallChocolateyPackage ripgrep
 
+    winget install --id Microsoft.Powershell --source winget
+
     Write-Host "Packages are now installed."
 }
 
