@@ -125,4 +125,3 @@ Set-Variable -Name "AccentColor" -Value "#HexColor" -Scope Global
 <br>
 
 <div align="right"><a href="#">(Back to top)</a></div>
-```
