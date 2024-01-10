@@ -7,13 +7,10 @@
 # Version: 1.2.3
 # Date: 2024-01-04
 
-Set-ExecutionPolicy Bypass -Scope Process -Force
-
 # ----------------------------------------
 # Variables
 # ----------------------------------------
 
-$ShellType = if ($host.Version.Major -ge 7) { "Pwsh" } else { "PowerShell" }
 $installationKey = "HKCU:\Software\Azrael\Packages"
 
 # ----------------------------------------
@@ -21,16 +18,8 @@ $installationKey = "HKCU:\Software\Azrael\Packages"
 # ----------------------------------------
 
 if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
-    if ($ShellType -eq "Pwsh") {
-        Write-Host "Relaunching as an elevated process..."
-        Start-Process pwsh.exe "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs
-        exit
-    }
-    else {
-        Write-Host "Relaunching as an elevated process..."
-        Start-Process powershell.exe "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs
-        exit
-    }   
+    Write-Host "This script must be run as an administrator. Exiting..."
+    exit
 }
 
 # ----------------------------------------

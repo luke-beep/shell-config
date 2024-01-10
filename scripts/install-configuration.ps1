@@ -21,16 +21,8 @@ $KernelVersion = (Get-CimInstance -ClassName Win32_OperatingSystem).Version
 # ----------------------------------------
 
 if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
-    if ($ShellType -eq "Pwsh") {
-        Write-Host "Relaunching as an elevated process..."
-        Start-Process pwsh.exe "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs
-        exit
-    }
-    else {
-        Write-Host "Relaunching as an elevated process..."
-        Start-Process powershell.exe "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs
-        exit
-    }   
+    Write-Host "This script must be run as an administrator. Exiting..."
+    exit
 }
 
 # ----------------------------------------
@@ -73,7 +65,7 @@ else {
     Invoke-WebRequest -Uri https://github.com/luke-beep/shell-config/raw/main/configs/pwsh/Microsoft.PowerShell_profile.ps1 -OutFile $PROFILE
 
     Write-Host "Installing the necessary packages..."
-    Invoke-WebRequest -Uri https://raw.githubusercontent.com/luke-beep/shell-config/master/scripts/packages/install-packages.ps1 | Invoke-Expression
+    Start-Process powershell -Verb runAs -ArgumentList "-NoProfile -Command `"& { Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/luke-beep/shell-config/main/scripts/packages/install-packages.ps1') }`""
 
     Write-Host "Installation complete. Please restart your shell."
 }
