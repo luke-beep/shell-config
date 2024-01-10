@@ -41,7 +41,10 @@ else {
     if (-not (Test-Path $installationKey)) {
         New-Item -Path $installationKey -Force
     }
-    New-ItemProperty -Path $installationKey -Name "$($ShellType)Installed" -Value 1 -PropertyType DWORD -Force
+
+    if (-not (Test-Path $PROFILE)) {
+        New-Item -Path $PROFILE -Force
+    }
 
     Write-Host "Microsoft Windows [Version $($KernelVersion)]" # Fun. I like it.
     Write-Host "(c) Microsoft Corporation. All rights reserved.`n"
@@ -68,6 +71,7 @@ else {
     Start-Process powershell -Verb runAs -ArgumentList "-NoProfile -Command `"& { Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/luke-beep/shell-config/main/scripts/packages/install-packages.ps1') }`""
 
     Write-Host "Installation complete. Please restart your shell."
+    New-ItemProperty -Path $installationKey -Name "$($ShellType)Installed" -Value 1 -PropertyType DWORD -Force
 }
 
 # ----------------------------------------
