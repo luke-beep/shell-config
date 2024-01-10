@@ -49,6 +49,7 @@ You have two choices for installation. You can either use the automated installa
 - **Automated Installation** - The automated installation script is the recommended installation method for most users. It's designed to be user-friendly and easy to use. It will automatically install the profile and configure the Windows Terminal. It will also automatically install the required dependencies. You can use the following command to install the profile:
 
 ```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 iwr -useb https://raw.githubusercontent.com/luke-beep/shell-config/main/scripts/install-configuration.ps1 | iex
 ```
 
