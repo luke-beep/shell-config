@@ -57,57 +57,63 @@ function InstallChocolateyPackage {
 }
 
 if ((Get-ItemProperty -Path $installationKey -Name Installed).Installed -eq 1) {
-    Write-Host "Packages are already installed. Exiting..."
-}
-else {
-    Write-Host "Packages are not installed. Installing..."
-    if (-not (Test-Path $installationKey)) {
-        New-Item -Path $installationKey -Force
+    Write-Host "Packages are already installed. Do you want to reinstall them? (y/n)"
+    $input = Read-Host
+    if ($input -eq "y") {
+        Remove-Item -Path $installationKey -Force -Recurse -ErrorAction SilentlyContinue
     }
-    New-ItemProperty -Path $installationKey -Name Installed -Value 1 -PropertyType DWORD -Force
-
-    Write-Host "Microsoft Windows [Version $($KernelVersion)]" # Fun. I like it.
-    Write-Host "(c) Microsoft Corporation. All rights reserved.`n"
-    Write-Host "Copyright (c) 2023-2024 Azrael"
-    Write-Host "https://github.com/luke-beep/shell-config/`n"
-    
-    Write-Host "This script doesn't cover Winget packages. Please install them manually."
-
-    InstallScoopPackage 7zip
-    InstallScoopPackage btop
-    InstallScoopPackage dark
-    InstallScoopPackage fastfetch
-    InstallScoopPackage gh
-    InstallScoopPackage git
-    InstallScoopPackage git-crypt
-    InstallScoopPackage git-lfs
-    InstallScoopPackage git-quick-stats
-    InstallScoopPackage neofetch
-    InstallScoopPackage nvm
-    InstallScoopPackage ntop
-    InstallScoopPackage oh-my-posh
-    InstallScoopPackage posh-git
-    InstallScoopPackage python
-    InstallScoopPackage scoop-search
-    InstallScoopPackage starship
-    InstallScoopPackage touch
-    InstallScoopPackage vim
-    InstallScoopPackage neovim
-    InstallScoopPackage winget
-    InstallScoopPackage zip
-    InstallScoopPackage clink
-
-    InstallChocolateyPackage firefox
-    InstallChocolateyPackage gimp
-    InstallChocolateyPackage libreoffice
-    InstallChocolateyPackage librewolf
-    InstallChocolateyPackage sysinternals
-    InstallChocolateyPackage ripgrep
-
-    winget install --id Microsoft.Powershell --source winget
-
-    Write-Host "Packages are now installed."
+    else {
+        Write-Host "Exiting..."
+        exit
+    }
 }
+Write-Host "Packages are not installed. Installing..."
+if (-not (Test-Path $installationKey)) {
+    New-Item -Path $installationKey -Force
+}
+New-ItemProperty -Path $installationKey -Name Installed -Value 1 -PropertyType DWORD -Force
+
+Write-Host "Microsoft Windows [Version $($KernelVersion)]" # Fun. I like it.
+Write-Host "(c) Microsoft Corporation. All rights reserved.`n"
+Write-Host "Copyright (c) 2023-2024 Azrael"
+Write-Host "https://github.com/luke-beep/shell-config/`n"
+    
+Write-Host "This script doesn't cover Winget packages. Please install them manually."
+
+InstallScoopPackage 7zip
+InstallScoopPackage btop
+InstallScoopPackage dark
+InstallScoopPackage fastfetch
+InstallScoopPackage gh
+InstallScoopPackage git
+InstallScoopPackage git-crypt
+InstallScoopPackage git-lfs
+InstallScoopPackage git-quick-stats
+InstallScoopPackage neofetch
+InstallScoopPackage nvm
+InstallScoopPackage ntop
+InstallScoopPackage oh-my-posh
+InstallScoopPackage posh-git
+InstallScoopPackage python
+InstallScoopPackage scoop-search
+InstallScoopPackage starship
+InstallScoopPackage touch
+InstallScoopPackage vim
+InstallScoopPackage neovim
+InstallScoopPackage winget
+InstallScoopPackage zip
+InstallScoopPackage clink
+
+InstallChocolateyPackage firefox
+InstallChocolateyPackage gimp
+InstallChocolateyPackage libreoffice
+InstallChocolateyPackage librewolf
+InstallChocolateyPackage sysinternals
+InstallChocolateyPackage ripgrep
+
+winget install --id Microsoft.Powershell --source winget
+
+Write-Host "Packages are now installed."
 
 # ----------------------------------------
 # Footer
