@@ -180,6 +180,9 @@ $CurrentVersion = if ($null -eq $VersionKey) { $null } else { $VersionKey.Versio
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "", Justification = "Suppressing warning for this variable", Target = "LatestVersion")]
 $LatestVersion = Invoke-RestMethod -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/version'
 
+# Security
+$LockOnLogin = Get-ItemProperty -Path $KeyPath -Name "LockOnLogin" -ErrorAction SilentlyContinue
+
 # Environment Variables
 $SystemDrive = $env:SystemDrive
 $UserName = $env:UserName
@@ -874,6 +877,10 @@ function Initialize-Profile {
       New-ItemProperty -Path $ToolsKeyPath -Name 'CSharpReplInstalled' -Value 1 -PropertyType 'DWord' -Force 
       dotnet tool install -g csharprepl
     }
+
+    if ($null -eq $LockOnLogin) {
+      Set-ItemProperty -Path $KeyPath -Name "LockOnLogin" -Value 0
+    }    
 
     # Check if the profile has been run before
     if ($firstRunKey.FirstRun -eq 1) {
@@ -6195,3 +6202,7 @@ Register-EngineEvent -SourceIdentifier PowerShell.Exiting -Action {
   Stop-Transcript
   Write-Host "PowerShell/Pwsh session ended at $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')"
 } -SupportEvent
+
+if ($LockOnLogin.LockOnLogin -eq 1) {
+  Lock-Session
+} # Lock in the end, this will prevent the user from utilizing the shell if they don't know the password, but it'll still load the profile
