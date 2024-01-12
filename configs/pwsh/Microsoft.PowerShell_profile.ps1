@@ -4,7 +4,7 @@
 
 # Author: LukeHjo (Azrael)
 # Description: This is my PowerShell profile. It contains features that I use on a daily basis.
-# Version: 1.3.0
+# Version: 1.3.1
 # Date: 2024-01-12
 
 # ----------------------------------------
@@ -33,6 +33,10 @@ function Write-InformationEvent {
     Write-EventLog -LogName $LogName -Source $SourceName -EntryType Information -EventId 1 -Message $Message
   }
 }
+
+# ----------------------------------------
+# Logging
+# ----------------------------------------
 
 function Write-WarningEvent {
   [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
@@ -72,7 +76,6 @@ TRAP {
   continue
 }
 
-
 # ----------------------------------------
 # Import Modules
 # ----------------------------------------
@@ -80,6 +83,7 @@ TRAP {
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 Add-Type -AssemblyName System.Management.Automation
+Add-Type -AssemblyName PresentationFramework
 
 if (-not (Get-Module -ListAvailable -Name PSReadLine -ErrorAction SilentlyContinue)) {
   Install-Module -Name PSReadLine -Force -Scope CurrentUser
@@ -3479,7 +3483,6 @@ function Start-MatrixRain {
       continue
     }
     while ($true) {
-      Clear-Host
       for ($i = 0; $i -lt $width; $i++) {
         $stream = $streams[$i]
         $stream.Position = ($stream.Position + $stream.Speed) % $height
@@ -3495,7 +3498,6 @@ function Start-MatrixRain {
       Write-ErrorEvent $_.Exception.Message
       continue
     }
-    Clear-Host
   }
 }
 
@@ -6051,6 +6053,138 @@ function Open-Tools {
   }
 }
 
+<#
+.SYNOPSIS
+  Locks the current PowerShell/Pwsh session. Requires a password to unlock.
+.DESCRIPTION
+  Locks the current PowerShell/Pwsh session. Requires a password to unlock. This is not a secure way to lock your session, but it is better than nothing.
+.EXAMPLE
+  Lock-Session
+.LINK 
+  https://github.com/luke-beep/shell-config/wiki/Commands
+#>
+function Lock-Session {
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM ( ) # No parameters
+
+  BEGIN {
+    $PasswordExists = Get-ItemProperty -Path $KeyPath -Name "Password" -ErrorAction SilentlyContinue
+    if ($null -eq $PasswordExists) {
+      Write-TimestampedWarning "Password not set. Please set a password using Set-Password."
+      $PasswordExists = $false
+    }
+    else {
+      $PasswordExists = $true
+      
+      $form = New-Object System.Windows.Forms.Form
+      $form.Text = "Session locked"
+      $form.BackColor = $PrimaryBackgroundColor
+      $form.Size = New-Object System.Drawing.Size(200, 130)
+      $form.StartPosition = 'CenterScreen'
+      $form.FormBorderStyle = 'FixedDialog'
+      $form.MaximizeBox = $false
+      $form.MinimizeBox = $false
+      $form.Icon = $ShellIcon
+
+      $textBox = New-Object Windows.Forms.RichTextBox
+      $textBox.Dock = 'Fill'
+      $textBox.BackColor = $PrimaryBackgroundColor
+      $textBox.ForeColor = $PrimaryForegroundColor
+      $textBox.BorderStyle = 'None'
+      $form.Controls.Add($textBox)
+
+      $button = New-Object Windows.Forms.Button
+      $button.Dock = 'Bottom'
+      $button.Text = "Unlock"
+      $button.Size = New-Object System.Drawing.Size(200, 30)
+      $button.BackColor = $SecondaryBackgroundColor
+      $button.ForeColor = $SecondaryForegroundColor
+      $button.FlatStyle = 'Flat'
+      $button.FlatAppearance.BorderSize = 1
+      $button.FlatAppearance.BorderColor = $AccentColor
+      $button | Add-Member -MemberType NoteProperty -Name "Result" -Value $null
+      $button.Add_Click({
+          $storedPasswordHashBase64 = (Get-ItemProperty -Path $KeyPath -Name "Password").Password
+    
+          $enteredPasswordHash = (New-Object System.Security.Cryptography.SHA256Managed).ComputeHash([Text.Encoding]::UTF8.GetBytes($textBox.Text))
+          $enteredPasswordHashBase64 = [Convert]::ToBase64String($enteredPasswordHash)
+    
+          if ($enteredPasswordHashBase64 -eq $storedPasswordHashBase64) {
+            $form.Tag = $true
+          }
+          else {
+            $form.Tag = $false
+          }
+    
+          $form.Close()
+        })
+
+      $form.Controls.Add($button)
+    }
+  }
+
+  PROCESS {
+    if ($PasswordExists) {
+      while ($true) {
+        $form.ShowDialog()
+      
+        if ($form.Tag -eq $true) {
+          Write-Host "Session unlocked successfully."
+          return $true
+        }
+        else {
+          Write-Host "Incorrect code. Please try again."
+        }
+      }
+    }
+  }
+
+  END {
+    if ($PasswordExists) {
+      $form.Dispose()
+    }
+  }
+}
+
+<#
+.SYNOPSIS
+  Sets the password for the Lock-Session command.
+.DESCRIPTION
+  Sets the password for the Lock-Session command. This is not a secure way to lock your session, but it is better than nothing.
+.PARAMETER Password
+  The password to set.
+.EXAMPLE
+  Set-Password -Password "password"
+.LINK
+  https://github.com/luke-beep/shell-config/wiki/Commands
+#>
+function Set-Password {
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM (
+    [Parameter(Mandatory = $true)]
+    [ValidateNotNullOrEmpty()]
+    [string]$Password
+  )
+
+  BEGIN {
+    $securePassword = ConvertTo-SecureString -String $Password -AsPlainText -Force
+
+    $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($securePassword)
+    $plainTextPassword = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
+
+    $hash = (New-Object System.Security.Cryptography.SHA256Managed).ComputeHash([Text.Encoding]::UTF8.GetBytes($plainTextPassword))
+    $hashBase64 = [Convert]::ToBase64String($hash)
+  }
+
+  PROCESS {
+    Set-ItemProperty -Path $KeyPath -Name "Password" -Value $hashBase64
+  }
+
+  END {
+    Write-Host "Password set successfully."
+  }
+}
+
 # ----------------------------------------
 # End of Azrael's PowerShell/Pwsh Profile (End events should be at the bottom of the file)
 # ----------------------------------------
@@ -6059,4 +6193,5 @@ Import-Aliases # Import aliases
 
 Register-EngineEvent -SourceIdentifier PowerShell.Exiting -Action {
   Stop-Transcript
+  Write-Host "PowerShell/Pwsh session ended at $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')"
 } -SupportEvent

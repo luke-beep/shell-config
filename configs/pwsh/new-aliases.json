@@ -74,5 +74,7 @@
   "fcsv": "ConvertFrom-Csv",
   "uniq": "Select-Unique",
   "csharp": "Invoke-CSharp",
-  "tools": "Open-Tools"
+  "tools": "Open-Tools",
+  "lock": "Lock-Session",
+  "password": "Set-Password"
 }

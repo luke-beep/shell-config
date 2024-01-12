@@ -75,5 +75,7 @@
     "fcsv",
     "uniq",
     "csharp",
-    "tools"
+    "tools",
+    "lock",
+    "password"
 ]
