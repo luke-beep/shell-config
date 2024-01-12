@@ -4,7 +4,7 @@
 
 # Author: LukeHjo (Azrael)
 # Description: This is my PowerShell profile. It contains features that I use on a daily basis.
-# Version: 1.3.2
+# Version: 1.3.3
 # Date: 2024-01-12
 
 # ----------------------------------------
@@ -6082,7 +6082,7 @@ function Lock-Session {
     }
     else {
       $PasswordExists = $true
-      
+      [Console]::TreatControlCAsInput = $True
       $form = New-Object System.Windows.Forms.Form
       $form.Text = "Session locked"
       $form.BackColor = $PrimaryBackgroundColor
@@ -6148,6 +6148,7 @@ function Lock-Session {
 
   END {
     if ($PasswordExists) {
+      [Console]::TreatControlCAsInput = $false
       $form.Dispose()
     }
   }
