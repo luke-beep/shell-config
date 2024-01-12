@@ -4,24 +4,8 @@
 
 # Author: LukeHjo (Azrael)
 # Description: This is my PowerShell profile. It contains features that I use on a daily basis.
-# Version: 1.2.8
+# Version: 1.2.9
 # Date: 2024-01-09
-
-# ----------------------------------------
-# Transcription
-# ----------------------------------------
-
-$CurrentDate = Get-Date -Format "yyyy-MM-dd"
-$CurrentTime = Get-Date -Format "HH-mm-ss"
-$ProfilePath = $PROFILE | Split-Path
-$TranscriptPath = "$ProfilePath\Transcripts"
-$TranscriptFile = "$TranscriptPath\$CurrentDate\$CurrentTime.txt"
-
-if (-not (Test-Path -Path $TranscriptPath)) {
-  New-Item -ItemType Directory -Force -Path "$TranscriptPath\$CurrentDate"
-} # Semi-redundant but it's needed to create the directory for compatibility reasons.
-
-Start-Transcript -Path $TranscriptFile -Append
 
 # ----------------------------------------
 # Event Log
@@ -167,6 +151,18 @@ $Bitness = if ([Environment]::Is64BitProcess) { "64-bit" } else { "32-bit" }
 $KeyPath = if ($ShellType -eq "Pwsh") { 'HKCU:\Software\Azrael\Pwsh' } else { 'HKCU:\Software\Azrael\PowerShell' }
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "", Justification = "Suppressing warning for this variable", Target = "ToolsKeyPath")]
 $ToolsKeyPath = 'HKCU:\Software\Azrael\Tools'
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "", Justification = "Suppressing warning for this variable", Target = "CurrentDate")]
+$CurrentDate = Get-Date -Format "yyyy-MM-dd"
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "", Justification = "Suppressing warning for this variable", Target = "CurrentTime")]
+$CurrentTime = Get-Date -Format "HH-mm-ss"
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "", Justification = "Suppressing warning for this variable", Target = "ProfilePath")]
+$ProfilePath = $PROFILE | Split-Path
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "", Justification = "Suppressing warning for this variable", Target = "TranscriptPath")]
+$TranscriptPath = "$ProfilePath\Transcripts"
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "", Justification = "Suppressing warning for this variable", Target = "TranscriptFile")]
+$TranscriptFile = "$TranscriptPath\$CurrentDate\$CurrentTime.txt"
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "", Justification = "Suppressing warning for this variable", Target = "DisableTranscript")]
+$DisableTranscript = Get-ItemProperty -Path $KeyPath -Name 'DisableTranscript' -ErrorAction SilentlyContinue
 
 # Operating System Variables
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "", Justification = "Suppressing warning for this variable", Target = "KernelVersion")]
@@ -749,7 +745,24 @@ function Initialize-Profile {
     if ($null -eq $loginMessageKey) {
       New-ItemProperty -Path $KeyPath -Name 'LoginMessage' -Value 1 -PropertyType 'DWord' -Force 
     }
+
+    # Transcript
+    if (-not (Test-Path -Path $TranscriptPath)) {
+      New-Item -ItemType Directory -Force -Path "$TranscriptPath\$CurrentDate"
+    }
     
+    # Check if the transcript should be disabled
+    if ($null -eq $DisableTranscript) {
+      New-ItemProperty -Path $KeyPath -Name 'DisableTranscript' -Value 0 -PropertyType 'DWord' -Force 
+      Start-Transcript -Path $TranscriptFile -Append
+    }
+    elseif ($DisableTranscript.DisableTranscript -eq 0) {
+      Start-Transcript -Path $TranscriptFile -Append
+    }
+    else {
+      Write-Warning "Transcript is disabled"
+    }
+
     # Check for the random tip key
     $randomTipKey = Get-ItemProperty -Path $KeyPath -Name 'RandomTip' -ErrorAction SilentlyContinue
     if ($null -eq $randomTipKey) {
@@ -1402,23 +1415,27 @@ function Manage-Profile {
     $form.StartPosition = 'CenterScreen'
     $form.FormBorderStyle = 'FixedDialog'
     $form.Icon = $ShellIcon
-    
 
-    $buttonPanel2 = New-Object System.Windows.Forms.Panel # 7 buttons
+    $buttonPanel = New-Object System.Windows.Forms.Panel # 8 buttons
+    $buttonPanel.Dock = 'Top'
+    $buttonPanel.Height = 30
+    $buttonPanel.Width = $PanelWidth
+
+    $buttonPanel2 = New-Object System.Windows.Forms.Panel # 8 buttons
     $buttonPanel2.Dock = 'Top'
-    $buttonPanel2.Height = 50
+    $buttonPanel2.Height = 30
     $buttonPanel2.Width = $PanelWidth
 
-    $buttonPanel = New-Object System.Windows.Forms.Panel # 7 buttons
-    $buttonPanel.Dock = 'Top'
-    $buttonPanel.Height = 50
-    $buttonPanel.Width = $PanelWidth
+    $buttonPanel3 = New-Object System.Windows.Forms.Panel # 1 buttons
+    $buttonPanel3.Dock = 'Top'
+    $buttonPanel3.Height = 30
+    $buttonPanel3.Width = $PanelWidth
 
     $button1 = New-Object System.Windows.Forms.Button
     $button1.Text = "Update Profile"
     $button1.Width = 100
     $button1.Height = 30
-    $button1.Location = New-Object System.Drawing.Point(10, 10)
+    $button1.Location = New-Object System.Drawing.Point(10, 0)
     $button1.BackColor = $SecondaryBackgroundColor
     $button1.ForeColor = $SecondaryForegroundColor
     $button1.FlatStyle = 'Flat'
@@ -1430,27 +1447,27 @@ function Manage-Profile {
       })
     $buttonPanel.Controls.Add($button1)
 
-    $updateAliasesButton = New-Object System.Windows.Forms.Button
-    $updateAliasesButton.Text = "Update Aliases"
-    $updateAliasesButton.Width = 100
-    $updateAliasesButton.Height = 30
-    $updateAliasesButton.Location = New-Object System.Drawing.Point(120, 10)
-    $updateAliasesButton.BackColor = $SecondaryBackgroundColor
-    $updateAliasesButton.ForeColor = $SecondaryForegroundColor
-    $updateAliasesButton.FlatStyle = 'Flat'
-    $updateAliasesButton.FlatAppearance.BorderSize = 1
-    $updateAliasesButton.FlatAppearance.BorderColor = $AccentColor
-    $updateAliasesButton.Add_Click({
+    $button0 = New-Object System.Windows.Forms.Button
+    $button0.Text = "Update Aliases"
+    $button0.Width = 100
+    $button0.Height = 30
+    $button0.Location = New-Object System.Drawing.Point(120, 0)
+    $button0.BackColor = $SecondaryBackgroundColor
+    $button0.ForeColor = $SecondaryForegroundColor
+    $button0.FlatStyle = 'Flat'
+    $button0.FlatAppearance.BorderSize = 1
+    $button0.FlatAppearance.BorderColor = $AccentColor
+    $button0.Add_Click({
         Import-Aliases -Force
       })
 
-    $buttonPanel.Controls.Add($updateAliasesButton)
+    $buttonPanel.Controls.Add($button0)
 
     $button2 = New-Object System.Windows.Forms.Button
     $button2.Text = "Change Theme"
     $button2.Width = 100
     $button2.Height = 30
-    $button2.Location = New-Object System.Drawing.Point(230, 10)
+    $button2.Location = New-Object System.Drawing.Point(230, 0)
     $button2.BackColor = $SecondaryBackgroundColor
     $button2.ForeColor = $SecondaryForegroundColor
     $button2.FlatStyle = 'Flat'
@@ -1465,7 +1482,7 @@ function Manage-Profile {
     $button3.Text = "Settings"
     $button3.Width = 100
     $button3.Height = 30
-    $button3.Location = New-Object System.Drawing.Point(340, 10)
+    $button3.Location = New-Object System.Drawing.Point(340, 0)
     $button3.BackColor = $SecondaryBackgroundColor
     $button3.ForeColor = $SecondaryForegroundColor
     $button3.FlatStyle = 'Flat'
@@ -1480,7 +1497,7 @@ function Manage-Profile {
     $button4.Text = "Add Alias"
     $button4.Width = 100
     $button4.Height = 30
-    $button4.Location = New-Object System.Drawing.Point(450, 10)
+    $button4.Location = New-Object System.Drawing.Point(450, 0)
     $button4.BackColor = $SecondaryBackgroundColor
     $button4.ForeColor = $SecondaryForegroundColor
     $button4.FlatStyle = 'Flat'
@@ -1495,7 +1512,7 @@ function Manage-Profile {
     $button5.Text = "Remove Alias"
     $button5.Width = 100
     $button5.Height = 30
-    $button5.Location = New-Object System.Drawing.Point(560, 10)
+    $button5.Location = New-Object System.Drawing.Point(560, 0)
     $button5.BackColor = $SecondaryBackgroundColor
     $button5.ForeColor = $SecondaryForegroundColor
     $button5.FlatStyle = 'Flat'
@@ -1510,7 +1527,7 @@ function Manage-Profile {
     $button6.Text = "Profile Help"
     $button6.Width = 100
     $button6.Height = 30
-    $button6.Location = New-Object System.Drawing.Point(670, 10)
+    $button6.Location = New-Object System.Drawing.Point(670, 0)
     $button6.BackColor = $SecondaryBackgroundColor
     $button6.ForeColor = $SecondaryForegroundColor
     $button6.FlatStyle = 'Flat'
@@ -1525,7 +1542,7 @@ function Manage-Profile {
     $button7.Text = "Profile Tips"
     $button7.Width = 100
     $button7.Height = 30
-    $button7.Location = New-Object System.Drawing.Point(780, 10)
+    $button7.Location = New-Object System.Drawing.Point(780, 0)
     $button7.BackColor = $SecondaryBackgroundColor
     $button7.ForeColor = $SecondaryForegroundColor
     $button7.FlatStyle = 'Flat'
@@ -1641,12 +1658,46 @@ function Manage-Profile {
       })
     $buttonPanel2.Controls.Add($button14)
 
+    $button15 = New-Object System.Windows.Forms.Button
+    $button15.Text = "Transcripts"
+    $button15.Width = 100
+    $button15.Height = 30
+    $button15.Location = New-Object System.Drawing.Point(780, 0)
+    $button15.BackColor = $SecondaryBackgroundColor
+    $button15.ForeColor = $SecondaryForegroundColor
+    $button15.FlatStyle = 'Flat'
+    $button15.FlatAppearance.BorderSize = 1
+    $button15.FlatAppearance.BorderColor = $AccentColor
+    $button15.Add_Click({
+        $TranscriptPath = (Split-Path -Parent $PROFILE) + "\Transcripts"
+        if (Test-Path $TranscriptPath) {
+          Start-Process -FilePath $TranscriptPath
+        }
+      })
+    $buttonPanel2.Controls.Add($button15)
+
+    $button16 = New-Object System.Windows.Forms.Button
+    $button16.Text = "System Tools"
+    $button16.Height = 30
+    $button16.Width = 870
+    $button16.Location = New-Object System.Drawing.Point(10, 0)
+    $button16.BackColor = $SecondaryBackgroundColor
+    $button16.ForeColor = $SecondaryForegroundColor
+    $button16.FlatStyle = 'Flat'
+    $button16.FlatAppearance.BorderSize = 1
+    $button16.FlatAppearance.BorderColor = $AccentColor
+    $button16.Add_Click({
+        Open-Tools
+      })
+    $buttonPanel3.Controls.Add($button16)
+
     $tableLayoutPanel = New-Object System.Windows.Forms.TableLayoutPanel
-    $tableLayoutPanel.RowCount = 3
+    $tableLayoutPanel.RowCount = 4
     $tableLayoutPanel.ColumnCount = 1
     $tableLayoutPanel.Dock = [System.Windows.Forms.DockStyle]::Fill
     $tableLayoutPanel.ColumnStyles.Add((New-Object System.Windows.Forms.ColumnStyle([System.Windows.Forms.SizeType]::Percent, 100)))
     $tableLayoutPanel.RowStyles.Clear()
+    $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::AutoSize)))
     $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::AutoSize)))
     $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::AutoSize)))
     $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::Percent, 100)))
@@ -1664,7 +1715,8 @@ function Manage-Profile {
 
     $tableLayoutPanel.Controls.Add($buttonPanel, 0, 0)
     $tableLayoutPanel.Controls.Add($buttonPanel2, 0, 1)
-    $tableLayoutPanel.Controls.Add($richTextBox, 0, 2)
+    $tableLayoutPanel.Controls.Add($buttonPanel3, 0, 2)
+    $tableLayoutPanel.Controls.Add($richTextBox, 0, 3)
 
     $form.Controls.Add($tableLayoutPanel)
   }
@@ -5166,11 +5218,832 @@ function Invoke-CSharp {
   }
 }
 
-Import-Aliases # Import aliases
+<#
+.SYNOPSIS
+  A comprehensive GUI with access to various tools and native functions
+.DESCRIPTION
+  This function is a comprehensive GUI with access to various tools and native functions
+.OUTPUTS
+  The GUI
+.LINK
+  https://github.com/luke-beep/shell-config/wiki/Commands
+#>
+function Open-Tools {
+  [CmdletBinding(HelpUri = 'https://github.com/luke-beep/shell-config/wiki/Commands')]
+  PARAM ( ) # No parameters
+
+  BEGIN {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
+    $PanelWidth = 905
+
+    $form = New-Object System.Windows.Forms.Form
+    $form.Text = "Tools"
+    $form.BackColor = $PrimaryBackgroundColor
+    $form.Size = New-Object System.Drawing.Size($PanelWidth, 275)
+    $form.StartPosition = 'CenterScreen'
+    $form.FormBorderStyle = 'FixedDialog'
+    $form.Icon = $ShellIcon
+
+    $buttonPanel = New-Object System.Windows.Forms.Panel # 8 buttons
+    $buttonPanel.Dock = 'Top'
+    $buttonPanel.Width = $PanelWidth
+    $buttonPanel.Height = 30
+
+    $buttonPanel2 = New-Object System.Windows.Forms.Panel # 8 buttons
+    $buttonPanel2.Dock = 'Top'
+    $buttonPanel2.Width = $PanelWidth
+    $buttonPanel2.Height = 30
+
+    $buttonPanel3 = New-Object System.Windows.Forms.Panel # 8 buttons
+    $buttonPanel3.Dock = 'Top'
+    $buttonPanel3.Width = $PanelWidth
+    $buttonPanel3.Height = 30
+
+    $buttonPanel4 = New-Object System.Windows.Forms.Panel # 8 buttons
+    $buttonPanel4.Dock = 'Top'
+    $buttonPanel4.Width = $PanelWidth
+    $buttonPanel4.Height = 30
+
+    $buttonPanel5 = New-Object System.Windows.Forms.Panel # 8 buttons
+    $buttonPanel5.Dock = 'Top'
+    $buttonPanel5.Width = $PanelWidth
+    $buttonPanel5.Height = 30
+
+    $buttonPanel6 = New-Object System.Windows.Forms.Panel # 8 buttons
+    $buttonPanel6.Dock = 'Top'
+    $buttonPanel6.Width = $PanelWidth
+    $buttonPanel6.Height = 30
+
+    $button0 = New-Object System.Windows.Forms.Button
+    $button0.Text = "Disk Management"
+    $button0.Width = 100
+    $button0.Height = 30
+    $button0.Location = New-Object System.Drawing.Point(10, 0)
+    $button0.BackColor = $SecondaryBackgroundColor
+    $button0.ForeColor = $SecondaryForegroundColor
+    $button0.FlatStyle = 'Flat'
+    $button0.FlatAppearance.BorderSize = 1
+    $button0.FlatAppearance.BorderColor = $AccentColor
+    $button0.Add_Click({
+        diskmgmt.msc
+      })
+    $buttonPanel.Controls.Add($button0)
+
+    $button1 = New-Object System.Windows.Forms.Button
+    $button1.Text = "Control Panel"
+    $button1.Width = 100
+    $button1.Height = 30
+    $button1.Location = New-Object System.Drawing.Point(120, 0)
+    $button1.BackColor = $SecondaryBackgroundColor
+    $button1.ForeColor = $SecondaryForegroundColor
+    $button1.FlatStyle = 'Flat'
+    $button1.FlatAppearance.BorderSize = 1
+    $button1.FlatAppearance.BorderColor = $AccentColor
+    $button1.Add_Click({
+        control panel
+      })
+    $buttonPanel.Controls.Add($button1)
+
+    $button2 = New-Object System.Windows.Forms.Button
+    $button2.Text = "Device Manager"
+    $button2.Width = 100
+    $button2.Height = 30
+    $button2.Location = New-Object System.Drawing.Point(230, 0)
+    $button2.BackColor = $SecondaryBackgroundColor
+    $button2.ForeColor = $SecondaryForegroundColor
+    $button2.FlatStyle = 'Flat'
+    $button2.FlatAppearance.BorderSize = 1
+    $button2.FlatAppearance.BorderColor = $AccentColor
+    $button2.Add_Click({
+        devmgmt.msc
+      })
+    $buttonPanel.Controls.Add($button2)
+
+    $button3 = New-Object System.Windows.Forms.Button
+    $button3.Text = "Registry Editor"
+    $button3.Width = 100
+    $button3.Height = 30
+    $button3.Location = New-Object System.Drawing.Point(340, 0)
+    $button3.BackColor = $SecondaryBackgroundColor
+    $button3.ForeColor = $SecondaryForegroundColor
+    $button3.FlatStyle = 'Flat'
+    $button3.FlatAppearance.BorderSize = 1
+    $button3.FlatAppearance.BorderColor = $AccentColor
+    $button3.Add_Click({
+        regedit
+      })
+    $buttonPanel.Controls.Add($button3)
+
+    $button4 = New-Object System.Windows.Forms.Button
+    $button4.Text = "Services"
+    $button4.Width = 100
+    $button4.Height = 30
+    $button4.Location = New-Object System.Drawing.Point(450, 0)
+    $button4.BackColor = $SecondaryBackgroundColor
+    $button4.ForeColor = $SecondaryForegroundColor
+    $button4.FlatStyle = 'Flat'
+    $button4.FlatAppearance.BorderSize = 1
+    $button4.FlatAppearance.BorderColor = $AccentColor
+    $button4.Add_Click({
+        services.msc
+      })
+    $buttonPanel.Controls.Add($button4)
+
+    $button5 = New-Object System.Windows.Forms.Button
+    $button5.Text = "Event Viewer"
+    $button5.Width = 100
+    $button5.Height = 30
+    $button5.Location = New-Object System.Drawing.Point(560, 0)
+    $button5.BackColor = $SecondaryBackgroundColor
+    $button5.ForeColor = $SecondaryForegroundColor
+    $button5.FlatStyle = 'Flat'
+    $button5.FlatAppearance.BorderSize = 1
+    $button5.FlatAppearance.BorderColor = $AccentColor
+    $button5.Add_Click({
+        eventvwr.msc
+      })
+    $buttonPanel.Controls.Add($button5)
+
+    $button6 = New-Object System.Windows.Forms.Button
+    $button6.Text = "System Configuration"
+    $button6.Width = 100
+    $button6.Height = 30
+    $button6.Location = New-Object System.Drawing.Point(670, 0)
+    $button6.BackColor = $SecondaryBackgroundColor
+    $button6.ForeColor = $SecondaryForegroundColor
+    $button6.FlatStyle = 'Flat'
+    $button6.FlatAppearance.BorderSize = 1
+    $button6.FlatAppearance.BorderColor = $AccentColor
+    $button6.Add_Click({
+        msconfig
+      })
+    $buttonPanel.Controls.Add($button6)
+
+    $button7 = New-Object System.Windows.Forms.Button
+    $button7.Text = "Performance Monitor"
+    $button7.Width = 100
+    $button7.Height = 30
+    $button7.Location = New-Object System.Drawing.Point(780, 0)
+    $button7.BackColor = $SecondaryBackgroundColor
+    $button7.ForeColor = $SecondaryForegroundColor
+    $button7.FlatStyle = 'Flat'
+    $button7.FlatAppearance.BorderSize = 1
+    $button7.FlatAppearance.BorderColor = $AccentColor
+    $button7.Add_Click({
+        perfmon.msc
+      })
+    $buttonPanel.Controls.Add($button7)
+
+    $button8 = New-Object System.Windows.Forms.Button
+    $button8.Text = "Resource Monitor"
+    $button8.Width = 100
+    $button8.Height = 30
+    $button8.Location = New-Object System.Drawing.Point(10, 0)
+    $button8.BackColor = $SecondaryBackgroundColor
+    $button8.ForeColor = $SecondaryForegroundColor
+    $button8.FlatStyle = 'Flat'
+    $button8.FlatAppearance.BorderSize = 1
+    $button8.FlatAppearance.BorderColor = $AccentColor
+    $button8.Add_Click({
+        resmon
+      })
+    $buttonPanel2.Controls.Add($button8)
+
+    $button9 = New-Object System.Windows.Forms.Button
+    $button9.Text = "Computer Management"
+    $button9.Width = 100
+    $button9.Height = 30
+    $button9.Location = New-Object System.Drawing.Point(120, 0)
+    $button9.BackColor = $SecondaryBackgroundColor
+    $button9.ForeColor = $SecondaryForegroundColor
+    $button9.FlatStyle = 'Flat'
+    $button9.FlatAppearance.BorderSize = 1
+    $button9.FlatAppearance.BorderColor = $AccentColor
+    $button9.Add_Click({
+        compmgmt.msc
+      })
+    $buttonPanel2.Controls.Add($button9)
+
+    $button10 = New-Object System.Windows.Forms.Button
+    $button10.Text = "Repair Windows Image"
+    $button10.Width = 100
+    $button10.Height = 30
+    $button10.Location = New-Object System.Drawing.Point(230, 0)
+    $button10.BackColor = $SecondaryBackgroundColor
+    $button10.ForeColor = $SecondaryForegroundColor
+    $button10.FlatStyle = 'Flat'
+    $button10.FlatAppearance.BorderSize = 1
+    $button10.FlatAppearance.BorderColor = $AccentColor
+    $button10.Add_Click({
+        Start-Process -FilePath cmd -ArgumentList "/c DISM /Online /Cleanup-Image /RestoreHealth" -Verb RunAs
+      })
+    $buttonPanel2.Controls.Add($button10)
+
+    $button11 = New-Object System.Windows.Forms.Button
+    $button11.Text = "Scan system files"
+    $button11.Width = 100
+    $button11.Height = 30
+    $button11.Location = New-Object System.Drawing.Point(340, 0)
+    $button11.BackColor = $SecondaryBackgroundColor
+    $button11.ForeColor = $SecondaryForegroundColor
+    $button11.FlatStyle = 'Flat'
+    $button11.FlatAppearance.BorderSize = 1
+    $button11.FlatAppearance.BorderColor = $AccentColor
+    $button11.Add_Click({
+        Start-Process -FilePath cmd -ArgumentList "/c sfc /scannow" -Verb RunAs
+      })
+    $buttonPanel2.Controls.Add($button11)
+
+    $button12 = New-Object System.Windows.Forms.Button
+    $button12.Text = "Restart Explorer"
+    $button12.Width = 100
+    $button12.Height = 30
+    $button12.Location = New-Object System.Drawing.Point(450, 0)
+    $button12.BackColor = $SecondaryBackgroundColor
+    $button12.ForeColor = $SecondaryForegroundColor
+    $button12.FlatStyle = 'Flat'
+    $button12.FlatAppearance.BorderSize = 1
+    $button12.FlatAppearance.BorderColor = $AccentColor
+    $button12.Add_Click({
+        Stop-Process -Name explorer
+        Start-Sleep 1
+        Start-Process -FilePath explorer
+      })
+    $buttonPanel2.Controls.Add($button12)
+
+    $button13 = New-Object System.Windows.Forms.Button
+    $button13.Text = "Group Policy Editor"
+    $button13.Width = 100
+    $button13.Height = 30
+    $button13.Location = New-Object System.Drawing.Point(560, 0)
+    $button13.BackColor = $SecondaryBackgroundColor
+    $button13.ForeColor = $SecondaryForegroundColor
+    $button13.FlatStyle = 'Flat'
+    $button13.FlatAppearance.BorderSize = 1
+    $button13.FlatAppearance.BorderColor = $AccentColor
+    $button13.Add_Click({
+        gpedit.msc
+      })
+    $buttonPanel2.Controls.Add($button13)
+
+    $button14 = New-Object System.Windows.Forms.Button
+    $button14.Text = "Windows Tools"
+    $button14.Width = 100
+    $button14.Height = 30
+    $button14.Location = New-Object System.Drawing.Point(670, 0)
+    $button14.BackColor = $SecondaryBackgroundColor
+    $button14.ForeColor = $SecondaryForegroundColor
+    $button14.FlatStyle = 'Flat'
+    $button14.FlatAppearance.BorderSize = 1
+    $button14.FlatAppearance.BorderColor = $AccentColor
+    $button14.Add_Click({
+        control admintools
+      })
+    $buttonPanel2.Controls.Add($button14)
+
+    $button15 = New-Object System.Windows.Forms.Button
+    $button15.Text = "System Restore"
+    $button15.Width = 100
+    $button15.Height = 30
+    $button15.Location = New-Object System.Drawing.Point(780, 0)
+    $button15.BackColor = $SecondaryBackgroundColor
+    $button15.ForeColor = $SecondaryForegroundColor
+    $button15.FlatStyle = 'Flat'
+    $button15.FlatAppearance.BorderSize = 1
+    $button15.FlatAppearance.BorderColor = $AccentColor
+    $button15.Add_Click({
+        rstrui
+      })
+    $buttonPanel2.Controls.Add($button15)
+
+    $button16 = New-Object System.Windows.Forms.Button
+    $button16.Text = "Windows Features"
+    $button16.Width = 100
+    $button16.Height = 30
+    $button16.Location = New-Object System.Drawing.Point(10, 0)
+    $button16.BackColor = $SecondaryBackgroundColor
+    $button16.ForeColor = $SecondaryForegroundColor
+    $button16.FlatStyle = 'Flat'
+    $button16.FlatAppearance.BorderSize = 1
+    $button16.FlatAppearance.BorderColor = $AccentColor
+    $button16.Add_Click({
+        optionalfeatures
+      })
+    $buttonPanel3.Controls.Add($button16)
+
+    $button17 = New-Object System.Windows.Forms.Button
+    $button17.Text = "Windows Defender"
+    $button17.Width = 100
+    $button17.Height = 30
+    $button17.Location = New-Object System.Drawing.Point(120, 0)
+    $button17.BackColor = $SecondaryBackgroundColor
+    $button17.ForeColor = $SecondaryForegroundColor
+    $button17.FlatStyle = 'Flat'
+    $button17.FlatAppearance.BorderSize = 1
+    $button17.FlatAppearance.BorderColor = $AccentColor
+    $button17.Add_Click({
+        explorer.exe windowsdefender:
+      })
+    $buttonPanel3.Controls.Add($button17)
+
+    $button18 = New-Object System.Windows.Forms.Button
+    $button18.Text = "Windows Update"
+    $button18.Width = 100
+    $button18.Height = 30
+    $button18.Location = New-Object System.Drawing.Point(230, 0)
+    $button18.BackColor = $SecondaryBackgroundColor
+    $button18.ForeColor = $SecondaryForegroundColor
+    $button18.FlatStyle = 'Flat'
+    $button18.FlatAppearance.BorderSize = 1
+    $button18.FlatAppearance.BorderColor = $AccentColor
+    $button18.Add_Click({
+        explorer.exe ms-settings:windowsupdate
+      })
+    $buttonPanel3.Controls.Add($button18)
+
+    $button19 = New-Object System.Windows.Forms.Button
+    $button19.Text = "DirectX Diagnostic Tool"
+    $button19.Width = 100
+    $button19.Height = 30
+    $button19.Location = New-Object System.Drawing.Point(340, 0)
+    $button19.BackColor = $SecondaryBackgroundColor
+    $button19.ForeColor = $SecondaryForegroundColor
+    $button19.FlatStyle = 'Flat'
+    $button19.FlatAppearance.BorderSize = 1
+    $button19.FlatAppearance.BorderColor = $AccentColor
+    $button19.Add_Click({
+        dxdiag
+      })
+    $buttonPanel3.Controls.Add($button19)
+
+    $button20 = New-Object System.Windows.Forms.Button
+    $button20.Text = "DirectX Control Panel"
+    $button20.Width = 100
+    $button20.Height = 30
+    $button20.Location = New-Object System.Drawing.Point(450, 0)
+    $button20.BackColor = $SecondaryBackgroundColor
+    $button20.ForeColor = $SecondaryForegroundColor
+    $button20.FlatStyle = 'Flat'
+    $button20.FlatAppearance.BorderSize = 1
+    $button20.FlatAppearance.BorderColor = $AccentColor
+    $button20.Add_Click({
+        dxcpl
+      })
+    $buttonPanel3.Controls.Add($button20)
+
+    $button21 = New-Object System.Windows.Forms.Button
+    $button21.Text = "Windows Memory Diagnostic"
+    $button21.Width = 100
+    $button21.Height = 30
+    $button21.Location = New-Object System.Drawing.Point(560, 0)
+    $button21.BackColor = $SecondaryBackgroundColor
+    $button21.ForeColor = $SecondaryForegroundColor
+    $button21.FlatStyle = 'Flat'
+    $button21.FlatAppearance.BorderSize = 1
+    $button21.FlatAppearance.BorderColor = $AccentColor
+    $button21.Add_Click({
+        mdsched
+      })
+    $buttonPanel3.Controls.Add($button21)
+
+    $button22 = New-Object System.Windows.Forms.Button
+    $button22.Text = "Disk Cleanup"
+    $button22.Width = 100
+    $button22.Height = 30
+    $button22.Location = New-Object System.Drawing.Point(670, 0)
+    $button22.BackColor = $SecondaryBackgroundColor
+    $button22.ForeColor = $SecondaryForegroundColor
+    $button22.FlatStyle = 'Flat'
+    $button22.FlatAppearance.BorderSize = 1
+    $button22.FlatAppearance.BorderColor = $AccentColor
+    $button22.Add_Click({
+        cleanmgr
+      })
+    $buttonPanel3.Controls.Add($button22)
+
+    $button23 = New-Object System.Windows.Forms.Button
+    $button23.Text = "System Information"
+    $button23.Width = 100
+    $button23.Height = 30
+    $button23.Location = New-Object System.Drawing.Point(780, 0)
+    $button23.BackColor = $SecondaryBackgroundColor
+    $button23.ForeColor = $SecondaryForegroundColor
+    $button23.FlatStyle = 'Flat'
+    $button23.FlatAppearance.BorderSize = 1
+    $button23.FlatAppearance.BorderColor = $AccentColor
+    $button23.Add_Click({
+        msinfo32
+      })
+    $buttonPanel3.Controls.Add($button23)
+
+    $button24 = New-Object System.Windows.Forms.Button
+    $button24.Text = "Windows Firewall"
+    $button24.Width = 100
+    $button24.Height = 30 
+    $button24.Location = New-Object System.Drawing.Point(10, 0)
+    $button24.BackColor = $SecondaryBackgroundColor
+    $button24.ForeColor = $SecondaryForegroundColor
+    $button24.FlatStyle = 'Flat'
+    $button24.FlatAppearance.BorderSize = 1
+    $button24.FlatAppearance.BorderColor = $AccentColor
+    $button24.Add_Click({
+        firewall.cpl
+      })
+    $buttonPanel4.Controls.Add($button24)
+
+    $button25 = New-Object System.Windows.Forms.Button
+    $button25.Text = "Internet Options"
+    $button25.Width = 100
+    $button25.Height = 30
+    $button25.Location = New-Object System.Drawing.Point(120, 0)
+    $button25.BackColor = $SecondaryBackgroundColor
+    $button25.ForeColor = $SecondaryForegroundColor
+    $button25.FlatStyle = 'Flat'
+    $button25.FlatAppearance.BorderSize = 1
+    $button25.FlatAppearance.BorderColor = $AccentColor
+    $button25.Add_Click({
+        inetcpl.cpl
+      })
+    $buttonPanel4.Controls.Add($button25)
+
+    $button26 = New-Object System.Windows.Forms.Button
+    $button26.Text = "Network Connections"
+    $button26.Width = 100
+    $button26.Height = 30
+    $button26.Location = New-Object System.Drawing.Point(230, 0)
+    $button26.BackColor = $SecondaryBackgroundColor
+    $button26.ForeColor = $SecondaryForegroundColor
+    $button26.FlatStyle = 'Flat'
+    $button26.FlatAppearance.BorderSize = 1
+    $button26.FlatAppearance.BorderColor = $AccentColor
+    $button26.Add_Click({
+        ncpa.cpl
+      })
+    $buttonPanel4.Controls.Add($button26)
+
+    $button27 = New-Object System.Windows.Forms.Button
+    $button27.Text = "Power Options"
+    $button27.Width = 100
+    $button27.Height = 30
+    $button27.Location = New-Object System.Drawing.Point(340, 0)
+    $button27.BackColor = $SecondaryBackgroundColor
+    $button27.ForeColor = $SecondaryForegroundColor
+    $button27.FlatStyle = 'Flat'
+    $button27.FlatAppearance.BorderSize = 1
+    $button27.FlatAppearance.BorderColor = $AccentColor
+    $button27.Add_Click({
+        powercfg.cpl
+      })
+    $buttonPanel4.Controls.Add($button27)
+      
+    $button28 = New-Object System.Windows.Forms.Button
+    $button28.Text = "Mouse Properties"
+    $button28.Width = 100
+    $button28.Height = 30
+    $button28.Location = New-Object System.Drawing.Point(450, 0)
+    $button28.BackColor = $SecondaryBackgroundColor
+    $button28.ForeColor = $SecondaryForegroundColor
+    $button28.FlatStyle = 'Flat'
+    $button28.FlatAppearance.BorderSize = 1
+    $button28.FlatAppearance.BorderColor = $AccentColor
+    $button28.Add_Click({
+        main.cpl
+      })
+    $buttonPanel4.Controls.Add($button28)
+
+    $button29 = New-Object System.Windows.Forms.Button
+    $button29.Text = "Keyboard Properties"
+    $button29.Width = 100
+    $button29.Height = 30
+    $button29.Location = New-Object System.Drawing.Point(560, 0)
+    $button29.BackColor = $SecondaryBackgroundColor
+    $button29.ForeColor = $SecondaryForegroundColor
+    $button29.FlatStyle = 'Flat'
+    $button29.FlatAppearance.BorderSize = 1
+    $button29.FlatAppearance.BorderColor = $AccentColor
+    $button29.Add_Click({
+        control keyboard
+      })
+    $buttonPanel4.Controls.Add($button29)
+
+    $button30 = New-Object System.Windows.Forms.Button
+    $button30.Text = "System Properties"
+    $button30.Width = 100
+    $button30.Height = 30
+    $button30.Location = New-Object System.Drawing.Point(670, 0)
+    $button30.BackColor = $SecondaryBackgroundColor
+    $button30.ForeColor = $SecondaryForegroundColor
+    $button30.FlatStyle = 'Flat'
+    $button30.FlatAppearance.BorderSize = 1
+    $button30.FlatAppearance.BorderColor = $AccentColor
+    $button30.Add_Click({
+        control sysdm.cpl
+      })
+    $buttonPanel4.Controls.Add($button30)
+
+    $button31 = New-Object System.Windows.Forms.Button
+    $button31.Text = "Date and Time"
+    $button31.Width = 100
+    $button31.Height = 30
+    $button31.Location = New-Object System.Drawing.Point(780, 0)
+    $button31.BackColor = $SecondaryBackgroundColor
+    $button31.ForeColor = $SecondaryForegroundColor
+    $button31.FlatStyle = 'Flat'
+    $button31.FlatAppearance.BorderSize = 1
+    $button31.FlatAppearance.BorderColor = $AccentColor
+    $button31.Add_Click({
+        timedate.cpl
+      })
+    $buttonPanel4.Controls.Add($button31)
+
+    $button32 = New-Object System.Windows.Forms.Button
+    $button32.Text = "Sound Properties"
+    $button32.Width = 100
+    $button32.Height = 30
+    $button32.Location = New-Object System.Drawing.Point(10, 0)
+    $button32.BackColor = $SecondaryBackgroundColor
+    $button32.ForeColor = $SecondaryForegroundColor
+    $button32.FlatStyle = 'Flat'
+    $button32.FlatAppearance.BorderSize = 1
+    $button32.FlatAppearance.BorderColor = $AccentColor
+    $button32.Add_Click({
+        mmsys.cpl
+      })
+    $buttonPanel5.Controls.Add($button32)
+
+    $button33 = New-Object System.Windows.Forms.Button
+    $button33.Text = "Display Properties"
+    $button33.Width = 100
+    $button33.Height = 30
+    $button33.Location = New-Object System.Drawing.Point(120, 0)
+    $button33.BackColor = $SecondaryBackgroundColor
+    $button33.ForeColor = $SecondaryForegroundColor
+    $button33.FlatStyle = 'Flat'
+    $button33.FlatAppearance.BorderSize = 1
+    $button33.FlatAppearance.BorderColor = $AccentColor
+    $button33.Add_Click({
+        desk.cpl
+      })
+    $buttonPanel5.Controls.Add($button33) 
+
+    $button34 = New-Object System.Windows.Forms.Button
+    $button34.Text = "Color Management"
+    $button34.Width = 100
+    $button34.Height = 30
+    $button34.Location = New-Object System.Drawing.Point(230, 0)
+    $button34.BackColor = $SecondaryBackgroundColor
+    $button34.ForeColor = $SecondaryForegroundColor
+    $button34.FlatStyle = 'Flat'
+    $button34.FlatAppearance.BorderSize = 1
+    $button34.FlatAppearance.BorderColor = $AccentColor
+    $button34.Add_Click({
+        colorcpl
+      })
+    $buttonPanel5.Controls.Add($button34)
+
+    $button35 = New-Object System.Windows.Forms.Button
+    $button35.Text = "Programs and Features"
+    $button35.Width = 100
+    $button35.Height = 30
+    $button35.Location = New-Object System.Drawing.Point(340, 0)
+    $button35.BackColor = $SecondaryBackgroundColor
+    $button35.ForeColor = $SecondaryForegroundColor
+    $button35.FlatStyle = 'Flat'
+    $button35.FlatAppearance.BorderSize = 1
+    $button35.FlatAppearance.BorderColor = $AccentColor
+    $button35.Add_Click({
+        appwiz.cpl
+      })
+    $buttonPanel5.Controls.Add($button35)
+
+    $button36 = New-Object System.Windows.Forms.Button
+    $button36.Text = "Task Scheduler"
+    $button36.Width = 100
+    $button36.Height = 30
+    $button36.Location = New-Object System.Drawing.Point(450, 0)
+    $button36.BackColor = $SecondaryBackgroundColor
+    $button36.ForeColor = $SecondaryForegroundColor
+    $button36.FlatStyle = 'Flat'
+    $button36.FlatAppearance.BorderSize = 1
+    $button36.FlatAppearance.BorderColor = $AccentColor
+    $button36.Add_Click({
+        taskschd.msc
+      })
+    $buttonPanel5.Controls.Add($button36)
+
+    $button37 = New-Object System.Windows.Forms.Button
+    $button37.Text = "Local Security Policy"
+    $button37.Width = 100
+    $button37.Height = 30
+    $button37.Location = New-Object System.Drawing.Point(560, 0)
+    $button37.BackColor = $SecondaryBackgroundColor
+    $button37.ForeColor = $SecondaryForegroundColor
+    $button37.FlatStyle = 'Flat'
+    $button37.FlatAppearance.BorderSize = 1
+    $button37.FlatAppearance.BorderColor = $AccentColor
+    $button37.Add_Click({
+        secpol.msc
+      })
+    $buttonPanel5.Controls.Add($button37)
+
+    $button38 = New-Object System.Windows.Forms.Button
+    $button38.Text = "Local Users and Groups"
+    $button38.Width = 100
+    $button38.Height = 30
+    $button38.Location = New-Object System.Drawing.Point(670, 0)
+    $button38.BackColor = $SecondaryBackgroundColor
+    $button38.ForeColor = $SecondaryForegroundColor
+    $button38.FlatStyle = 'Flat'
+    $button38.FlatAppearance.BorderSize = 1
+    $button38.FlatAppearance.BorderColor = $AccentColor
+    $button38.Add_Click({
+        lusrmgr.msc
+      })
+    $buttonPanel5.Controls.Add($button38)
+
+    $button39 = New-Object System.Windows.Forms.Button
+    $button39.Text = "ODBC Data Sources"
+    $button39.Width = 100
+    $button39.Height = 30
+    $button39.Location = New-Object System.Drawing.Point(780, 0)
+    $button39.BackColor = $SecondaryBackgroundColor
+    $button39.ForeColor = $SecondaryForegroundColor
+    $button39.FlatStyle = 'Flat'
+    $button39.FlatAppearance.BorderSize = 1
+    $button39.FlatAppearance.BorderColor = $AccentColor
+    $button39.Add_Click({
+        odbcad32
+      })
+    $buttonPanel5.Controls.Add($button39)
+
+    $button40 = New-Object System.Windows.Forms.Button
+    $button40.Text = "Windows Version"
+    $button40.Width = 100
+    $button40.Height = 30
+    $button40.Location = New-Object System.Drawing.Point(10, 0)
+    $button40.BackColor = $SecondaryBackgroundColor
+    $button40.ForeColor = $SecondaryForegroundColor
+    $button40.FlatStyle = 'Flat'
+    $button40.FlatAppearance.BorderSize = 1
+    $button40.FlatAppearance.BorderColor = $AccentColor
+    $button40.Add_Click({
+        winver
+      })
+    $buttonPanel6.Controls.Add($button40)
+
+    $button41 = New-Object System.Windows.Forms.Button
+    $button41.Text = "Windows Activation"
+    $button41.Width = 100
+    $button41.Height = 30
+    $button41.Location = New-Object System.Drawing.Point(120, 0)
+    $button41.BackColor = $SecondaryBackgroundColor
+    $button41.ForeColor = $SecondaryForegroundColor
+    $button41.FlatStyle = 'Flat'
+    $button41.FlatAppearance.BorderSize = 1
+    $button41.FlatAppearance.BorderColor = $AccentColor
+    $button41.Add_Click({
+        explorer.exe ms-settings:activation
+      })
+    $buttonPanel6.Controls.Add($button41)
+
+    $button42 = New-Object System.Windows.Forms.Button
+    $button42.Text = "Assessment Tool"
+    $button42.Width = 100
+    $button42.Height = 30
+    $button42.Location = New-Object System.Drawing.Point(230, 0)
+    $button42.BackColor = $SecondaryBackgroundColor
+    $button42.ForeColor = $SecondaryForegroundColor
+    $button42.FlatStyle = 'Flat'
+    $button42.FlatAppearance.BorderSize = 1
+    $button42.FlatAppearance.BorderColor = $AccentColor
+    $button42.Add_Click({
+        Start-Process -FilePath cmd -ArgumentList "/c winsat formal" -Verb RunAs
+      })
+    $buttonPanel6.Controls.Add($button42)
+
+    $button43 = New-Object System.Windows.Forms.Button
+    $button43.Text = "Windows Troubleshooting"
+    $button43.Width = 100
+    $button43.Height = 30
+    $button43.Location = New-Object System.Drawing.Point(340, 0)
+    $button43.BackColor = $SecondaryBackgroundColor
+    $button43.ForeColor = $SecondaryForegroundColor
+    $button43.FlatStyle = 'Flat'
+    $button43.FlatAppearance.BorderSize = 1
+    $button43.FlatAppearance.BorderColor = $AccentColor
+    $button43.Add_Click({
+        control.exe /name Microsoft.Troubleshooting
+      })
+    $buttonPanel6.Controls.Add($button43)
+
+    $button44 = New-Object System.Windows.Forms.Button
+    $button44.Text = "iSCSI Initiator"
+    $button44.Width = 100
+    $button44.Height = 30
+    $button44.Location = New-Object System.Drawing.Point(450, 0)
+    $button44.BackColor = $SecondaryBackgroundColor
+    $button44.ForeColor = $SecondaryForegroundColor
+    $button44.FlatStyle = 'Flat'
+    $button44.FlatAppearance.BorderSize = 1
+    $button44.FlatAppearance.BorderColor = $AccentColor
+    $button44.Add_Click({
+        iscsicpl
+      })
+    $buttonPanel6.Controls.Add($button44)
+
+    $button45 = New-Object System.Windows.Forms.Button
+    $button45.Text = "DiskPart"
+    $button45.Width = 100
+    $button45.Height = 30
+    $button45.Location = New-Object System.Drawing.Point(560, 0)
+    $button45.BackColor = $SecondaryBackgroundColor
+    $button45.ForeColor = $SecondaryForegroundColor
+    $button45.FlatStyle = 'Flat'
+    $button45.FlatAppearance.BorderSize = 1
+    $button45.FlatAppearance.BorderColor = $AccentColor
+    $button45.Add_Click({
+        Start-Process -FilePath cmd -ArgumentList "/c diskpart" -Verb RunAs
+      })
+    $buttonPanel6.Controls.Add($button45)
+
+    $button46 = New-Object System.Windows.Forms.Button
+    $button46.Text = "Private Character Editor"
+    $button46.Width = 100
+    $button46.Height = 30
+    $button46.Location = New-Object System.Drawing.Point(670, 0)
+    $button46.BackColor = $SecondaryBackgroundColor
+    $button46.ForeColor = $SecondaryForegroundColor
+    $button46.FlatStyle = 'Flat'
+    $button46.FlatAppearance.BorderSize = 1
+    $button46.FlatAppearance.BorderColor = $AccentColor
+    $button46.Add_Click({
+        eudcedit
+      })
+    $buttonPanel6.Controls.Add($button46)
+
+    $button47 = New-Object System.Windows.Forms.Button
+    $button47.Text = "Driver Verifier Manager"
+    $button47.Width = 100
+    $button47.Height = 30
+    $button47.Location = New-Object System.Drawing.Point(780, 0)
+    $button47.BackColor = $SecondaryBackgroundColor
+    $button47.ForeColor = $SecondaryForegroundColor
+    $button47.FlatStyle = 'Flat'
+    $button47.FlatAppearance.BorderSize = 1
+    $button47.FlatAppearance.BorderColor = $AccentColor
+    $button47.Add_Click({
+        verifier
+      })
+    $buttonPanel6.Controls.Add($button47)
+
+    $tableLayoutPanel = New-Object System.Windows.Forms.TableLayoutPanel
+    $tableLayoutPanel.RowCount = 5
+    $tableLayoutPanel.ColumnCount = 1
+    $tableLayoutPanel.Dock = [System.Windows.Forms.DockStyle]::Fill
+    $tableLayoutPanel.ColumnStyles.Add((New-Object System.Windows.Forms.ColumnStyle([System.Windows.Forms.SizeType]::Percent, 100)))
+    $tableLayoutPanel.RowStyles.Clear()
+    $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::AutoSize)))
+    $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::AutoSize)))
+    $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::AutoSize)))
+    $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::AutoSize)))
+    $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::AutoSize)))
+    $tableLayoutPanel.RowStyles.Add((New-Object System.Windows.Forms.RowStyle([System.Windows.Forms.SizeType]::AutoSize)))
+
+    $tableLayoutPanel.Controls.Add($buttonPanel, 0, 0)
+    $tableLayoutPanel.Controls.Add($buttonPanel2, 0, 1)
+    $tableLayoutPanel.Controls.Add($buttonPanel3, 0, 2)
+    $tableLayoutPanel.Controls.Add($buttonPanel4, 0, 3)
+    $tableLayoutPanel.Controls.Add($buttonPanel5, 0, 4)
+    $tableLayoutPanel.Controls.Add($buttonPanel6, 0, 5)
+
+    $form.Controls.Add($tableLayoutPanel)
+  }
+
+  PROCESS {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
+    $form.ShowDialog()
+  }
+
+  END {
+    TRAP {
+      Write-ErrorEvent $_.Exception.Message
+      continue
+    }
+    $form.Dispose()
+  }
+}
 
 # ----------------------------------------
-# End of Azrael's PowerShell/Pwsh Profile
+# End of Azrael's PowerShell/Pwsh Profile (End events should be at the bottom of the file)
 # ----------------------------------------
+
+Import-Aliases # Import aliases
 
 Register-EngineEvent -SourceIdentifier PowerShell.Exiting -Action {
   Stop-Transcript

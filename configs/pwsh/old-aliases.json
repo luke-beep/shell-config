@@ -74,5 +74,6 @@
     "tcsv",
     "fcsv",
     "uniq",
-    "csharp"
+    "csharp",
+    "tools"
 ]

@@ -73,5 +73,6 @@
   "tcsv": "ConvertTo-Csv",
   "fcsv": "ConvertFrom-Csv",
   "uniq": "Select-Unique",
-  "csharp": "Invoke-CSharp"
+  "csharp": "Invoke-CSharp",
+  "tools": "Open-Tools"
 }
