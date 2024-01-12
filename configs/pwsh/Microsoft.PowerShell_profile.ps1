@@ -4,8 +4,8 @@
 
 # Author: LukeHjo (Azrael)
 # Description: This is my PowerShell profile. It contains features that I use on a daily basis.
-# Version: 1.2.9
-# Date: 2024-01-09
+# Version: 1.3.0
+# Date: 2024-01-12
 
 # ----------------------------------------
 # Event Log
