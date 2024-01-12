@@ -1262,7 +1262,19 @@ function Set-ProfileSettings {
     $form.FormBorderStyle = 'FixedDialog'
     $form.Icon = $ShellIcon
 
-    $keys = Get-ItemProperty -Path $KeyPath -ErrorAction SilentlyContinue | Select-Object -ExcludeProperty PSPath, PSParentPath, PSChildName, PSDrive, PSProvider
+    if ($ShellType -eq "Pwsh") {
+      $keys = Get-ItemProperty -Path $KeyPath -ErrorAction SilentlyContinue | Select-Object -ExcludeProperty PSPath, PSParentPath, PSChildName, PSDrive, PSProvider
+    }
+    else {
+      $keys = Get-ItemProperty -Path $KeyPath -ErrorAction SilentlyContinue | ForEach-Object {
+        $properties = $_.PSObject.Properties | Where-Object { $_.Name -notin @('PSPath', 'PSParentPath', 'PSChildName', 'PSDrive', 'PSProvider') }
+        $output = New-Object -TypeName PSObject
+        foreach ($property in $properties) {
+          $output | Add-Member -MemberType NoteProperty -Name $property.Name -Value $property.Value
+        }
+        $output
+      }
+    }
     
     $dataTable = New-Object System.Data.DataTable
 
