@@ -34,7 +34,7 @@ function InstallScoopPackage {
 
     if (!(Get-Command scoop -ErrorAction SilentlyContinue)) {
         Write-Host "Scoop is not installed. Installing..."
-        iex "& {$(irm get.scoop.sh)} -RunAsAdmin"
+        Start-Process powershell -ArgumentList '-noprofile -c', 'Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression' -Wait
     }
 
     Write-Host "Installing $PackageName..."
