@@ -23,6 +23,11 @@
   - nvim | Main - Neovim - Vim-fork focused on extensibility and usability.
   - winget | Main - Windows Package Manager.
   - zip | Main - Zip is a compression and file packaging/archive utility.
+  - chafa | Main - Terminal graphics for the 21st century.
+  - zoxide | Main - A smarter cd command.
+  - bat | Main - A cat(1) clone with wings.
+  - fzf | Main - A command-line fuzzy finder.
+  - less | Main - Less is a free, open-source file pager.
 
 ### Chocolatey
 
