@@ -33,6 +33,9 @@
 
 This repository contains my personal configuration for the Windows Terminal. It's designed to optimize my workflow and make terminal operations more efficient.
 
+> [!NOTE]
+> This shell configuration is designed and optimized for Windows 11. It may not work as intended on other versions of Windows.
+
 ### 📸 Screenshots
 
 ---

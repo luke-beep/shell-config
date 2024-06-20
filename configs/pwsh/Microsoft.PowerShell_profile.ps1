@@ -199,6 +199,16 @@ if ($null -eq $themeKey) {
   New-ItemProperty -Path $KeyPath -Name 'LightMode' -Value 0 -PropertyType DWORD -Force
 }
 
+# TTE installed
+$TTECheck = Get-Command -Name tte -ErrorAction SilentlyContinue
+$TTEInstalled = $false
+if ($null -eq $TTECheck) {
+  $TTEInstalled = $false
+}
+else {
+  $TTEInstalled = $true
+}
+
 if ($themeKey.LightMode -eq 1) {
   $PrimaryBackgroundColor = $Nord4
   $SecondaryBackgroundColor = $Nord0
@@ -902,6 +912,14 @@ function Initialize-Profile {
   END {
     $form.Dispose() # Dispose of the form
 
+    $localOutputString = @"
+Microsoft Windows [Version $($KernelVersion)]
+(c) Microsoft Corporation. All rights reserved.`n
+Azrael's $($ShellType) v$($CurrentVersion.Trim())
+Copyright (c) 2023-2024 Azrael
+https://github.com/luke-beep/shell-config/`n
+"@
+
     Set-PSReadlineConfiguration # Set the PSReadline configuration
 
     Import-Functions # Import custom functions
@@ -912,18 +930,25 @@ function Initialize-Profile {
 
     # Display the login message if it's enabled
     if ($loginMessageKey.LoginMessage) {
-      Write-Host "Microsoft Windows [Version $($KernelVersion)]"
-      Write-Host "(c) Microsoft Corporation. All rights reserved.`n"
-    
-      Write-Host "Azrael's $($ShellType) v$($CurrentVersion.Trim())"
-      Write-Host "Copyright (c) 2023-2024 Azrael"
-      Write-Host "https://github.com/luke-beep/shell-config/`n"
+      # Check if TTE is installed
+      if ($TTEInstalled -eq $true) {
+        Write-Output $localOutputString | tte rain --final-gradient-stops FFFFFF --rain-colors 8FBCBB 88C0D0 81A1C1 5E81AC
+      }
+      else {
+        Write-Output $localOutputString
+      }
     }
 
     if ($randomTipKey.RandomTip) {
       $tips = (Invoke-RestMethod -Uri 'https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/pwsh/random-tips.txt') -split "`n"
       $tip = Get-Random -InputObject $tips
-      Write-Host "Randomized terminal tip: $tip`n"
+      # Check if TTE is installed
+      if ($TTEInstalled -eq $true) {
+        Write-Output "Randomized terminal tip: $tip" | tte decrypt --final-gradient-stops FFFFFF --typing-speed 3 --ciphertext-colors A3BE8C
+      }
+      else {
+        Write-Host "Randomized terminal tip: $tip"
+      }
     }
   }
 }
