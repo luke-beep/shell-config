@@ -19,7 +19,7 @@
 3. **Install the required dependencies**: Download the script [`install-packages.ps1`](/scripts/install-packages.ps1) and run it in an elevated PowerShell session:
 
    ```powershell
-   .\scripts\install-packages.ps1
+   .\scripts\packages\install-packages.ps1
    ```
 
 4. **Copy the clink configuration file**: Copy the [`oh-my-posh.lua`](/configs/clink/oh-my-posh.lua) file to the clink configuration directory:
