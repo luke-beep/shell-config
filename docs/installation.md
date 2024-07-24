@@ -28,7 +28,7 @@
    copy configs\clink\oh-my-posh.lua "C:\Program Files (x86)\clink\oh-my-posh.lua"
    ```
 
-5. **Copy the Windows Terminal configuration file**: Copy the [`settings.json`](/configs/windows-terminal/settings.json) file to the Windows Terminal configuration directory:
+5. **Copy the Windows Terminal configuration file**: Copy the [`settings.json`](/configs/terminal/settings.json) file to the Windows Terminal configuration directory:
 
    ```bash
    copy configs\windows-terminal\settings.json "%LocalAppData%\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
