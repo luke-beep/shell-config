@@ -41,21 +41,6 @@ function InstallScoopPackage {
     scoop install $PackageName
 }
 
-function InstallChocolateyPackage {
-    param(
-        [Parameter(Mandatory = $true)]
-        [string]$PackageName
-    )
-
-    if (!(Get-Command choco -ErrorAction SilentlyContinue)) {
-        Write-Host "Chocolatey is not installed. Installing..."
-        Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1')
-    }
-
-    Write-Host "Installing $PackageName..."
-    choco install $PackageName -y
-}
-
 if ((Get-ItemProperty -Path $installationKey -Name Installed).Installed -eq 1) {
     Write-Host "Packages are already installed. Do you want to reinstall them? (y/n)"
     $input = Read-Host
@@ -100,16 +85,10 @@ InstallScoopPackage starship
 InstallScoopPackage touch
 InstallScoopPackage vim
 InstallScoopPackage neovim
-InstallScoopPackage winget
 InstallScoopPackage zip
 InstallScoopPackage clink
-
-InstallChocolateyPackage firefox
-InstallChocolateyPackage gimp
-InstallChocolateyPackage libreoffice
-InstallChocolateyPackage librewolf
-InstallChocolateyPackage sysinternals
-InstallChocolateyPackage ripgrep
+InstallScoopPackage ripgrep
+InstallScoopPackage sysinternals
 
 winget install --id Microsoft.Powershell --source winget
 

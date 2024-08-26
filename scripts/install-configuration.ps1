@@ -11,7 +11,7 @@
 
 $ShellType = if ($host.Version.Major -ge 7) { "Pwsh" } else { "PowerShell" }
 $TerminalSettingsPath = "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
-$ClinkThemePath = "$env:SystemDrive\Program Files (x86)\clink\oh-my-posh.lua"
+$ClinkThemePath = "$env:USERPROFILE\scoop\apps\clink\oh-my-posh.lua"
 $OmpConfig = "$env:USERPROFILE\.config\omp.json"
 $installationKey = "HKCU:\Software\Azrael\Configuration"
 $KernelVersion = (Get-CimInstance -ClassName Win32_OperatingSystem).Version
@@ -67,7 +67,11 @@ Write-Host "Applying Windows Terminal settings..."
 Invoke-WebRequest -Uri https://github.com/luke-beep/shell-config/raw/main/configs/terminal/settings.json -OutFile $TerminalSettingsPath -ErrorAction SilentlyContinue
 Write-Host "Warning: These settings may cause issues with Windows Terminal. Please check the settings.json file in $TerminalSettingsPath. If you encounter any issues, please open an issue on GitHub."
 
-Write-Host "Installing the oh-my-posh theme for Clink..."
+Write-Host "Installing the oh-my-posh theme..."
+if (-not (Test-Path "$env:USERPROFILE\.config")) {
+    New-Item -Path "$env:USERPROFILE\.config" -Force
+}
+
 if (-not (Test-Path $OmpConfig)) {
     New-Item -Path $OmpConfig -Force 
     Invoke-WebRequest -Uri https://raw.githubusercontent.com/luke-beep/shell-config/main/configs/omp/theme.json -OutFile $OmpConfig -ErrorAction SilentlyContinue
