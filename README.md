@@ -19,7 +19,6 @@
     - [📚 Description](#-description)
     - [📸 Screenshots](#-screenshots)
     - [🚀 Installation](#-installation)
-    - [🌟 Features](#-features)
     - [🛠️ Usage](#️-usage)
     - [📚 Customization](#-customization)
     - [🤝 Contributing](#-contributing)
@@ -60,38 +59,6 @@ iwr -useb https://raw.githubusercontent.com/luke-beep/shell-config/main/scripts/
 
 > [!NOTE]
 > The automated installation script is the recommended installation method for most users. It's designed to be user-friendly and easy to use. It will automatically install the profile and configure the Windows Terminal. It will also automatically install the required dependencies.
-
-### 🌟 Features
-
----
-
-- **Nord Theme Integration** - Utilizes Nord theme color variables for a beautiful interface.
-- **Global Variables** - Includes `$ShellIcon`, `$ShellType`, and more for enhanced scripting.
-- **Restart-Shell Function** - Easily restart your PowerShell session.
-- **Timestamped Logging** - Functions for detailed, timestamped logs.
-- **Write-Color Function** - Enrich your console with colored text.
-- **Update-Profile Function** - Keep your profile updated with the latest features.
-- **Custom Functions and Variables Management** - Import, manage, and preview custom scripts.
-- **Interactive GUI Management** - User-friendly GUI for managing functions and variables.
-- **Automated Tool Installation** - Scripted setup for Scoop, Chocolatey, oh-my-posh, and more.
-- **Profile Settings GUI** - Customize your profile settings with an interactive interface.
-- **Registry Key Management** - Centralized configuration management via Windows Registry.
-- **Customizable Login Message** - Personalize your PowerShell greeting message.
-- **Error Handling Mechanisms** - Advanced functions for error tracking and logging.
-- **Nerd Fonts and Sysinternals Setup** - Enhanced visual appeal with Nerd Fonts and Sysinternals tools integration.
-- **Cross-Shell** - Works with both PowerShell and Pwsh (PowerShell Core).
-- **Interactive Function and Variable Preview** - Easily view available functions and variables.
-- **PowerShell Version Check** - `$ShellType` variable to distinguish between PowerShell versions.
-- **Automatic Update Checks** - Option to enable automatic updates for the profile.
-- **Manage-Profile Function** - Centralized management for the entire profile.
-- **Custom Script Incorporation** - Easily add and manage your own scripts.
-- **Help and Documentation** - Access to detailed help and documentation for each function.
-- **Guided Initial Setup** - Initial setup with guided instructions and configuration checks.
-- **Unix-Style Commands** - Unix-style commands for enhanced cross-platform compatibility. *Note* that these commands are only imitations of the real commands. They are not actual Unix commands and won't function the same way.
-- **Tips for Terminal usage** - Tips for using the Windows Terminal.
-- **Profile customization** - Customize your profile using the following guide [here](./docs/customizing.md).
-
-This profile is designed to offer a comprehensive, customizable, and user-friendly PowerShell environment.
 
 ### 🛠️ Usage
 
